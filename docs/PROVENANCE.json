@@ -49,7 +49,7 @@
     "deliveries": {
       "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\deliveries.parquet",
       "rows": 200999,
-      "columns": 76
+      "columns": 78
     }
   },
   "quality_checks": {

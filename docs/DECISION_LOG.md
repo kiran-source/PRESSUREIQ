@@ -39,3 +39,4 @@
 - **Date**: 2026-11-10
 - **Context**: Innings 3 and 4 appear in 5 matches (38 total deliveries). Super overs operate under completely separate game mechanics, player selection constraints, and risk-reward profiles.
 - **Decision**: Filter out innings >= 3 from standard 20-over pressure modeling and player evaluation rankings to preserve metric consistency.
+

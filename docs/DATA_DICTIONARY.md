@@ -76,3 +76,4 @@
 | `revised_target` | Float64 | DLS revised target if applicable |
 | `outcome_type` | String | `win_by_runs`, `win_by_wickets`, `tie`, `abandoned`, `no_result` |
 | `result` | String | Official textual match result |
+
