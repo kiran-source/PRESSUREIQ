@@ -1,0 +1,64 @@
+{
+  "raw_files": {
+    "competitions": {
+      "rows": 141,
+      "cols": 4
+    },
+    "teams": {
+      "rows": 353,
+      "cols": 3
+    },
+    "player_mapping": {
+      "rows": 6413,
+      "cols": 6
+    },
+    "playing_eleven": {
+      "rows": 28381,
+      "cols": 9
+    },
+    "matches": {
+      "rows": 883,
+      "cols": 22
+    },
+    "ball_by_ball": {
+      "rows": 200999,
+      "cols": 33
+    }
+  },
+  "processed_files": {
+    "competitions": {
+      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\competitions.parquet",
+      "rows": 141
+    },
+    "teams": {
+      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\teams.parquet",
+      "rows": 353
+    },
+    "players": {
+      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\players.parquet",
+      "rows": 6413
+    },
+    "playing_eleven": {
+      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\playing_eleven.parquet",
+      "rows": 28381
+    },
+    "matches": {
+      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\matches.parquet",
+      "rows": 883
+    },
+    "deliveries": {
+      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\deliveries.parquet",
+      "rows": 200999,
+      "columns": 76
+    }
+  },
+  "quality_checks": {
+    "matches_with_ball_data": 867,
+    "total_deliveries": 200999,
+    "total_legal_balls": 192445,
+    "total_wickets": 10881,
+    "unique_batters": 888,
+    "unique_bowlers": 647,
+    "legal_ball_pct": 95.74
+  }
+}
