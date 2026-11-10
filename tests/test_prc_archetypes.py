@@ -76,3 +76,4 @@ def test_prc_insufficient_data():
     
     res = fit_pressure_response_curve(df, is_batting=True)
     assert res["archetype"] == "Insufficient Data"
+

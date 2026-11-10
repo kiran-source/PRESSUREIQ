@@ -99,3 +99,4 @@ Mathematical verification confirmed directional behavior:
 - **Match Isolation**: Zero matches span across years or split boundaries. Match intersection between splits is strictly 0.
 - **Player History Cutoff**: For every match $M$, player historical statistics use only matches strictly prior to match $M$ (`cumsum() - match_value`).
 - **Same-Date Matches**: Zero players in the dataset played multiple matches on the same calendar date. Zero ambiguity or intra-day leakage.
+

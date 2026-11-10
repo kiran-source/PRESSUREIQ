@@ -13,3 +13,4 @@ for f in files:
             h.update(chunk)
     size_mb = os.path.getsize(f) / (1024 * 1024)
     print(f"- {os.path.basename(f)} ({size_mb:.2f} MB): {h.hexdigest()}")
+

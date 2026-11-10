@@ -114,3 +114,4 @@ def test_first_innings_par_pressure_symmetry():
     assert bpi[0] > bpi[1], f"Batter under more pressure when behind par: {bpi}"
     # Bowler is under more pressure when batting team is ahead of par (+20) than behind (-20)
     assert bopi[1] > bopi[0], f"Bowler under more pressure when batting team ahead of par: {bopi}"
+

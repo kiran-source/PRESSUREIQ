@@ -63,3 +63,4 @@ This guide provides the exact dropdown selections, standardized player names, nu
    - While express pace (Nathan Ellis, Matheesha Pathirana, Haris Rauf) dominates the death overs, defensive left-arm spin (Liam Dawson, Sufiyan Muqeem, Harpreet Brar) is an undervalued clutch weapon that throttles run rates in high-leverage middle overs.
 4. **Rajasthan Royals Strategic Alignment**:
    - Recommends pairing late-overs boundary hitters with positive PRC slopes (Romario Shepherd, Jason Holder) with extreme-pressure death bowlers who suppress boundary rates below 12% (Nathan Ellis, Matheesha Pathirana).
+

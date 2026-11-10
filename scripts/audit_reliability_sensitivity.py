@@ -115,3 +115,4 @@ for sc_name, min_b, min_hp, min_m in threshold_scenarios:
     print(f"{sc_name:38s} -> Qualifying Batters: {len(eligible):3d} | Top 10 Retained: {len(retained)}/10")
     if dropped:
         print(f"   Dropped from Top 10: {', '.join(dropped)}")
+

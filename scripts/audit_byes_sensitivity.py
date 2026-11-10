@@ -9,3 +9,4 @@ import numpy as np
 avg_byes_per_inn = (529 + 2748) / (867 * 2)
 print(f"Average byes + leg-byes per innings: {avg_byes_per_inn:.2f} deliveries")
 print(f"Percentage of total deliveries: {3277 / 200999 * 100:.2f}%")
+
