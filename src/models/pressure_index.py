@@ -45,22 +45,37 @@ def compute_batting_pressure_index(df: pd.DataFrame) -> pd.DataFrame:
     resource_comp = (np.clip(wkts_lost / 9.0, 0.0, 1.0) ** 1.2) * 100.0
     
     # --- 3. Climax / Temporal Urgency Component (0 - 100) ---
-    balls_rem = df["balls_remaining_before"].fillna(120).values
-    balls_bowled = np.clip(120.0 - balls_rem, 0.0, 120.0)
-    climax_comp = ((balls_bowled / 120.0) ** 1.3) * 100.0
+    # In shortened matches, scheduled available balls is max_innings_balls (e.g., 30, 48, 84, 90, 120)
+    if "max_innings_balls" in df.columns:
+        max_balls = np.maximum(df["max_innings_balls"].fillna(120.0).values.astype(float), 1.0)
+    else:
+        b_rem_val = df["balls_remaining_before"].fillna(120.0).values.astype(float)
+        b_bef_val = df["legal_balls_before"].fillna(0.0).values.astype(float) if "legal_balls_before" in df.columns else 0.0
+        max_balls = np.maximum(120.0, b_rem_val + b_bef_val)
+        
+    if "legal_balls_before" in df.columns:
+        balls_bowled = df["legal_balls_before"].fillna(0.0).values.astype(float)
+    else:
+        b_rem_arr = df["balls_remaining_before"].fillna(120.0).values.astype(float)
+        balls_bowled = np.clip(max_balls - b_rem_arr, 0.0, max_balls)
+        
+    # Temporal completion ratio: strictly 0.0 at the first delivery of any match, 1.0 at the final scheduled ball
+    completion_ratio = np.clip(balls_bowled / max_balls, 0.0, 1.0)
+    climax_comp = (completion_ratio ** 1.3) * 100.0
     
     # Interaction: high rate demand at the climax is exponentially harder
-    # e.g., needing 12 RPO in over 18 is vastly more pressurized than in over 5
-    climax_factor = 0.5 + 0.5 * (balls_bowled / 120.0)
+    climax_factor = 0.5 + 0.5 * completion_ratio
     effective_rate = rate_comp * climax_factor
     
     # --- 4. Leverage & Match Stage (0 - 100) ---
     is_knockout = df["is_knockout_stage"].fillna(False).values
     knockout_bonus = np.where(is_knockout, 12.0, 0.0)
     
-    # Close chase leverage (when in 2nd innings, balls_rem <= 30 and runs_required <= 45)
+    # Close chase leverage (scaled for match length: final 25% of match and tight runs required)
+    balls_rem = np.where(df["balls_remaining_before"].notna(), df["balls_remaining_before"].values, max_balls)
     runs_req = df["runs_required_before"].fillna(100.0).values
-    close_chase = (~inn_mask) & (balls_rem <= 30) & (runs_req <= 50) & (runs_req > 0)
+    chase_threshold = np.maximum(12.0, max_balls * 0.25)
+    close_chase = (~inn_mask) & (balls_rem <= chase_threshold) & (runs_req <= 50) & (runs_req > 0)
     leverage_bonus = np.where(close_chase, 15.0, 0.0)
     
     # --- Composite BPI (Calibrated 0-100) ---
@@ -121,18 +136,31 @@ def compute_bowling_pressure_index(df: pd.DataFrame) -> pd.DataFrame:
     resource_comp = (np.clip(wkts_rem / 10.0, 0.0, 1.0) ** 1.1) * 100.0
     
     # --- 3. Death & Climax Pressure (0 - 100) ---
-    # Bowling in death overs (overs 16-20) carries highest penalty for error
-    balls_rem = df["balls_remaining_before"].fillna(120).values
-    balls_bowled = np.clip(120.0 - balls_rem, 0.0, 120.0)
-    climax_comp = ((balls_bowled / 120.0) ** 1.4) * 100.0
+    if "max_innings_balls" in df.columns:
+        max_balls = np.maximum(df["max_innings_balls"].fillna(120.0).values.astype(float), 1.0)
+    else:
+        b_rem_val = df["balls_remaining_before"].fillna(120.0).values.astype(float)
+        b_bef_val = df["legal_balls_before"].fillna(0.0).values.astype(float) if "legal_balls_before" in df.columns else 0.0
+        max_balls = np.maximum(120.0, b_rem_val + b_bef_val)
+        
+    if "legal_balls_before" in df.columns:
+        balls_bowled = df["legal_balls_before"].fillna(0.0).values.astype(float)
+    else:
+        b_rem_arr = df["balls_remaining_before"].fillna(120.0).values.astype(float)
+        balls_bowled = np.clip(max_balls - b_rem_arr, 0.0, max_balls)
+        
+    completion_ratio = np.clip(balls_bowled / max_balls, 0.0, 1.0)
+    climax_comp = (completion_ratio ** 1.4) * 100.0
     
     # --- 4. Match Leverage & Stage (0 - 100) ---
     is_knockout = df["is_knockout_stage"].fillna(False).values
     knockout_bonus = np.where(is_knockout, 12.0, 0.0)
     
-    # Tight finish: last 3 overs and chasing team needs <= 30 runs
+    # Tight finish: final 15% of overs and chasing team needs <= 30 runs
+    balls_rem = np.where(df["balls_remaining_before"].notna(), df["balls_remaining_before"].values, max_balls)
     runs_req = df["runs_required_before"].fillna(100.0).values
-    close_finish = (~inn_mask) & (balls_rem <= 18) & (runs_req <= 30) & (runs_req > 0)
+    bowl_threshold = np.maximum(6.0, max_balls * 0.15)
+    close_finish = (~inn_mask) & (balls_rem <= bowl_threshold) & (runs_req <= 30) & (runs_req > 0)
     leverage_bonus = np.where(close_finish, 18.0, 0.0)
     
     # --- Composite BoPI (Calibrated 0-100) ---

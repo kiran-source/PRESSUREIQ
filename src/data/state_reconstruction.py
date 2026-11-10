@@ -14,17 +14,36 @@ def reconstruct_match_states(
     
     Guarantees strict temporal validity:
     All 'before' features represent the state prior to that ball being bowled.
+    Fully accounts for shortened matches and DLS revised overs in both innings.
     """
     df = deliveries_df.sort_values(
         by=["match_id", "innings", "overid", "over_ball_num", "innings_ball_num"]
     ).copy()
+    
+    # 0. Early merge of matches metadata for revised overs / targets
+    revised_cols = [
+        "match_id", "first_inn_revised_overs", "second_inn_revised_overs",
+        "revised_target", "is_dls_or_revised"
+    ]
+    cols_to_merge = [c for c in revised_cols if c in matches_df.columns]
+    df = df.merge(matches_df[cols_to_merge], on="match_id", how="left")
+    
+    # Determine maximum legal ball allocation for the innings
+    # Note: first_inn_revised_overs and second_inn_revised_overs store total balls (e.g., 90, 84, 48, 30)
+    inn1_max = df["first_inn_revised_overs"].fillna(120).astype(int) if "first_inn_revised_overs" in df.columns else 120
+    inn2_max = df["second_inn_revised_overs"].fillna(120).astype(int) if "second_inn_revised_overs" in df.columns else 120
+    
+    df["max_innings_balls"] = np.where(
+        df["innings"] == 1, inn1_max,
+        np.where(df["innings"] == 2, inn2_max, 120)
+    ).astype(int)
     
     # 1. Intra-innings cumulative counters
     grp = df.groupby(["match_id", "innings"], sort=False)
     
     # Cumulative legal balls bowled (including current delivery)
     df["cum_legal_balls"] = grp["is_legal_ball"].cumsum()
-    # Legal balls bowled prior to this delivery
+    # Legal balls bowled prior to this delivery (elapsed balls)
     df["legal_balls_before"] = grp["is_legal_ball"].cumsum() - df["is_legal_ball"].astype(int)
     
     # Cumulative team runs (estimated)
@@ -36,17 +55,20 @@ def reconstruct_match_states(
     df["wickets_lost_before"] = grp["is_wicket"].cumsum() - df["is_wicket"].astype(int)
     df["wickets_remaining_before"] = np.clip(10 - df["wickets_lost_before"], 0, 10)
     
-    # Standard T20 overs (default 120 balls)
-    total_innings_balls = 120
-    df["balls_remaining_before"] = np.clip(total_innings_balls - df["legal_balls_before"], 0, total_innings_balls)
+    # Balls remaining before delivery, strictly respecting shortened match allocations
+    df["balls_remaining_before"] = np.clip(
+        df["max_innings_balls"] - df["legal_balls_before"], 0, df["max_innings_balls"]
+    )
     
-    # Match Phase before delivery
-    # Powerplay: balls 0 to 35 (overs 0.1 to 6.0)
-    # Middle: balls 36 to 89 (overs 6.1 to 15.0)
-    # Death: balls 90 to 119 (overs 15.1 to 20.0)
+    # Match Phase before delivery (adapted for standard and shortened matches)
+    # Powerplay: first ~30% of scheduled innings (36 balls for 120; 14 for 48; 9 for 30)
+    # Death: last ~25% of scheduled innings (90+ for 120; 36+ for 48; 23+ for 30)
+    pp_cutoff = np.floor(df["max_innings_balls"] * 0.30).astype(int)
+    death_cutoff = np.floor(df["max_innings_balls"] * 0.75).astype(int)
+    
     df["phase"] = np.where(
-        df["legal_balls_before"] < 36, "Powerplay",
-        np.where(df["legal_balls_before"] < 90, "Middle", "Death")
+        df["legal_balls_before"] < pp_cutoff, "Powerplay",
+        np.where(df["legal_balls_before"] < death_cutoff, "Middle", "Death")
     )
     
     # Current Run Rate before delivery
@@ -60,30 +82,15 @@ def reconstruct_match_states(
     # Compute 1st innings total score for each match
     inn1 = df[df["innings"] == 1].groupby("match_id")["est_total_runs"].sum().reset_index()
     inn1.columns = ["match_id", "inn1_final_score"]
-    
-    # Merge matches meta for revised targets (e.g. DLS)
-    revised_meta = matches_df[["match_id", "revised_target", "second_inn_revised_overs", "is_dls_or_revised"]].copy()
-    
     df = df.merge(inn1, on="match_id", how="left")
-    df = df.merge(revised_meta, on="match_id", how="left")
     
     # Target score definition:
     # If revised target is specified, use that; otherwise 1st innings score + 1
-    has_revised = df["revised_target"].notna()
+    has_revised = df["revised_target"].notna() if "revised_target" in df.columns else pd.Series(False, index=df.index)
     df["target_score"] = np.where(
         df["innings"] == 2,
         np.where(has_revised, df["revised_target"], df["inn1_final_score"] + 1),
         np.nan
-    )
-    
-    # Revised total balls for innings 2 if shortened
-    # Note: 'second_inn_revised_overs' column in raw data actually stores the total revised BALLS (e.g., 90 = 15 overs)
-    inn2_max_balls = df["second_inn_revised_overs"].fillna(120).astype(int)
-    
-    df["balls_remaining_before"] = np.where(
-        df["innings"] == 2,
-        np.clip(inn2_max_balls - df["legal_balls_before"], 0, inn2_max_balls),
-        df["balls_remaining_before"]
     )
     
     # Runs required before delivery in 2nd innings
