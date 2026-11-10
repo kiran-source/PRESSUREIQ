@@ -4,7 +4,10 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.features.first_innings_par import FirstInningsParModel
+from src.features.first_innings_par import (
+    FirstInningsParModel,
+    compute_chronological_first_innings_par
+)
 from src.features.player_history import (
     compute_historical_batter_stats,
     compute_historical_bowler_stats,
@@ -16,13 +19,82 @@ from src.features.player_history import (
 def test_first_innings_par_model():
     model = FirstInningsParModel()
     # At start of match (120 balls remaining, 10 wickets, 0 score)
-    par_score, runs_above = model.estimate_par_trajectory("IPL", 120, 10, 0)
+    par_score, runs_above = model.estimate_single_delivery("IPL", 120, 10, 0, 0, 120)
     assert 140 <= par_score <= 210
     assert runs_above == 0.0
     
-    # At 90 balls remaining, score 40, 9 wickets
-    par_score, runs_above = model.estimate_par_trajectory("IPL", 90, 9, 40)
+    # At 90 balls remaining, score 40, 9 wickets, 30 elapsed
+    par_score, runs_above = model.estimate_single_delivery("IPL", 90, 9, 40, 30, 120)
     assert 140 <= par_score <= 210
+
+
+def test_par_no_same_match_leakage():
+    """
+    P0-1 Test: A delivery must never use the final score of its own innings.
+    Modifying the final score or outcome of match M must have 0 effect on match M's par predictions.
+    """
+    # Create two versions of Match 1: Version A scores 120, Version B scores 250
+    base_delivs = []
+    for b in range(10):
+        base_delivs.append({
+            "match_date": "2024-01-01", "match_id": 1, "innings": 1,
+            "overid": b // 6, "over_ball_num": (b % 6) + 1, "innings_ball_num": b + 1,
+            "comp_category": "IPL", "balls_remaining_before": 120 - b,
+            "legal_balls_before": b, "wickets_remaining_before": 10,
+            "team_runs_before": b * 2, "est_total_runs": 2, "max_innings_balls": 120
+        })
+    df_a = pd.DataFrame(base_delivs)
+    # Version A: last ball produces 1 run
+    df_a.loc[9, "est_total_runs"] = 1
+    
+    # Version B: last ball produces 6 runs (or massive runs)
+    df_b = pd.DataFrame(base_delivs)
+    df_b.loc[9, "est_total_runs"] = 6
+    
+    res_a = compute_chronological_first_innings_par(df_a)
+    res_b = compute_chronological_first_innings_par(df_b)
+    
+    # Check that for delivery 0 to 8, par predictions are 100% IDENTICAL
+    # (proving deliveries in match 1 do not observe the completed outcome of match 1)
+    np.testing.assert_array_equal(
+        res_a.loc[:8, "par_final_score"].values,
+        res_b.loc[:8, "par_final_score"].values
+    )
+    np.testing.assert_array_equal(
+        res_a.loc[:8, "runs_above_par_trajectory"].values,
+        res_b.loc[:8, "runs_above_par_trajectory"].values
+    )
+
+
+def test_par_no_future_match_leakage():
+    """
+    P0-1 Test: Modifying or adding future matches must have 0 effect on earlier matches.
+    """
+    m1_delivs = [{
+        "match_date": "2024-01-01", "match_id": 1, "innings": 1,
+        "overid": 0, "over_ball_num": 1, "innings_ball_num": 1,
+        "comp_category": "IPL", "balls_remaining_before": 120,
+        "legal_balls_before": 0, "wickets_remaining_before": 10,
+        "team_runs_before": 0, "est_total_runs": 1, "max_innings_balls": 120
+    }]
+    
+    # Run standalone match 1
+    df1 = pd.DataFrame(m1_delivs)
+    res1 = compute_chronological_first_innings_par(df1)
+    par1_isolated = res1.loc[0, "par_final_score"]
+    
+    # Now append future matches on subsequent dates
+    future_delivs = [
+        {"match_date": "2024-01-01", "match_id": 1, "innings": 1, "overid": 0, "over_ball_num": 1, "innings_ball_num": 1, "comp_category": "IPL", "balls_remaining_before": 120, "legal_balls_before": 0, "wickets_remaining_before": 10, "team_runs_before": 0, "est_total_runs": 1, "max_innings_balls": 120},
+        {"match_date": "2024-02-01", "match_id": 2, "innings": 1, "overid": 0, "over_ball_num": 1, "innings_ball_num": 1, "comp_category": "IPL", "balls_remaining_before": 120, "legal_balls_before": 0, "wickets_remaining_before": 10, "team_runs_before": 0, "est_total_runs": 6, "max_innings_balls": 120},
+        {"match_date": "2024-03-01", "match_id": 3, "innings": 1, "overid": 0, "over_ball_num": 1, "innings_ball_num": 1, "comp_category": "IPL", "balls_remaining_before": 120, "legal_balls_before": 0, "wickets_remaining_before": 10, "team_runs_before": 0, "est_total_runs": 6, "max_innings_balls": 120},
+    ]
+    df_with_future = pd.DataFrame(future_delivs)
+    res_with_future = compute_chronological_first_innings_par(df_with_future)
+    par1_with_future = res_with_future.loc[0, "par_final_score"]
+    
+    # Assert exact equality: future matches 2 & 3 cannot change match 1's par!
+    assert par1_isolated == par1_with_future
 
 
 def test_player_history_zero_future_leakage():

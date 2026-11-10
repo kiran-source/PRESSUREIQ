@@ -10,7 +10,10 @@ import pandas as pd
 from pathlib import Path
 
 from src.config import DELIVERIES_PARQUET, PROCESSED_DATA_DIR
-from src.features.first_innings_par import FirstInningsParModel
+from src.features.first_innings_par import (
+    compute_chronological_first_innings_par,
+    FirstInningsParModel
+)
 from src.features.player_history import (
     compute_historical_batter_stats,
     compute_historical_bowler_stats
@@ -28,31 +31,9 @@ def build_delivery_features(deliveries_df: pd.DataFrame) -> pd.DataFrame:
     # Exclude super overs from feature training / pressure rankings
     df = df[df["innings"].isin([1, 2])].copy()
     
-    # 1. First innings par score trajectory estimation
-    logger.info("Fitting 1st innings par trajectory model...")
-    par_model = FirstInningsParModel()
-    par_model.fit(df)
-    
-    # Vectorized / batch estimation for 1st innings
-    inn1_mask = df["innings"] == 1
-    par_final_list = []
-    runs_above_par_list = []
-    
-    # Apply par model to inn1 rows
-    for comp, b_rem, w_rem, s_bef in zip(
-        df.loc[inn1_mask, "comp_category"],
-        df.loc[inn1_mask, "balls_remaining_before"],
-        df.loc[inn1_mask, "wickets_remaining_before"],
-        df.loc[inn1_mask, "team_runs_before"]
-    ):
-        p_fin, r_abov = par_model.estimate_par_trajectory(comp, b_rem, w_rem, s_bef)
-        par_final_list.append(p_fin)
-        runs_above_par_list.append(r_abov)
-        
-    df["par_final_score"] = np.nan
-    df["runs_above_par_trajectory"] = np.nan
-    df.loc[inn1_mask, "par_final_score"] = par_final_list
-    df.loc[inn1_mask, "runs_above_par_trajectory"] = runs_above_par_list
+    # 1. First innings par score trajectory estimation (strictly chronological expanding window)
+    logger.info("Computing strictly chronological 1st innings par trajectories...")
+    df = compute_chronological_first_innings_par(df)
     
     # 2. Historical player statistics (strictly pre-match lag)
     logger.info("Computing pre-match historical batter statistics...")
