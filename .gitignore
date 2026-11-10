@@ -46,3 +46,6 @@ data/processed/
 data/interim/
 .DS_Store
 *.log
+catboost_info/
+SupeRR Selector Season 2 _ Problem Statement _ Data Pack/
+

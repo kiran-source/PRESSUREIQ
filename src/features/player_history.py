@@ -112,3 +112,4 @@ def compute_historical_bowler_stats(deliveries_df: pd.DataFrame) -> pd.DataFrame
         "hist_bowler_strike_rate", "hist_bowler_dot_pct", "hist_bowler_balls_exp"
     ]
     return match_bowl[cols]
+

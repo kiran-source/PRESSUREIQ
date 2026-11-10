@@ -69,3 +69,4 @@ def test_player_history_zero_future_leakage():
     # Match 2 strike rate must be influenced by Match 1 performance, NOT Match 2 itself
     assert m2_stats["hist_batter_sr"] != PRIOR_BATTER_SR
     assert m2_stats["hist_batter_sr"] > 140.0  # High score in Match 1 pulled it up
+

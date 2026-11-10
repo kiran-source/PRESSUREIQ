@@ -155,3 +155,4 @@ def compute_bowling_pressure_index(df: pd.DataFrame) -> pd.DataFrame:
         labels=["Low", "Medium", "High", "Extreme"]
     )
     return res
+

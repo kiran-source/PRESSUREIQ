@@ -130,3 +130,4 @@ Resampling 867 match clusters over 30 iterations establishes tight 95% confidenc
 1. **Leg-Bye and Bye Actual Runs**: The raw dataset encodes `runs = 0` for all byes and leg-byes without recording the actual runs scored (1 to 4 runs). While this does not affect batter runs or bowler runs conceded (which follow official MCC rules), it introduces a $\pm 3$ to $5$ run variance in first-innings par estimation.
 2. **Sensor Bowl Speed Artifacts**: 38.7% of deliveries have `bowl_speed = 0`, and sensor errors reach $>1000$ km/h. Cleaned by setting speeds outside 50–165 km/h to NaN.
 3. **Shortened / DLS Matches**: 23 matches featured revised targets. Corrected by handling `second_inn_revised_overs` directly as revised ball counts rather than overs.
+

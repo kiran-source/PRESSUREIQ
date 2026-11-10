@@ -194,3 +194,4 @@ This matrix establishes which proposed features are directly calculable from the
 | `exact_delivery_time` | Match Time | ❌ **Impossible** | All timestamps set to `00:00:00 UTC` | Only calendar date is usable |
 | `bowl_speed` | Sensor Data | ❌ **Unusable** | 38.7% zeros; extreme sensor errors | Excluded from predictive models |
 | `field_placements` / `lengths` | Spatial Context | ❌ **Impossible** | No tracking coordinates provided | Only categorical stroke/side recorded |
+

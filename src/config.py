@@ -55,3 +55,4 @@ NON_BOWLER_DISMISSAL_TYPES = {
     "Obstructing the field",
     "Obstracting the field"
 }
+

@@ -98,7 +98,7 @@ def run_pipeline() -> dict:
     
     # Merge competition category and match date from matches
     logger.info("Merging match metadata...")
-    match_meta = matches_clean[["match_id", "comp_category", "match_date", "venue_country", "venue_id"]].copy()
+    match_meta = matches_clean[["match_id", "comp_category", "match_date", "venue_country", "venue_id", "stage", "knock_out"]].copy()
     deliveries_clean = deliveries_clean.merge(match_meta, on="match_id", how="left")
     
     # Reconstruct match states

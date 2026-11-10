@@ -1,0 +1,22 @@
+{
+  "mode": "standard",
+  "workflow": {
+    "auto_verify": true,
+    "require_tests": true,
+    "strict_no_leakage": true,
+    "cpu_first": true
+  },
+  "phases": {
+    "00": "discovery",
+    "01": "data-engineering",
+    "02": "match-state-features",
+    "03": "pressure-indices",
+    "04": "expected-models",
+    "05": "pressure-adjusted-value",
+    "06": "research-contributions",
+    "07": "player-reliability",
+    "08": "validation",
+    "09": "dashboard",
+    "10": "submission-deliverables"
+  }
+}

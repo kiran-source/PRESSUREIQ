@@ -73,3 +73,4 @@ def test_bopi_monotonicity_and_bounds(sample_scenarios):
     assert "bopi_defend_comp" in bopi_df.columns
     assert "bopi_resource_comp" in bopi_df.columns
     assert "bopi_climax_comp" in bopi_df.columns
+
