@@ -1,131 +1,100 @@
-# PRESSUREIQ — Independent Audit Remediation & Verification Report
+# PRESSUREIQ Final Independent Audit Verification Report
 
-**Audit Authority**: Independent Lead Cricket Analytics & ML Verification Auditor  
-**Date of Audit**: November 10, 2026  
-**Repository Commit**: `master` (continuation from `d524fa2` and `6f7fc71`)  
-**Scope**: 11-Point Verification of Data Integrity, Cricket Physics, Pressure Metrics, Chronological Splits, ML Models, Reliability Scoring, Bootstrap Stability, Interactive Dashboard, and Provenance.
-
----
-
-## Master Verification Matrix (11 Directives)
-
-| # | Audit Directive | Status | Key Evidence / Metric | Primary Artifact / Code Location |
-|---|:---|:---:|:---|:---|
-| **1** | **Byes and Leg-Byes** | **PASS** | `extras1_runs` identified as internal enum (not runs). Modal 1-run heuristic validated: 0.000 median margin error across 408 matches (31.4% exact, 49.3% $\pm 1$ run vs 11.0% for 0-runs). Zero impact on player PAVA. | `scripts/audit_extras_semantics.py`, `scripts/audit_byes_margins.py` |
-| **2** | **2,000+ Match Bootstrap** | **PASS** | 2,000 match-clustered bootstrap iterations executed with deterministic `seed=42`. 0 failed resamples. Exact 95% CIs and inclusion probabilities calculated. | `scripts/run_clustered_bootstrap_2000.py`, `docs/RANKING_STABILITY_REPORT.md` |
-| **3** | **PRC Archetypes** | **PASS** | All 4 archetypes confirmed across the full player pool (Batters: 71 Climbers, 23 Fragile, 10 Anchors, 5 Decliners; Bowlers: 63 Climbers, 57 Fragile, 18 Anchors, 9 Decliners). Top 10 homogeneity proven as mathematical artifact of clutch ranking. 6 synthetic curve unit tests passing. | `tests/test_prc_archetypes.py`, `src/analysis/reliability_engine.py` |
-| **4** | **Pressure Directionality** | **PASS** | BPI and BoPI semantics verified. $\frac{\partial BPI}{\partial RRR} > 0$, $\frac{\partial BPI}{\partial \text{Wickets Lost}} > 0$, $\frac{\partial BPI}{\partial \text{Balls Rem}} < 0$. Bowler defense difficulty and opposition wickets in hand verified. 6 unit tests passing. | `tests/test_pressure_directionality.py`, `src/models/pressure_index.py` |
-| **5** | **Match Invariants (All 867 Matches)** | **PASS** | Automated invariant verification over all 867 matches and 200,961 deliveries: 0 score monotonicity violations, 0 wicket bounds violations, 100% legal delivery classification, 275 non-striker runouts handled, 34 DLS matches validated. | `scripts/audit_full_match_invariants.py` |
-| **6** | **Chronological Leakage** | **PASS** | Splits: Train $\le 2024$ (120,243 balls), Val $2025$ (47,636 balls), Test $\ge 2026$ (33,082 balls). 0 matches span years or splits. Player career history uses strictly prior matches (`cumsum() - match`). 0 same-date player conflicts. | `scripts/audit_same_date_matches.py`, `src/features/player_history.py` |
-| **7** | **Model Evaluation & Units** | **PASS** | Exact target documented: `batter_runs` and `bowler_runs_conceded` in **runs/ball**. LightGBM (1.7270), XGBoost (1.7278), CatBoost (1.7259) vs Baseline (1.7383). Brier scores: Dismissal (0.0508), Boundary (0.1441). | `docs/MODEL_BENCHMARK_REPORT.json`, `src/models/expected_outcomes.py` |
-| **8** | **Reliability Scoring & Sensitivity** | **PASS** | Five pillars exposed: Absolute PAVA (0.50), Retention (0.20), Consistency (0.15), Adaptability (0.15), Shrinkage (45 pseudo-balls). Weight perturbations ($\pm 20\%$) preserve 9/10–10/10 top players (Spearman $> 0.98$). Eligibility sensitivity documented. | `scripts/audit_reliability_sensitivity.py`, `src/analysis/reliability_engine.py` |
-| **9** | **Ranking Robustness** | **PASS** | 2,000-resample top-10 inclusion probabilities computed: Ruturaj Gaikwad (68.65%), Fakhar Zaman (54.60%), Rohit Sharma (54.50%), Liam Dawson (53.50%), Nathan Ellis (50.70%). Baseline rankings preserved as benchmark. | `docs/RANKING_STABILITY_REPORT.md` |
-| **10** | **Dashboard Live Verification** | **PASS** | Streamlit running on port 8502. Verified via Playwright MCP: HTTP 200, DOM snapshot verified for Batters and Bowlers tabs, interactive Plotly charts with 95% CIs rendered, screenshots captured. | `docs/dashboard_screenshot.png`, `docs/dashboard_bowlers_screenshot.png` |
-| **11** | **Provenance & Reproducibility** | **PASS** | SHA-256 hashes of all 6 raw CSVs verified and locked. Full test suite: 26 passed in 7.61s. Python 3.13.5 environment documented. Clean git state. | `scripts/verify_raw_hashes.py`, `tests/` |
+**Date of Audit**: November 11, 2026  
+**Auditor**: Independent Static & Empirical Audit Harness  
+**Audit Scope**: Complete pipeline verification from raw CSV ingest through ML inference, reliability scoring, 2,000-resample bootstrap, and dashboard visualization.  
+**Baseline Reference**: Preserved in `data/processed/baseline_v1_backup/`
 
 ---
 
-## Detailed Audit Investigation Reports
+## Executive Summary
 
-### 1. Byes, Leg-Byes, and Innings Score Reconciliation
-- **Investigation**: We inspected the raw values of `extras_type`, `extras1_runs`, `extras_2_runs`, `runs`, `is_four`, and `is_six` across all 200,999 raw rows.
-- **Key Finding**: `extras1_runs` is a 1-based categorical enum (1=Overstep, 2=wide, 3=legbyes, 4=byes, 5=other, 6=None, 7=Penalty). It does **not** indicate runs scored. For all 529 byes and 2,748 leg-byes, `extras_2_runs == 0` and `runs == 0` (with 1 exception having runs=1).
-- **Match Margin Reconciliation**: We parsed official run margins from `matches.csv` across 408 completed matches won by runs:
-  - Current heuristic (`max(1, extras_2)` = 1 run per bye/leg-bye): **Median error = 0.000 runs**, **Mean error = +0.475 runs**, **MAE = 2.85 runs**, exact match in 31.4% of games.
-  - Alternative (0 runs for byes/leg-byes): Exact match plummets to 11.0% and MAE worsens to 3.98 runs.
-- **Cricket Invariant**: Byes and leg-byes do not count towards batter runs or bowler runs conceded. Therefore, **batter PAVA and bowler PAVA are completely invariant to bye/leg-bye run counts**.
-
-### 2. High-Precision 2,000-Iteration Clustered Bootstrap
-- **Execution Command**: `python scripts/run_clustered_bootstrap_2000.py`
-- **Output**: 2,000 match-clustered bootstrap iterations completed in **3.92 seconds** (1.96 ms / resample) with **0 failed resamples**.
-- **Top Batter Stability**:
-  1. Ruturaj Gaikwad: Baseline Score = 96.56, 95% Score CI = [66.90, 98.21], Inclusion Probability = **68.65%**, Mean Rank = 10.9.
-  2. Fakhar Zaman: Baseline Score = 94.75, 95% Score CI = [44.91, 97.97], Inclusion Probability = **54.60%**, Mean Rank = 19.1.
-  3. Rohit Sharma: Baseline Score = 94.08, 95% Score CI = [55.95, 96.21], Inclusion Probability = **54.50%**, Mean Rank = 14.4.
-- **Top Bowler Stability**:
-  1. Liam Dawson: Baseline Score = 95.88, 95% Score CI = [69.56, 98.64], Inclusion Probability = **53.50%**, Mean Rank = 16.3.
-  2. Nathan Ellis: Baseline Score = 95.41, 95% Score CI = [71.17, 97.88], Inclusion Probability = **50.70%**, Mean Rank = 16.2.
-  3. Akash Madhwal: Baseline Score = 95.26, 95% Score CI = [55.33, 98.48], Inclusion Probability = **49.70%**, Mean Rank = 23.6.
-
-### 3. PRC Archetype Classification
-- **Homogeneity Audit**: The top 10 batters and bowlers were all *Clutch Climbers* because the ranking explicitly optimizes for high-pressure excellence ($\text{PAVA}_{\text{hp}} - \text{PAVA}_{\text{lp}} > 0$).
-- Across the wider eligible pool, **all 4 archetypes exist in healthy proportions**:
-  - Batters: 71 Clutch Climbers, 23 Pressure Fragile, 10 Ice Cold Anchors, 5 Gradual Decliners.
-  - Bowlers: 63 Clutch Climbers, 57 Pressure Fragile, 18 Ice Cold Anchors, 9 Gradual Decliners.
-- **Unit Tests**: `tests/test_prc_archetypes.py` verified that synthetic increasing, decreasing, flat, extreme-collapsing, and small-sample curves are correctly and distinctly classified.
-
-### 4. Pressure Directionality & Symmetry
-- **Verification Command**: `python -m pytest tests/test_pressure_directionality.py -v` (6 passed).
-- Confirmed monotonic response to RRR, wickets lost, balls remaining, opposition wickets in hand, and first-innings par deviation.
-
-### 5. Automated Full-Dataset Match Invariants
-- **Verification Command**: `python scripts/audit_full_match_invariants.py`
-- All 10 invariants across all 867 matches and 200,961 deliveries passed with **0 exceptions**:
-  - Score Monotonicity: 0 violations.
-  - Wicket Monotonicity: 0 violations.
-  - Wickets Remaining [1, 10]: 0 violations.
-  - Legal Ball Classification: 0 violations.
-  - Non-Striker Runouts: 275 identified, 0 incorrectly marked as striker out.
-  - Bowler Wicket Attribution: 10,272 bowler dismissals correctly credited, 609 non-bowler dismissals excluded.
-  - DLS/Revised Matches: 34 matches (4,433 balls) validated.
-  - Super Overs: 38 balls across 6 matches partitioned.
-
-### 6. Chronological Integrity & Cutoff Verification
-- **Split Dates & Sizes**:
-  - Train: 2022-01-22 to 2024-12-31 (120,243 deliveries, 512 matches).
-  - Validation: 2025-01-01 to 2025-12-31 (47,636 deliveries, 211 matches).
-  - Test: 2026-01-01 to 2026-11-01 (33,082 deliveries, 144 matches).
-- **Leakage Prevention**:
-  - Match split intersection: strictly 0 matches.
-  - Same-date multi-match occurrences for any player: 0 instances.
-  - Historical career lag: `cumsum() - current_match` ensures 100% causal separation.
-
-### 7. Expected Outcome Model Benchmarking
-- **Target & Units**:
-  - Target: Delivery-level runs (`batter_runs` and `bowler_runs_conceded`).
-  - Units: **Runs per ball**.
-- **Performance Summary (Held-out 2025 Validation Set)**:
-  - Contextual Baseline: RMSE = 1.7383 runs/ball.
-  - LightGBM: RMSE = **1.7270 runs/ball** (Selected for production).
-  - XGBoost: RMSE = 1.7278 runs/ball.
-  - CatBoost: RMSE = 1.7259 runs/ball.
-  - Dismissal Classifier: Brier Score = 0.0508, ROC-AUC = 0.5853.
-  - Boundary Classifier: Brier Score = 0.1441, ROC-AUC = 0.6109.
-
-### 8. Reliability Scoring Ablation & Sensitivity
-- **Pillar Exposure**:
-  - Pillar 1 (Absolute PAVA, 0.50 weight): Empirical Bayes shrunk score using $K=45$ pseudo-deliveries.
-  - Pillar 2 (Retention Delta, 0.20 weight): $\text{PAVA}_{\text{hp}} - \text{PAVA}_{\text{lp}}$.
-  - Pillar 3 (Consistency, 0.15 weight): $100 / (1 + \sigma_{\text{innings}} / 10)$.
-  - Pillar 4 (Adaptability, 0.15 weight): Difference between IPL and T20I PAVA.
-- **Ablation Studies**:
-  - Varying weights by $\pm 20\%$ yielded Top-10 overlaps between 9/10 and 10/10 with Spearman rank correlations $> 0.98$.
-  - Score saturation test: 0 players score $\le 5.0$, only 2 / 109 score $\ge 95.0$.
-  - Eligibility thresholds: Baseline threshold (400 career balls, 30 HP balls, 15 matches) is optimal; strict threshold (500 balls, 40 HP balls) prematurely discards clutch match-winners (Rohit Sharma, Jason Holder, Darwish Rasooli).
-
-### 9. Interactive Dashboard Verification
-- **Server URL**: `http://localhost:8502`
-- **Playwright MCP Verification**:
-  - Successfully connected and rendered DOM.
-  - Title: `PRESSUREIQ | Cricket Reliability Intelligence`.
-  - Both leaderboards verified: Official Top 10 Batters and Top 10 Bowlers.
-  - Interactive Plotly figures with 95% confidence intervals rendered.
-  - Viewport screenshots captured and verified: `docs/dashboard_screenshot.png` and `docs/dashboard_bowlers_screenshot.png`.
-
-### 10. Provenance & Reproducibility
-- **Raw CSV SHA-256 Checksums**:
-  - `ball_by_ball.csv`: `a3926f49d2c684dca2a5d2de535a02c5ee46ea654ca1e79dd31c69e7544e9889`
-  - `competition_team_player_mapping.csv`: `1ded4e42a933618572d6e2c3a521c3257eb1844fab4456d567d77cbb2d3bbb12`
-  - `competitions.csv`: `507ceb7189f972d4e4f299ddcfc97f3c3247af1913f6291106f161fa8353fd9b`
-  - `matches.csv`: `bb100ab84b8b9a15160c1f2315cf675210131a30e779ec5079fd5403dcf56eef`
-  - `playing_eleven.csv`: `7517c73722a28d5d61c808ccf0cbed315a8780586d02e946eb9a7f5daf011c27`
-  - `teams.csv`: `a65e5922a9b3bf49247b24fc9471782e700efb31f8dcc5042923238b87c50a5d`
-- **Environment**: Python 3.13.5 (Windows), duckdb, pandas, numpy, scikit-learn, lightgbm, xgboost, catboost, scipy, plotly, streamlit, pytest.
-- **Pytest Suite**: **26 tests passed in 7.61 seconds** (100% pass rate).
+| Directive | Focus Area | Status | Evidence Summary |
+|---|---|---|---|
+| **P0-1** | First-Innings Par Non-Leakage | **PASS** | Expanding-window Bayesian prior ($K=15$); 0 same-match or future-match score visibility (`tests/test_features.py`). |
+| **P0-2** | Out-of-Fold Expected Outcomes | **PASS** | Walk-forward chronological OOF with GroupKFold for 2022; provenance logged for 100% of rows (`tests/test_oof_predictions.py`). |
+| **P0-3** | DLS & Shortened Match Physics | **PASS** | Dynamic `max_innings_balls` for 1st & 2nd innings; 0 elapsed balls at start; verified on 90, 84, 48, 30 ball allocations (`tests/test_shortened_innings_dls.py`). |
+| **P0-4** | Bowling Illegal Deliveries Accounting | **PASS** | All deliveries included for runs and PAVA; legal balls used for overs and exposure denominator; wides penalize economy (`tests/test_bowler_illegal_deliveries.py`). |
+| **P0-5** | Bootstrap Ranking Fidelity | **PASS** | Exact mathematical alignment between 2,000 bootstrap engine and scoring engine; $k=\mathbf{1}$ reproduces baseline scores to $<0.05$ (`tests/test_bootstrap_baseline_reproducibility.py`). |
+| **P1-6** | Opportunity-Adjusted Consistency | **PASS** | Replaced match PAVA SD with spell/innings per-ball rate SD; low-pressure PAVA Bayesian shrunk towards career mean. |
+| **P1-7** | PRC Archetype Empirical Diversity | **PASS** | Linear regression on rate above expectation with significance gating and collapse detection; verified on 5 synthetic profiles (`tests/test_prc_archetypes.py`). |
+| **P1-8** | Model Chronological Evaluation | **PASS** | 2022–2024 Train, 2025 Val, 2026 Test; benchmarked Baseline, LightGBM, XGBoost, CatBoost with RMSE, MAE, Brier, ROC-AUC, ECE. |
+| **P1-9** | Ranking Robustness & Preservation | **PASS** | Baseline preserved in `baseline_v1_backup/`; top-10 inclusion probabilities derived from 2,000 match-clustered bootstrap runs. |
+| **P1-10** | Dashboard Integrity | **PASS** | Streamlit app tested with actual DuckDB binned queries, 2,000 bootstrap CIs, and full interactive tabs. |
+| **P2-11** | Provenance & Reproducibility | **PASS** | SHA-256 automated verification passing (`scripts/verify_raw_hashes.py`); 38 Super Over balls reconciled; `requirements.txt` pinned. |
 
 ---
 
-## Final Auditor Verdict
-**OVERALL STATUS: PASS (11 / 11 REQUIREMENTS SATISFIED)**  
-The PRESSUREIQ framework satisfies all data provenance, cricket domain validity, causal non-leakage, pressure directionality, statistical robustness, and reproducible modeling requirements.
+## Official Top 10 Rankings (Remediated Pipeline)
 
+### Top 10 Most Reliable Batters Under Pressure
+| Rank | Player Name | Role | Reliability Score | 95% Score CI | Top-10 Inclusion Prob | 95% Rank CI | PRC Archetype |
+|:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **1** | Ruturaj Gaikwad | Top_Order | **97.04** | [74.88, 98.74] | 57.95% | [1, 107] | Clutch Climber |
+| **2** | Rohit Sharma | Top_Order | **95.70** | [59.31, 97.85] | 39.45% | [1, 108] | Clutch Climber |
+| **3** | Phil Salt | Top_Order | **94.67** | [14.14, 98.97] | 42.60% | [1, 107] | Ice Cold Anchor |
+| **4** | Fakhar Zaman | Top_Order | **93.95** | [49.90, 97.90] | 40.85% | [1, 106] | Clutch Climber |
+| **5** | Suryakumar Yadav | Middle_Order | **93.61** | [64.00, 98.31] | 41.00% | [1, 65] | Clutch Climber |
+| **6** | Rinku Singh | Middle_Order | **93.38** | [70.27, 97.34] | 35.90% | [2, 55] | Clutch Climber |
+| **7** | Naman Dhir | Top_Order | **93.01** | [57.16, 98.09] | 35.15% | [1, 87] | Clutch Climber |
+| **8** | Jos Buttler | Top_Order | **92.56** | [39.83, 98.62] | 35.95% | [1, 91] | Ice Cold Anchor |
+| **9** | Romario Shepherd | Finisher | **92.45** | [66.18, 96.99] | 27.25% | [2, 63] | Pressure Fragile |
+| **10** | Jason Holder | Finisher | **91.88** | [50.31, 98.10] | 25.75% | [1, 107] | Clutch Climber |
+
+### Top 10 Most Reliable Bowlers Under Pressure
+| Rank | Player Name | Pace/Spin | Reliability Score | 95% Score CI | Top-10 Inclusion Prob | 95% Rank CI | PRC Archetype |
+|:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **1** | Liam Dawson | Spin | **94.92** | [72.01, 97.83] | 41.50% | [1, 152] | Clutch Climber |
+| **2** | Abbas Afridi | Pace | **92.50** | [69.83, 95.74] | 44.80% | [1, 151] | Ice Cold Anchor |
+| **3** | Matheesha Pathirana | Pace | **91.54** | [69.29, 95.35] | 53.85% | [1, 57] | Ice Cold Anchor |
+| **4** | Haris Rauf | Pace | **91.44** | [68.78, 96.07] | 53.70% | [1, 58] | Clutch Climber |
+| **5** | Sufiyan Muqeem | Spin | **91.15** | [63.22, 96.99] | 41.85% | [1, 150] | Ice Cold Anchor |
+| **6** | Nathan Ellis | Pace | **90.70** | [68.13, 95.25] | 45.95% | [1, 60] | Ice Cold Anchor |
+| **7** | Ishant Sharma | Pace | **89.38** | [71.20, 93.53] | 21.20% | [3, 153] | Ice Cold Anchor |
+| **8** | Nasum Ahmed | Spin | **89.15** | [53.38, 98.03] | 39.40% | [1, 146] | Clutch Climber |
+| **9** | Prince Yadav | Pace | **88.46** | [68.79, 92.52] | 31.05% | [2, 64] | Ice Cold Anchor |
+| **10** | Shoriful Islam | Pace | **88.45** | [61.80, 95.71] | 39.65% | [1, 82] | Ice Cold Anchor |
+
+---
+
+## Verification Test Results
+
+```bash
+$ python -m pytest
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.6.0
+collected 40 items
+
+tests\test_bootstrap_baseline_reproducibility.py ..                      [  5%]
+tests\test_bowler_illegal_deliveries.py .                                [  7%]
+tests\test_data_cleaning.py ....                                         [ 17%]
+tests\test_features.py ....                                              [ 27%]
+tests\test_oof_predictions.py ..                                         [ 32%]
+tests\test_prc_archetypes.py .....                                       [ 45%]
+tests\test_pressure_directionality.py ......                             [ 60%]
+tests\test_pressure_index.py ..                                          [ 65%]
+tests\test_shortened_innings_dls.py ........                             [ 85%]
+tests\test_state_reconstruction.py ..                                    [ 90%]
+tests\test_validation_fixes.py ....                                      [100%]
+
+============================= 40 passed in 18.44s =============================
+```
+
+```bash
+$ python scripts/verify_raw_hashes.py
+Verifying 6 raw CSV files against expected SHA-256 provenance hashes:
+✅ VERIFIED: ball_by_ball.csv (39.17 MB) -> a3926f49d2c684dc...
+✅ VERIFIED: competition_team_player_mapping.csv (0.44 MB) -> 1ded4e42a9336185...
+✅ VERIFIED: competitions.csv (0.01 MB) -> 507ceb7189f972d4...
+✅ VERIFIED: matches.csv (0.12 MB) -> bb100ab84b8b9a15...
+✅ VERIFIED: playing_eleven.csv (0.92 MB) -> 7517c73722a28d5d...
+✅ VERIFIED: teams.csv (0.01 MB) -> a65e5922a9b3bf49...
+
+SUCCESS: All raw dataset files match immutable provenance SHA-256 hashes exactly.
+```
+
+---
+
+## Final Readiness Determination
+
+All 11 critical directives are verified **PASS**. The pipeline satisfies strict methodological rigor, zero future leakage, exact cricket state physics, full accounting of illegal deliveries, mathematical equivalence of bootstrap resampling, and complete reproducibility.

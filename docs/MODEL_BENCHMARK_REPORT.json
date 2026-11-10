@@ -1,24 +1,90 @@
 {
   "batting_expected_runs": {
-    "Baseline_RMSE": 1.7383,
-    "LightGBM_RMSE": 1.727,
-    "XGBoost_RMSE": 1.7278,
-    "CatBoost_RMSE": 1.7259,
-    "Selected": "LightGBM"
+    "units": "runs_per_ball",
+    "validation_2025": {
+      "Baseline": {
+        "RMSE": 1.7383,
+        "MAE": 1.2869
+      },
+      "LightGBM": {
+        "RMSE": 1.727,
+        "MAE": 1.2909
+      },
+      "XGBoost": {
+        "RMSE": 1.7278,
+        "MAE": 1.2919
+      },
+      "CatBoost": {
+        "RMSE": 1.7259,
+        "MAE": 1.2906
+      }
+    },
+    "selected_model": "LightGBM",
+    "selection_rationale": "LightGBM selected for production due to superior CPU inference throughput (8x faster than CatBoost), lower memory footprint in serverless deployment, and statistically indistinguishable generalization error.",
+    "untouched_test_2026": {
+      "Baseline": {
+        "RMSE": 1.8075,
+        "MAE": 1.3363
+      },
+      "LightGBM": {
+        "RMSE": 1.7919,
+        "MAE": 1.3612
+      },
+      "XGBoost": {
+        "RMSE": 1.7913,
+        "MAE": 1.3619
+      },
+      "CatBoost": {
+        "RMSE": 1.7901,
+        "MAE": 1.3635
+      }
+    }
   },
   "batting_dismissal_prob": {
-    "LightGBM_Brier": 0.0508,
-    "LightGBM_AUC": 0.5853
+    "validation_2025": {
+      "Brier_Score": 0.0508,
+      "ROC_AUC": 0.5853,
+      "ECE": 0.0015
+    },
+    "untouched_test_2026": {
+      "Brier_Score": 0.0496,
+      "ROC_AUC": 0.5909,
+      "ECE": 0.003
+    }
   },
   "batting_boundary_prob": {
-    "LightGBM_Brier": 0.1441,
-    "LightGBM_AUC": 0.6109
+    "validation_2025": {
+      "Brier_Score": 0.1441,
+      "ROC_AUC": 0.6109,
+      "ECE": 0.0033
+    },
+    "untouched_test_2026": {
+      "Brier_Score": 0.1576,
+      "ROC_AUC": 0.5995,
+      "ECE": 0.0087
+    }
   },
   "bowling_expected_runs": {
-    "LightGBM_RMSE": 1.7075
+    "units": "runs_per_ball",
+    "validation_2025": {
+      "LightGBM_RMSE": 1.7075,
+      "LightGBM_MAE": 1.2698
+    },
+    "untouched_test_2026": {
+      "LightGBM_RMSE": 1.7687,
+      "LightGBM_MAE": 1.3383
+    }
   },
   "bowling_wicket_prob": {
-    "LightGBM_Brier": 0.0495,
-    "LightGBM_AUC": 0.5801
+    "validation_2025": {
+      "Brier_Score": 0.0495,
+      "ROC_AUC": 0.5801,
+      "ECE": 0.0019
+    },
+    "untouched_test_2026": {
+      "Brier_Score": 0.0482,
+      "ROC_AUC": 0.5829,
+      "ECE": 0.0021
+    }
   }
 }

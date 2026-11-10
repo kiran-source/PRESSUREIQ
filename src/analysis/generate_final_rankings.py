@@ -43,31 +43,43 @@ def main():
     eligible_bowlers = bowler_df[bowler_df["is_eligible"]].copy()
     eligible_bowlers["rank"] = np.arange(1, len(eligible_bowlers) + 1)
     
-    # 3. Bootstrap 95% Confidence Intervals for Top Contenders
-    logger.info("Running fast bootstrap for top 20 batters...")
-    bat_top20_ci = match_clustered_bootstrap_rankings(df, n_iterations=30, is_batting=True)
-    ci_map_bat = bat_top20_ci.set_index("player_id")[["ci_lower_95", "ci_upper_95"]].to_dict(orient="index")
+    # 3. 2,000 Match-Clustered Bootstrap Confidence Intervals (P0-5)
+    boot_bat_path = PROCESSED_DATA_DIR / "bootstrap_2000_batters.parquet"
+    if not boot_bat_path.exists():
+        logger.info("Running 2,000 match-clustered bootstrap for batters...")
+        bat_boot = match_clustered_bootstrap_rankings(df, n_iterations=2000, is_batting=True)
+        bat_boot.to_parquet(boot_bat_path, index=False)
+        bat_boot.to_csv(PROCESSED_DATA_DIR / "bootstrap_2000_batters.csv", index=False)
+    else:
+        logger.info(f"Loading existing 2,000 bootstrap results from {boot_bat_path}...")
+        bat_boot = pd.read_parquet(boot_bat_path)
+        
+    boot_bowl_path = PROCESSED_DATA_DIR / "bootstrap_2000_bowlers.parquet"
+    if not boot_bowl_path.exists():
+        logger.info("Running 2,000 match-clustered bootstrap for bowlers...")
+        bowl_boot = match_clustered_bootstrap_rankings(df, n_iterations=2000, is_batting=False)
+        bowl_boot.to_parquet(boot_bowl_path, index=False)
+        bowl_boot.to_csv(PROCESSED_DATA_DIR / "bootstrap_2000_bowlers.csv", index=False)
+    else:
+        logger.info(f"Loading existing 2,000 bootstrap results from {boot_bowl_path}...")
+        bowl_boot = pd.read_parquet(boot_bowl_path)
+        
+    # Merge bootstrap statistics
+    merge_cols = [
+        "player_id", "boot_score_ci_lower_95", "boot_score_ci_upper_95",
+        "top10_inclusion_prob", "boot_mean_rank", "boot_rank_ci_lower_95", "boot_rank_ci_upper_95"
+    ]
     
-    eligible_batters["ci_lower_95"] = eligible_batters["player_id"].map(
-        lambda pid: ci_map_bat.get(pid, {}).get("ci_lower_95", eligible_batters.loc[eligible_batters["player_id"] == pid, "reliability_score"].values[0] - 5.0)
-    )
-    eligible_batters["ci_upper_95"] = eligible_batters["player_id"].map(
-        lambda pid: ci_map_bat.get(pid, {}).get("ci_upper_95", eligible_batters.loc[eligible_batters["player_id"] == pid, "reliability_score"].values[0] + 5.0)
-    )
+    eligible_batters = eligible_batters.merge(bat_boot[merge_cols], on="player_id", how="left")
+    eligible_batters["ci_lower_95"] = eligible_batters["boot_score_ci_lower_95"].fillna(eligible_batters["reliability_score"] - 5.0)
+    eligible_batters["ci_upper_95"] = eligible_batters["boot_score_ci_upper_95"].fillna(eligible_batters["reliability_score"] + 5.0)
     
-    logger.info("Running fast bootstrap for top 20 bowlers...")
-    bowl_top20_ci = match_clustered_bootstrap_rankings(df, n_iterations=30, is_batting=False)
-    ci_map_bowl = bowl_top20_ci.set_index("player_id")[["ci_lower_95", "ci_upper_95"]].to_dict(orient="index")
-    
-    eligible_bowlers["ci_lower_95"] = eligible_bowlers["player_id"].map(
-        lambda pid: ci_map_bowl.get(pid, {}).get("ci_lower_95", eligible_bowlers.loc[eligible_bowlers["player_id"] == pid, "reliability_score"].values[0] - 5.0)
-    )
-    eligible_bowlers["ci_upper_95"] = eligible_bowlers["player_id"].map(
-        lambda pid: ci_map_bowl.get(pid, {}).get("ci_upper_95", eligible_bowlers.loc[eligible_bowlers["player_id"] == pid, "reliability_score"].values[0] + 5.0)
-    )
+    eligible_bowlers = eligible_bowlers.merge(bowl_boot[merge_cols], on="player_id", how="left")
+    eligible_bowlers["ci_lower_95"] = eligible_bowlers["boot_score_ci_lower_95"].fillna(eligible_bowlers["reliability_score"] - 5.0)
+    eligible_bowlers["ci_upper_95"] = eligible_bowlers["boot_score_ci_upper_95"].fillna(eligible_bowlers["reliability_score"] + 5.0)
     
     # 4. Save Rankings to Parquet and CSV
-    logger.info(f"Saving final rankings...")
+    logger.info("Saving final rankings...")
     eligible_batters.to_parquet(BATTER_RANKINGS_PARQUET, index=False)
     eligible_batters.to_csv(BATTER_RANKINGS_CSV, index=False)
     
@@ -81,24 +93,23 @@ def main():
     logger.info(f"Validation report saved to {VALIDATION_REPORT}")
     
     # 6. Print Official Top 10 Batters and Bowlers
-    print("\n" + "=" * 80)
+    print("\n" + "=" * 90)
     print("🏆 PRESSUREIQ — OFFICIAL TOP 10 MOST RELIABLE BATTERS UNDER PRESSURE")
-    print("=" * 80)
+    print("=" * 90)
     print(eligible_batters.head(10)[[
         "rank", "player_name", "role", "reliability_score", "ci_lower_95", "ci_upper_95",
-        "hp_balls", "shrunk_hp_pava_per_ball", "retention_delta", "prc_archetype"
+        "top10_inclusion_prob", "hp_balls", "shrunk_hp_pava_per_ball", "retention_delta", "prc_archetype"
     ]].to_string(index=False))
     
-    print("\n" + "=" * 80)
+    print("\n" + "=" * 90)
     print("🏆 PRESSUREIQ — OFFICIAL TOP 10 MOST RELIABLE BOWLERS UNDER PRESSURE")
-    print("=" * 80)
+    print("=" * 90)
     print(eligible_bowlers.head(10)[[
         "rank", "player_name", "pace_or_spin", "reliability_score", "ci_lower_95", "ci_upper_95",
-        "hp_balls", "shrunk_hp_pava_per_ball", "retention_delta", "prc_archetype"
+        "top10_inclusion_prob", "hp_balls", "shrunk_hp_pava_per_ball", "retention_delta", "prc_archetype"
     ]].to_string(index=False))
-    print("=" * 80 + "\n")
+    print("=" * 90 + "\n")
 
 
 if __name__ == "__main__":
     main()
-

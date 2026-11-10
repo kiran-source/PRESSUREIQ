@@ -35,7 +35,7 @@ def main():
     
     # 2. Train and benchmark models
     engine = ExpectedOutcomeEngine()
-    engine.train_and_benchmark(train_df, val_df)
+    engine.train_and_benchmark(train_df, val_df, test_df)
     engine.save()
     
     # Save benchmark report
@@ -43,9 +43,9 @@ def main():
         json.dump(engine.benchmark_results, f, indent=2)
     logger.info(f"Benchmark results saved to {BENCHMARK_REPORT}")
     
-    # 3. Compute expected outcomes on entire dataset
-    logger.info("Computing expected outcome predictions across entire dataset...")
-    exp_out = engine.predict_expected_outcomes(df)
+    # 3. Compute expected outcomes on entire dataset using strict chronological out-of-fold walk-forward
+    logger.info("Computing STRICT CHRONOLOGICAL out-of-fold predictions across entire dataset...")
+    exp_out = engine.generate_chronological_oof_predictions(df)
     
     # 4. Compute delivery-level Pressure-Adjusted Value Added (PAVA)
     logger.info("Calculating delivery-level PAVA...")

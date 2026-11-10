@@ -25,7 +25,10 @@ def compute_pressure_adjusted_value(
     
     All units are expressed in Runs Added Above Expectation.
     """
-    df = pd.concat([deliveries_df, expected_outcomes_df], axis=1).copy()
+    # Drop existing outcome columns from deliveries_df to avoid duplicate column collisions
+    overlap_cols = [c for c in expected_outcomes_df.columns if c in deliveries_df.columns]
+    deliv_clean = deliveries_df.drop(columns=overlap_cols) if overlap_cols else deliveries_df
+    df = pd.concat([deliv_clean, expected_outcomes_df], axis=1).copy()
     
     # 1. Phase-based wicket run equivalence
     phase = df["phase"].fillna("Middle")
@@ -89,11 +92,18 @@ def aggregate_innings_batting_pava(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def aggregate_spell_bowling_pava(df: pd.DataFrame) -> pd.DataFrame:
-    """Aggregate delivery-level bowling PAVA to match/spell level."""
-    bowlers = df[df["is_legal_ball"]].groupby(
+    """
+    Aggregate delivery-level bowling PAVA to match/spell level.
+    
+    Includes all deliveries bowled by the bowler (including wides and no-balls)
+    for total runs conceded and total PAVA, while tracking legal balls for overs
+    and legal exposure denominators (P0-4).
+    """
+    bowlers = df[df["bowler_id"].notna()].groupby(
         ["match_id", "innings", "bowler_id", "bowler_name", "comp_category"]
     ).agg(
         legal_balls=("is_legal_ball", "sum"),
+        total_balls_bowled=("bowler_id", "count"),
         runs_conceded=("bowler_runs_conceded", "sum"),
         wickets=("is_bowler_wicket", "sum"),
         avg_bopi=("bopi", "mean"),
@@ -102,6 +112,6 @@ def aggregate_spell_bowling_pava(df: pd.DataFrame) -> pd.DataFrame:
         raw_value=("raw_bowl_value", "sum")
     ).reset_index()
     
-    bowlers["pava_per_ball"] = np.round(bowlers["total_pava"] / bowlers["legal_balls"], 3)
+    bowlers["pava_per_ball"] = np.round(bowlers["total_pava"] / np.maximum(bowlers["legal_balls"], 1), 3)
     return bowlers
 

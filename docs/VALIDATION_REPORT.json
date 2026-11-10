@@ -1,18 +1,96 @@
 {
   "full_model_top10": [
-    "Fakhar Zaman",
-    "Jason Holder",
-    "Darwish Rasooli",
     "Suryakumar Yadav",
-    "Naman Dhir",
-    "Phil Salt",
-    "Rohit Sharma",
-    "Ruturaj Gaikwad",
+    "Rinku Singh",
+    "Romario Shepherd",
+    "Fakhar Zaman",
     "Jos Buttler",
-    "Romario Shepherd"
+    "Jason Holder",
+    "Ruturaj Gaikwad",
+    "Phil Salt",
+    "Naman Dhir",
+    "Rohit Sharma"
   ],
-  "raw_sr_overlap": 3,
-  "no_shrinkage_overlap": 7,
-  "no_retention_overlap": 8,
-  "conclusion": "Empirical Bayes shrinkage successfully dampens high-variance small-sample spikes, while retention delta distinguishes players who elevate under pressure from those who decline."
+  "ablations": {
+    "raw_strike_rate_only": {
+      "top10": [
+        "Andre Russell",
+        "Suryakumar Yadav",
+        "Harry Brook",
+        "Tim David",
+        "Sunil Narine",
+        "Rajat Patidar",
+        "Phil Salt",
+        "Naman Dhir",
+        "Heinrich Klaasen",
+        "Dinesh Karthik"
+      ],
+      "top10_overlap_with_full": 3,
+      "jaccard_similarity": 0.176
+    },
+    "no_empirical_bayes_shrinkage": {
+      "top10": [
+        "Suryakumar Yadav",
+        "Rinku Singh",
+        "Fakhar Zaman",
+        "Jos Buttler",
+        "Ruturaj Gaikwad",
+        "Phil Salt",
+        "Naman Dhir",
+        "Darwish Rasooli",
+        "Rohit Sharma",
+        "Mohammad Rizwan"
+      ],
+      "top10_overlap_with_full": 8,
+      "jaccard_similarity": 0.667
+    },
+    "no_retention_delta": {
+      "top10": [
+        "Rinku Singh",
+        "Suryakumar Yadav",
+        "Jos Buttler",
+        "Fakhar Zaman",
+        "Jitesh Sharma",
+        "Ruturaj Gaikwad",
+        "Phil Salt",
+        "Nicholas Pooran",
+        "Naman Dhir",
+        "Rohit Sharma"
+      ],
+      "top10_overlap_with_full": 8,
+      "jaccard_similarity": 0.667
+    },
+    "no_consistency_pillar": {
+      "top10": [
+        "Suryakumar Yadav",
+        "Rinku Singh",
+        "Romario Shepherd",
+        "Fakhar Zaman",
+        "Jason Holder",
+        "Jos Buttler",
+        "Jitesh Sharma",
+        "Ruturaj Gaikwad",
+        "Phil Salt",
+        "Rohit Sharma"
+      ],
+      "top10_overlap_with_full": 9,
+      "jaccard_similarity": 0.818
+    },
+    "no_adaptability_pillar": {
+      "top10": [
+        "Suryakumar Yadav",
+        "Romario Shepherd",
+        "Fakhar Zaman",
+        "Jason Holder",
+        "Jos Buttler",
+        "Ruturaj Gaikwad",
+        "Phil Salt",
+        "Naman Dhir",
+        "Darwish Rasooli",
+        "Rohit Sharma"
+      ],
+      "top10_overlap_with_full": 9,
+      "jaccard_similarity": 0.818
+    }
+  }
 }

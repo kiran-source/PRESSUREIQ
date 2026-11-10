@@ -26,6 +26,9 @@ def reconstruct_match_states(
         "revised_target", "is_dls_or_revised"
     ]
     cols_to_merge = [c for c in revised_cols if c in matches_df.columns]
+    cols_to_drop = [c for c in cols_to_merge if c != "match_id" and c in df.columns]
+    if cols_to_drop:
+        df = df.drop(columns=cols_to_drop)
     df = df.merge(matches_df[cols_to_merge], on="match_id", how="left")
     
     # Determine maximum legal ball allocation for the innings
@@ -82,6 +85,8 @@ def reconstruct_match_states(
     # Compute 1st innings total score for each match
     inn1 = df[df["innings"] == 1].groupby("match_id")["est_total_runs"].sum().reset_index()
     inn1.columns = ["match_id", "inn1_final_score"]
+    if "inn1_final_score" in df.columns:
+        df = df.drop(columns=["inn1_final_score"])
     df = df.merge(inn1, on="match_id", how="left")
     
     # Target score definition:

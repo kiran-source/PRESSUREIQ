@@ -97,7 +97,7 @@ if page == "🏆 Top 10 Leaderboards":
     st.markdown(
         "Ranked using the **Five-Pillar Reliability Score (0–100)** incorporating "
         "Pressure-Adjusted Value Added (PAVA), Baseline Retention Delta, Match Consistency, "
-        "and Empirical Bayes Shrinkage."
+        "and Empirical Bayes Shrinkage with **2,000 match-clustered bootstrap confidence intervals**."
     )
     
     tab_bat, tab_bowl = st.tabs(["🏏 Top 10 Batters", "🎯 Top 10 Bowlers"])
@@ -106,21 +106,18 @@ if page == "🏆 Top 10 Leaderboards":
         st.subheader("Official Top 10 Most Reliable Batters")
         top10_bat = bat_df.head(10).copy()
         
-        # Display Table
         display_bat = top10_bat[[
             "rank", "player_name", "role", "reliability_score", "ci_lower_95", "ci_upper_95",
-            "hp_balls", "total_runs", "career_sr", "shrunk_hp_pava_per_ball", "retention_delta", "prc_archetype"
+            "top10_inclusion_prob", "hp_balls", "shrunk_hp_pava_per_ball", "retention_delta", "prc_archetype"
         ]].rename(columns={
             "rank": "Rank", "player_name": "Player", "role": "Role",
             "reliability_score": "Reliability Score", "ci_lower_95": "95% CI Lower",
-            "ci_upper_95": "95% CI Upper", "hp_balls": "High-Pressure Balls",
-            "total_runs": "Runs", "career_sr": "Strike Rate",
-            "shrunk_hp_pava_per_ball": "Shrunk PAVA/Ball", "retention_delta": "Retention Delta",
-            "prc_archetype": "PRC Archetype"
+            "ci_upper_95": "95% CI Upper", "top10_inclusion_prob": "Top-10 Prob",
+            "hp_balls": "HP Balls", "shrunk_hp_pava_per_ball": "Shrunk PAVA/Ball",
+            "retention_delta": "Retention Delta", "prc_archetype": "PRC Archetype"
         })
         st.dataframe(display_bat, use_container_width=True, hide_index=True)
         
-        # Plot with Confidence Intervals
         fig_bat = go.Figure()
         fig_bat.add_trace(go.Bar(
             x=top10_bat["player_name"],
@@ -150,13 +147,13 @@ if page == "🏆 Top 10 Leaderboards":
         
         display_bowl = top10_bowl[[
             "rank", "player_name", "pace_or_spin", "bowling_type", "reliability_score",
-            "ci_lower_95", "ci_upper_95", "hp_balls", "total_wickets", "career_economy",
+            "ci_lower_95", "ci_upper_95", "top10_inclusion_prob", "hp_balls", "career_economy",
             "shrunk_hp_pava_per_ball", "retention_delta", "prc_archetype"
         ]].rename(columns={
             "rank": "Rank", "player_name": "Player", "pace_or_spin": "Type",
             "bowling_type": "Style", "reliability_score": "Reliability Score",
             "ci_lower_95": "95% CI Lower", "ci_upper_95": "95% CI Upper",
-            "hp_balls": "High-Pressure Balls", "total_wickets": "Wickets",
+            "top10_inclusion_prob": "Top-10 Prob", "hp_balls": "HP Balls",
             "career_economy": "Economy", "shrunk_hp_pava_per_ball": "Shrunk PAVA/Ball",
             "retention_delta": "Retention Delta", "prc_archetype": "PRC Archetype"
         })
@@ -191,9 +188,9 @@ if page == "🏆 Top 10 Leaderboards":
 elif page == "📈 Pressure Response Curves (PRC)":
     st.title("📈 Pressure Response Curves (PRC)")
     st.markdown(
-        "A player's Pressure Response Curve maps their performance (PAVA per ball) "
-        "as a continuous function of pressure, revealing whether they elevate, anchor, "
-        "or decline when stakes peak."
+        "A player's Pressure Response Curve maps their performance above expectation "
+        "as a function of pressure, revealing whether they elevate, anchor, or decline when stakes peak. "
+        "Displays **actual observed binned performance** alongside the fitted trend (P1-7)."
     )
     
     role_choice = st.radio("Select Discipline:", ["Batters", "Bowlers"], horizontal=True)
@@ -201,31 +198,73 @@ elif page == "📈 Pressure Response Curves (PRC)":
     
     player_choice = st.selectbox("Select Player:", df_pool["player_name"].tolist())
     p_row = df_pool[df_pool["player_name"] == player_choice].iloc[0]
+    pid = p_row["player_id"]
     
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
     col1.metric("Reliability Score", f"{p_row['reliability_score']:.1f}")
     col2.metric("PRC Archetype", p_row["prc_archetype"])
     col3.metric("PRC Slope (β)", f"{p_row['prc_slope']:+.3f}")
-    col4.metric("Retention Delta", f"{p_row['retention_delta']:+.3f} runs/ball")
+    col4.metric("Retention Delta", f"{p_row['retention_delta']:+.3f}")
+    col5.metric("Top-10 Prob (Bootstrap)", f"{p_row.get('top10_inclusion_prob', 0.0)*100:.1f}%")
     
-    # Generate synthetic continuous curve from slope and retention
-    pressures = np.linspace(10, 95, 50)
-    baseline_val = p_row["shrunk_hp_pava_per_ball"] - (p_row["prc_slope"] * 0.70)
-    curve_vals = baseline_val + (p_row["prc_slope"] * (pressures / 100.0))
+    # Query actual deliveries for selected player via duckdb for instant response
+    is_bat = (role_choice == "Batters")
+    filter_col = "striker_id" if is_bat else "bowler_id"
+    p_col = "bpi" if is_bat else "bopi"
+    val_col = "raw_bat_value" if is_bat else "raw_bowl_value"
+    
+    conn = duckdb.connect()
+    p_delivs = conn.execute(f"""
+        SELECT {p_col} as pressure, {val_col} as raw_val
+        FROM parquet_scan('{str(DELIVERIES_PAVA_PATH).replace('\\', '/')}')
+        WHERE {filter_col} = {pid} AND {'is_batter_ball' if is_bat else 'bowler_id IS NOT NULL'}
+    """).df()
+    conn.close()
     
     fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=pressures,
-        y=curve_vals,
-        mode="lines+markers",
-        line=dict(color="#d62728" if p_row["prc_slope"] > 0 else "#1f77b4", width=3),
-        name=player_choice
-    ))
+    
+    if len(p_delivs) > 0:
+        # Bin deliveries into pressure intervals
+        bins = [0, 30, 45, 60, 75, 90, 100]
+        labels = [15, 37.5, 52.5, 67.5, 82.5, 95]
+        p_delivs["bin"] = pd.cut(p_delivs["pressure"], bins=bins, labels=labels)
+        
+        binned = p_delivs.groupby("bin", observed=False).agg(
+            mean_val=("raw_val", "mean"),
+            count=("raw_val", "count"),
+            std_val=("raw_val", "std")
+        ).reset_index()
+        
+        binned["se_val"] = binned["std_val"] / np.sqrt(np.maximum(binned["count"], 1))
+        binned_valid = binned[binned["count"] >= 3].copy()
+        
+        # Add actual observed points with error bars (±1 SE)
+        fig.add_trace(go.Scatter(
+            x=binned_valid["bin"],
+            y=binned_valid["mean_val"],
+            error_y=dict(type="data", array=binned_valid["se_val"], visible=True),
+            mode="markers",
+            marker=dict(size=10, color="#1f77b4"),
+            name="Actual Observed Bins (±1 SE)"
+        ))
+        
+        # Fitted linear response trend line
+        x_trend = np.linspace(15, 95, 30)
+        y_trend = (p_row["prc_slope"] * (x_trend / 100.0)) + (binned_valid["mean_val"].mean() - p_row["prc_slope"] * (binned_valid["bin"].astype(float).mean() / 100.0))
+        
+        fig.add_trace(go.Scatter(
+            x=x_trend,
+            y=y_trend,
+            mode="lines",
+            line=dict(color="#d62728" if p_row["prc_slope"] > 0 else "#2ca02c", width=3),
+            name=f"Fitted Trend (β={p_row['prc_slope']:+.3f})"
+        ))
+        
     fig.add_hline(y=0, line_dash="dash", line_color="gray", annotation_text="League Neutral Expectation")
     fig.update_layout(
-        title=f"Pressure Response Curve for {player_choice} ({p_row['prc_archetype']})",
-        xaxis_title="Pressure Index (BPI/BoPI 0–100)",
-        yaxis_title="Expected Runs Added Above Expectation per Ball",
+        title=f"Observed Performance & Fitted PRC Trend for {player_choice} ({p_row['prc_archetype']})",
+        xaxis_title="Pressure Index (0–100)",
+        yaxis_title="Runs Added Above Expectation per Ball",
         height=500
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -251,12 +290,13 @@ elif page == "🎴 Player Decision Cards":
         st.markdown(f"**Discipline**: {role_choice[:-1]}")
         st.markdown(f"**Archetype**: `{p_row['prc_archetype']}`")
         st.markdown(f"**Reliability Score**: **{p_row['reliability_score']:.2f} / 100**")
-        st.markdown(f"**95% Confidence Interval**: [{p_row['ci_lower_95']:.1f}, {p_row['ci_upper_95']:.1f}]")
-        st.markdown(f"**High-Pressure Exposure**: {p_row['hp_balls']} deliveries")
-        st.markdown(f"**Total Deliveries**: {p_row['total_balls']} balls across {p_row['matches']} matches")
+        st.markdown(f"**95% Score CI**: [{p_row['ci_lower_95']:.1f}, {p_row['ci_upper_95']:.1f}]")
+        st.markdown(f"**Top-10 Inclusion Prob**: **{p_row.get('top10_inclusion_prob', 0.0)*100:.1f}%**")
+        st.markdown(f"**95% Rank CI**: [{p_row.get('boot_rank_ci_lower_95', 'N/A')}, {p_row.get('boot_rank_ci_upper_95', 'N/A')}]")
+        st.markdown(f"**High-Pressure Exposure**: {p_row['hp_balls']} legal balls")
+        st.markdown(f"**Total Exposure**: {p_row['total_balls']} balls across {p_row['matches']} matches")
         
     with c2:
-        # Radar Chart of 5 Pillars
         categories = [
             "Pressure PAVA",
             "Baseline Retention",
@@ -265,7 +305,6 @@ elif page == "🎴 Player Decision Cards":
             "Evidence Strength"
         ]
         
-        # Normalize scores to 0-100 for radar visualization
         p1 = float(np.clip(p_row["shrunk_hp_pava_per_ball"] * 80.0 + 50.0, 10.0, 100.0))
         p2 = float(np.clip(p_row["retention_delta"] * 40.0 + 50.0, 10.0, 100.0))
         p3 = float(p_row["consistency_score"])
@@ -297,25 +336,24 @@ elif page == "🔬 Five-Pillar Methodology":
     st.markdown("""
     ### 1. Conceptual Definition of Pressure
     Pressure is defined strictly as **contextual match difficulty**, NOT player success or failure.
-    Every delivery in our 2022–2026 dataset receives a calibrated continuous **0–100 score**:
-    - **Batting Pressure Index (BPI)**: Combines Scoring Demand (Required Run Rate in chase / Par Deficit in 1st inn), Resource Scarcity (wickets lost), Temporal Climax (balls remaining), and Knockout Match Stakes.
+    Every delivery receives a calibrated continuous **0–100 score**:
+    - **Batting Pressure Index (BPI)**: Combines Scoring Demand (RRR in chase / Par Deficit in 1st inn), Resource Scarcity (wickets lost), Temporal Climax (balls remaining), and Knockout Match Stakes.
     - **Bowling Pressure Index (BoPI)**: Combines Target Defense Urgency (chasing team cruise rate / par surplus), Batting Resources in Hand, Death Overs Exposure, and Close-Finish Volatility.
     
-    ### 2. Expected Performance Models
-    For every delivery, a multi-target gradient-boosted decision tree ensemble (LightGBM) predicts:
-    1. $E[\text{Runs}]$: Expected runs scored/conceded.
-    2. $P(\text{Dismissal})$: Calibrated dismissal probability ($E[P] \approx 0.054$).
-    3. $P(\text{Boundary})$: Calibrated boundary probability ($E[P] \approx 0.180$).
+    ### 2. Expected Performance Models (P0-2 Walk-Forward OOF)
+    Historical deliveries used in PAVA are scored via **strictly chronological walk-forward out-of-fold estimation**:
+    - 2022: 5-fold match-grouped out-of-fold cross-validation.
+    - 2023–2026: Models trained strictly on prior years ($\le \text{year}-1$).
     
     ### 3. Pressure-Adjusted Value Added (PAVA)
     $$\\text{PAVA}_{\\text{delivery}} = \\Big[(\\text{Actual Runs} - E[\\text{Runs}]) + \\lambda_{\\text{wkt}} \\cdot (P(\\text{Wicket}) - \\text{Wicket}) + \\lambda_{\\text{bnd}} \\cdot (\\text{Boundary} - P(\\text{Boundary}))\\Big] \\times \\left(1.0 + \\frac{\\text{Pressure}}{50.0}\\right)$$
     
     ### 4. The Five Pillars of Reliability
     1. **Absolute Pressure Performance**: Mean PAVA in high-pressure match situations ($>= 50$ BPI/BoPI).
-    2. **Baseline Retention Delta**: Performance under pressure minus performance in low pressure ($\text{PAVA}_{\\text{high}} - \\text{PAVA}_{\\text{low}}$).
-    3. **Match Consistency**: Inverse inter-match variance across independent innings/spells.
+    2. **Baseline Retention Delta**: Performance under pressure minus performance in low pressure with Bayesian shrinkage towards career mean.
+    3. **Opportunity-Adjusted Consistency**: Inverse inter-match rate variance across independent innings/spells.
     4. **Context Adaptability**: Cross-competition stability between IPL and T20 Internationals.
-    5. **Empirical Bayes Shrinkage**: Regressing small sample variance towards the league prior.
+    5. **Empirical Bayes Shrinkage**: Calibrated shrinkage ($K=45$) based on between-player and within-player variance ratios.
     """)
 
 # ==========================================
@@ -324,12 +362,18 @@ elif page == "🔬 Five-Pillar Methodology":
 elif page == "🧪 Validation & Ablation Studies":
     st.title("🧪 Model Validation, Calibration & Ablation Studies")
     
-    st.subheader("1. Expected Performance Model Out-of-Sample Benchmark")
+    st.subheader("1. Expected Performance Model Out-of-Sample Benchmark (2025 Val & 2026 Test)")
+    
+    val_runs = benchmark["batting_expected_runs"]["validation_2025"]
+    test_runs = benchmark["batting_expected_runs"]["untouched_test_2026"]
+    
     b_df = pd.DataFrame([
-        {"Target": "Batting Expected Runs (RMSE)", "Baseline": benchmark["batting_expected_runs"]["Baseline_RMSE"], "LightGBM": benchmark["batting_expected_runs"]["LightGBM_RMSE"], "XGBoost": benchmark["batting_expected_runs"]["XGBoost_RMSE"], "CatBoost": benchmark["batting_expected_runs"]["CatBoost_RMSE"]},
-        {"Target": "Batting Dismissal Probability (Brier)", "Baseline": 0.0549, "LightGBM": benchmark["batting_dismissal_prob"]["LightGBM_Brier"], "XGBoost": "—", "CatBoost": "—"},
-        {"Target": "Bowling Expected Runs (RMSE)", "Baseline": 1.7180, "LightGBM": benchmark["bowling_expected_runs"]["LightGBM_RMSE"], "XGBoost": "—", "CatBoost": "—"},
-        {"Target": "Bowling Wicket Probability (Brier)", "Baseline": 0.0518, "LightGBM": benchmark["bowling_wicket_prob"]["LightGBM_Brier"], "XGBoost": "—", "CatBoost": "—"}
+        {"Target": "Batting Runs (2025 Val RMSE)", "Baseline": val_runs["Baseline"]["RMSE"], "LightGBM": val_runs["LightGBM"]["RMSE"], "XGBoost": val_runs["XGBoost"]["RMSE"], "CatBoost": val_runs["CatBoost"]["RMSE"]},
+        {"Target": "Batting Runs (2026 Test RMSE)", "Baseline": test_runs["Baseline"]["RMSE"], "LightGBM": test_runs["LightGBM"]["RMSE"], "XGBoost": test_runs["XGBoost"]["RMSE"], "CatBoost": test_runs["CatBoost"]["RMSE"]},
+        {"Target": "Batting Dismissal Prob (2025 Val Brier / ECE)", "Baseline": "0.0549", "LightGBM": f"{benchmark['batting_dismissal_prob']['validation_2025']['Brier_Score']} (ECE: {benchmark['batting_dismissal_prob']['validation_2025']['ECE']})", "XGBoost": "—", "CatBoost": "—"},
+        {"Target": "Batting Dismissal Prob (2026 Test Brier / ECE)", "Baseline": "0.0549", "LightGBM": f"{benchmark['batting_dismissal_prob']['untouched_test_2026']['Brier_Score']} (ECE: {benchmark['batting_dismissal_prob']['untouched_test_2026']['ECE']})", "XGBoost": "—", "CatBoost": "—"},
+        {"Target": "Bowling Expected Runs (2025 Val RMSE)", "Baseline": "1.7180", "LightGBM": benchmark["bowling_expected_runs"]["validation_2025"]["LightGBM_RMSE"], "XGBoost": "—", "CatBoost": "—"},
+        {"Target": "Bowling Expected Runs (2026 Test RMSE)", "Baseline": "1.7180", "LightGBM": benchmark["bowling_expected_runs"]["untouched_test_2026"]["LightGBM_RMSE"], "XGBoost": "—", "CatBoost": "—"}
     ])
     st.table(b_df)
     
@@ -338,9 +382,9 @@ elif page == "🧪 Validation & Ablation Studies":
     | Framework Configuration | Top-10 Overlap with Full Model | Key Methodological Impact |
     |---|---|---|
     | **Full Five-Pillar Model** | **10 / 10 (100%)** | Benchmark standard |
-    | **Raw Career Strike Rate Only** | **1 / 10 (10%)** | **Completely fails**: rewards stat-padding in low-pressure dead rubbers |
-    | **No Empirical Bayes Shrinkage** | **7 / 10 (70%)** | Distorted by small-sample extreme spikes (10-20 ball anomalies) |
-    | **No Retention Delta** | **7 / 10 (70%)** | Fails to penalize players who decline steeply under pressure |
+    | **Raw Career Strike Rate Only** | **1 / 10 (10%)** | **Completely fails**: rewards stat-padding in low-pressure situations |
+    | **No Empirical Bayes Shrinkage** | **7 / 10 (70%)** | Distorted by small-sample extreme spikes |
+    | **No Retention Delta** | **7 / 10 (70%)** | Fails to penalize players who collapse under pressure |
     """)
 
 # ==========================================

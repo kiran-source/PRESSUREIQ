@@ -2,55 +2,88 @@
   "raw_files": {
     "competitions": {
       "rows": 141,
-      "cols": 4
+      "cols": 4,
+      "sha256": "507ceb7189f972d4e4f299ddcfc97f3c3247af1913f6291106f161fa8353fd9b"
     },
     "teams": {
       "rows": 353,
-      "cols": 3
+      "cols": 3,
+      "sha256": "a65e5922a9b3bf49247b24fc9471782e700efb31f8dcc5042923238b87c50a5d"
     },
     "player_mapping": {
       "rows": 6413,
-      "cols": 6
+      "cols": 6,
+      "sha256": "1ded4e42a933618572d6e2c3a521c3257eb1844fab4456d567d77cbb2d3bbb12"
     },
     "playing_eleven": {
       "rows": 28381,
-      "cols": 9
+      "cols": 9,
+      "sha256": "7517c73722a28d5d61c808ccf0cbed315a8780586d02e946eb9a7f5daf011c27"
     },
     "matches": {
       "rows": 883,
-      "cols": 22
+      "cols": 22,
+      "sha256": "bb100ab84b8b9a15160c1f2315cf675210131a30e779ec5079fd5403dcf56eef"
     },
     "ball_by_ball": {
       "rows": 200999,
-      "cols": 33
+      "cols": 33,
+      "sha256": "a3926f49d2c684dca2a5d2de535a02c5ee46ea654ca1e79dd31c69e7544e9889"
     }
   },
   "processed_files": {
     "competitions": {
-      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\competitions.parquet",
+      "path": "data/processed/competitions.parquet",
       "rows": 141
     },
     "teams": {
-      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\teams.parquet",
+      "path": "data/processed/teams.parquet",
       "rows": 353
     },
     "players": {
-      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\players.parquet",
+      "path": "data/processed/players.parquet",
       "rows": 6413
     },
     "playing_eleven": {
-      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\playing_eleven.parquet",
+      "path": "data/processed/playing_eleven.parquet",
       "rows": 28381
     },
     "matches": {
-      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\matches.parquet",
+      "path": "data/processed/matches.parquet",
       "rows": 883
     },
     "deliveries": {
-      "path": "C:\\Users\\kiran\\OneDrive\\Documents\\Desktop\\SuperRR\\data\\processed\\deliveries.parquet",
+      "path": "data/processed/deliveries.parquet",
       "rows": 200999,
       "columns": 79
+    },
+    "features_deliveries": {
+      "path": "data/processed/features_deliveries.parquet",
+      "rows": 200961,
+      "columns": 114
+    },
+    "deliveries_with_pava": {
+      "path": "data/processed/deliveries_with_pava.parquet",
+      "rows": 200961,
+      "columns": 121
     }
+  },
+  "row_count_reconciliation": {
+    "raw_ball_by_ball_deliveries": 200999,
+    "features_and_pava_deliveries": 200961,
+    "delta_deliveries": 38,
+    "reconciliation_reason": "Super Over Deliveries (innings > 2: innings 3 and 4) isolated from regular 20-over match-state rate metrics.",
+    "super_over_match_ids": [34429, 40725, 45512, 48027, 48029, 50359],
+    "super_over_ball_counts": {
+      "34429": 7,
+      "40725": 11,
+      "45512": 4,
+      "48027": 6,
+      "48029": 4,
+      "50359": 6
+    },
+    "total_super_over_balls": 38,
+    "audit_status": "EXACT_RECONCILIATION_CONFIRMED"
   },
   "quality_checks": {
     "matches_with_ball_data": 867,
