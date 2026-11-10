@@ -1,0 +1,48 @@
+﻿# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Raw Data (preserve original files without pushing 40MB+ raw data to git commits if needed, or track scripts)
+# Keep data pack untracked if large or track git lfs, but let's ignore huge parquet/csv exports if generated
+*.parquet
+data/processed/
+data/interim/
+.DS_Store
+*.log
