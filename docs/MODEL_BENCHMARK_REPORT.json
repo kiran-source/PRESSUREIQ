@@ -1,0 +1,24 @@
+{
+  "batting_expected_runs": {
+    "Baseline_RMSE": 1.7383,
+    "LightGBM_RMSE": 1.7272,
+    "XGBoost_RMSE": 1.7271,
+    "CatBoost_RMSE": 1.7258,
+    "Selected": "LightGBM"
+  },
+  "batting_dismissal_prob": {
+    "LightGBM_Brier": 0.052,
+    "LightGBM_AUC": 0.5882
+  },
+  "batting_boundary_prob": {
+    "LightGBM_Brier": 0.1441,
+    "LightGBM_AUC": 0.6098
+  },
+  "bowling_expected_runs": {
+    "LightGBM_RMSE": 1.7075
+  },
+  "bowling_wicket_prob": {
+    "LightGBM_Brier": 0.0495,
+    "LightGBM_AUC": 0.5794
+  }
+}
