@@ -58,3 +58,4 @@ for b in top_bowlers:
         line = f"- **{b}**: Took **{int(r['wickets'])} wickets for {int(r['runs_conceded'])} runs in {int(r['balls'])} balls** (Average BoPI: {r['avg_bopi']}, PAVA: +{r['total_pava']} runs) in {r['comp_category']} on {r['match_date']}."
         print(line)
         bowler_dossiers.append(line)
+

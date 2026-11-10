@@ -54,7 +54,7 @@ class FirstInningsParModel:
             return
             
         grp = inn1.groupby(["match_id", "innings"], sort=False)
-        final_scores = grp["team_runs_before"].transform("max")
+        final_scores = grp["team_runs_before"].transform("last") + grp["est_total_runs"].transform("last")
         inn1["actual_remaining_runs"] = np.maximum(0, final_scores - inn1["team_runs_before"])
         
         # Over bucket (in units of 6 balls)

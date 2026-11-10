@@ -21,6 +21,9 @@ MIN_BOWLER_CAREER_BALLS = 400
 MIN_BOWLER_PRESSURE_BALLS = 30
 MIN_BOWLER_MATCHES = 20
 
+# Empirical Bayes Shrinkage parameter (pseudo-deliveries)
+K_SHRINK = 45.0
+
 
 def fit_pressure_response_curve(player_delivs: pd.DataFrame, is_batting=True) -> Dict:
     """

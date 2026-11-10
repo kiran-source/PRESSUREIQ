@@ -28,12 +28,13 @@ def compute_historical_batter_stats(deliveries_df: pd.DataFrame) -> pd.DataFrame
     Returns DataFrame indexed by (match_id, striker_id) with strictly pre-match statistics.
     """
     # 1. Match-level aggregates per batter
+    dis_col = "is_striker_out" if "is_striker_out" in deliveries_df.columns else "is_wicket"
     match_bat = deliveries_df.groupby(["match_date", "match_id", "striker_id"]).agg(
         match_runs=("batter_runs", "sum"),
         match_balls=("is_batter_ball", "sum"),
         match_dots=("batter_runs", lambda s: (s == 0).sum()),
         match_boundaries=("is_boundary", "sum"),
-        match_dismissed=("is_wicket", "max")
+        match_dismissed=(dis_col, "max")
     ).reset_index()
     
     # Sort chronologically

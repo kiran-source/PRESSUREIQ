@@ -23,6 +23,7 @@ REQUIRED_DATA_FILES = [
 
 REQUIRED_DOC_FILES = [
     REPO_ROOT / "README.md",
+    DOCS_DIR / "EXECUTIVE_SUMMARY.md",
     DOCS_DIR / "METHODOLOGY_REPORT.md",
     DOCS_DIR / "PLAYER_DECISION_DOSSIERS.md",
     DOCS_DIR / "DATA_INVENTORY_AND_FEASIBILITY.md",
@@ -95,3 +96,4 @@ def print_unstop_dropdown_table():
 if __name__ == "__main__":
     verify_files()
     print_unstop_dropdown_table()
+

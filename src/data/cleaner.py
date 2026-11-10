@@ -183,6 +183,8 @@ def clean_deliveries(df: pd.DataFrame) -> pd.DataFrame:
     # Wickets
     df["is_wicket"] = df["is_wicket"].fillna(False).astype(bool)
     df["is_bowler_wicket"] = df["is_wicket"] & df["dismissal_type"].isin(BOWLER_DISMISSAL_TYPES)
+    # Batter dismissal: strictly true when the striker is the player dismissed (prevents penalizing striker on non-striker run-out)
+    df["is_striker_out"] = df["is_wicket"] & (df["dismissed_player_id"] == df["striker_id"])
     
     # Bowl speed: clean zeros and extreme sensor artifacts
     speed = df["bowl_speed"].replace(0, np.nan)

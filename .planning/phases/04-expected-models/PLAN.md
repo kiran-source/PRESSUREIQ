@@ -22,3 +22,4 @@ Build expected-outcome machine learning models on chronological validation split
 ## Acceptance Criteria
 - LightGBM selected based on best test calibration and speed.
 - Natural wicket calibration preserved ($Brier \approx 0.052$).
+

@@ -21,3 +21,4 @@ Implement Pressure Response Curves (PRC), Archetype Classification, and Five-Pil
 ## Acceptance Criteria
 - PRC slopes and archetypes assigned to all qualified players.
 - Five pillars normalized on 0–100 scale.
+

@@ -39,18 +39,19 @@ def match_clustered_bootstrap_rankings(
     
     boot_scores: Dict[int, List[float]] = {pid: [] for pid in player_ids}
     
+    # Pre-cache match chunks for O(1) retrieval across iterations
+    match_cache = {mid: chunk for mid, chunk in deliveries_df.groupby("match_id", sort=False)}
+    
     np.random.seed(42)
     for i in range(n_iterations):
         # Sample match IDs with replacement
         sample_match_ids = np.random.choice(unique_matches, size=n_matches, replace=True)
         # Create bootstrap deliveries DataFrame
-        # Map each sampled match to its deliveries
         match_counts = pd.Series(sample_match_ids).value_counts()
         boot_chunks = []
         for mid, count in match_counts.items():
-            chunk = deliveries_df[deliveries_df["match_id"] == mid]
-            for _ in range(count):
-                boot_chunks.append(chunk)
+            if mid in match_cache:
+                boot_chunks.extend([match_cache[mid]] * count)
                 
         boot_df = pd.concat(boot_chunks, ignore_index=True)
         res_df = score_fn(boot_df)

@@ -17,3 +17,4 @@ Quantify ranking stability and uncertainty via match-clustered bootstrap resampl
 ## Acceptance Criteria
 - 95% Confidence Intervals populated in final rankings.
 - Ablation report confirms all 5 pillars provide measurable ranking stability benefits.
+

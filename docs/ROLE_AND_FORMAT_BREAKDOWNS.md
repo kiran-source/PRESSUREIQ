@@ -20,16 +20,16 @@ All metrics are derived from the 200,999 ball-by-ball deliveries spanning 2022 t
 
 | Rank | Player Name | Overall Rank | Reliability Score | 95% Confidence Interval | HP Deliveries | Shrunk HP PAVA/ball | Retention Delta ($\Delta$) | PRC Archetype | Primary Franchise / Country |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---|:---|
-| **1** | **Ruturaj Gaikwad** | #2 | **95.48** | `[69.3, 97.1]` | 39 | +0.755 | +0.697 | Clutch Climber | Chennai Super Kings / India |
-| **2** | **Naman Dhir** | #3 | **94.98** | `[68.2, 98.7]` | 174 | +0.881 | +0.640 | Clutch Climber | Mumbai Indians / India |
-| **3** | **Fakhar Zaman** | #4 | **94.74** | `[58.6, 97.8]` | 48 | +0.773 | +0.722 | Clutch Climber | Lahore Qalandars / Pakistan |
-| **4** | **Rohit Sharma** | #5 | **94.23** | `[69.4, 96.3]` | 32 | +0.679 | +0.777 | Clutch Climber | Mumbai Indians / India |
-| **5** | **Phil Salt** | #13 | **91.35** | `[58.3, 94.6]` | 49 | +0.551 | +0.485 | Clutch Climber | Kolkata Knight Riders / England |
+| **1** | **Ruturaj Gaikwad** | #1 | **97.01** | `[79.1, 98.0]` | 45 | +0.877 | +1.702 | Clutch Climber | Chennai Super Kings / India |
+| **2** | **Fakhar Zaman** | #2 | **95.58** | `[67.1, 97.5]` | 52 | +0.835 | +1.572 | Clutch Climber | Lahore Qalandars / Pakistan |
+| **3** | **Rohit Sharma** | #3 | **94.98** | `[72.0, 95.9]` | 35 | +0.731 | +1.659 | Clutch Climber | Mumbai Indians / India |
+| **4** | **Naman Dhir** | #5 | **93.86** | `[60.4, 98.2]` | 184 | +0.828 | +0.940 | Clutch Climber | Mumbai Indians / India |
+| **5** | **Phil Salt** | #6 | **93.06** | `[23.3, 98.0]` | 49 | +0.680 | +1.054 | Clutch Climber | Kolkata Knight Riders / England |
 
 *Top-Order Analytical Observations*:
-- **Ruturaj Gaikwad** anchors high-pressure run-chases with minimal dot-ball wastage. While his career SR is measured, his high-pressure PAVA jumps by $+0.697$ runs/ball when RRR exceeds 9.5.
-- **Naman Dhir** demonstrated an exceptional clutch breakout, facing 174 high-pressure deliveries across IPL and domestic/international fixtures with a remarkable shrunk PAVA of $+0.881$ runs/ball.
-- **Rohit Sharma** exhibits the highest retention delta in the top order ($+0.777$), showcasing aggressive intent in high-stakes knockout and must-win group encounters.
+- **Ruturaj Gaikwad** anchors high-pressure run-chases with minimal dot-ball wastage and zero false dismissals. His high-pressure PAVA jumps by $+1.702$ runs/ball when RRR exceeds 9.5.
+- **Fakhar Zaman** and **Rohit Sharma** exhibit elite clutch retention, showcasing aggressive boundary striking in high-stakes knockout and must-win group encounters.
+- **Naman Dhir** demonstrated an exceptional clutch breakout, facing 184 high-pressure deliveries across IPL and domestic/international fixtures with a remarkable shrunk PAVA of $+0.828$ runs/ball.
 
 ---
 
@@ -38,16 +38,16 @@ All metrics are derived from the 200,999 ball-by-ball deliveries spanning 2022 t
 
 | Rank | Player Name | Overall Rank | Reliability Score | 95% Confidence Interval | HP Deliveries | Shrunk HP PAVA/ball | Retention Delta ($\Delta$) | PRC Archetype | Primary Franchise / Country |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---|:---|
-| **1** | **Darwish Rasooli** | #6 | **94.14** | `[67.2, 97.3]` | 34 | +0.709 | +0.787 | Clutch Climber | Afghanistan |
-| **2** | **Mohammad Nabi** | #7 | **93.28** | `[56.7, 97.9]` | 187 | +0.824 | +0.638 | Clutch Climber | Afghanistan |
-| **3** | **Nicholas Pooran** | #9 | **92.68** | `[74.4, 96.5]` | 282 | +0.756 | +0.596 | Clutch Climber | Lucknow Super Giants / West Indies |
-| **4** | **Curtis Campher** | #10 | **92.42** | `[60.6, 96.8]` | 85 | +0.712 | +0.644 | Clutch Climber | Ireland |
-| **5** | **Aiden Markram** | #11 | **91.41** | `[64.5, 95.2]` | 126 | +0.573 | +0.482 | Clutch Climber | Sunrisers Hyderabad / South Africa |
+| **1** | **Darwish Rasooli** | #8 | **92.15** | `[64.8, 95.6]` | 38 | +0.650 | +1.442 | Clutch Climber | Afghanistan |
+| **2** | **Suryakumar Yadav** | #9 | **91.94** | `[60.1, 94.7]` | 236 | +0.699 | +0.632 | Clutch Climber | Mumbai Indians / India |
+| **3** | **Rinku Singh** | #11 | **91.46** | `[71.2, 95.4]` | 198 | +0.665 | +0.588 | Clutch Climber | Kolkata Knight Riders / India |
+| **4** | **Towhid Hridoy** | #12 | **91.15** | `[68.4, 94.2]` | 142 | +0.642 | +0.612 | Clutch Climber | Bangladesh |
+| **5** | **Nicholas Pooran** | #13 | **90.96** | `[72.5, 95.1]` | 290 | +0.684 | +0.540 | Clutch Climber | Lucknow Super Giants / West Indies |
 
 *Middle-Order Analytical Observations*:
-- **Nicholas Pooran** combines colossal volume (282 high-pressure deliveries) with elite clutch performance ($+0.756$ shrunk PAVA/ball). He acts as the premier middle-order boundary engine under extreme BPI ($\ge 75$).
-- **Mohammad Nabi** and **Darwish Rasooli** provide calm crisis management for Afghanistan in ICC tournaments, frequently arresting collapses against high-quality spin.
-- **Curtis Campher** provides proven lower-middle order counter-punching reliability, maintaining positive PAVA even when wickets are rapidly tumbling.
+- **Suryakumar Yadav** and **Rinku Singh** act as premier 360-degree accelerators, combining high exposure with elite clutch execution ($+0.699$ and $+0.665$ shrunk PAVA/ball).
+- **Darwish Rasooli** provides calm crisis management for Afghanistan in ICC tournaments, frequently arresting collapses against high-quality spin.
+- **Nicholas Pooran** maintains colossal volume (290 high-pressure deliveries) with proven boundary creation under extreme BPI ($\ge 75$).
 
 ---
 
@@ -56,16 +56,15 @@ All metrics are derived from the 200,999 ball-by-ball deliveries spanning 2022 t
 
 | Rank | Player Name | Overall Rank | Reliability Score | 95% Confidence Interval | HP Deliveries | Shrunk HP PAVA/ball | Retention Delta ($\Delta$) | PRC Archetype | Primary Franchise / Country |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---|:---|
-| **1** | **Romario Shepherd** | #1 | **95.73** | `[76.1, 96.5]` | 469 | +0.770 | +0.472 | Clutch Climber | Mumbai Indians / West Indies |
-| **2** | **Jason Holder** | #8 | **93.10** | `[52.3, 96.4]` | 226 | +0.701 | +0.648 | Clutch Climber | Rajasthan Royals / West Indies |
-| **3** | **MS Dhoni** | #14 | **91.21** | `[71.8, 93.4]` | 339 | +0.489 | +0.380 | Clutch Climber | Chennai Super Kings / India |
-| **4** | **Matthew Wade** | #21 | **88.15** | `[62.1, 91.5]` | 182 | +0.395 | +0.312 | Clutch Climber | Australia |
-| **5** | **Mitchell Santner** | #32 | **85.00** | `[55.4, 89.2]` | 265 | +0.302 | +0.245 | Ice Cold Anchor | Chennai Super Kings / New Zealand |
+| **1** | **Romario Shepherd** | #4 | **93.88** | `[70.8, 95.3]` | 482 | +0.670 | +1.434 | Clutch Climber | Mumbai Indians / West Indies |
+| **2** | **Jason Holder** | #7 | **92.75** | `[49.0, 96.6]` | 233 | +0.687 | +1.368 | Clutch Climber | Rajasthan Royals / West Indies |
+| **3** | **Matthew Wade** | #18 | **87.83** | `[61.5, 91.2]` | 185 | +0.380 | +0.410 | Clutch Climber | Australia |
+| **4** | **MS Dhoni** | #19 | **87.52** | `[68.4, 91.0]` | 345 | +0.395 | +0.380 | Clutch Climber | Chennai Super Kings / India |
+| **5** | **Mitchell Santner** | #30 | **83.88** | `[54.2, 88.5]` | 270 | +0.285 | +0.245 | Ice Cold Anchor | Chennai Super Kings / New Zealand |
 
 *Finisher Analytical Observations*:
-- **Romario Shepherd** emerges as the overall #1 batter in the entire dataset. With 469 deliveries faced under high pressure (the highest in the entire sample), he maintains an unprecedented shrunk PAVA of $+0.770$ runs/ball.
-- **Jason Holder** demonstrates elite boundary conversion and lower-order game management in death finishes ($+0.701$ PAVA/ball).
-- **MS Dhoni** maintains elite reliability (91.21) across 339 high-pressure balls, proving that his game-finishing composure remains quantitatively resilient.
+- **Romario Shepherd** and **Jason Holder** stand as the premier finishers in the dataset, facing over 700 combined high-pressure balls with huge positive PAVA.
+- **MS Dhoni** maintains proven finishing reliability across 345 high-pressure deliveries.
 
 ---
 
@@ -76,17 +75,17 @@ All metrics are derived from the 200,999 ball-by-ball deliveries spanning 2022 t
 
 | Rank | Player Name | Overall Rank | Reliability Score | 95% Confidence Interval | HP Deliveries | Shrunk HP PAVA/ball | Retention Delta ($\Delta$) | PRC Archetype | Primary Franchise / Country |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---|:---|
-| **1** | **Nathan Ellis** | #1 | **94.95** | `[74.2, 96.0]` | 270 | +0.686 | +0.552 | Clutch Climber | Punjab Kings / Australia |
-| **2** | **Abbas Afridi** | #3 | **93.14** | `[76.3, 95.4]` | 240 | +0.598 | +0.490 | Clutch Climber | Pakistan |
-| **3** | **Haris Rauf** | #6 | **91.81** | `[79.0, 97.5]` | 476 | +0.506 | +0.394 | Clutch Climber | Lahore Qalandars / Pakistan |
-| **4** | **Lungi Ngidi** | #7 | **90.66** | `[69.8, 93.9]` | 315 | +0.433 | +0.380 | Clutch Climber | Delhi Capitals / South Africa |
-| **5** | **Shoriful Islam** | #8 | **89.84** | `[59.3, 96.3]` | 292 | +0.355 | +0.330 | Clutch Climber | Bangladesh |
-| **6** | **Matheesha Pathirana** | #9 | **89.82** | `[60.6, 93.3]` | 440 | +0.481 | +0.370 | Clutch Climber | Chennai Super Kings / Sri Lanka |
+| **1** | **Nathan Ellis** | #1 | **94.00** | `[71.9, 95.4]` | 251 | +0.633 | +0.346 | Clutch Climber | Punjab Kings / Australia |
+| **2** | **Abbas Afridi** | #4 | **92.74** | `[78.0, 94.7]` | 232 | +0.609 | +0.511 | Clutch Climber | Pakistan |
+| **3** | **Haris Rauf** | #5 | **91.20** | `[78.9, 96.7]` | 444 | +0.489 | +0.925 | Clutch Climber | Lahore Qalandars / Pakistan |
+| **4** | **Ishant Sharma** | #6 | **90.63** | `[73.6, 92.9]` | 64 | +0.469 | +0.845 | Clutch Climber | Delhi Capitals / India |
+| **5** | **Matheesha Pathirana** | #8 | **89.55** | `[65.6, 92.7]` | 400 | +0.481 | -0.023 | Clutch Climber | Chennai Super Kings / Sri Lanka |
+| **6** | **Shoriful Islam** | #10 | **89.38** | `[55.2, 96.0]` | 279 | +0.347 | +1.399 | Clutch Climber | Bangladesh |
 
 *Pace Bowling Analytical Observations*:
-- **Nathan Ellis** is the #1 bowler in the framework. With deceptive slower balls and lethal yorkers, he suppresses boundary rates to $<12\%$ at the death, yielding $+0.686$ runs saved per ball under pressure.
-- **Haris Rauf** combines sheer volume (476 high-pressure deliveries) with elite express-pace clutch execution ($+0.506$ PAVA/ball).
-- **Matheesha Pathirana** operates almost exclusively in high-pressure death overs (440 HP balls), conceding well below expected runs against the world's most dangerous finishers.
+- **Nathan Ellis** remains the undisputed #1 bowler in the framework ($+0.633$ runs saved/ball).
+- **Ishant Sharma** emerges as an elite high-leverage Powerplay/Death specialist with a high retention delta ($+0.845$).
+- **Matheesha Pathirana** operates almost exclusively in high-pressure death overs (400 HP balls), conceding well below expected runs against the world's most dangerous finishers.
 
 ---
 
@@ -95,11 +94,11 @@ All metrics are derived from the 200,999 ball-by-ball deliveries spanning 2022 t
 
 | Rank | Player Name | Overall Rank | Reliability Score | 95% Confidence Interval | HP Deliveries | Shrunk HP PAVA/ball | Retention Delta ($\Delta$) | PRC Archetype | Primary Franchise / Country |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---|:---|
-| **1** | **Liam Dawson** | #2 | **94.72** | `[76.8, 94.8]` | 94 | +0.638 | +0.523 | Clutch Climber | England |
-| **2** | **Sufiyan Muqeem** | #4 | **93.00** | `[70.0, 95.3]` | 218 | +0.624 | +0.518 | Clutch Climber | Pakistan |
-| **3** | **Harpreet Brar** | #5 | **92.14** | `[62.0, 97.1]` | 262 | +0.450 | +0.410 | Clutch Climber | Punjab Kings / India |
-| **4** | **Nasum Ahmed** | #10 | **89.71** | `[59.3, 98.5]` | 126 | +0.348 | +0.310 | Clutch Climber | Bangladesh |
-| **5** | **Noor Ahmad** | #15 | **85.68** | `[71.2, 91.4]` | 499 | +0.315 | +0.220 | Ice Cold Anchor | Gujarat Titans / Afghanistan |
+| **1** | **Liam Dawson** | #2 | **93.61** | `[74.6, 93.6]` | 83 | +0.582 | +0.947 | Clutch Climber | England |
+| **2** | **Sufiyan Muqeem** | #3 | **93.10** | `[68.8, 95.6]` | 213 | +0.645 | +0.433 | Clutch Climber | Pakistan |
+| **3** | **Harpreet Brar** | #7 | **89.59** | `[52.9, 96.6]` | 257 | +0.387 | +1.178 | Clutch Climber | Punjab Kings / India |
+| **4** | **Nasum Ahmed** | #9 | **89.51** | `[63.6, 98.0]` | 122 | +0.350 | +1.429 | Clutch Climber | Bangladesh |
+| **5** | **Axar Patel** | #15 | **84.07** | `[68.4, 89.2]` | 280 | +0.295 | +0.310 | Ice Cold Anchor | Delhi Capitals / India |
 
 *Spin Bowling Analytical Observations*:
 - **Liam Dawson** and **Sufiyan Muqeem** represent high-impact defensive left-arm spin, denying batters access to scoring zones when run rates are climbing.
@@ -144,3 +143,4 @@ Players who maintain positive PAVA and high reliability across **both** IPL and 
    - Pace bowlers with sub-15% boundary rates under BoPI $\ge 60$ (Nathan Ellis, Matheesha Pathirana, Abbas Afridi) provide disproportionately higher win equity than raw wicket-takers who bleed boundaries.
 3. **Spin Containment**:
    - Left-arm orthodox spinners like Harpreet Brar and Liam Dawson provide exceptional value in holding down high-leverage middle overs, allowing captains to preserve death overs pacers.
+

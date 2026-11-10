@@ -67,3 +67,4 @@
   - Raw CSV files must remain strictly unmodified. No post-match or future-ball leakage into predictors.
 - **NFR-05: Code Quality & Provenance**
   - Clean modular package architecture under `src/`, with atomic Git commits per phase.
+

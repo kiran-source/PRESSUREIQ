@@ -1,18 +1,18 @@
 {
   "full_model_top10": [
-    "Romario Shepherd",
-    "Mohammad Nabi",
-    "Nicholas Pooran",
-    "Rohit Sharma",
-    "Curtis Campher",
-    "Naman Dhir",
-    "Ruturaj Gaikwad",
-    "Darwish Rasooli",
     "Fakhar Zaman",
-    "Jason Holder"
+    "Jason Holder",
+    "Darwish Rasooli",
+    "Suryakumar Yadav",
+    "Naman Dhir",
+    "Phil Salt",
+    "Rohit Sharma",
+    "Ruturaj Gaikwad",
+    "Jos Buttler",
+    "Romario Shepherd"
   ],
-  "raw_sr_overlap": 1,
+  "raw_sr_overlap": 3,
   "no_shrinkage_overlap": 7,
-  "no_retention_overlap": 7,
+  "no_retention_overlap": 8,
   "conclusion": "Empirical Bayes shrinkage successfully dampens high-variance small-sample spikes, while retention delta distinguishes players who elevate under pressure from those who decline."
 }

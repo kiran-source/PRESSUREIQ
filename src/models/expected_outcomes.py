@@ -162,10 +162,11 @@ class ExpectedOutcomeEngine:
         }
         self.models["batting_expected_runs"] = lgb_runs
         
-        # 2. Batting Target: Dismissal Probability (Wicket Probability)
+        # 2. Batting Target: Dismissal Probability (Striker Dismissal Probability)
         logger.info("Training Batting Dismissal Probability models...")
-        y_train_wkt = train_df["is_wicket"].astype(int).values
-        y_val_wkt = val_df["is_wicket"].astype(int).values
+        w_col = "is_striker_out" if "is_striker_out" in train_df.columns else "is_wicket"
+        y_train_wkt = train_df[w_col].astype(int).values
+        y_val_wkt = val_df[w_col].astype(int).values
         
         # Standard unweighted GBDT to preserve natural probability calibration
         lgb_wkt = lgb.LGBMClassifier(

@@ -166,3 +166,4 @@ Comprehensive quantitative evaluation profiles, Five-Pillar metric scores, arche
 - **PAVA Metrics**: Shrunk HP PAVA/ball: **+0.348 runs** | Baseline Retention Delta: **+1.459 runs/ball**
 - **Consistency & Adaptability**: Consistency Score: 83.1 | Adaptability Score: 78.1
 - **Match Case Study**: On 2026-06-21 under high leverage (BoPI: 63.8), bowled 18 balls conceding just 10 runs with 1 wicket (+41.1 runs PAVA).
+

@@ -35,7 +35,9 @@ def compute_pressure_adjusted_value(
     # delta_runs: runs off bat - expected runs
     delta_bat_runs = df["batter_runs"].values - df["exp_batter_runs"].values
     # delta_wkt: avoided expected dismissal (positive), or conceded wicket (negative)
-    delta_bat_wkt = df["prob_dismissal"].values - df["is_wicket"].astype(int).values
+    # Strictly evaluate striker dismissal (avoids penalizing striker on non-striker run-outs)
+    striker_out = df["is_striker_out"].astype(int).values if "is_striker_out" in df.columns else df["is_wicket"].astype(int).values
+    delta_bat_wkt = df["prob_dismissal"].values - striker_out
     # delta_boundary: boundary scored above probability
     delta_bat_bnd = df["is_boundary"].astype(int).values - df["prob_boundary"].values
     
@@ -69,12 +71,13 @@ def compute_pressure_adjusted_value(
 def aggregate_innings_batting_pava(df: pd.DataFrame) -> pd.DataFrame:
     """Aggregate delivery-level batting PAVA to innings level."""
     # Filter to players who faced at least 1 legal/batting delivery
+    d_col = "is_striker_out" if "is_striker_out" in df.columns else "is_wicket"
     batters = df[df["is_batter_ball"]].groupby(
         ["match_id", "innings", "striker_id", "striker_name", "comp_category"]
     ).agg(
         balls_faced=("is_batter_ball", "sum"),
         runs=("batter_runs", "sum"),
-        dismissed=("is_wicket", "max"),
+        dismissed=(d_col, "max"),
         avg_bpi=("bpi", "mean"),
         high_pressure_balls=("bpi", lambda s: (s >= 65.0).sum()),
         total_pava=("pava_bat", "sum"),
