@@ -82,6 +82,18 @@ def build_delivery_features(deliveries_df: pd.DataFrame) -> pd.DataFrame:
     # 5. Handedness matchup interaction
     df["matchup_interaction"] = df["batting_type"] + "_vs_" + df["pace_or_spin"]
     
+    # 6. Pressure Indices (BPI and BoPI)
+    logger.info("Computing Batting Pressure Index (BPI)...")
+    from src.models.pressure_index import compute_batting_pressure_index, compute_bowling_pressure_index
+    bpi_df = compute_batting_pressure_index(df)
+    for col in bpi_df.columns:
+        df[col] = bpi_df[col].values
+        
+    logger.info("Computing Bowling Pressure Index (BoPI)...")
+    bopi_df = compute_bowling_pressure_index(df)
+    for col in bopi_df.columns:
+        df[col] = bopi_df[col].values
+    
     # Fill remaining numerical NaNs with appropriate domain neutrals
     df["hist_batter_sr"] = df["hist_batter_sr"].fillna(130.0)
     df["hist_batter_avg"] = df["hist_batter_avg"].fillna(24.0)
