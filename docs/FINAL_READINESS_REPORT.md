@@ -3,7 +3,7 @@
 
 **Auditor**: Independent Quantitative Review & Audit Suite  
 **Date**: November 11, 2026  
-**Repository State**: Commit 20a6b20b296a66fbb29162e7dfd1f38bc70d06ab (Lineage: d524fa2 -> 8c366d8 -> 8b7732a -> 15afc00 -> 20a6b20 -> Final Closure)  
+**Repository State**: Commit c31305745b230d9acaef27d3dbbcc72e891f1b9f (Lineage: d524fa2 -> 8c366d8 -> 8b7732a -> 15afc00 -> 20a6b20 -> 165dcf9 -> c313057 -> Final Closure)  
 **Scope**: End-to-End Methodological Verification, P0/P1 Remediation, 2,000 Match-Clustered Bootstrap, and Packaging Closure  
 **Overall Readiness Verdict**: 🎉 **ALL 8 CRITICAL REQUIREMENTS PASSED — OFFICIALLY SUBMISSION READY**
 
@@ -20,7 +20,7 @@
 | **REQ-05** | **Expected Outcome Models & Calibration** | **PASS** | LightGBM out-of-fold RMSE = 1.727 vs Baseline 1.738; Brier score $\approx 0.049\text{--}0.050$, ECE $< 0.003$ on untouched 2026 test split; natural event calibration preserved. |
 | **REQ-06** | **PAVA Resolution & Reliability Engine** | **PASS** | PAVA double-counting resolved: unamplified execution surplus $V_{\text{raw}}$ (runs/ball) used for reliability scoring and retention deltas; Empirical Bayes shrinkage ($K=45$) applied. |
 | **REQ-07** | **2,000 Match-Clustered Bootstrap Uncertainty** | **PASS** | Full 2,000 match-clustered bootstrap executed with fixed seed 42; 95% CIs and top-10 inclusion probabilities computed with exact score parity ($<0.01$ score delta). |
-| **REQ-08** | **Dashboard & Test Suite Integrity** | **PASS** | 44/44 automated unit and regression tests pass (100% success rate in 19.86s); Streamlit/Plotly dashboard headless import verified clean; PyArrow pinned to `23.0.1`. |
+| **REQ-08** | **Dashboard & Test Suite Integrity** | **PASS** | 44/44 automated unit and regression tests pass (100% success rate in 13.54s); Streamlit/Plotly dashboard headless import verified clean; PyArrow pinned to `23.0.1`; DuckDB pinned to `2.0.0`. |
 
 ---
 
@@ -168,7 +168,7 @@ Cumulative leverage-weighted match impact is tracked separately as $\text{Levera
 
 ## 5. Verification & Test Suite Summary
 
-- **Pytest Suite**: 44 tests executed in 19.86s, **44 passed, 0 failed** (100% success rate).
+- **Pytest Suite**: 44 tests executed in 13.54s, **44 passed, 0 failed** (100% success rate).
   - `test_bootstrap_baseline_reproducibility.py`: 2 tests passed (exact scoring reproducibility verified).
   - `test_bowler_illegal_deliveries.py`: 1 test passed (wides/no-balls charged to bowlers).
   - `test_data_cleaning.py`: 4 tests passed (boundary conditions, team mapping).
@@ -187,4 +187,5 @@ Cumulative leverage-weighted match impact is tracked separately as $\text{Levera
   - `duckdb==2.0.0`: Required for high-throughput delivery aggregations and dashboard SQL queries.
   - `pandas==2.3.3`, `numpy==2.2.2`, `scipy==1.16.3`, `scikit-learn==1.8.0`, `lightgbm==4.7.0`, `xgboost==3.2.0`, `catboost==1.2.10`, `streamlit==1.56.0`, `pytest==9.1.1`.
 - **Line Ending Integrity**: Managed via `.gitattributes` (`* text=auto eol=lf`) to guarantee 100% clean Git status without phantom CRLF/LF modifications across Linux, macOS, and Windows.
-- **Archive Verification**: The generated package `PRESSUREIQ_Final_Submission.zip` (462 files, 42.65 MB, CRC-32 checked) was extracted into an isolated clean directory; automated validation confirmed that `git status` reports 0 modifications and 0 deletions, Git HEAD matches commit `20a6b20b296a66fbb29162e7dfd1f38bc70d06ab` lineage, and all six raw CSV SHA-256 hashes match perfectly.
+- **Archive Verification**: The generated package `PRESSUREIQ_Final_Submission.zip` (468 files, 42.66 MB, CRC-32 checked) was extracted into an isolated clean directory; automated validation confirmed that `git status` reports 0 modifications and 0 deletions, Git HEAD matches commit `c31305745b230d9acaef27d3dbbcc72e891f1b9f` lineage, and all six raw CSV SHA-256 hashes match perfectly.
+- **Known Environment Boundaries**: Running the full 44-test suite requires the exact dependencies in `requirements.txt`. If `pyarrow` is omitted from the test environment, 42 tests pass while the 2 bootstrap reproducibility tests fail on Parquet deserialization; if `duckdb` is omitted, test collection is blocked for modules querying duckdb tables.
