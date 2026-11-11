@@ -29,15 +29,23 @@ def compute_historical_batter_stats(deliveries_df: pd.DataFrame) -> pd.DataFrame
     """
     # 1. Match-level aggregates per batter
     dis_col = "is_striker_out" if "is_striker_out" in deliveries_df.columns else "is_wicket"
-    match_bat = deliveries_df.groupby(["match_date", "match_id", "striker_id"]).agg(
+    
+    # Audit remediation: Strictly isolate balls faced by batter.
+    # Wides have is_batter_ball == 0 and batter_runs == 0. Previously, lambda s: (s == 0).sum()
+    # was counting wides in match_dots while excluded from match_balls!
+    df_work = deliveries_df.copy()
+    is_bat = df_work["is_batter_ball"].astype(bool) if "is_batter_ball" in df_work.columns else pd.Series(True, index=df_work.index)
+    df_work["_batter_dot"] = np.where(is_bat & (df_work["batter_runs"] == 0), 1, 0)
+    
+    match_bat = df_work.groupby(["match_date", "match_id", "striker_id"]).agg(
         match_runs=("batter_runs", "sum"),
         match_balls=("is_batter_ball", "sum"),
-        match_dots=("batter_runs", lambda s: (s == 0).sum()),
+        match_dots=("_batter_dot", "sum"),
         match_boundaries=("is_boundary", "sum"),
         match_dismissed=(dis_col, "max")
     ).reset_index()
     
-    # Sort chronologically
+    # Sort chronologically (match_id breaks same-date ties deterministically)
     match_bat.sort_values(by=["match_date", "match_id"], inplace=True)
     
     # 2. Expanding window sum per striker
@@ -78,14 +86,20 @@ def compute_historical_bowler_stats(deliveries_df: pd.DataFrame) -> pd.DataFrame
     Returns DataFrame indexed by (match_id, bowler_id) with strictly pre-match statistics.
     """
     # 1. Match-level aggregates per bowler
-    match_bowl = deliveries_df.groupby(["match_date", "match_id", "bowler_id"]).agg(
+    # Audit remediation: Strictly isolate legal balls for bowler dot counting.
+    df_work_b = deliveries_df.copy()
+    is_leg = df_work_b["is_legal_ball"].astype(bool) if "is_legal_ball" in df_work_b.columns else pd.Series(True, index=df_work_b.index)
+    runs_conc = df_work_b["bowler_runs_conceded"] if "bowler_runs_conceded" in df_work_b.columns else (df_work_b["runs"] if "runs" in df_work_b.columns else pd.Series(0, index=df_work_b.index))
+    df_work_b["_bowler_dot"] = np.where(is_leg & (runs_conc == 0), 1, 0)
+    
+    match_bowl = df_work_b.groupby(["match_date", "match_id", "bowler_id"]).agg(
         match_legal_balls=("is_legal_ball", "sum"),
         match_runs_conceded=("bowler_runs_conceded", "sum"),
         match_wickets=("is_bowler_wicket", "sum"),
-        match_dots=("bowler_runs_conceded", lambda s: (s == 0).sum())
+        match_dots=("_bowler_dot", "sum")
     ).reset_index()
     
-    # Sort chronologically
+    # Sort chronologically (match_id breaks same-date ties deterministically)
     match_bowl.sort_values(by=["match_date", "match_id"], inplace=True)
     
     # 2. Expanding window sum per bowler
