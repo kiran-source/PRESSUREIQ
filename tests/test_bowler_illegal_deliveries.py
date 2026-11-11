@@ -97,3 +97,4 @@ def test_illegal_deliveries_worsen_economy_and_pava_without_increasing_legal_bal
     # PAVA must be strictly worse (lower)
     dirty_pava = spell_dirty["total_pava"].iloc[0]
     assert dirty_pava < clean_pava
+

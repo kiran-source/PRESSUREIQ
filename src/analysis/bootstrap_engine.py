@@ -234,9 +234,9 @@ def evaluate_scores_vectorized(mats: Dict, k_vec: np.ndarray) -> Tuple[np.ndarra
     comp_diff = np.abs(ipl_rate - t20i_rate)
     adaptability_score = np.where(has_both, np.clip(100.0 - comp_diff * 40.0, 20.0, 100.0), 60.0)
     
-    # Standardize across candidate pool
-    pava_std = np.std(shrunk_hp_pava) if np.std(shrunk_hp_pava) > 0 else 1.0
-    ret_std = np.std(retention_delta) if np.std(retention_delta) > 0 else 1.0
+    # Standardize across candidate pool using ddof=1 (matching pandas .std())
+    pava_std = np.std(shrunk_hp_pava, ddof=1) if len(shrunk_hp_pava) > 1 else 1.0
+    ret_std = np.std(retention_delta, ddof=1) if len(retention_delta) > 1 else 1.0
     pava_norm = (shrunk_hp_pava - np.mean(shrunk_hp_pava)) / (pava_std + 1e-6)
     ret_norm = (retention_delta - np.mean(retention_delta)) / (ret_std + 1e-6)
     

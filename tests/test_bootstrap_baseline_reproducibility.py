@@ -66,3 +66,4 @@ def test_bootstrap_baseline_reproduces_bowling_scores():
         boot_score = boot_scores[p_idx]
         
         assert abs(canon_score - boot_score) < 0.05, f"Mismatch for bowler {row['player_name']}: canon={canon_score}, boot={boot_score}"
+

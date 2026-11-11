@@ -333,7 +333,7 @@ elif page == "🎴 Player Decision Cards":
 elif page == "🔬 Five-Pillar Methodology":
     st.title("🔬 PRESSUREIQ Methodology Architecture")
     
-    st.markdown("""
+    st.markdown(r"""
     ### 1. Conceptual Definition of Pressure
     Pressure is defined strictly as **contextual match difficulty**, NOT player success or failure.
     Every delivery receives a calibrated continuous **0–100 score**:
@@ -343,10 +343,11 @@ elif page == "🔬 Five-Pillar Methodology":
     ### 2. Expected Performance Models (P0-2 Walk-Forward OOF)
     Historical deliveries used in PAVA are scored via **strictly chronological walk-forward out-of-fold estimation**:
     - 2022: 5-fold match-grouped out-of-fold cross-validation.
-    - 2023–2026: Models trained strictly on prior years ($\le \text{year}-1$).
+    - 2023–2026: Models trained strictly on prior years ($<= \text{year}-1$, no future leakage).
     
     ### 3. Pressure-Adjusted Value Added (PAVA)
-    $$\\text{PAVA}_{\\text{delivery}} = \\Big[(\\text{Actual Runs} - E[\\text{Runs}]) + \\lambda_{\\text{wkt}} \\cdot (P(\\text{Wicket}) - \\text{Wicket}) + \\lambda_{\\text{bnd}} \\cdot (\\text{Boundary} - P(\\text{Boundary}))\\Big] \\times \\left(1.0 + \\frac{\\text{Pressure}}{50.0}\\right)$$
+    $$\text{PAVA}_{\text{delivery}} = (\text{Actual Runs} - E[\text{Runs}]) + \lambda_{\text{wkt}} \cdot (P(\text{Dismissal}) - \text{Dismissal}) + \lambda_{\text{bnd}} \cdot (\text{Boundary} - P(\text{Boundary}))$$
+    *Note: Expected outcome models $E[\cdot]$ are already conditioned on match pressure (BPI/BoPI). PAVA measures pure above-expectation execution surplus (in runs/ball). Leverage-weighted impact ($L(P) = \text{PAVA} \times (1 + \text{Pressure}/50)$) is reported separately to prevent double-counting pressure in retention deltas.*
     
     ### 4. The Five Pillars of Reliability
     1. **Absolute Pressure Performance**: Mean PAVA in high-pressure match situations ($>= 50$ BPI/BoPI).
@@ -378,7 +379,7 @@ elif page == "🧪 Validation & Ablation Studies":
     st.table(b_df)
     
     st.subheader("2. Ablation Study: What Powers Reliable Rankings?")
-    st.markdown("""
+    st.markdown(r"""
     | Framework Configuration | Top-10 Overlap with Full Model | Key Methodological Impact |
     |---|---|---|
     | **Full Five-Pillar Model** | **10 / 10 (100%)** | Benchmark standard |

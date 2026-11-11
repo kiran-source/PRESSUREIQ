@@ -46,10 +46,16 @@ def compute_pressure_adjusted_value(
     
     raw_bat_value = delta_bat_runs + (wkt_val * delta_bat_wkt) + (0.5 * delta_bat_bnd)
     
-    # Pressure multiplier: linear scaling anchored at 1.0 (neutral), reaching 3.0 at BPI=100
+    # Methodological Resolution (P0):
+    # Performance above expectation is the pure, unamplified skill execution surplus (Runs/ball).
+    # Expected outcome models already conditioned on BPI/BoPI, so the residual is already pressure-adjusted.
+    # Setting pava_bat = raw_bat_value eliminates double-counting and prevents artificial retention distortion.
+    pava_bat = raw_bat_value
+    
+    # Optional leverage-weighted metric for cumulative match equity impact
     bpi = df["bpi"].fillna(35.0).values
     bat_pressure_mult = 1.0 + (bpi / 50.0)
-    pava_bat = raw_bat_value * bat_pressure_mult
+    leverage_pava_bat = raw_bat_value * bat_pressure_mult
     
     # 3. Bowling Raw Value Added (Runs)
     # delta_bowl_runs: expected runs conceded - actual runs conceded (positive is good)
@@ -58,15 +64,18 @@ def compute_pressure_adjusted_value(
     delta_bowl_wkt = df["is_bowler_wicket"].astype(int).values - df["prob_bowler_wicket"].values
     
     raw_bowl_value = delta_bowl_runs + (wkt_val * delta_bowl_wkt)
+    pava_bowl = raw_bowl_value
     
     bopi = df["bopi"].fillna(45.0).values
     bowl_pressure_mult = 1.0 + (bopi / 50.0)
-    pava_bowl = raw_bowl_value * bowl_pressure_mult
+    leverage_pava_bowl = raw_bowl_value * bowl_pressure_mult
     
     df["raw_bat_value"] = np.round(raw_bat_value, 3)
     df["pava_bat"] = np.round(pava_bat, 3)
+    df["leverage_pava_bat"] = np.round(leverage_pava_bat, 3)
     df["raw_bowl_value"] = np.round(raw_bowl_value, 3)
     df["pava_bowl"] = np.round(pava_bowl, 3)
+    df["leverage_pava_bowl"] = np.round(leverage_pava_bowl, 3)
     
     return df
 

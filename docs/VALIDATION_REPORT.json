@@ -1,96 +1,96 @@
 {
   "full_model_top10": [
-    "Suryakumar Yadav",
-    "Rinku Singh",
-    "Romario Shepherd",
-    "Fakhar Zaman",
-    "Jos Buttler",
-    "Jason Holder",
-    "Ruturaj Gaikwad",
-    "Phil Salt",
     "Naman Dhir",
+    "Ruturaj Gaikwad",
+    "Romario Shepherd",
+    "Jos Buttler",
+    "Phil Salt",
+    "Jitesh Sharma",
+    "Nicholas Pooran",
+    "Suryakumar Yadav",
+    "Fakhar Zaman",
     "Rohit Sharma"
   ],
   "ablations": {
     "raw_strike_rate_only": {
       "top10": [
-        "Andre Russell",
-        "Suryakumar Yadav",
         "Harry Brook",
         "Tim David",
-        "Sunil Narine",
         "Rajat Patidar",
         "Phil Salt",
-        "Naman Dhir",
+        "Sunil Narine",
+        "Andre Russell",
+        "Dinesh Karthik",
         "Heinrich Klaasen",
-        "Dinesh Karthik"
+        "Naman Dhir",
+        "Suryakumar Yadav"
       ],
       "top10_overlap_with_full": 3,
       "jaccard_similarity": 0.176
     },
     "no_empirical_bayes_shrinkage": {
       "top10": [
-        "Suryakumar Yadav",
-        "Rinku Singh",
-        "Fakhar Zaman",
-        "Jos Buttler",
-        "Ruturaj Gaikwad",
-        "Phil Salt",
         "Naman Dhir",
         "Darwish Rasooli",
-        "Rohit Sharma",
-        "Mohammad Rizwan"
+        "Ruturaj Gaikwad",
+        "Jos Buttler",
+        "Phil Salt",
+        "Nicholas Pooran",
+        "Mohammad Rizwan",
+        "Suryakumar Yadav",
+        "Fakhar Zaman",
+        "Rohit Sharma"
       ],
       "top10_overlap_with_full": 8,
       "jaccard_similarity": 0.667
     },
     "no_retention_delta": {
       "top10": [
-        "Rinku Singh",
-        "Suryakumar Yadav",
-        "Jos Buttler",
-        "Fakhar Zaman",
-        "Jitesh Sharma",
         "Ruturaj Gaikwad",
+        "Tristan Stubbs",
+        "Tim David",
+        "Jos Buttler",
         "Phil Salt",
         "Nicholas Pooran",
-        "Naman Dhir",
+        "Jitesh Sharma",
+        "Rinku Singh",
+        "Suryakumar Yadav",
+        "Rohit Sharma"
+      ],
+      "top10_overlap_with_full": 7,
+      "jaccard_similarity": 0.538
+    },
+    "no_consistency_pillar": {
+      "top10": [
+        "Ruturaj Gaikwad",
+        "Romario Shepherd",
+        "Tristan Stubbs",
+        "Jos Buttler",
+        "Jason Holder",
+        "Phil Salt",
+        "Jitesh Sharma",
+        "Suryakumar Yadav",
+        "Fakhar Zaman",
         "Rohit Sharma"
       ],
       "top10_overlap_with_full": 8,
       "jaccard_similarity": 0.667
     },
-    "no_consistency_pillar": {
-      "top10": [
-        "Suryakumar Yadav",
-        "Rinku Singh",
-        "Romario Shepherd",
-        "Fakhar Zaman",
-        "Jason Holder",
-        "Jos Buttler",
-        "Jitesh Sharma",
-        "Ruturaj Gaikwad",
-        "Phil Salt",
-        "Rohit Sharma"
-      ],
-      "top10_overlap_with_full": 9,
-      "jaccard_similarity": 0.818
-    },
     "no_adaptability_pillar": {
       "top10": [
-        "Suryakumar Yadav",
-        "Romario Shepherd",
-        "Fakhar Zaman",
-        "Jason Holder",
-        "Jos Buttler",
-        "Ruturaj Gaikwad",
-        "Phil Salt",
         "Naman Dhir",
         "Darwish Rasooli",
+        "Romario Shepherd",
+        "Ruturaj Gaikwad",
+        "Jason Holder",
+        "Phil Salt",
+        "Jitesh Sharma",
+        "Suryakumar Yadav",
+        "Fakhar Zaman",
         "Rohit Sharma"
       ],
-      "top10_overlap_with_full": 9,
-      "jaccard_similarity": 0.818
+      "top10_overlap_with_full": 8,
+      "jaccard_similarity": 0.667
     }
   }
 }

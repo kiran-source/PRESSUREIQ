@@ -123,17 +123,31 @@ class ExpectedOutcomeEngine:
         self.models: Dict[str, Any] = {}
         self.benchmark_results: Dict[str, Any] = {}
         
-    def preprocess_features(self, df: pd.DataFrame, fit=False) -> pd.DataFrame:
-        """Encode categoricals and extract feature matrix."""
+    def preprocess_features(
+        self,
+        df: pd.DataFrame,
+        encoder: Optional[OrdinalEncoder] = None,
+        fit: bool = False
+    ) -> Tuple[pd.DataFrame, OrdinalEncoder]:
+        """
+        Encode categoricals and extract feature matrix.
+        
+        Strict categorical isolation (P1): When fit=True, encoder is fit strictly
+        on the training slice. Unseen categories in test slices are mapped to -1.
+        """
         X = df[FEATURE_COLS].copy()
         X["is_knockout_stage"] = X["is_knockout_stage"].astype(int)
         
+        enc = self.encoder if encoder is None else encoder
+        
         if fit:
-            X[CATEGORICAL_COLS] = self.encoder.fit_transform(X[CATEGORICAL_COLS].astype(str))
+            X[CATEGORICAL_COLS] = enc.fit_transform(X[CATEGORICAL_COLS].astype(str))
+            if encoder is None:
+                self.encoder = enc
         else:
-            X[CATEGORICAL_COLS] = self.encoder.transform(X[CATEGORICAL_COLS].astype(str))
+            X[CATEGORICAL_COLS] = enc.transform(X[CATEGORICAL_COLS].astype(str))
             
-        return X
+        return X, enc
 
     def fit_model_bundle(self, X_train: pd.DataFrame, y_train_dict: Dict[str, np.ndarray]) -> Dict[str, Any]:
         """Fit the bundle of 5 outcome models (batting runs, dismissal, boundary, bowling runs, wicket)."""
@@ -195,9 +209,9 @@ class ExpectedOutcomeEngine:
         Evaluates on held-out 2025 Validation set AND untouched 2026 Test set.
         """
         logger.info("Preprocessing features for training, validation, and test...")
-        X_train = self.preprocess_features(train_df, fit=True)
-        X_val = self.preprocess_features(val_df, fit=False)
-        X_test = self.preprocess_features(test_df, fit=False) if test_df is not None else None
+        X_train, self.encoder = self.preprocess_features(train_df, encoder=self.encoder, fit=True)
+        X_val, _ = self.preprocess_features(val_df, encoder=self.encoder, fit=False)
+        X_test, _ = self.preprocess_features(test_df, encoder=self.encoder, fit=False) if test_df is not None else (None, None)
         
         # Target vectors
         y_train_runs = train_df["batter_runs"].values
@@ -404,10 +418,7 @@ class ExpectedOutcomeEngine:
         out["pred_provenance"] = ""
         out["pred_model_cutoff"] = ""
         
-        # Fit global encoder on full features safely
-        self.preprocess_features(df_work, fit=True)
-        
-        # 1. Year 2022: 5-fold match-grouped out-of-fold
+        # 1. Year 2022: 5-fold match-grouped out-of-fold with fold-isolated categorical encoding (P1)
         logger.info("Period 1 (2022): Running 5-fold match-grouped out-of-fold CV...")
         mask_2022 = df_work["match_year"] == 2022
         df_2022 = df_work[mask_2022].copy()
@@ -418,8 +429,9 @@ class ExpectedOutcomeEngine:
             fold_val = df_2022.iloc[val_idx]
             val_orig_idx = fold_val.index
             
-            X_tr = self.preprocess_features(fold_train, fit=False)
-            X_te = self.preprocess_features(fold_val, fit=False)
+            enc_fold = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1)
+            X_tr, _ = self.preprocess_features(fold_train, encoder=enc_fold, fit=True)
+            X_te, _ = self.preprocess_features(fold_val, encoder=enc_fold, fit=False)
             y_tr = get_targets(fold_train)
             
             bundle = self.fit_model_bundle(X_tr, y_tr)
@@ -433,7 +445,7 @@ class ExpectedOutcomeEngine:
             out.loc[val_orig_idx, "pred_provenance"] = f"2022_GroupKFold_split{fold+1}"
             out.loc[val_orig_idx, "pred_model_cutoff"] = "2022-GroupKFold"
             
-        # 2. Chronological Walk-Forward for Years 2023, 2024, 2025, 2026
+        # 2. Chronological Walk-Forward with strict historical-only encoding (P1)
         walk_forward_configs = [
             (2023, 2022, "2022-12-31", "walk_forward_2023"),
             (2024, 2023, "2023-12-31", "walk_forward_2024"),
@@ -450,8 +462,9 @@ class ExpectedOutcomeEngine:
             if len(eval_sub) == 0:
                 continue
                 
-            X_tr = self.preprocess_features(train_sub, fit=False)
-            X_te = self.preprocess_features(eval_sub, fit=False)
+            enc_wf = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1)
+            X_tr, _ = self.preprocess_features(train_sub, encoder=enc_wf, fit=True)
+            X_te, _ = self.preprocess_features(eval_sub, encoder=enc_wf, fit=False)
             y_tr = get_targets(train_sub)
             
             bundle = self.fit_model_bundle(X_tr, y_tr)
@@ -465,13 +478,15 @@ class ExpectedOutcomeEngine:
             out.loc[eval_orig_idx, "pred_provenance"] = prov_label
             out.loc[eval_orig_idx, "pred_model_cutoff"] = cutoff_label
             
-        assert not out["exp_batter_runs"].isna().any(), "Error: unpredicted deliveries exist in OOF generation!"
-        logger.info("Successfully generated out-of-fold predictions for 100% of dataset deliveries.")
+        pred_cols = ["exp_batter_runs", "prob_dismissal", "prob_boundary", "exp_bowler_runs", "prob_bowler_wicket"]
+        for c in pred_cols:
+            assert not out[c].isna().any(), f"Error: Prediction column {c} contains missing values in OOF generation!"
+        logger.info("Successfully generated out-of-fold predictions with strict categorical isolation for 100% of dataset deliveries.")
         return out
 
     def predict_expected_outcomes(self, df: pd.DataFrame) -> pd.DataFrame:
         """Inference for expected performance on any delivery dataset using production models."""
-        X = self.preprocess_features(df, fit=False)
+        X, _ = self.preprocess_features(df, encoder=self.encoder, fit=False)
         out = pd.DataFrame(index=df.index)
         
         out["exp_batter_runs"] = np.round(self.models["batting_expected_runs"].predict(X), 3)
