@@ -95,7 +95,74 @@ def print_unstop_dropdown_table():
     print("=" * 90 + "\n")
 
 
+def create_and_verify_submission_zip():
+    import subprocess
+    import tempfile
+    import zipfile
+    import os
+
+    print("=" * 80)
+    print("📦 PACKAGING SUBMISSION ZIP ARCHIVE...")
+    print("=" * 80)
+    
+    zip_path = REPO_ROOT / "PRESSUREIQ_Final_Submission.zip"
+    commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True).strip()
+    tracked_files = subprocess.check_output(["git", "ls-files"], cwd=REPO_ROOT, text=True).splitlines()
+    
+    print(f"Commit HEAD: {commit}")
+    print(f"Tracked Git files to pack: {len(tracked_files)}")
+    
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        # 1. Add all tracked files
+        for tf in tracked_files:
+            p = REPO_ROOT / tf
+            if p.exists():
+                zf.write(p, arcname=tf)
+                
+        # 2. Add processed data directory (Parquets, final CSVs, 2000-bootstrap, baseline backup)
+        proc_dir = REPO_ROOT / "data" / "processed"
+        for root, _, files in os.walk(proc_dir):
+            for f in files:
+                full_p = Path(root) / f
+                rel_p = full_p.relative_to(REPO_ROOT)
+                zf.write(full_p, arcname=str(rel_p))
+                
+        # 3. Add .git repository metadata
+        git_dir = REPO_ROOT / ".git"
+        for root, _, files in os.walk(git_dir):
+            for f in files:
+                full_p = Path(root) / f
+                rel_p = full_p.relative_to(REPO_ROOT)
+                zf.write(full_p, arcname=str(rel_p))
+                
+    size_mb = zip_path.stat().st_size / (1024 * 1024)
+    print(f"✅ Generated {zip_path.name} ({size_mb:.2f} MB)")
+    
+    print("\n🔍 REOPENING AND VERIFYING EXTRACTED ARCHIVE INTEGRITY...")
+    with tempfile.TemporaryDirectory() as td:
+        with zipfile.ZipFile(zip_path, "r") as zf:
+            zf.extractall(td)
+            
+        res_status = subprocess.run(["git", "status", "--short"], cwd=td, capture_output=True, text=True)
+        res_head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=td, text=True).strip()
+        
+        print(f"Extracted Git HEAD: {res_head}")
+        status_out = res_status.stdout.strip()
+        print(f"Extracted Git status: {status_out if status_out else '(working tree clean)'}")
+        
+        assert res_head == commit, f"Commit mismatch: {res_head} vs {commit}"
+        assert status_out == "", f"Extracted archive has dirty git status:\n{status_out}"
+        
+        # Verify critical files in extracted archive
+        for req_f in REQUIRED_DATA_FILES + REQUIRED_DOC_FILES:
+            rel = req_f.relative_to(REPO_ROOT)
+            assert (Path(td) / rel).exists(), f"Missing extracted file: {rel}"
+            
+    print("🎉 ARCHIVE VERIFICATION PASSED: Clean Git status, exact commit match, all critical files intact!\n")
+
+
 if __name__ == "__main__":
     verify_files()
     print_unstop_dropdown_table()
+    create_and_verify_submission_zip()
 

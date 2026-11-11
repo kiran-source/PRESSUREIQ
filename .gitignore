@@ -46,6 +46,7 @@ data/processed/
 data/interim/
 .DS_Store
 *.log
+*.zip
 catboost_info/
 .playwright-mcp/
 SupeRR Selector Season 2 _ Problem Statement _ Data Pack/
