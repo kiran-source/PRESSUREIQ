@@ -135,23 +135,48 @@ def create_and_verify_submission_zip():
                 rel_p = full_p.relative_to(REPO_ROOT)
                 zf.write(full_p, arcname=str(rel_p))
                 
+        # 4. Add raw CSV dataset files
+        raw_dir = REPO_ROOT / "SupeRR Selector Season 2 _ Problem Statement _ Data Pack" / "SupeRR Selector Season 2 _ Data Pack"
+        if raw_dir.exists():
+            for f in raw_dir.glob("*.csv"):
+                rel_p = f.relative_to(REPO_ROOT)
+                zf.write(f, arcname=str(rel_p))
+                
     size_mb = zip_path.stat().st_size / (1024 * 1024)
-    print(f"✅ Generated {zip_path.name} ({size_mb:.2f} MB)")
+    import hashlib
+    h = hashlib.sha256()
+    with open(zip_path, "rb") as fp:
+        while chunk := fp.read(8192 * 1024):
+            h.update(chunk)
+    zip_sha256 = h.hexdigest()
+    
+    with zipfile.ZipFile(zip_path, "r") as zf:
+        file_count = len(zf.namelist())
+        
+    print(f"✅ Generated {zip_path.name}")
+    print(f"   Size:       {size_mb:.2f} MB ({zip_path.stat().st_size:,} bytes)")
+    print(f"   File Count: {file_count} files")
+    print(f"   SHA-256:    {zip_sha256}")
     
     print("\n🔍 REOPENING AND VERIFYING EXTRACTED ARCHIVE INTEGRITY...")
     with tempfile.TemporaryDirectory() as td:
         with zipfile.ZipFile(zip_path, "r") as zf:
+            bad_crc = zf.testzip()
+            assert bad_crc is None, f"Corrupted file in ZIP: {bad_crc}"
             zf.extractall(td)
             
         res_status = subprocess.run(["git", "status", "--short"], cwd=td, capture_output=True, text=True)
         res_head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=td, text=True).strip()
+        res_raw = subprocess.run([sys.executable, "scripts/verify_raw_hashes.py"], cwd=td, capture_output=True, text=True)
         
         print(f"Extracted Git HEAD: {res_head}")
         status_out = res_status.stdout.strip()
         print(f"Extracted Git status: {status_out if status_out else '(working tree clean)'}")
+        print(f"Extracted Raw Hash Verification: {'PASSED (exit code 0)' if res_raw.returncode == 0 else 'FAILED'}")
         
         assert res_head == commit, f"Commit mismatch: {res_head} vs {commit}"
         assert status_out == "", f"Extracted archive has dirty git status:\n{status_out}"
+        assert res_raw.returncode == 0, f"Raw hash verification failed in extracted archive:\n{res_raw.stdout}\n{res_raw.stderr}"
         
         # Verify critical files in extracted archive
         for req_f in REQUIRED_DATA_FILES + REQUIRED_DOC_FILES:
