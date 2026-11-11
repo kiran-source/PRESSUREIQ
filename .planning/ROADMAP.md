@@ -197,3 +197,17 @@ This roadmap outlines the milestones, phases, atomic tasks, dependencies, accept
   python -m pytest -v
   ```
 
+---
+
+## Milestone 6: Phase 2 Clean-Room Verification & Jury-Grade Dashboard (Phase 11)
+*Goal: Execute isolated clean-room verification and build the modular 10-view PRESSUREIQ Streamlit dashboard with strict market-status safeguards.*
+
+### Phase 11: Clean-Room Audit, Modular Dashboard & Jury Handover
+- **Goal**: Complete Phase A verification, modularize `src/dashboard/` (`data_loader.py`, `analytics.py`, `charts.py`, `app.py`), run Playwright visual QA across all 10 pages, and deliver Phase D documentation.
+- **Dependencies**: Milestone 5 & Phase 1 Market Audit.
+- **Acceptance Criteria**:
+  - `docs/PHASE2_INDEPENDENT_VERIFICATION.md` and `data/processed/phase2_verification_manifest.json` recorded.
+  - All 10 views operational with DuckDB/Plotly/Pandas and unit-tested in `tests/test_dashboard_data.py`.
+  - Zero frozen baseline mutations.
+
+

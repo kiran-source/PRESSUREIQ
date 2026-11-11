@@ -3,11 +3,11 @@
 Mandatory Rules:
 - Preserves Model A as Leaderboard A (Pure Pressure Reliability).
 - Reconstructs Leaderboard B (RR IPL 2027 Acquisition Recommendations) using Multi-Criteria Decision Analysis.
-- Integrates the audited market intelligence ledger (data/processed/ipl_2027_player_market_template.csv).
+- Integrates the audited market intelligence ledger (data/processed/ipl_2027_player_market_template.csv)
+  plus verified Nov 5, 2026 trade counterparties (Liam Livingstone -> CSK, Khaleel Ahmed -> SRH).
 - Strictly prohibits displaying Pending Verification, Rumour, or Policy/Eligibility Review
   records as Confirmed Available or Confirmed Released.
 - Respects longstanding BCCI/diplomatic restriction (Pakistani players in Class D).
-- Accounts for 2026 franchise contracts / Nov 5 2026 trades (Class C) vs contingent targets (Class B).
 """
 
 from pathlib import Path
@@ -16,15 +16,6 @@ import pandas as pd
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PROCESSED_DIR = REPO_ROOT / "data" / "processed"
 RAW_DIR = REPO_ROOT / "SupeRR Selector Season 2 _ Problem Statement _ Data Pack" / "SupeRR Selector Season 2 _ Data Pack"
-
-# Load source files
-bat_df = pd.read_csv(PROCESSED_DIR / "final_batter_rankings.csv")
-bowl_df = pd.read_csv(PROCESSED_DIR / "final_bowler_rankings.csv")
-comp_map = pd.read_csv(RAW_DIR / "competition_team_player_mapping.csv")
-
-MARKET_PATH = PROCESSED_DIR / "ipl_2027_player_market_template.csv"
-market_df = pd.read_csv(MARKET_PATH).fillna("None") if MARKET_PATH.exists() else pd.DataFrame()
-market_by_id = market_df.set_index("player_id").to_dict(orient="index") if len(market_df) > 0 else {}
 
 INTL_TEAMS = [
     "India", "Pakistan", "England", "Australia", "South Africa", "New Zealand",
@@ -39,7 +30,6 @@ IPL_FRANCHISES = [
     "Gujarat Titans", "Lucknow Super Giants"
 ]
 
-# Pakistan-registered players (Class D Policy/Eligibility Review under post-2008 BCCI/diplomatic stance)
 PAKISTAN_PLAYERS = {
     "Fakhar Zaman", "Haris Rauf", "Abbas Afridi", "Sufiyan Muqeem", "Mohammad Rizwan",
     "Abrar Ahmed", "Babar Azam", "Shaheen Shah Afridi", "Naseem Shah", "Shadab Khan",
@@ -47,7 +37,35 @@ PAKISTAN_PLAYERS = {
     "Usman Khan", "Zaman Khan", "Mohammad Haris", "Haseebullah Khan", "Aamer Jamal"
 }
 
-# Verified RR 2026 Squad Core (awaiting Nov 17, 2026 retention list)
+KNOWN_NATIONALITIES = {
+    "Sunil Narine": "West Indies",
+    "Faf du Plessis": "South Africa",
+    "Mahendra Singh Dhoni": "India",
+    "M Shahrukh Khan": "India",
+    "Shikhar Dhawan": "India",
+    "Devdutt Padikkal": "India",
+    "Rahul Tewatia": "India",
+    "Krunal Pandya": "India",
+    "Nitish Rana": "India",
+    "Rajat Patidar": "India",
+    "Angkrish Raghuvanshi": "India",
+    "Ishant Sharma": "India",
+    "Digvesh Rathi": "India",
+    "Mohsin Khan": "India",
+    "T Natarajan": "India",
+    "Sandeep Sharma": "India",
+    "Mohit Sharma": "India",
+    "Harpreet Brar": "India",
+    "Prince Yadav": "India",
+    "Naman Dhir": "India",
+    "Rasikh Salam": "India",
+    "Mukesh Choudhary": "India",
+    "Shashank Singh": "India",
+    "Jitesh Sharma": "India",
+    "Vaibhav Arora": "India",
+    "Ayush Badoni": "India",
+}
+
 RR_EXISTING_CORE = {
     "Dhruv Jurel": "RR 2026 Retained Core WK-Batter (2027 List Pending Nov 17)",
     "Yashasvi Jaiswal": "RR 2026 Retained Opener (2027 List Pending Nov 17)",
@@ -63,20 +81,29 @@ RR_EXISTING_CORE = {
     "Donovan Ferreira": "RR 2026 Traded & Retained Finisher (2027 List Pending Nov 17)",
 }
 
-# Verified Non-RR Franchise Contracts from IPL 2026 Squads & Nov 5, 2026 Trade Window (Class C)
-# Updated strictly against official TATA IPL 2026 Retentions (2025-11-15), 2026 Auction, and Nov 5 2026 Trade.
+TRADE_URL_NOV5 = "https://www.iplt20.com/news/article/csk-and-srh-agree-to-four-player-trade"
+
+# Verified Nov 5, 2026 4-player trade counterparties across CSK and SRH
+CONFIRMED_TRADE_OVERRIDES = {
+    "Nathan Ellis": ("Sunrisers Hyderabad", "Confirmed Trade CSK -> SRH (2026-11-05, 4-player deal)", TRADE_URL_NOV5),
+    "Khaleel Ahmed": ("Sunrisers Hyderabad", "Confirmed Trade CSK -> SRH (2026-11-05, 4-player deal)", TRADE_URL_NOV5),
+    "Liam Livingstone": ("Chennai Super Kings", "Confirmed Trade SRH -> CSK (2026-11-05, 4-player deal)", TRADE_URL_NOV5),
+    "Jack Edwards": ("Chennai Super Kings", "Confirmed Trade SRH -> CSK (2026-11-05, 4-player deal)", TRADE_URL_NOV5),
+}
+
 FRANCHISE_CONTRACTS = {
     "Ruturaj Gaikwad": ("Chennai Super Kings", "CSK 2026 Retained Captain (2027 List Pending Nov 17)"),
     "Sanju Samson": ("Chennai Super Kings", "CSK 2026 Traded Captain/WK (2027 List Pending Nov 17)"),
     "Shivam Dube": ("Chennai Super Kings", "CSK 2026 Retained All-Rounder (2027 List Pending Nov 17)"),
     "Noor Ahmad": ("Chennai Super Kings", "CSK 2026 Retained Spinner (2027 List Pending Nov 17)"),
     "Mukesh Choudhary": ("Chennai Super Kings", "CSK 2026 Retained Pacer (2027 List Pending Nov 17)"),
+    "Liam Livingstone": ("Chennai Super Kings", "Confirmed Trade SRH -> CSK (2026-11-05, 4-player deal)"),
     "Nathan Ellis": ("Sunrisers Hyderabad", "Confirmed Trade CSK -> SRH (2026-11-05, 4-player deal)"),
+    "Khaleel Ahmed": ("Sunrisers Hyderabad", "Confirmed Trade CSK -> SRH (2026-11-05, 4-player deal)"),
     "Heinrich Klaasen": ("Sunrisers Hyderabad", "SRH 2026 Retained Keeper-Batter (2027 List Pending Nov 17)"),
     "Travis Head": ("Sunrisers Hyderabad", "SRH 2026 Retained Opener (2027 List Pending Nov 17)"),
     "Pat Cummins": ("Sunrisers Hyderabad", "SRH 2026 Retained Captain (2027 List Pending Nov 17)"),
     "Patrick Cummins": ("Sunrisers Hyderabad", "SRH 2026 Retained Captain (2027 List Pending Nov 17)"),
-    "Mukesh Kumar": ("Delhi Capitals", "DC 2026 Retained Fast Bowler (2027 List Pending Nov 17)"),
     "Eshan Malinga": ("Sunrisers Hyderabad", "SRH 2026 Retained Death Bowler (2027 List Pending Nov 17)"),
     "Harshal Patel": ("Sunrisers Hyderabad", "SRH 2026 Retained Seam Bowler (2027 List Pending Nov 17)"),
     "Rohit Sharma": ("Mumbai Indians", "MI 2026 Retained Veteran Opener (2027 List Pending Nov 17)"),
@@ -116,9 +143,9 @@ FRANCHISE_CONTRACTS = {
     "Axar Patel": ("Delhi Capitals", "DC 2026 Retained All-Rounder (2027 List Pending Nov 17)"),
     "Kuldeep Yadav": ("Delhi Capitals", "DC 2026 Retained Wrist-Spinner (2027 List Pending Nov 17)"),
     "Mitchell Starc": ("Delhi Capitals", "DC 2026 Retained Left-Arm Pacer (2027 List Pending Nov 17)"),
+    "Mukesh Kumar": ("Delhi Capitals", "DC 2026 Retained Fast Bowler (2027 List Pending Nov 17)"),
 }
 
-# Retired / Inactive (Class E)
 RETIRED_INACTIVE = {
     "Mahendra Singh Dhoni": "Veteran franchise icon / non-auction asset",
     "Dinesh Karthik": "Retired from IPL active playing roster",
@@ -127,23 +154,27 @@ RETIRED_INACTIVE = {
 }
 
 
-def audit_player(pname, pid, is_bat=True):
+def audit_player(pname: str, pid: int, comp_map: pd.DataFrame, market_by_id: dict, is_bat: bool = True) -> dict:
     sub = comp_map[comp_map["player_name"] == pname]
     teams = sub["team_name"].unique().tolist()
 
-    ipl_teams = [t for t in teams if any(f in t for f in IPL_FRANCHISES)]
+    ipl_teams = [t for t in teams if any(f in str(t) for f in IPL_FRANCHISES)]
     intl_teams = [t for t in teams if t in INTL_TEAMS]
 
     latest_ipl = ipl_teams[-1] if ipl_teams else "None"
-    nationality = intl_teams[0] if intl_teams else ("India" if ipl_teams and "India" in str(teams) else "Unknown")
+    nationality = KNOWN_NATIONALITIES.get(
+        pname,
+        intl_teams[0] if intl_teams else ("India" if ipl_teams and "India" in str(teams) else "Unknown"),
+    )
     is_overseas = (nationality != "India")
 
-    if pname in ["Harpreet Brar", "Prince Yadav", "Naman Dhir", "Rasikh Salam", "Mukesh Choudhary", "Shashank Singh", "Jitesh Sharma", "Vaibhav Arora", "Ayush Badoni"]:
-        nationality = "India"
-        is_overseas = False
-
     mkt_row = market_by_id.get(pid)
-    if mkt_row:
+    if pname in CONFIRMED_TRADE_OVERRIDES:
+        f_trade, _, t_url = CONFIRMED_TRADE_OVERRIDES[pname]
+        mkt_status = "Confirmed Trade"
+        latest_ipl = f_trade
+        mkt_url = t_url
+    elif mkt_row:
         mkt_status = str(mkt_row.get("official_retention_status", "Pending Verification"))
         mkt_fran = str(mkt_row.get("current_verified_franchise", latest_ipl))
         mkt_url = str(mkt_row.get("source_url", ""))
@@ -153,7 +184,6 @@ def audit_player(pname, pid, is_bat=True):
         mkt_status = "Policy/Eligibility Review" if (pname in PAKISTAN_PLAYERS or nationality == "Pakistan") else "Pending Verification"
         mkt_url = "https://www.iplt20.com/news/article/tata-ipl-2026-player-retentions-announced"
 
-    # Determine Classification strictly without falsely marking Pending records as Confirmed Available
     if pname in PAKISTAN_PLAYERS or nationality == "Pakistan":
         cls = "D"
         mkt_status = "Policy/Eligibility Review"
@@ -162,6 +192,7 @@ def audit_player(pname, pid, is_bat=True):
         conf = "Established Policy Context"
     elif pname in RETIRED_INACTIVE:
         cls = "E"
+        mkt_status = "Historical / Inactive (Pending Verification)"
         status_desc = RETIRED_INACTIVE[pname]
         avail_2027 = "0% (Retired/Inactive)"
         conf = "Historical Record"
@@ -186,7 +217,6 @@ def audit_player(pname, pid, is_bat=True):
             avail_2027 = f"Pending Verification (2026 Contract: {f_team}; Awaiting Nov 17 List)"
             conf = "Verified 2026 Squad / Pending 2027 List"
     else:
-        # Class B: Uncontracted in 2026 retained lists or overseas free agent — still Pending Nov 17 & Nov 23 registration
         cls = "B"
         status_desc = f"Contingent Pool Candidate (Latest mapped team: {latest_ipl}; 2027 status unconfirmed)"
         avail_2027 = "Contingent Target — Pending Verification (Awaiting Nov 17 & Auction Registration)"
@@ -213,42 +243,58 @@ def main():
     print("CONDUCTING AUDITED PLAYER ELIGIBILITY & MARKET INTEGRATION...")
     print("=" * 80)
 
-    audit_records = []
+    bat_df = pd.read_csv(PROCESSED_DIR / "final_batter_rankings.csv")
+    bowl_df = pd.read_csv(PROCESSED_DIR / "final_bowler_rankings.csv")
 
+    raw_mapping_csv = RAW_DIR / "competition_team_player_mapping.csv"
+    players_parquet = PROCESSED_DIR / "players.parquet"
+    if raw_mapping_csv.exists():
+        comp_map = pd.read_csv(raw_mapping_csv)
+    elif players_parquet.exists():
+        comp_map = pd.read_parquet(players_parquet)
+    else:
+        raise FileNotFoundError(f"Missing both {raw_mapping_csv} and {players_parquet}")
+
+    market_path = PROCESSED_DIR / "ipl_2027_player_market_template.csv"
+    market_df = pd.read_csv(market_path).fillna("None") if market_path.exists() else pd.DataFrame()
+    market_by_id = market_df.set_index("player_id").to_dict(orient="index") if len(market_df) > 0 else {}
+
+    audit_records = []
     for _, row in bat_df.iterrows():
-        rec = audit_player(row["player_name"], row["player_id"], is_bat=True)
-        rec["reliability_score"] = row["reliability_score"]
-        rec["model_a_rank"] = row["rank"]
-        rec["hp_balls"] = row["hp_balls"]
-        rec["matches"] = row["matches"]
-        rec["role"] = row["role"]
-        rec["prc_archetype"] = row["prc_archetype"]
-        rec["ci_lower_95"] = row["ci_lower_95"]
-        rec["ci_upper_95"] = row["ci_upper_95"]
-        rec["top10_prob"] = row.get("top10_inclusion_prob", 0.0)
+        rec = audit_player(row["player_name"], row["player_id"], comp_map, market_by_id, is_bat=True)
+        rec.update({
+            "reliability_score": row["reliability_score"],
+            "model_a_rank": row["rank"],
+            "hp_balls": row["hp_balls"],
+            "matches": row["matches"],
+            "role": row["role"],
+            "prc_archetype": row["prc_archetype"],
+            "ci_lower_95": row["ci_lower_95"],
+            "ci_upper_95": row["ci_upper_95"],
+            "top10_prob": row.get("top10_inclusion_prob", 0.0),
+        })
         audit_records.append(rec)
 
     for _, row in bowl_df.iterrows():
-        rec = audit_player(row["player_name"], row["player_id"], is_bat=False)
-        rec["reliability_score"] = row["reliability_score"]
-        rec["model_a_rank"] = row["rank"]
-        rec["hp_balls"] = row["hp_balls"]
-        rec["matches"] = row["matches"]
-        rec["role"] = f"{row['pace_or_spin']} ({row['bowling_type']})"
-        rec["prc_archetype"] = row["prc_archetype"]
-        rec["ci_lower_95"] = row["ci_lower_95"]
-        rec["ci_upper_95"] = row["ci_upper_95"]
-        rec["top10_prob"] = row.get("top10_inclusion_prob", 0.0)
+        rec = audit_player(row["player_name"], row["player_id"], comp_map, market_by_id, is_bat=False)
+        rec.update({
+            "reliability_score": row["reliability_score"],
+            "model_a_rank": row["rank"],
+            "hp_balls": row["hp_balls"],
+            "matches": row["matches"],
+            "role": f"{row['pace_or_spin']} ({row['bowling_type']})",
+            "prc_archetype": row["prc_archetype"],
+            "ci_lower_95": row["ci_lower_95"],
+            "ci_upper_95": row["ci_upper_95"],
+            "top10_prob": row.get("top10_inclusion_prob", 0.0),
+        })
         audit_records.append(rec)
 
     audit_df = pd.DataFrame(audit_records)
     audit_csv = PROCESSED_DIR / "player_eligibility_audit.csv"
     audit_df.to_csv(audit_csv, index=False)
     print(f"Generated {audit_csv} ({len(audit_df)} players audited)")
-    print("\nEligibility Class Breakdown:")
-    print(audit_df["eligibility_class"].value_counts().to_string())
 
-    # Single-pass MCDA: 40% Rel + 20% Ev + 25% Avail + 15% Fit
     class_weights = {"A": 1.00, "B": 0.85, "C": 0.20, "D": 0.00, "E": 0.00, "F": 0.50}
 
     def calculate_rr_scores(df_sub, is_bat=True):
@@ -280,15 +326,12 @@ def main():
                     fit_score = 80.0
                     role_need = "Bowling Squad Depth"
 
-            if avail_w == 0.0:
-                rr_score = 0.0
-            else:
-                rr_score = (
-                    (row["reliability_score"] * 0.40) +
-                    (ev_score * 0.20) +
-                    (avail_w * 100.0 * 0.25) +
-                    (fit_score * 0.15)
-                )
+            rr_score = 0.0 if avail_w == 0.0 else (
+                (row["reliability_score"] * 0.40) +
+                (ev_score * 0.20) +
+                (avail_w * 100.0 * 0.25) +
+                (fit_score * 0.15)
+            )
 
             scored.append({
                 "player_id": row["player_id"],
@@ -322,21 +365,10 @@ def main():
     bowl_scored = calculate_rr_scores(audit_df[audit_df["discipline"] == "Bowler"], is_bat=False)
 
     candidates_df = pd.concat([bat_scored, bowl_scored], ignore_index=True)
-    candidates_csv = PROCESSED_DIR / "rr_2027_candidate_rankings.csv"
-    candidates_df.to_csv(candidates_csv, index=False)
-    print(f"Generated {candidates_csv} ({len(candidates_df)} candidates scored)")
-
-    top10_bat_rr = bat_scored.head(10).copy()
-    top10_bowl_rr = bowl_scored.head(10).copy()
-
-    top10_bat_rr.to_csv(PROCESSED_DIR / "rr_2027_batter_top10.csv", index=False)
-    top10_bowl_rr.to_csv(PROCESSED_DIR / "rr_2027_bowler_top10.csv", index=False)
-
-    print("\n--- TOP 10 CONTINGENT BATTERS (LEADERBOARD B) ---")
-    print(top10_bat_rr[["rr_priority_rank", "player_name", "latest_ipl_franchise", "eligibility_class", "market_status", "rr_priority_score"]].to_string(index=False))
-
-    print("\n--- TOP 10 CONTINGENT BOWLERS (LEADERBOARD B) ---")
-    print(top10_bowl_rr[["rr_priority_rank", "player_name", "latest_ipl_franchise", "eligibility_class", "market_status", "rr_priority_score"]].to_string(index=False))
+    candidates_df.to_csv(PROCESSED_DIR / "rr_2027_candidate_rankings.csv", index=False)
+    bat_scored.head(10).to_csv(PROCESSED_DIR / "rr_2027_batter_top10.csv", index=False)
+    bowl_scored.head(10).to_csv(PROCESSED_DIR / "rr_2027_bowler_top10.csv", index=False)
+    print(f"Generated candidate rankings ({len(candidates_df)} rows) & Top-10 files cleanly.")
 
 
 if __name__ == "__main__":

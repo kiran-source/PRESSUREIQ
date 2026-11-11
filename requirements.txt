@@ -13,4 +13,5 @@ plotly==6.6.0
 streamlit==1.56.0
 pyarrow==23.0.1
 pytest==9.1.1
+pymupdf==2.1
 
