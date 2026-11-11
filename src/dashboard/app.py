@@ -719,7 +719,7 @@ def render_market_intelligence(bundle: DashboardDataBundle) -> None:
     st.title("8. Auction & Market Intelligence")
     st.warning(
         "**Pre-Retention Chronology Guardrails (Audit Date: 11 November 2026):**\n"
-        "- Official IPL 2027 retention submissions are due **17 November 2026** (`6 days away`). A 2026 squad record is **NOT proof of 2027 retention**, and missing from a list is **NOT released**.\n"
+        "- Official IPL 2027 retention submissions are due **17 November 2026**. A 2026 squad record is **NOT proof of 2027 retention**, and missing from a list is **NOT released**.\n"
         "- **Pending Verification** records are unverified and are strictly isolated from open-auction availability lists.\n"
         "- **Nathan Ellis (`Confirmed Trade`):** CSK -> SRH (5 Nov 2026) — unavailable for RR auction targeting.\n"
         "- **Haris Rauf (`Policy/Eligibility Review`):** Classified under longstanding post-2008 geopolitical/BCCI policy context (no fabricated individual ban).\n"

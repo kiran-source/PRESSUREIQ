@@ -44,13 +44,13 @@ To guarantee zero future information leakage into historical performance ratings
 ### 2.2 Prediction Targets & Evaluation Populations
 1. **Boundary Probability (`is_boundary`):**
    - Target: Binary indicator $\{0, 1\}$ (where runs off bat $\in \{4, 6\}$).
-   - Evaluation Population: All legal deliveries faced by batters in 2026.
-2. **Dismissal Probability (`is_wicket`):**
+   - Evaluation Population: All delivery records in the chronological 2026 split ($N = 33,082$).
+2. **Dismissal Probability (`is_wicket` / `is_striker_out`):**
    - Target: Binary indicator $\{0, 1\}$ of batter dismissal on the delivery.
-   - Evaluation Population: All legal deliveries faced by batters in 2026.
+   - Evaluation Population: All delivery records in the chronological 2026 split ($N = 33,082$).
 3. **Expected Runs (`batter_runs`):**
    - Target: Continuous runs scored off the bat $\{0, 1, 2, 3, 4, 5, 6\}$.
-   - Evaluation Population: All legal deliveries in 2026.
+   - Evaluation Population: All delivery records in the chronological 2026 split ($N = 33,082$).
 4. **2nd Innings In-Game Win Probability (`bat_won`):**
    - Target: Binary indicator $\{0, 1\}$ whether chasing team won the match.
    - Evaluation Population: All 2nd-innings deliveries in 2026 ($N = 15,614$).

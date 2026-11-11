@@ -98,32 +98,80 @@ def verify_reproduced_numbers(df: pd.DataFrame) -> Dict[str, Any]:
             "rohit_drop_pct": float(rohit_row["drop_pct_50_to_55"]),
             "rohit_sig_ess": float(rohit_row["continuous_sig_ess"])
         }
-        if "gaikwad_step_50" in weighting_verification:
-            # Cross-verify against live deliveries_with_pava dataframe
-            g_del = df[(df["striker_name"] == "Ruturaj Gaikwad") & (df["is_batter_ball"] == 1)]
-            r_del = df[(df["striker_name"] == "Rohit Sharma") & (df["is_batter_ball"] == 1)]
-            g50 = int((g_del["bpi"] >= 50.0).sum())
-            g55 = int((g_del["bpi"] >= 55.0).sum())
-            r50 = int((r_del["bpi"] >= 50.0).sum())
-            r55 = int((r_del["bpi"] >= 55.0).sum())
-            checks = [
-                total_deliveries == 200961,
-                total_matches == 867,
-                bool(reproduced_sweep),
-                train_auc is not None and val_auc is not None and test_auc is not None,
-                g50 == weighting_verification["gaikwad_step_50"],
-                g55 == weighting_verification["gaikwad_step_55"],
-                r50 == weighting_verification["rohit_step_50"],
-                r55 == weighting_verification["rohit_step_55"],
-            ]
-        else:
-            checks = [total_deliveries == 200961, total_matches == 867]
-    else:
-        weighting_verification = {}
-        checks = [total_deliveries == 200961, total_matches == 867]
+    failed_checks: List[str] = []
+    if total_deliveries != 200961:
+        failed_checks.append(f"total_deliveries={total_deliveries}!=200961")
+    if total_matches != 867:
+        failed_checks.append(f"total_matches={total_matches}!=867")
 
-    all_ok = all(checks)
-    status_str = "ALL_NUMBERS_VERIFIED_EXACT_MATCH" if all_ok else "VERIFICATION_MISMATCH"
+    if reproduced_sweep:
+        # Independently recompute CDPI defense sweep at center=10.5, width=3.8 directly on df
+        inn2_c = df[df["innings"] == 2]
+        rrr_raw_c = inn2_c["required_run_rate_before"].fillna(8.5).values
+        rrr_c = np.clip(rrr_raw_c, 1.0, 24.0)
+        b_rem_c = inn2_c["balls_remaining_before"].fillna(120.0).values
+        w_rem_c = np.clip(10.0 - inn2_c["wickets_lost_before"].fillna(0.0).values, 1.0, 10.0)
+        bell_c = np.exp(-0.5 * ((rrr_c - 10.5) / 3.8) ** 2)
+        disc_step_c = np.where((rrr_raw_c < 4.5) & (b_rem_c < 36), 0.25, 1.0)
+        disc_sig_c = sigmoid((rrr_c - 4.5) / 1.0)
+        def_step_c = (0.55 * bell_c * 100.0 + 0.45 * sigmoid((12.0 - rrr_c) / 2.5) * (w_rem_c / 10.0) * 100.0) * disc_step_c
+        def_smooth_c = (0.55 * bell_c * 100.0 + 0.45 * sigmoid((12.0 - rrr_c) / 2.5) * (w_rem_c / 10.0) * 100.0) * disc_sig_c
+        live_corr = round(float(spearmanr(rrr_c, def_smooth_c)[0]), 4)
+        blow_mask_c = (rrr_raw_c <= 4.0) & (b_rem_c <= 30)
+        live_b_step = round(float(def_step_c[blow_mask_c].mean()), 2)
+        live_b_smooth = round(float(def_smooth_c[blow_mask_c].mean()), 2)
+        live_def_mean = round(float(def_smooth_c.mean()), 2)
+        if not np.isclose(live_corr, reproduced_sweep["center_10_5_width_3_8_corr_rrr"], atol=1e-3):
+            failed_checks.append(f"cdpi_corr_rrr={live_corr}!={reproduced_sweep['center_10_5_width_3_8_corr_rrr']}")
+        if not np.isclose(live_b_step, reproduced_sweep["blowout_step_mean"], atol=0.05):
+            failed_checks.append(f"blowout_step_mean={live_b_step}!={reproduced_sweep['blowout_step_mean']}")
+        if not np.isclose(live_b_smooth, reproduced_sweep["blowout_smooth_mean"], atol=0.05):
+            failed_checks.append(f"blowout_smooth_mean={live_b_smooth}!={reproduced_sweep['blowout_smooth_mean']}")
+        if not np.isclose(live_def_mean, reproduced_sweep["mean_defense_score"], atol=0.05):
+            failed_checks.append(f"mean_defense_score={live_def_mean}!={reproduced_sweep['mean_defense_score']}")
+    else:
+        failed_checks.append("missing_cdpi_sweep_csv")
+
+    if None not in (train_auc, val_auc, test_auc):
+        # Independently check 2026 chronological test AUC parity directly on df
+        inn2_wp = df[(df["innings"] == 2) & (df["match_date"].notna())].copy()
+        inn2_wp["year"] = pd.to_datetime(inn2_wp["match_date"]).dt.year
+        mo_wp = inn2_wp.groupby("match_id").agg(final_runs=("cum_team_runs", "max"), target=("target_score", "first"))
+        mo_wp["bat_won"] = (mo_wp["final_runs"] >= mo_wp["target"]).astype(int)
+        inn2_wp = inn2_wp.merge(mo_wp[["bat_won"]], on="match_id", how="left")
+        xcols = ["balls_remaining_before", "runs_required_before", "wickets_lost_before", "target_score"]
+        tr_wp = inn2_wp[inn2_wp["year"] <= 2024]
+        va_wp = inn2_wp[inn2_wp["year"] == 2025]
+        te_wp = inn2_wp[inn2_wp["year"] == 2026]
+        mu_wp, sd_wp = tr_wp[xcols].fillna(0).mean().values, tr_wp[xcols].fillna(0).std().values + 1e-6
+        lr_wp = LogisticRegression(C=1.0, max_iter=500, random_state=42).fit((tr_wp[xcols].fillna(0).values - mu_wp) / sd_wp, tr_wp["bat_won"].values)
+        live_tr_auc = round(float(roc_auc_score(tr_wp["bat_won"].values, lr_wp.predict_proba((tr_wp[xcols].fillna(0).values - mu_wp) / sd_wp)[:, 1])), 4)
+        live_va_auc = round(float(roc_auc_score(va_wp["bat_won"].values, lr_wp.predict_proba((va_wp[xcols].fillna(0).values - mu_wp) / sd_wp)[:, 1])), 4)
+        live_te_auc = round(float(roc_auc_score(te_wp["bat_won"].values, lr_wp.predict_proba((te_wp[xcols].fillna(0).values - mu_wp) / sd_wp)[:, 1])), 4)
+        if not np.isclose(live_tr_auc, train_auc, atol=5e-3):
+            failed_checks.append(f"win_prob_train_auc={live_tr_auc}!={train_auc}")
+        if not np.isclose(live_va_auc, val_auc, atol=5e-3):
+            failed_checks.append(f"win_prob_val_auc={live_va_auc}!={val_auc}")
+        if not np.isclose(live_te_auc, test_auc, atol=5e-3):
+            failed_checks.append(f"win_prob_test_auc={live_te_auc}!={test_auc}")
+    else:
+        failed_checks.append("missing_win_prob_json")
+
+    if "gaikwad_step_50" in weighting_verification:
+        g_del = df[(df["striker_name"] == "Ruturaj Gaikwad") & (df["is_batter_ball"] == 1)]
+        r_del = df[(df["striker_name"] == "Rohit Sharma") & (df["is_batter_ball"] == 1)]
+        if int((g_del["bpi"] >= 50.0).sum()) != weighting_verification["gaikwad_step_50"]:
+            failed_checks.append("gaikwad_step_50_mismatch")
+        if int((g_del["bpi"] >= 55.0).sum()) != weighting_verification["gaikwad_step_55"]:
+            failed_checks.append("gaikwad_step_55_mismatch")
+        if int((r_del["bpi"] >= 50.0).sum()) != weighting_verification["rohit_step_50"]:
+            failed_checks.append("rohit_step_50_mismatch")
+        if int((r_del["bpi"] >= 55.0).sum()) != weighting_verification["rohit_step_55"]:
+            failed_checks.append("rohit_step_55_mismatch")
+    else:
+        failed_checks.append("missing_weighting_csv")
+
+    status_str = "ALL_NUMBERS_VERIFIED_EXACT_MATCH" if not failed_checks else "VERIFICATION_MISMATCH"
 
     res = {
         "dataset_integrity": {
@@ -142,6 +190,7 @@ def verify_reproduced_numbers(df: pd.DataFrame) -> Dict[str, Any]:
             "test_ece": test_ece
         },
         "reproduced_weighting": weighting_verification,
+        "failed_checks": failed_checks,
         "verification_status": status_str
     }
     
@@ -780,60 +829,64 @@ def compare_hybrid_vs_baseline_rankings(df: pd.DataFrame) -> Dict[str, Any]:
     jaccard_bat = len(top10_base_bat.intersection(top10_hybrid_bat)) / len(top10_base_bat.union(top10_hybrid_bat))
     
     # ---------------- BOWLING ----------------
-    # Enforce MCC legal-ball population parity with Model A (147 qualified bowlers)
-    bowl_deliv = df[(df["bowler_id"].notna()) & (df["is_legal_ball"] == 1)].copy()
-    
-    # Career stats per bowler
-    bowl_career = bowl_deliv.groupby("bowler_name").agg(
+    # Include all deliveries with non-null bowler_id so wide/no-ball PAVA penalties contribute
+    # to numerator while strictly keeping legal deliveries as career & effective sample denominator (MCC parity).
+    bowl_deliv = df[df["bowler_id"].notna()].copy()
+    is_legal = (bowl_deliv["is_legal_ball"] == 1)
+
+    # Career stats per bowler (legal balls >= 400, matches >= 20)
+    bowl_career = bowl_deliv[is_legal].groupby("bowler_name").agg(
         career_balls=("is_legal_ball", "count"),
         career_matches=("match_id", "nunique")
     ).reset_index()
     qual_bowlers = set(bowl_career[(bowl_career["career_balls"] >= 400) & (bowl_career["career_matches"] >= 20)]["bowler_name"])
-    
-    # Single-PAVA Proxy Baseline (Step BoPI >= 50, min 30 legal balls, career qualified)
-    bowl_high_base = bowl_deliv[(bowl_deliv["bopi"] >= 50.0) & (bowl_deliv["bowler_name"].isin(qual_bowlers))].copy()
-    bowl_agg_base = bowl_high_base.groupby("bowler_name").agg(
-        balls=("bopi", "count"),
-        raw_pava=("pava_bowl", "mean")
+
+    # Single-PAVA Proxy Baseline: all deliveries' pava_bowl summed across BoPI>=50, divided by legal BoPI>=50 balls
+    bowl_high_all = bowl_deliv[(bowl_deliv["bopi"] >= 50.0) & (bowl_deliv["bowler_name"].isin(qual_bowlers))].copy()
+    bowl_high_all["legal_hp"] = (bowl_high_all["is_legal_ball"] == 1).astype(int)
+    bowl_agg_base = bowl_high_all.groupby("bowler_name").agg(
+        balls=("legal_hp", "sum"),
+        sum_pava=("pava_bowl", "sum"),
     ).reset_index()
     bowl_agg_base = bowl_agg_base[bowl_agg_base["balls"] >= 30].copy()
-    
+    bowl_agg_base["raw_pava"] = bowl_agg_base["sum_pava"] / bowl_agg_base["balls"]
+
     mu_bowl = bowl_agg_base["raw_pava"].mean()
     bowl_agg_base["shrunk_pava"] = (bowl_agg_base["balls"] / (bowl_agg_base["balls"] + K)) * bowl_agg_base["raw_pava"] + (K / (bowl_agg_base["balls"] + K)) * mu_bowl
-    
+
     pava_min_b, pava_max_b = bowl_agg_base["shrunk_pava"].min(), bowl_agg_base["shrunk_pava"].max()
     bowl_agg_base["reliability_base"] = np.round(50.0 + 45.0 * (bowl_agg_base["shrunk_pava"] / max(abs(pava_max_b), abs(pava_min_b), 1e-4)), 2)
     bowl_agg_base = bowl_agg_base.sort_values(by="reliability_base", ascending=False).reset_index(drop=True)
     bowl_agg_base["rank_base"] = bowl_agg_base.index + 1
-    
-    # Hybrid Model Bowlers: Continuous Sigmoidal Weighting w_i = sigmoid((BoPI_smooth - 42.0) / 8.0)
-    # Recomputing BoPI with Smooth Blowout Factor
+
+    # Hybrid Model Bowlers: include illegal-delivery weighted PAVA in numerator while keeping legal deliveries in ESS & weight denominator
     rrr_clean = np.clip(bowl_deliv["required_run_rate_before"].fillna(8.5).values, 1.0, 24.0)
     w_lost = bowl_deliv["wickets_lost_before"].fillna(2.0).values
     w_rem = np.clip(10.0 - w_lost, 0.0, 10.0)
     b_rem = bowl_deliv["balls_remaining_before"].fillna(60.0).values
     inn_mask = (bowl_deliv["innings"] == 1).values
     runs_above_par = bowl_deliv["runs_above_par_trajectory"].fillna(0.0).values
-    
+
     bell = np.exp(-0.5 * ((rrr_clean - 10.5) / 3.8) ** 2)
     smooth_blowout = np.where(~inn_mask, sigmoid((rrr_clean - 4.5) / 1.0), 1.0)
     cdpi_defend_inn2 = (0.55 * bell * 100.0 + 0.45 * sigmoid((12.0 - rrr_clean) / 2.5) * (w_rem / 10.0) * 100.0) * smooth_blowout
     cdpi_defend_inn1 = sigmoid(runs_above_par / 14.0) * 100.0
     cdpi_defend = np.where(inn_mask, cdpi_defend_inn1, cdpi_defend_inn2)
     climax_comp = (((120.0 - b_rem) / 120.0) ** 1.35) * 100.0
-    
+
     bopi_smooth = np.clip(0.45 * cdpi_defend + 0.30 * ((w_rem / 10.0) * 100.0) + 0.25 * climax_comp, 0.0, 100.0)
-    
+
     w_bowl = sigmoid((bopi_smooth - 42.0) / 8.0)
-    bowl_deliv["w_hybrid"] = w_bowl
+    legal_mask_arr = is_legal.astype(float).values
+    bowl_deliv["w_hybrid_legal"] = w_bowl * legal_mask_arr
     bowl_deliv["weighted_pava_num"] = bowl_deliv["pava_bowl"] * w_bowl
-    bowl_deliv["w_sq"] = w_bowl ** 2
-    
+    bowl_deliv["w_sq_legal"] = (w_bowl * legal_mask_arr) ** 2
+
     bowl_agg_hybrid = bowl_deliv[bowl_deliv["bowler_name"].isin(qual_bowlers)].groupby("bowler_name").agg(
-        sum_w=("w_hybrid", "sum"),
-        sum_w_sq=("w_sq", "sum"),
+        sum_w=("w_hybrid_legal", "sum"),
+        sum_w_sq=("w_sq_legal", "sum"),
         sum_weighted_pava=("weighted_pava_num", "sum"),
-        raw_balls=("w_hybrid", "count")
+        raw_balls=("is_legal_ball", "sum")
     ).reset_index()
     
     bowl_agg_hybrid["ess"] = (bowl_agg_hybrid["sum_w"] ** 2) / np.maximum(bowl_agg_hybrid["sum_w_sq"], 1e-6)

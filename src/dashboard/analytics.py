@@ -312,28 +312,32 @@ def summarize_rr_squad_intelligence(
     candidates_df: pd.DataFrame,
 ) -> Dict[str, pd.DataFrame]:
     """Build RR 2026 core profile and recruitment fit tables separating fit from market availability."""
-    if audit_df.empty or candidates_df.empty:
-        return {"rr_core": pd.DataFrame(), "role_depth": pd.DataFrame(), "targets": pd.DataFrame()}
+    if audit_df.empty:
+        rr_core = pd.DataFrame()
+        role_depth = pd.DataFrame()
+    else:
+        rr_core = audit_df[audit_df["eligibility_class"] == "A"].sort_values("reliability_score", ascending=False).copy()
+        rr_core["market_status_verified"] = rr_core["market_status"].astype(str)
 
-    rr_core = audit_df[audit_df["eligibility_class"] == "A"].sort_values("reliability_score", ascending=False).copy()
-    rr_core["market_status_verified"] = rr_core["market_status"].astype(str)
-
-    role_depth = (
-        rr_core.groupby(["discipline", "role"], as_index=False)
-        .agg(
-            Players=("player_name", "count"),
-            Avg_Reliability=("reliability_score", "mean"),
-            Total_HP_Balls=("hp_balls", "sum"),
+        role_depth = (
+            rr_core.groupby(["discipline", "role"], as_index=False)
+            .agg(
+                Players=("player_name", "count"),
+                Avg_Reliability=("reliability_score", "mean"),
+                Total_HP_Balls=("hp_balls", "sum"),
+            )
         )
-    )
-    role_depth["Avg_Reliability"] = role_depth["Avg_Reliability"].round(2)
+        role_depth["Avg_Reliability"] = role_depth["Avg_Reliability"].round(2)
 
-    targets = candidates_df[candidates_df["eligibility_class"] != "A"].copy()
-    targets["auction_availability"] = targets.apply(
-        lambda r: sanitize_availability_label(r.get("market_status", "Pending Verification"), r.get("auction_availability", "")),
-        axis=1,
-    )
-    targets["market_verified_available"] = targets["market_status"].isin(["Confirmed Released"])
+    if candidates_df.empty:
+        targets = pd.DataFrame()
+    else:
+        targets = candidates_df[candidates_df["eligibility_class"] != "A"].copy()
+        targets["auction_availability"] = targets.apply(
+            lambda r: sanitize_availability_label(r.get("market_status", "Pending Verification"), r.get("auction_availability", "")),
+            axis=1,
+        )
+        targets["market_verified_available"] = targets["market_status"].isin(["Confirmed Released"])
     return {"rr_core": rr_core, "role_depth": role_depth, "targets": targets}
 
 

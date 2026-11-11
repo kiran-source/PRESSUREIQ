@@ -45,7 +45,7 @@ Every player in the official Top-10 was verified against the three strict compet
 ### Zero Anomaly Checks:
 - **No Duplicate IDs:** All 10 players possess unique, canonical player IDs.
 - **No Missing Values:** 0 missing values across runs, strike rates, or confidence intervals.
-- **Natural Role Distribution:** 5 Top-Order batters, 4 Middle-Order batters, 1 Finisher.
+- **Natural Role Distribution:** 6 Top-Order batters, 3 Middle-Order batters, 1 Finisher.
 
 ---
 

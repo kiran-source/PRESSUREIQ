@@ -1,7 +1,7 @@
 # PRESSUREIQ — Limitations, Ethical Governance & Research Integrity
 
 **Document:** `docs/FINAL_LIMITATIONS_AND_RESEARCH_INTEGRITY.md`  
-**Date:** 15 November 2026  
+**Date:** 11 November 2026  
 **Status:** Certified Ethics & Governance Protocol  
 **Framework:** Rajasthan Royals SupeRR Selector Season 2 — Round 1  
 **Competition Deadline:** 18 November 2026  
@@ -28,7 +28,7 @@ flowchart TD
 
 ### 1.2 Small Sample Tail Scarcity in Extreme Leverage
 - **Observation:** Extreme high-pressure deliveries ($\text{BPI} \ge 80$, typically overs 19–20 with $\text{RRR} \ge 12.0$) represent only **$0.61\%$ of the total dataset** (1,216 deliveries out of 200,999).
-- **Mitigation:** We applied Empirical Bayes Shrinkage ($K_{\text{bat}} = 45$, $K_{\text{bowl}} = 60$) and executed 2,000 match-clustered bootstrap iterations. Ranking positions are presented with explicit confidence bands and top-10 inclusion probabilities rather than point-estimate absolutes.
+- **Mitigation:** We applied Empirical Bayes Shrinkage ($K_{\text{shrink}} = 45.0$ for both batters and bowlers) and executed 2,000 match-clustered bootstrap iterations. Ranking positions are presented with explicit confidence bands and top-10 inclusion probabilities rather than point-estimate absolutes.
 
 ### 1.3 Structural Tournament Scope
 - **Observation:** The official dataset consists of 367 IPL matches, 470 T20Is, and 30 Asian developmental T20 fixtures. It contains **no data** from the Big Bash League, Caribbean Premier League, Pakistan Super League, or The Hundred.

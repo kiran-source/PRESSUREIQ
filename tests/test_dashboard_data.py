@@ -201,3 +201,13 @@ def test_bowler_economy_includes_illegal_delivery_runs():
     assert int(pat_row["slice_balls"]) == 1132
     assert float(pat_row["slice_rate_stat"]) == 8.64
 
+
+def test_rr_core_visible_when_candidates_empty():
+    """Verify summarize_rr_squad_intelligence keeps rr_core & role_depth when candidates_df is empty."""
+    bundle = load_dashboard_bundle_uncached()
+    out = summarize_rr_squad_intelligence(bundle.eligibility_audit_df, pd.DataFrame())
+    assert not out["rr_core"].empty
+    assert not out["role_depth"].empty
+    assert out["targets"].empty
+
+

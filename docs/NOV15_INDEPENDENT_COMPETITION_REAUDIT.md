@@ -1,7 +1,7 @@
 # PRESSUREIQ — Deep Competition Re-Audit & IPL 2027 Auction-Reality Rebuild
 
 **Document:** `docs/NOV15_INDEPENDENT_COMPETITION_REAUDIT.md`  
-**Date:** 15 November 2026  
+**Date:** 11 November 2026 (Audit Baseline Snapshot)  
 **Status:** Certified Independent Competition Audit & Handover Report  
 **Competition:** Rajasthan Royals SupeRR Selector Season 2 — Round 1  
 **Competition Deadline:** 18 November 2026  
@@ -30,43 +30,45 @@ To uphold strict competition integrity while providing genuine strategic value t
 
 ```
 ========================================================================================================================
-LEADERBOARD A: PURE STATISTICAL RELIABILITY (MODEL A)          LEADERBOARD B: RR IPL 2027 ACTIONABLE RECOMMENDATIONS
+LEADERBOARD A: PURE STATISTICAL RELIABILITY (MODEL A)          LEADERBOARD B: RR IPL 2027 ACTIONABLE (MCDA)
 ========================================================================================================================
 Rank Player               Nat.     Rel.  Class  Archetype       Rank Player               Nat.     Class  RR Score  Role
 ------------------------------------------------------------------------------------------------------------------------
- 1   Ruturaj Gaikwad      IND     97.71    C    Climber          1   Dhruv Jurel          IND        A     91.93    Middle
- 2   Rohit Sharma         IND     95.27    C    Climber          2   Jos Buttler          ENG        A     86.73    Top
- 3   Fakhar Zaman         PAK     95.25    D    Climber          3   Shimron Hetmyer      WI         A     82.80    Middle
- 4   Suryakumar Yadav     IND     94.68    C    Climber          4   Romario Shepherd     WI         B     79.67    Finisher
- 5   Romario Shepherd     WI      93.69    B    Fragile          5   Jason Holder         WI         B     78.17    Finisher
- 6   Naman Dhir           IND     93.30    C    Climber          6   Jitesh Sharma        IND        B     76.78    Middle
- 7   Phil Salt            ENG     93.01    B    Anchor           7   Tim David            AUS        B     76.11    Middle
- 8   Jitesh Sharma        IND     92.79    B    Climber          8   Mohammad Nabi        AFG        B     75.51    Middle
- 9   Nicholas Pooran      WI      92.58    C    Anchor           9   Heinrich Klaasen     SA         B     75.20    Middle
-10   Jos Buttler          ENG     92.45    A    Anchor          10   Rovman Powell        WI         B     75.13    Middle
+ 1   Ruturaj Gaikwad      IND     97.71    C    Climber          1   Jason Holder         WI         B     91.97    Finisher
+ 2   Rohit Sharma         IND     95.27    C    Climber          2   Dhruv Jurel          IND        A     91.93    Middle
+ 3   Fakhar Zaman         PAK     95.25    D    Climber          3   Andre Russell        WI         B     90.75    Finisher
+ 4   Suryakumar Yadav     IND     94.68    C    Climber          4   Riyan Parag          IND        A     89.18    Middle
+ 5   Romario Shepherd     WI      93.69    C    Fragile          5   Mohammad Nabi        AFG        B     88.83    Middle
+ 6   Naman Dhir           IND     93.30    C    Climber          6   Ravindra Jadeja      IND        A     86.97    Middle
+ 7   Phil Salt            ENG     93.01    C    Anchor           7   Dasun Shanaka        SL         B     86.83    Middle
+ 8   Jitesh Sharma        IND     92.79    C    Climber          8   Sikandar Raza        ZIM        B     86.14    Middle
+ 9   Nicholas Pooran      WI      92.58    C    Anchor           9   Sam Curran           ENG        A     85.44    Middle
+10   Jos Buttler          ENG     92.45    C    Anchor          10   Moeen Ali            ENG        B     84.91    Middle
 ========================================================================================================================
 ```
+*Note: Class B candidates flagged in `rr_2027_candidate_rankings.csv` remain `Pending Verification` until 17 November 2026 official lists. `Jos Buttler` is verified Class C (`Gujarat Titans`).*
 
 ### 2.2 Top 10 Bowlers Under Pressure
 
 ```
 ========================================================================================================================
-LEADERBOARD A: PURE STATISTICAL RELIABILITY (MODEL A)          LEADERBOARD B: RR IPL 2027 ACTIONABLE RECOMMENDATIONS
+LEADERBOARD A: PURE STATISTICAL RELIABILITY (MODEL A)          LEADERBOARD B: RR IPL 2027 ACTIONABLE (MCDA)
 ========================================================================================================================
 Rank Player               Nat.     Rel.  Class  Archetype       Rank Player               Nat.     Class  RR Score  Role
 ------------------------------------------------------------------------------------------------------------------------
- 1   Liam Dawson          ENG     95.39    B    Climber          1   Prasidh Krishna      IND        A     92.25    Pace
- 2   Haris Rauf           PAK     92.36    D    Climber          2   Trent Boult          NZ         A     88.32    Pace
- 3   Abbas Afridi         PAK     91.88    D    Anchor           3   Shoriful Islam       BAN        B     77.58    Pace
- 4   Nathan Ellis         AUS     91.84    B    Anchor           4   Nathan Ellis         AUS        B     77.49    Pace
- 5   Sufiyan Muqeem       PAK     91.41    D    Anchor           5   Tim Southee          NZ         B     77.49    Pace
- 6   Matheesha Pathirana  SL      91.11    C    Anchor           6   Lungi Ngidi          SA         B     77.00    Pace
- 7   Nasum Ahmed          BAN     90.77    B    Climber          7   Prince Yadav         IND        B     76.86    Pace
- 8   Ishant Sharma        IND     90.42    B    Anchor           8   Jofra Archer         ENG        B     75.77    Pace
- 9   Shoriful Islam       BAN     90.36    B    Anchor           9   Harpreet Brar        IND        B     75.27    Spin
-10   Tim Southee          NZ      89.16    B    Anchor          10   Noor Ahmad           AFG        B     75.20    Spin
+ 1   Liam Dawson          ENG     95.39    B    Climber          1   Jofra Archer         ENG        A     92.89    Pace
+ 2   Haris Rauf           PAK     92.36    D    Climber          2   Shoriful Islam       BAN        B     91.28    Pace
+ 3   Abbas Afridi         PAK     91.88    D    Anchor           3   Tim Southee          NZ         B     91.16    Pace
+ 4   Nathan Ellis         AUS     91.84    C    Anchor           4   Lungi Ngidi          SA         B     90.59    Pace
+ 5   Sufiyan Muqeem       PAK     91.41    D    Anchor           5   Jason Holder         WI         B     87.22    Pace
+ 6   Matheesha Pathirana  SL      91.11    C    Anchor           6   Ravindra Jadeja      IND        A     86.90    Spin
+ 7   Nasum Ahmed          BAN     90.77    B    Climber          7   Moeen Ali            ENG        B     86.74    Spin
+ 8   Ishant Sharma        IND     90.42    C    Anchor           8   Dasun Shanaka        SL         B     86.44    Pace
+ 9   Shoriful Islam       BAN     90.36    B    Anchor           9   Tushar Deshpande     IND        A     86.15    Pace
+10   Tim Southee          NZ      89.16    B    Anchor          10   Naveen ul Haq        AFG        B     85.32    Pace
 ========================================================================================================================
 ```
+*Note: `Prasidh Krishna` (Gujarat Titans, Class C) and `Trent Boult` (Mumbai Indians, Class C) are correctly excluded from RR Class A core in `player_eligibility_audit.csv`, and `Nathan Ellis` is Class C (`Confirmed Trade` CSK -> SRH, 5 Nov 2026).*
 
 ---
 
@@ -81,28 +83,28 @@ In Leaderboard A, four Pakistani players featured prominently:
 
 **Audit Finding:** These players possess genuine statistical clutch skill. However, under prevailing BCCI policy established after the November 2008 attacks, Pakistani players cannot register for the IPL auction. In Leaderboard B, their auction feasibility is set to $A_i = 0.0$, applying a zero-tolerance hard gate ($\text{Score}_{\text{RR}} = 0.00$). Recommending them as actionable targets to Rajasthan Royals would compromise operational credibility.
 
-### 3.2 Class C: Discounting Rival Franchise Retentions
-In Leaderboard A, several top players are marquee franchise pillars:
-- **Ruturaj Gaikwad (Batter #1, Score 97.71):** Chennai Super Kings Captain, retained for ₹18 Crore.
-- **Rohit Sharma (Batter #2, Score 95.27):** Mumbai Indians core marquee asset, retained for ₹16.3 Crore.
-- **Suryakumar Yadav (Batter #4, Score 94.68):** India T20I Captain and Mumbai Indians core, retained for ₹16.35 Crore.
-- **Nicholas Pooran (Batter #9, Score 92.58):** Lucknow Super Giants primary retention, ₹21 Crore.
-- **Matheesha Pathirana (Bowler #6, Score 91.11):** Chennai Super Kings primary death weapon, retained for ₹13 Crore.
+### 3.2 Class C: Contracted Franchise Players & Confirmed Nov 5 Trade
+In Leaderboard A, several top players belong to IPL 2026 squads (`Pending Verification` for 2027) or were traded ahead of 2027:
+- **Ruturaj Gaikwad (Batter #1, Score 97.71):** Chennai Super Kings 2026 retention (`Pending Verification` for 2027).
+- **Rohit Sharma (Batter #2, Score 95.27):** Mumbai Indians 2026 squad (`Pending Verification` for 2027).
+- **Suryakumar Yadav (Batter #4, Score 94.68):** Mumbai Indians 2026 squad (`Pending Verification` for 2027).
+- **Nicholas Pooran (Batter #9, Score 92.58):** Lucknow Super Giants 2026 squad (`Pending Verification` for 2027).
+- **Jos Buttler (Batter #10, Score 92.45):** Gujarat Titans 2026 squad (`Pending Verification` for 2027; former RR icon).
+- **Nathan Ellis (Bowler #4, Score 91.84):** **Confirmed Trade** (CSK -> SRH, 5 Nov 2026) — unavailable for auction.
+- **Matheesha Pathirana (Bowler #6, Score 91.11):** Kolkata Knight Riders 2026 squad (`Pending Verification` for 2027; bought by KKR Dec 2025 for INR 18 Cr).
 
-**Audit Finding:** While not legally barred, the probability of these players entering the IPL 2027 open auction is vanishingly small ($A_i = 0.20$). Attempting to build an auction strategy around them is financially and contractually untenable. Their scores drop to ~14–15 in Leaderboard B.
+**Audit Finding:** Attempting to assume availability before official Nov 17 filings—or targeting SRH-traded Nathan Ellis—violates market discipline. Class C assets are heavily discounted ($A_i = 0.20$) until Nov 17 lists confirm releases.
 
-### 3.3 Class A: Existing Rajasthan Royals Core Anchors
-- **Dhruv Jurel (Promoted to RR Batter #1, Score 91.93):** Model A Score 86.81 (Rank #22). Elite middle-order clutch hitter with a 130+ HP strike rate and proven finishing pedigree under pressure. Retaining and prioritizing Jurel is RR's highest-leverage internal move.
-- **Jos Buttler (RR Batter #2, Score 86.73):** Model A Score 92.45 (Rank #10). The premier overseas pressure anchor in T20 history with unmatched mastery of chase equity.
-- **Prasidh Krishna (Promoted to RR Bowler #1, Score 92.25):** Model A Score 82.50 (Rank #19). High-release hit-the-deck pace perfectly suited to Jaipur's long boundaries.
-- **Trent Boult (RR Bowler #2, Score 88.32):** Model A Score 72.68 (Rank #56). The gold standard for powerplay wicket-taking under early-innings pressure.
+### 3.3 Class A: Verified Rajasthan Royals 2026 Core
+- **Jofra Archer (RR Bowler #1, Score 92.89):** Verified RR 2026 pace spearhead (`Pending Verification` for 2027).
+- **Dhruv Jurel (RR Batter #2, Score 91.93):** Model A Score 86.81 (Rank #22); core Indian middle-order wicketkeeper-batter.
+- **Riyan Parag (RR Batter #4, Score 89.18):** Verified RR 2026 top/middle-order core.
+- **Ravindra Jadeja (RR Batter #6, Score 86.97 / Bowler #6, Score 86.90):** Verified RR 2026 all-round core asset.
+- **Sam Curran / Tushar Deshpande:** Verified RR 2026 squad members (`Pending Verification` for 2027).
 
-### 3.4 Class B: High-Priority Open Auction Targets Promoted
-- **Nathan Ellis (RR Bowler #4, Score 77.49):** Model A Bowler #4 (91.84). The premier death-overs yorker specialist in world cricket. Delivers the exact defensive execution needed to partner Sandeep Sharma in overs 18–20.
-- **Romario Shepherd (RR Batter #4, Score 79.67):** Model A Batter #5 (93.69). Extraordinary boundary power (482 HP balls faced) solving RR's #7 seam-bowling finisher void.
-- **Shoriful Islam (RR Bowler #3, Score 77.58):** Model A Bowler #9 (90.36). Left-arm pace angle, steep bounce, and reverse-swing yorkers at the death.
-- **Jitesh Sharma (RR Batter #6, Score 76.78):** Model A Batter #8 (92.79). Clutch Climber archetype, fearless Indian wicketkeeper-finisher.
-- **Harpreet Brar (RR Bowler #9, Score 75.27):** Model A Bowler #14 (87.73). Indian finger spinner delivering the exact "Jaipur Squeeze" required at SMS Stadium while preserving overseas slots.
+### 3.4 Watchlist & Overseas Uncontracted Options
+- **Shoriful Islam (RR Bowler #2, Score 91.28) & Tim Southee (#3, 91.16):** Uncontracted Class B overseas seamers on watchlist.
+- **Jason Holder (RR Batter #1, Score 91.97 / Bowler #5, 87.22) & Andre Russell (RR Batter #3, Score 90.75):** High-MCDA finishers (`Pending Verification` on Nov 17 franchise lists).
 
 ---
 
@@ -114,10 +116,10 @@ The audit reconciled the competition dataset (`SupeRR Selector Season 2 _ Data P
 flowchart TD
     Raw["Raw Data Pack: 6 Canonical CSVs"] --> Count["200,999 Total Deliveries | 883 Matches in Catalog"]
     Count --> Played["867 Played Matches Incorporated | 16 Abandoned/Walkovers"]
-    Played --> CompSplit["Competition Composition"]
-    CompSplit --> IPL["371 IPL Matches (5 Seasons: 2022–2026)"]
-    CompSplit --> T20I["482 T20I Matches (134 Series / Tournaments)"]
-    CompSplit --> Asian["30 Asian Developmental T20 Matches"]
+    Played --> CompSplit["867 Played Matches Composition (vs 883 Scheduled)"]
+    CompSplit --> IPL["367 Played IPL Matches (371 Scheduled, 2022–2026)"]
+    CompSplit --> T20I["470 Played T20I Matches (482 Scheduled)"]
+    CompSplit --> Asian["30 Played Asian Developmental T20 Matches"]
 ```
 
 **Key Data Verification Facts:**

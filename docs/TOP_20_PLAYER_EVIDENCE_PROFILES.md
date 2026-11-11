@@ -60,8 +60,8 @@
 - **PRC Archetype:** `Clutch Climber` ($\beta = +1.0716$).
 - **Key Strengths:** Fearless boundary hitter when chasing 10+ RPO; high boundary percentage in death overs (190.6 SR).
 - **Limitations:** Vulnerable to mystery spin and arm-balls in the middle overs.
-- **Rajasthan Royals IPL 2027 Strategic Fit:**
-  A dynamic overseas top-order enforcer who thrives in steep, high-pressure chases, providing insurance if early wickets fall in 200+ run chases.
+- **Analytical Benchmark / Tactical Reference (Policy/Eligibility Review):**
+  Serves strictly as an analytical benchmark for aggressive left-handed top-order powerplay pacing (`Policy/Eligibility Review`: Pakistan-registered players have no active IPL participation post-2008). Not an acquisition target.
 
 ---
 
@@ -82,7 +82,7 @@
 
 ---
 
-### Rank 5: Romario Shepherd (Finisher | West Indies & Mumbai Indians)
+### Rank 5: Romario Shepherd (Finisher | West Indies — Verified 2026: RCB; Historical Dataset: MI/LSG/RCB)
 - **Official Score:** **93.69 / 100** | **95% Bootstrap CI:** [71.26, 97.62] | **Top-10 Probability:** 0.3480
 - **Career Exposure:** 68 matches, 687 balls, 1,059 runs, Career SR: 154.1.
 - **High-Pressure Profile:** **482 balls at $BPI \ge 50$** (70.2% of his entire career), generating **+0.353 runs/ball** PAVA (+0.323 shrunk).
@@ -116,7 +116,7 @@
 
 ---
 
-### Rank 7: Phil Salt (Top Order | Kolkata Knight Riders & England)
+### Rank 7: Phil Salt (Top Order | England — Verified 2026: RCB; Historical Dataset: KKR/DC/RCB)
 - **Official Score:** **93.01 / 100** | **95% Bootstrap CI:** [14.48, 98.55] | **Top-10 Probability:** 0.3700
 - **Career Exposure:** 84 matches, 1,643 balls, 2,782 runs, Career SR: **169.3**.
 - **High-Pressure Profile:** 49 balls at $BPI \ge 50$, delivering **+0.693 runs/ball** raw PAVA (+0.361 shrunk).
@@ -133,7 +133,7 @@
 
 ---
 
-### Rank 8: Jitesh Sharma (Middle Order / Finisher | Punjab Kings & India)
+### Rank 8: Jitesh Sharma (Middle Order / Finisher | India — Verified 2026: RCB; Historical Dataset: PBKS/RCB)
 - **Official Score:** **92.79 / 100** | **95% Bootstrap CI:** [63.45, 97.68] | **Top-10 Probability:** 0.3270
 - **Career Exposure:** 73 matches, 894 balls, 1,389 runs, Career SR: 155.4.
 - **High-Pressure Profile:** 218 balls at $BPI \ge 50$, delivering **+0.412 runs/ball** raw PAVA (+0.342 shrunk).
@@ -167,7 +167,7 @@
 
 ---
 
-### Rank 10: Jos Buttler (Top Order | Rajasthan Royals & England)
+### Rank 10: Jos Buttler (Top Order | England — Verified 2026: Gujarat Titans; Historical Dataset: RR/GT)
 - **Official Score:** **92.45 / 100** | **95% Bootstrap CI:** [40.62, 98.43] | **Top-10 Probability:** 0.3405
 - **Career Exposure:** 121 matches, 2,829 balls, 4,396 runs, Career SR: 155.4.
 - **High-Pressure Profile:** 99 high-pressure balls, delivering **+0.520 runs/ball** raw PAVA (+0.357 shrunk).
@@ -177,10 +177,10 @@
   - *Death Overs:* 416 balls, **SR 192.3**.
 - **Matchup Splits:** vs Pace: 1,890 balls (SR 149.0); vs Spin: 1,030 balls (SR 153.3).
 - **PRC Archetype:** `Ice Cold Anchor` ($\beta = -0.0538$).
-- **Key Strengths:** Established franchise icon; proven ability to single-handedly chase 200+ (as demonstrated in Kolkata in 2024); 192.3 death-overs SR.
+- **Key Strengths:** Established chase master (Gujarat Titans 2026 squad; former RR icon 2018–2024); 192.3 death-overs SR.
 - **Limitations:** Occasionally takes time to settle in early overs before accelerating.
-- **Rajasthan Royals IPL 2027 Strategic Fit:**
-  Retaining/re-acquiring Buttler anchors the franchise identity while providing unmatched clutch chasing pedigree at the Sawai Mansingh Stadium.
+- **Tactical & Market Status (Nov 11 Audit):**
+  Currently contracted to **Gujarat Titans** (`Pending Verification` for 2027); monitor Nov 17 GT retention filing rather than assuming RR core status.
 
 ---
 ---
@@ -216,8 +216,8 @@
 - **PRC Archetype:** `Clutch Climber` ($\beta = +1.7352$).
 - **Key Strengths:** 150+ km/h pace; lethal reverse-swing yorker; tremendous wicket-taking volume in death overs (39 death wickets).
 - **Limitations:** Can concede runs if length is missed on small grounds.
-- **Rajasthan Royals IPL 2027 Strategic Fit:**
-  A genuine express pace enforcer who solves RR's death-over wicket-taking requirements, creating high-velocity breakthroughs in overs 17 and 19.
+- **Analytical Benchmark / Coaching Reference (Policy/Eligibility Review):**
+  Global benchmark for express reverse-swing and death-overs wicket-taking (`Policy/Eligibility Review`: Pakistan-registered players are excluded from IPL participation since 2008). Used strictly for pace variation benchmarking.
 
 ---
 
@@ -232,12 +232,12 @@
 - **PRC Archetype:** `Ice Cold Anchor` ($\beta = +1.2407$).
 - **Key Strengths:** Back-of-the-hand slower balls; outstanding middle-to-death economy transition.
 - **Limitations:** Lacks top-end express pace.
-- **Rajasthan Royals IPL 2027 Strategic Fit:**
-  A versatile change-of-pace bowler who excels on gripping, abrasive pitches like Jaipur and Chennai.
+- **Analytical Benchmark / Coaching Reference (Policy/Eligibility Review):**
+  Analytical benchmark for change-of-pace slower-ball modeling on gripping tracks (`Policy/Eligibility Review`; ineligible for IPL acquisition).
 
 ---
 
-### Rank 4: Nathan Ellis (Right-Arm Medium-Fast | Australia & Punjab Kings)
+### Rank 4: Nathan Ellis (Right-Arm Medium-Fast | Australia — 2027 Confirmed Trade: SRH; Historical Dataset: PBKS/CSK)
 - **Official Score:** **91.84 / 100** | **95% Bootstrap CI:** [70.87, 95.95] | **Top-10 Probability:** 0.4890
 - **Career Exposure:** 43 matches, 916 legal balls, 959 deliveries, 58 wickets, Career Economy: 8.25.
 - **High-Pressure Profile:** 251 balls at $BoPI \ge 50$, delivering **+0.300 runs/ball** raw PAVA (+0.255 shrunk).
@@ -248,8 +248,8 @@
 - **PRC Archetype:** `Ice Cold Anchor` ($\beta = +0.1151$).
 - **Key Strengths:** Highest consistency score in pace cohort (**43.5/100**); dipped yorkers, wide cutters, and elite field awareness; 92.2 adaptability.
 - **Limitations:** Susceptible to tall power hitters clearing straight boundaries.
-- **Rajasthan Royals IPL 2027 Strategic Fit:**
-  The premier T20 death-overs specialist. Pairing Ellis with Sandeep Sharma gives RR two elite defensive executors in overs 18–20.
+- **Market Status & Analytical Role (Nov 11 Audit):**
+  **`Confirmed Trade` (CSK -> Sunrisers Hyderabad, 5 Nov 2026).** Unavailable in the open 2027 auction; serves as the statistical gold-standard death-overs benchmark when evaluating Nov 17 released pacers.
 
 ---
 
@@ -264,12 +264,12 @@
 - **PRC Archetype:** `Ice Cold Anchor` ($\beta = +0.1732$).
 - **Key Strengths:** Rare wrist-spin trajectory; extraordinary middle-overs economy (5.90); deceptive googly.
 - **Limitations:** Untested with the new ball in powerplays.
-- **Rajasthan Royals IPL 2027 Strategic Fit:**
-  A rare left-arm wrist-spinner who controls middle-overs scoring and creates match-winning breakthroughs on turning tracks.
+- **Analytical Benchmark / Coaching Reference (Policy/Eligibility Review):**
+  Analytical benchmark for left-arm wrist-spin boundary suppression (`Policy/Eligibility Review`; ineligible for IPL acquisition).
 
 ---
 
-### Rank 6: Matheesha Pathirana (Right-Arm Fast Sling | Chennai Super Kings & Sri Lanka)
+### Rank 6: Matheesha Pathirana (Right-Arm Fast Sling | Sri Lanka — Verified 2026: KKR; Historical Dataset: CSK)
 - **Official Score:** **91.11 / 100** | **95% Bootstrap CI:** [70.27, 95.05] | **Top-10 Probability:** 0.4700
 - **Career Exposure:** 54 matches, 1,132 legal balls, 1,279 deliveries, 82 wickets, Career Economy: 8.64.
 - **High-Pressure Profile:** **400 high-pressure balls**, delivering **+0.287 runs/ball** raw PAVA (+0.258 shrunk).
@@ -280,8 +280,8 @@
 - **PRC Archetype:** `Ice Cold Anchor` ($\beta = +0.2286$).
 - **Key Strengths:** Unorthodox sling action; toe-crushing yorkers at 145+ km/h; leading death-overs wicket-taker (58 death wickets).
 - **Limitations:** Concedes wides (147 extras across 1,279 balls); requires strict field setting.
-- **Rajasthan Royals IPL 2027 Strategic Fit:**
-  An absolute game-changer. Would provide RR with a lethal death-overs strike weapon who consistently defends totals under 12 runs in the 20th over.
+- **Market Status & Opposition Benchmark (Nov 11 Audit):**
+  Released by CSK ahead of IPL 2026 and signed by **Kolkata Knight Riders** for INR 18 Cr (`Pending Verification` for Nov 17 retentions). Evaluated as an opposition tactical benchmark unless released by KKR.
 
 ---
 
@@ -301,7 +301,7 @@
 
 ---
 
-### Rank 8: Ishant Sharma (Right-Arm Fast-Medium | Delhi Capitals & India)
+### Rank 8: Ishant Sharma (Right-Arm Fast-Medium | India — Verified 2026: Gujarat Titans; Historical Dataset: DC/GT)
 - **Official Score:** **90.42 / 100** | **95% Bootstrap CI:** [72.42, 94.32] | **Top-10 Probability:** 0.2210
 - **Career Exposure:** 24 matches, 422 legal balls, 456 deliveries, 24 wickets, Career Economy: 9.53.
 - **High-Pressure Profile:** 64 balls at $BoPI \ge 50$, delivering **+0.338 runs/ball** raw PAVA (+0.199 shrunk).

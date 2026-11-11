@@ -47,7 +47,7 @@ The 5-page PDF methodology report was audited page-by-page using PyMuPDF (`fitz`
    - *5 Pillars & Bootstrap:* Weights defined (Volume 35%, Retention 20%, Consistency 20%, Adaptability 15%, Evidence 10%) alongside 2,000 match-clustered bootstrap description.
 4. **Page 4: Rajasthan Royals IPL 2027 Strategic Blueprint**
    - *Venue Context:* Sawai Mansingh Stadium (Jaipur) dimensions (68–72m square boundaries) and dew dynamics.
-   - *Categorization Grid:* Categorizes candidates into Actionable Auction Targets (Ellis, Shepherd, Jitesh, Dawson, Salt, Shoriful), Franchise Archetypes (Gaikwad, SKY, Pooran, Pathirana, Rohit), and Global Benchmarks (Rauf, Zaman, Afridi, Muqeem).
+   - *Categorization Grid:* Categorizes candidates into Uncontracted / Watchlist Targets (Dawson, Shoriful, plus conditional 2026 squad players pending Nov 17), Unavailable / Contracted Opposition Benchmarks (Nathan Ellis — Confirmed Trade CSK -> SRH Nov 5, Pathirana KKR, Gaikwad CSK, SKY/Rohit MI, Pooran LSG), and Global Benchmarks (Rauf, Zaman, Afridi, Muqeem).
 5. **Page 5: Statistical Limitations, Reproducibility & Certification**
    - *Honest Uncertainty:* Discloses sample concentration for Salt and Rohit.
    - *Hybrid Roadmap:* Highlights continuous CDPI and win-probability leverage as evolutionary research.

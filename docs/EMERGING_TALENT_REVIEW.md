@@ -65,68 +65,68 @@ Every young (<25 years) or uncapped candidate is classified into one of four dis
 
 ## 4. Deep Scouting Profiles: Top 10 Emerging Talent Watchlist
 
-The complete tabular data is compiled in [`data/processed/emerging_talent_watchlist.csv`](file:///c:/Users/kiran/OneDrive/Documents/Desktop/SuperRR/data/processed/emerging_talent_watchlist.csv). Below is the comprehensive tactical analysis:
+The complete tabular data is compiled in [`data/processed/emerging_talent_watchlist.csv`](../data/processed/emerging_talent_watchlist.csv). Below is the comprehensive tactical analysis:
 
 ### 1. Vaibhav Sooryavanshi (India / Rajasthan Royals) — Tier C
 - **Player ID:** `50284` | **Age:** 14 | **Role:** Top-Order Left-Hand Batter
-- **Dataset Metrics:** 714 Total Balls | 0 Late-Game HP Balls | Strike Rate: 139.8 | Boundary Pct: 18.2%
-- **Tactical Breakdown:** A generational batting prodigy signed by Rajasthan Royals. Possesses exceptional hand speed, bat swing, and back-foot punch through the offside. Fearless against 140+ km/h pace bowling in powerplays.
-- **Why He Missed Top 10:** Zero late-innings crisis deliveries. Ranking him in the official top 10 most reliable pressure batters would be statistically unscientific and confuse future ceiling with demonstrated late-game clutch execution.
-- **RR Action Plan:** Retain as the crown jewel of RR's developmental core. Shield from late-overs finishing; deploy strictly at #1 or #3 with a license to attack the powerplay.
+- **Dataset Metrics:** 676 Total Balls | 7 HP Balls ($\text{BPI} \ge 50$) | Strike Rate: 223.2
+- **Tactical Breakdown:** A generational batting prodigy signed by Rajasthan Royals. Possesses exceptional hand speed, bat swing, and back-foot punch through the offside. Fearless against pace bowling in powerplays.
+- **Why He Missed Top 10:** Only 7 high-pressure deliveries (below the 30-ball Model A threshold). Ranking him in the official top 10 most reliable pressure batters would confuse future ceiling with demonstrated late-game clutch execution.
+- **RR Action Plan:** Retain as a core developmental prospect. Shield from late-overs crisis finishing; deploy strictly in the top order with a license to attack the powerplay.
 
-### 2. Vignesh Puthur (India / Rajasthan Royals / MI) — Tier C
-- **Player ID:** `48557` | **Age:** 22 | **Role:** Slow Left-Arm Orthodox Spinner
-- **Dataset Metrics:** 73 Total Balls | 6 HP Balls | Economy: 7.89 | Dot Ball Pct: 38.4%
-- **Tactical Breakdown:** Tall Kerala left-arm orthodox spinner scouted for high-arm release and deceptive drift. Showcased exceptional accuracy in pre-season simulations and domestic T20 leagues.
-- **RR Action Plan:** Perfect candidate for Jaipur's abrasive surface. Develop under the guidance of RR's spin coaches to bowl tight middle-overs stump-to-stump trajectories.
+### 2. Vignesh Puthur (India / Rajasthan Royals — Dec 2025 Auction) — Tier C
+- **Player ID:** `48557` | **Age:** 22 | **Role:** Left-Arm Wrist/Orthodox Spinner
+- **Dataset Metrics:** 72 Legal Balls | 36 HP Balls ($\text{BoPI} \ge 50$)
+- **Tactical Breakdown:** Kerala spinner signed by Rajasthan Royals in the Dec 2025 IPL 2026 auction (INR 30 lakh) following release by MI (not a trade).
+- **RR Action Plan:** Develop under RR spin coaching for Jaipur home conditions once Nov 17 retention lists confirm roster status.
 
-### 3. Naman Dhir (India / Mumbai Indians) — Tier A (Selected Model A #6 Batter)
+### 3. Naman Dhir (India / Mumbai Indians — Pending Nov 17) — Tier A (Selected Model A #6 Batter)
 - **Player ID:** `37052` | **Age:** 24 | **Role:** Top/Middle-Order Batter & Off-Break Bowler
-- **Dataset Metrics:** 603 Total Balls | 184 HP Balls | Reliability Score: **93.30** | PRC Slope: $+0.078$ (Clutch Climber)
-- **Tactical Breakdown:** The premier young Indian batting discovery of recent IPL cycles. Displays an elite Clutch Climber profile—elevating boundary strike rate when required run rates exceed 11.0. Hits cleanly down the ground and clears deep midwicket with ease.
-- **RR Action Plan:** High-priority recruitment or trade target if released. Provides versatile top-3 or #5 firepower.
+- **Dataset Metrics:** 589 Total Balls | 184 HP Balls | Strike Rate: 168.4 | Reliability Score: **93.30** | PRC Slope: $+1.2455$ (Clutch Climber)
+- **Tactical Breakdown:** Breakout young Indian batter displaying a strong Clutch Climber slope.
+- **RR Action Plan:** Monitor Nov 17 MI retention announcement as a high-priority domestic watchlist option if released.
 
-### 4. Prince Yadav (India / Lucknow Super Giants) — Tier B (Model A #11 Bowler)
+### 4. Prince Yadav (India / Lucknow Super Giants — Pending Nov 17) — Tier B (Model A #11 Bowler)
 - **Player ID:** `58246` | **Age:** 23 | **Role:** Right-Arm Fast Bowler
-- **Dataset Metrics:** 747 Total Balls | 297 HP Balls | Reliability Score: **88.87** | PRC Slope: $-0.012$ (Ice Cold Anchor)
-- **Tactical Breakdown:** An extraordinary domestic fast-bowling find. Bowls with a repeatable 140+ km/h action, extracting steep bounce from hard lengths. Across 297 high-pressure balls, his execution remains completely unshaken (Rank #11 Bowler overall, missing top 10 by a negligible margin).
-- **RR Action Plan:** Absolute must-target domestic pace bowler at the auction. Fills RR's critical need for domestic fast-bowling depth behind Prasidh Krishna.
+- **Dataset Metrics:** 709 Legal Balls (747 deliveries) | 297 HP Balls | Reliability Score: **88.87**
+- **Tactical Breakdown:** Domestic pace discovery holding #11 Bowler overall across 297 high-pressure legal balls.
+- **RR Action Plan:** Monitor Nov 17 LSG retention announcement for domestic fast-bowling depth.
 
-### 5. Rasikh Salam (India / RCB / DC / India A) — Tier B (Model A #20 Bowler)
+### 5. Rasikh Salam (India / RCB — Domestic) — Tier B (Model A #20 Bowler)
 - **Player ID:** `7327` | **Age:** 24 | **Role:** Right-Arm Medium-Fast Bowler
-- **Dataset Metrics:** 571 Total Balls | 140 HP Balls | Reliability Score: **82.06** | PRC Slope: $+0.045$
-- **Tactical Breakdown:** Master of the deceptive back-of-the-hand slower ball and wide yorker. Excelled for India A in the Mens T20 Emerging Teams Asia Cup 2024 under extreme tension.
-- **RR Action Plan:** Highly cost-effective domestic death-bowling option for squad rotation.
+- **Dataset Metrics:** 542 Legal Balls (571 deliveries) | 140 HP Balls | Reliability Score: **82.06**
+- **Tactical Breakdown:** Death-overs executor with slower balls and wide yorkers across IPL and India A fixtures.
+- **RR Action Plan:** Cost-effective domestic death-bowling watchlist option pending Nov 17 retention lists.
 
-### 6. Allah Ghazanfar (Afghanistan / KKR / Afghanistan A) — Tier B (Model A #17 Bowler)
-- **Player ID:** `48312` | **Age:** 18 | **Role:** Right-Arm Mystery Off-Break Spinner
-- **Dataset Metrics:** 612 Total Balls | 212 HP Balls | Reliability Score: **83.68** | PRC Slope: $-0.008$ (Ice Cold Anchor)
-- **Tactical Breakdown:** Teenage mystery spinner featuring a lethal carrom ball, subtle arm-ball, and rapid release. Demonstrates composure beyond his years, conceding under 7.20 RPO in high-pressure middle overs.
-- **RR Action Plan:** High-upside overseas spinner target suited to Sawai Mansingh Stadium.
+### 6. Allah Ghazanfar (Afghanistan) — Tier B (Model A #17 Bowler)
+- **Player ID:** `32862` | **Age:** 18 | **Role:** Right-Arm Mystery Off-Break Spinner
+- **Dataset Metrics:** 461 Legal Balls (467 deliveries) | 212 HP Balls | Reliability Score: **83.68**
+- **Tactical Breakdown:** Teenage mystery spinner demonstrating composure across 212 high-pressure legal deliveries.
+- **RR Action Plan:** High-upside overseas spinner watchlist candidate suited to Sawai Mansingh Stadium.
 
-### 7. Abbas Afridi (Pakistan / Pakistan A) — Tier A (Model A #3 Bowler)
-- **Player ID:** `36341` | **Age:** 23 | **Role:** Right-Arm Medium-Fast Seamer
-- **Dataset Metrics:** 589 Total Balls | 232 HP Balls | Reliability Score: **91.88** | PRC Slope: $+0.021$ (Ice Cold Anchor)
-- **Tactical Breakdown:** World-class death-bowling execution. Uses off-cutters, dipping knuckleballs, and wide yorkers with immense precision under pressure.
-- **RR Action Plan:** While BCCI policy bars his IPL participation, RR's analytical staff should benchmark his release angles and variation distribution to coach RR's young pacers.
+### 7. Abbas Afridi (Pakistan / Policy Review) — Tier A (Model A #3 Bowler)
+- **Player ID:** `7699` | **Age:** 23 | **Role:** Right-Arm Medium-Fast Seamer
+- **Dataset Metrics:** 453 Legal Balls (474 deliveries) | 232 HP Balls | Reliability Score: **91.88** | PRC Slope: $+1.2407$ (Ice Cold Anchor)
+- **Tactical Breakdown:** World-class death-bowling execution using off-cutters, dipping knuckleballs, and wide yorkers under pressure.
+- **RR Action Plan:** Analytical benchmark only — prevailing post-2008 BCCI/geopolitical stance precludes IPL participation (`Policy/Eligibility Review`).
 
-### 8. Sufiyan Muqeem (Pakistan / Pakistan A) — Tier A (Model A #5 Bowler)
-- **Player ID:** `49925` | **Age:** 24 | **Role:** Left-Arm Wrist Spinner (Chinaman)
-- **Dataset Metrics:** 528 Total Balls | 213 HP Balls | Reliability Score: **91.41** | PRC Slope: $+0.015$ (Ice Cold Anchor)
-- **Tactical Breakdown:** Rare left-arm wrist spin angle with high revolutions and sharp googly. Highly effective at preventing boundary flurries in middle and death overs.
-- **RR Action Plan:** Tactical benchmark for spin analytics and defensive trajectories.
+### 8. Sufiyan Muqeem (Pakistan / Policy Review) — Tier A (Model A #5 Bowler)
+- **Player ID:** `34485` | **Age:** 24 | **Role:** Left-Arm Wrist Spinner (Chinaman)
+- **Dataset Metrics:** 518 Legal Balls (525 deliveries) | 213 HP Balls | Reliability Score: **91.41** | PRC Slope: $+0.1732$ (Ice Cold Anchor)
+- **Tactical Breakdown:** Rare left-arm wrist spin angle maintaining a 6.00 economy rate.
+- **RR Action Plan:** Analytical benchmark only (`Policy/Eligibility Review`).
 
-### 9. Matheesha Pathirana (Sri Lanka / CSK) — Tier A (Model A #6 Bowler)
-- **Player ID:** `37324` | **Age:** 22 | **Role:** Right-Arm Fast Bowler (Sling Action)
-- **Dataset Metrics:** 894 Total Balls | 400 HP Balls | Reliability Score: **91.11** | PRC Slope: $+0.018$ (Ice Cold Anchor)
-- **Tactical Breakdown:** Generational death bowling weapon. Low slingy release creates 148 km/h skidding yorkers that are visually and biomechanically near-impossible to hit under pressure.
-- **RR Action Plan:** Tactical benchmark for death-overs fielding placements and execution.
+### 9. Matheesha Pathirana (Sri Lanka / KKR 2026 Squad) — Tier A (Model A #6 Bowler)
+- **Player ID:** `8661` | **Age:** 22 | **Role:** Right-Arm Fast Bowler (Sling Action)
+- **Dataset Metrics:** 1,132 Legal Balls (1,279 deliveries) | 400 HP Balls | Reliability Score: **91.11** | PRC Slope: $+0.2286$ (Ice Cold Anchor)
+- **Tactical Breakdown:** Death bowling specialist released by CSK ahead of IPL 2026 and acquired by Kolkata Knight Riders for INR 18 Cr (Dec 2025).
+- **RR Action Plan:** Opposition benchmark (2027 status `Pending Verification` awaiting KKR Nov 17 retention list).
 
-### 10. Rinku Singh (India / KKR) — Tier A (Model A #11 Batter)
-- **Player ID:** `6023` | **Age:** 27 | **Role:** Middle-Order Finisher
-- **Dataset Metrics:** 1,120 Total Balls | 418 HP Balls | Reliability Score: **92.37** | PRC Slope: $+0.062$ (Clutch Climber)
-- **Tactical Breakdown:** The benchmark for modern Indian finishing. Missed the official top 10 by an agonizing 0.08 points. Elite bat speed, calm heart rate, and boundary execution in the 20th over.
-- **RR Action Plan:** Tactical case study in mental conditioning and bat preparation for Dhruv Jurel and RR's lower-middle order.
+### 10. Rinku Singh (India / KKR 2026 Squad) — Tier A (Model A #11 Batter)
+- **Player ID:** `4708` | **Age:** 27 | **Role:** Middle-Order Finisher
+- **Dataset Metrics:** 1,284 Total Balls | 418 HP Balls | Strike Rate: 152.5 | Reliability Score: **92.37**
+- **Tactical Breakdown:** Elite Indian finisher who missed the official top 10 by 0.08 points.
+- **RR Action Plan:** Tactical case study and conditional watchlist pending KKR Nov 17 retention list (`Harpreet Brar`, ID `7325`, is also profiled in `emerging_talent_watchlist.csv`).
 
 ---
 

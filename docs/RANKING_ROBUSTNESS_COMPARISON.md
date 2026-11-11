@@ -104,8 +104,8 @@ Mohammad Nawaz          Spin             17              9         62.97        
 
 ### 3.2 Bowling Metrics Summary (MCC Legal-Ball Population = 147 Bowlers):
 - **Eligible Bowlers Evaluated:** **147** legal-ball qualified bowlers (`is_legal_ball == 1`, matching `final_bowler_rankings.csv`).
-- **Spearman Rank Correlation vs Official 5-Pillar Model A ($\rho$):** **0.5714** (Jaccard Top-10 Overlap = **0.3333**).
-- **Spearman Rank Correlation vs Single-PAVA Proxy ($\rho$):** **0.6230** (Jaccard Top-10 Overlap = **0.3333**).
+- **Spearman Rank Correlation vs Official 5-Pillar Model A ($\rho$):** **0.5699** (Jaccard Top-10 Overlap = **0.3333**).
+- **Spearman Rank Correlation vs Single-PAVA Proxy ($\rho$):** **0.6220** (Jaccard Top-10 Overlap = **0.3333**).
 - **Top-10 Overlap:** **5 bowlers** appear in both Model A and Hybrid Top-10 lists (Sufiyan Muqeem, Matheesha Pathirana, Abbas Afridi, Nathan Ellis, Haris Rauf).
 - **The Jasprit Bumrah Correction:** Bumrah jumps into **#4 in the Hybrid Model** once smooth blowout suppression removes artificial garbage-time score inflation in decided chases.
 

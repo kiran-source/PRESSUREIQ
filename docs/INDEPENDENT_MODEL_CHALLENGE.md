@@ -36,14 +36,13 @@ flowchart TD
 *"Are players like Ruturaj Gaikwad (#1 Batter, 45 HP balls) and Liam Dawson (#1 Bowler, 83 HP balls) ranking at the top simply because small samples inflated their per-ball PAVA, while true high-volume workhorses like Romario Shepherd (482 HP balls) and Haris Rauf (444 HP balls) are being diluted?"*
 
 ### The Investigation & Evidence
-1. **Shrinkage Sensitivity Analysis:**
-   - We evaluated the impact of varying the Empirical Bayes shrinkage parameter $K$ from $30$ to $90$ balls:
-     - At $K=45$, Ruturaj Gaikwad's raw PAVA ($+0.218$) is shrunk to $+0.112$, resulting in a reliability score of $97.71$.
-     - If shrinkage is doubled to $K=90$, Gaikwad drops from #1 to #3 (Score $93.85$), and Suryakumar Yadav rises to #1.
-     - Liam Dawson's raw bowling PAVA ($+0.184$) at $K=60$ shrinks to $+0.106$. At $K=120$, Haris Rauf and Nathan Ellis overtake him.
+1. **Shrinkage Sensitivity Analysis (Recomputed Directly Using `reliability_engine` on `deliveries_with_pava.parquet`):**
+   - We evaluated doubling the Empirical Bayes shrinkage constant from canonical $K_{\text{shrink}} = 45.0$ to $K_{\text{shrink}} = 90.0$:
+     - At canonical $K=45.0$, **Ruturaj Gaikwad** records raw high-pressure PAVA $+0.938$ runs/ball, shrunk to $+0.469$, achieving **Rank #1 (Reliability Score 97.71)**. When shrinkage is doubled to $K=90.0$, his shrunk PAVA falls to $+0.313$, yet his elite score **96.93 still holds Rank #1** ahead of Suryakumar Yadav (#2, 96.66) and Romario Shepherd (#3, 96.16).
+     - Similarly, **Liam Dawson** (raw bowling PAVA $+0.500$ runs/ball, shrunk $+0.324$ at $K=45.0$, **Rank #1, 95.39**) retains **Rank #1 (95.50, shrunk $+0.240$)** even at $K=90.0$, ahead of Haris Rauf (#2, 94.64) and Abbas Afridi (#3, 93.95).
 2. **The Verdict:**
-   - Gaikwad's rank is partially sensitive to prior shrinkage strength, but his retention delta ($+12.4$ points above low pressure) and 60.85% bootstrap top-10 inclusion probability confirm elite quality.
-   - However, **Romario Shepherd's ranking reveals a crucial nuance:** despite facing 482 HP balls, his PRC slope is negative ($\beta = -0.068$, **Pressure Fragile**). He dominates high pressure in overs 15–18, but his performance decays in extreme leverage ($\text{BPI} > 80$). Disclosing this nuance protects Rajasthan Royals from deploying him incorrectly.
+   - The Top-1 rankings of both Gaikwad and Dawson survive doubling Empirical Bayes shrinkage ($K=45 \to K=90$), supported by positive retention deltas and strong bootstrap inclusion (60.85% for Gaikwad, 41.85% for Dawson).
+   - **Romario Shepherd's PRC Nuance:** Shepherd has an overall positive OLS linear PRC slope ($\beta = +0.6972$) driven by prolific boundary hitting in Medium/High bands ($+0.335$ across 483 Medium balls; $+0.228$ across 149 High balls), **but triggers the `Pressure Fragile` rule due to extreme-band collapse** (mean $-1.606$ across 8 Extreme-tier deliveries at $BPI \ge 85$). Disclosing this tail nuance prevents over-relying on him at the absolute climax.
 
 ---
 

@@ -22,21 +22,37 @@ def main():
     parser.add_argument(
         "--force",
         action="store_true",
-        help="Allow overwriting existing market ledger, immutable snapshot, and change log files.",
+        help="Allow overwriting the rebuildable master template only (never overwrites pinned snapshot or change log).",
+    )
+    parser.add_argument(
+        "--overwrite-history",
+        action="store_true",
+        help="Explicitly regenerate immutable Nov 11 snapshot and change log (requires explicit archival confirmation).",
     )
     args = parser.parse_args()
 
     template_path = Path("data/processed/ipl_2027_player_market_template.csv")
     snap_path = Path(f"data/processed/snapshots/ipl_2027_market_snapshot_{AUDIT_DATE}.csv")
     log_path = Path("data/processed/ipl_2027_market_change_log.csv")
-    existing_targets = [p for p in (template_path, snap_path, log_path) if p.exists()]
-    if existing_targets and not args.force:
-        joined = ", ".join(str(p) for p in existing_targets)
+    if template_path.exists() and not args.force:
         print(
-            f"Refusing to overwrite existing market artifacts without --force: {joined}. "
+            f"Refusing to overwrite existing master template without --force: {template_path}. "
             "Use scripts/import_market_retentions.py to ingest new announcements safely."
         )
         sys.exit(1)
+    history_existing = [p for p in (snap_path, log_path) if p.exists()]
+    if history_existing and not args.overwrite_history:
+        if args.force:
+            print(
+                f"Notice: --force rebuilds only {template_path}; preserving immutable historical trail: "
+                + ", ".join(str(p) for p in history_existing)
+            )
+        else:
+            print(
+                "Refusing to overwrite historical market snapshot/change log without --overwrite-history: "
+                + ", ".join(str(p) for p in history_existing)
+            )
+            sys.exit(1)
 
     print("Building Audited IPL 2027 Player-Market Intelligence Ledger & Change Log...")
     os.makedirs("data/processed", exist_ok=True)
@@ -414,9 +430,12 @@ def main():
     template_path = Path("data/processed/ipl_2027_player_market_template.csv")
     snap_path = Path(f"data/processed/snapshots/ipl_2027_market_snapshot_{AUDIT_DATE}.csv")
     df_market.to_csv(template_path, index=False)
-    df_market.to_csv(snap_path, index=False)
     print(f"Saved {template_path} ({len(df_market)} audited records)")
-    print(f"Saved historical snapshot {snap_path}")
+    if not snap_path.exists() or args.overwrite_history:
+        df_market.to_csv(snap_path, index=False)
+        print(f"Saved historical snapshot {snap_path}")
+    else:
+        print(f"Preserved pinned historical snapshot {snap_path}")
 
     # 2. Clean, Honest Audit Change Log (Retracting Unverified Legacy Claims + Verified Movements)
     change_log_records = [
@@ -501,8 +520,11 @@ def main():
 
     df_log = pd.DataFrame(change_log_records)
     log_path = Path("data/processed/ipl_2027_market_change_log.csv")
-    df_log.to_csv(log_path, index=False)
-    print(f"Saved {log_path} ({len(df_log)} audited change log events)")
+    if not log_path.exists() or args.overwrite_history:
+        df_log.to_csv(log_path, index=False)
+        print(f"Saved {log_path} ({len(df_log)} audited change log events)")
+    else:
+        print(f"Preserved existing append-only change log {log_path}")
 
 
 if __name__ == "__main__":

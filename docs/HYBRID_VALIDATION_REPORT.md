@@ -88,7 +88,7 @@ Parameter grid sweep across centers $\mu \in [38, 50]$ and scales $s \in [6, 10]
 ### 2.7 Side-by-Side Hybrid vs Official Model A & Proxy Rankings (Audit Section 7)
 Evaluated across identical legal-ball career-qualified players ($400+$ balls, $20+$ matches) separating official 5-pillar `final_*_rankings.csv` ($109$ batters, $147$ bowlers) from the simplified single-PAVA proxy:
 - **Batting Spearman Correlation ($\rho$):** **0.5520** vs Official Model A (**0.5585** vs Single-PAVA Proxy, $N = 109$ eligible batters).
-- **Bowling Spearman Correlation ($\rho$):** **0.5714** vs Official Model A (**0.6230** vs Single-PAVA Proxy, $N = 147$ eligible legal-ball bowlers).
+- **Bowling Spearman Correlation ($\rho$):** **0.5699** vs Official Model A (**0.6220** vs Single-PAVA Proxy, $N = 147$ eligible legal-ball bowlers).
 - **Top-10 Overlap (Jaccard):** Batting Jaccard = **0.1765**; Bowling Jaccard = **0.3333**.
 - **Key Contrast:** Smooth blowout attenuation elevates **Jasprit Bumrah** from outside the Model A top 10 into **#4** in the Hybrid Bowler top 10 alongside Sufiyan Muqeem, Matheesha Pathirana, Abbas Afridi, Nathan Ellis, and Haris Rauf.
 

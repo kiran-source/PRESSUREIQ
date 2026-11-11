@@ -1,8 +1,8 @@
 # PRESSUREIQ — Data Provenance, Validation & Canonical Data Dictionary
 
 **Document:** `docs/DATA_PROVENANCE_AND_VALIDATION.md`  
-**Date:** 15 November 2026  
-**Status:** Certified Data Audit & Provenance Specification  
+**Date:** 11 November 2026 (Baseline Audit)  
+**Status:** Baseline Data Audit & Provenance Specification  
 **Framework:** Rajasthan Royals SupeRR Selector Season 2 — Round 1  
 **Competition Deadline:** 18 November 2026  
 
@@ -117,6 +117,6 @@ The following table defines the core variables utilized in feature engineering, 
 
 As mandated by competition rules:
 1. **Zero Public Cloud Exposure:** No raw CSV files from the data pack have been uploaded to external public endpoints, cloud storage buckets, or code repositories.
-2. **Dashboard Data Masking:** The interactive Streamlit dashboard (`src/dashboard/app.py`) operates exclusively on aggregated, processed Parquet extracts (`deliveries_with_pava.parquet`) and masked player tables, ensuring proprietary match records cannot be reverse-engineered or extracted by third parties.
+2. **Dashboard Data Handling:** The interactive Streamlit dashboard (`src/dashboard/app.py`) reads leaderboard/ranking summaries alongside delivery-level records queried locally from `deliveries_with_pava.parquet` (via `query_player_deliveries` in `src/dashboard/data_loader.py`) without publishing raw competition pack CSVs to external public endpoints.
 3. **Reproducibility Guarantee:** All preprocessing pipelines (`src/data/clean_data.py`, `src/features/match_state.py`) operate deterministically with fixed random seeds ($42$), guaranteeing byte-level reproducibility across independent platforms.
 
