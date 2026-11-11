@@ -5,7 +5,13 @@ from pathlib import Path
 
 # Base Paths
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-RAW_DATA_DIR = PROJECT_ROOT / "SupeRR Selector Season 2 _ Problem Statement _ Data Pack" / "SupeRR Selector Season 2 _ Data Pack"
+RAW_DATA_DIR_DEFAULT = PROJECT_ROOT / "SupeRR Selector Season 2 _ Problem Statement _ Data Pack" / "SupeRR Selector Season 2 _ Data Pack"
+RAW_DATA_DIR_ALT = PROJECT_ROOT / "data" / "raw"
+
+if (RAW_DATA_DIR_ALT / "ball_by_ball.csv").exists():
+    RAW_DATA_DIR = RAW_DATA_DIR_ALT
+else:
+    RAW_DATA_DIR = RAW_DATA_DIR_DEFAULT
 PROCESSED_DATA_DIR = PROJECT_ROOT / "data" / "processed"
 DOCS_DIR = PROJECT_ROOT / "docs"
 

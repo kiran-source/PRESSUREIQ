@@ -20,7 +20,7 @@
 | **REQ-05** | **Expected Outcome Models & Calibration** | **PASS** | LightGBM out-of-fold RMSE = 1.727 vs Baseline 1.738; Brier score $\approx 0.049\text{--}0.050$, ECE $< 0.003$ on untouched 2026 test split; natural event calibration preserved. |
 | **REQ-06** | **PAVA Resolution & Reliability Engine** | **PASS** | PAVA double-counting resolved: unamplified execution surplus $V_{\text{raw}}$ (runs/ball) used for reliability scoring and retention deltas; Empirical Bayes shrinkage ($K=45$) applied. |
 | **REQ-07** | **2,000 Match-Clustered Bootstrap Uncertainty** | **PASS** | Full 2,000 match-clustered bootstrap executed with fixed seed 42; 95% CIs and top-10 inclusion probabilities computed with exact score parity ($<0.01$ score delta). |
-| **REQ-08** | **Dashboard & Test Suite Integrity** | **PASS** | 44/44 automated unit and regression tests pass (100% success rate in 24.8s); Streamlit/Plotly dashboard headless import verified clean; PyArrow pinned to `23.0.1`. |
+| **REQ-08** | **Dashboard & Test Suite Integrity** | **PASS** | 44/44 automated unit and regression tests pass (100% success rate in 19.86s); Streamlit/Plotly dashboard headless import verified clean; PyArrow pinned to `23.0.1`. |
 
 ---
 
@@ -168,7 +168,7 @@ Cumulative leverage-weighted match impact is tracked separately as $\text{Levera
 
 ## 5. Verification & Test Suite Summary
 
-- **Pytest Suite**: 44 tests executed in 24.75s, **44 passed, 0 failed** (100% success rate).
+- **Pytest Suite**: 44 tests executed in 19.86s, **44 passed, 0 failed** (100% success rate).
   - `test_bootstrap_baseline_reproducibility.py`: 2 tests passed (exact scoring reproducibility verified).
   - `test_bowler_illegal_deliveries.py`: 1 test passed (wides/no-balls charged to bowlers).
   - `test_data_cleaning.py`: 4 tests passed (boundary conditions, team mapping).

@@ -8,7 +8,10 @@ import glob
 import os
 import sys
 
-RAW_DIR = "SupeRR Selector Season 2 _ Problem Statement _ Data Pack/SupeRR Selector Season 2 _ Data Pack"
+RAW_DIR_DEFAULT = "SupeRR Selector Season 2 _ Problem Statement _ Data Pack/SupeRR Selector Season 2 _ Data Pack"
+RAW_DIR_ALT = "data/raw"
+
+RAW_DIR = RAW_DIR_ALT if os.path.exists(os.path.join(RAW_DIR_ALT, "ball_by_ball.csv")) else RAW_DIR_DEFAULT
 
 EXPECTED_HASHES = {
     "ball_by_ball.csv": "a3926f49d2c684dca2a5d2de535a02c5ee46ea654ca1e79dd31c69e7544e9889",

@@ -139,3 +139,4 @@ def test_symmetric_execution_surplus():
     ]])
     
     assert np.isclose(pava_df.loc[0, "pava_bat"], -pava_df.loc[1, "pava_bat"])
+
