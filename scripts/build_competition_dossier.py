@@ -24,33 +24,37 @@ def main():
     w_top10 = fw.head(10).copy()
     
     # Add strategic franchise context without changing statistical reliability
-    # Batters Strategic Category
+    # Canonical player IDs & audited 2026 squad / Nov 5 trade / policy statuses
     strat_b = {
-        6059: ("Opposition Benchmark (CSK Retained)", "Tactical planning benchmark; high-tempo powerplay anchor"),
-        126: ("Opposition Benchmark (MI Retained)", "Clutch powerplay pace exploitation; game-tempo control"),
-        2921: ("Global Benchmark (Pakistan)", "High-leverage left-hand boundary striker"),
-        6018: ("Opposition Benchmark (MI Retained)", "360-degree middle-overs spin/pace destroyer"),
-        6776: ("Prime Acquisition Target (West Indies)", "Priority #7 seam-bowling power finisher for RR"),
-        37052: ("Emerging Target / Retention (MI)", "Young dynamic top/middle-order clutch climber"),
-        6640: ("High-Value Target (England)", "Fearless powerplay wicketkeeper-batter"),
-        6017: ("Prime Domestic Target (India)", "High-intensity Indian finisher and wicketkeeper"),
-        5977: ("Opposition Benchmark (LSG Retained)", "World-class spin destructor and boundary anchor"),
-        813: ("RR Priority Asset (England)", "Franchise pillar and proven high-pressure chase master")
+        6059: ("Opposition Benchmark (CSK 2026 / Pending 2027 Verification)", "Tactical planning benchmark; high-tempo powerplay anchor (2027 CSK list pending Nov 17)"),
+        126: ("Opposition Benchmark (MI 2026 / Pending 2027 Verification)", "Clutch powerplay pace exploitation; game-tempo control (2027 MI list pending Nov 17)"),
+        2921: ("Global Benchmark (Pakistan / Policy Review)", "High-leverage left-hand boundary striker (IPL ineligible under BCCI geopolitical policy)"),
+        1699: ("Opposition Benchmark (MI 2026 / Pending 2027 Verification)", "360-degree middle-overs spin/pace destroyer (2027 MI list pending Nov 17)"),
+        6726: ("Watchlist Asset (RCB 2026 / Pending 2027 Verification)", "Seam-bowling power finisher fit for #7 if released by RCB on Nov 17"),
+        37052: ("Watchlist Asset (MI 2026 / Pending 2027 Verification)", "Young dynamic Indian top/middle-order clutch climber (2027 MI list pending Nov 17)"),
+        5553: ("Watchlist Asset (RCB 2026 / Pending 2027 Verification)", "High-tempo powerplay wicketkeeper-batter (2027 RCB list pending Nov 17)"),
+        3916: ("Watchlist Asset (RCB 2026 / Pending 2027 Verification)", "Indian middle-order keeper-finisher (2027 RCB list pending Nov 17)"),
+        3125: ("Opposition Benchmark (LSG 2026 / Pending 2027 Verification)", "World-class spin destructor and boundary anchor (2027 LSG list pending Nov 17)"),
+        813: ("Opposition Asset (GT 2026 / Pending 2027 Verification)", "Former RR opener now in GT squad; proven high-pressure chase master (2027 list pending Nov 17)"),
     }
-    
-    # Bowlers Strategic Category
+
     strat_w = {
-        722: ("High-Value Target (England)", "Jaipur-squeeze orthodox spinner and lower-order bat"),
-        7364: ("Global Benchmark (Pakistan)", "Express pace reverse-swing yorker benchmark"),
-        36341: ("Emerging Global Benchmark (Pakistan)", "Back-of-hand slower ball and change-of-pace weapon"),
-        7514: ("Prime Acquisition Target (Australia)", "Premier death yorker specialist; Sandeep Sharma partner"),
-        49925: ("Emerging Global Benchmark (Pakistan)", "Unorthodox left-arm wrist spinner"),
-        37324: ("Opposition Benchmark (CSK Retained)", "Slingy express death-overs execution benchmark"),
-        6426: ("High-Value Target (Bangladesh)", "Powerplay defensive finger spinner"),
-        65: ("Veteran Depth Target (India)", "Powerplay hit-the-deck experience"),
-        6845: ("Prime Acquisition Target (Bangladesh)", "Left-arm swing and reverse-yorker death specialist"),
-        775: ("Veteran Depth Target (New Zealand)", "Experienced change-of-pace death bowler")
+        722: ("Watchlist Overseas Option (Uncontracted / Pending 2027)", "Economical orthodox left-arm spinner and lower-order bat"),
+        7364: ("Global Benchmark (Pakistan / Policy Review)", "Express pace reverse-swing yorker benchmark (IPL ineligible under BCCI geopolitical policy)"),
+        7699: ("Global Benchmark (Pakistan / Policy Review)", "Back-of-hand slower ball and change-of-pace weapon (IPL ineligible under BCCI geopolitical policy)"),
+        7920: ("Unavailable — Confirmed Trade (SRH Pre-2027 Trade)", "Traded CSK -> SRH (5 Nov 2026); death-yorker benchmark (unattainable in auction)"),
+        34485: ("Global Benchmark (Pakistan / Policy Review)", "Unorthodox left-arm wrist spinner (IPL ineligible under BCCI geopolitical policy)"),
+        8661: ("Opposition Asset (KKR 2026 / Pending 2027 Verification)", "Slingy express death-overs executioner (acquired by KKR for IPL 2026; Nov 17 pending)"),
+        4658: ("Watchlist Overseas Option (Bangladesh / Uncontracted)", "Powerplay defensive finger spinner"),
+        28: ("Watchlist Domestic Depth (GT 2026 / Pending 2027 Verification)", "Veteran Indian hit-the-deck seam experience (2027 GT list pending Nov 17)"),
+        7344: ("Watchlist Overseas Option (Bangladesh / Uncontracted)", "Left-arm swing and death executioner"),
+        278: ("Watchlist Veteran Option (New Zealand / Uncontracted)", "Experienced change-of-pace death bowler"),
     }
+
+    missing_b = [int(pid) for pid in b_top10["player_id"] if int(pid) not in strat_b]
+    missing_w = [int(pid) for pid in w_top10["player_id"] if int(pid) not in strat_w]
+    assert not missing_b, f"Missing canonical batter IDs in strat_b: {missing_b}"
+    assert not missing_w, f"Missing canonical bowler IDs in strat_w: {missing_w}"
     
     b_top10["strategic_category"] = b_top10["player_id"].map(lambda x: strat_b.get(x, ("Target", "Key player"))[0])
     b_top10["rr_strategic_utility"] = b_top10["player_id"].map(lambda x: strat_b.get(x, ("Target", "Key player"))[1])
@@ -122,158 +126,179 @@ def main():
     dossier_df.to_csv("data/processed/player_evidence_dossier.csv", index=False)
     print("Saved player_evidence_dossier.csv (30 players)")
     
-    # 3. Build Dedicated Emerging Talent Watchlist
-    # Identify young (<25), uncapped, and emerging players in dataset & public domain
+    # 3. Build Dedicated Emerging Talent Watchlist with canonical IDs & dataset-verified metrics
+    d_pava = pd.read_parquet(
+        "data/processed/deliveries_with_pava.parquet",
+        columns=["striker_id", "bowler_id", "is_batter_ball", "is_legal_ball", "batter_runs", "bpi", "bopi"],
+    )
+    bat_by_id = fb.set_index("player_id")
+    bowl_by_id = fw.set_index("player_id")
+
+    def _bat_stats(pid: int) -> tuple[int, int, float]:
+        sub = d_pava[(d_pava["striker_id"] == pid) & (d_pava["is_batter_ball"] == 1)]
+        balls = int(len(sub))
+        hp = int((sub["bpi"] >= 50.0).sum())
+        sr = round(float(sub["batter_runs"].sum()) * 100.0 / balls, 1) if balls > 0 else 0.0
+        return balls, hp, sr
+
+    def _bowl_stats(pid: int) -> tuple[int, int, int]:
+        all_d = d_pava[d_pava["bowler_id"] == pid]
+        legal = all_d[all_d["is_legal_ball"] == 1]
+        return int(len(legal)), int(len(all_d)), int((legal["bopi"] >= 50.0).sum())
+
+    sv_b, sv_hp, sv_sr = _bat_stats(50284)
+    vp_leg, _vp_all, vp_hp = _bowl_stats(48557)
+
     emerging_data = [
         {
             "player_name": "Vaibhav Sooryavanshi",
             "player_id": 50284,
             "age": 14,
             "nationality": "India",
-            "category": "Tier C: High-Potential (Insufficient Pressure Evidence)",
+            "category": "Tier C: High-Potential (Insufficient HP Exposure)",
             "role": "Top-Order Left-Hand Batter",
-            "franchise": "Rajasthan Royals (IPL 2025/2026)",
-            "total_balls_dataset": 714,
-            "hp_balls_dataset": 0,
-            "dataset_strike_rate": 139.8,
-            "pressure_reliability_score": "N/A (Unshrunk / Low HP)",
-            "tactical_assessment": "Generational prodigy; fearless aggressive strokeplay against pace in powerplays. Lacks late-innings high-RRR pressure sample due to opening role, but represents RR's highest-ceiling developmental asset.",
-            "recommendation_for_rr": "Back long-term developmental trajectory; groom in high-pressure match simulations without burdening with late-overs salvage duties."
+            "franchise": "Rajasthan Royals (IPL 2026 / Pending 2027 Verification)",
+            "total_balls_dataset": sv_b,
+            "hp_balls_dataset": sv_hp,
+            "dataset_strike_rate": sv_sr,
+            "pressure_reliability_score": f"Unqualified ({sv_hp}/30 HP balls)",
+            "tactical_assessment": f"Generational prodigy ({sv_sr:.1f} SR over {sv_b} balls); fearless aggressive strokeplay in powerplays with {sv_hp} BPI>=50 deliveries.",
+            "recommendation_for_rr": "Back long-term developmental trajectory within RR squad; groom in high-pressure match simulations."
         },
         {
             "player_name": "Vignesh Puthur",
             "player_id": 48557,
             "age": 22,
             "nationality": "India",
-            "category": "Tier C: High-Potential (Insufficient Pressure Evidence)",
-            "role": "Slow Left-Arm Orthodox Spinner",
-            "franchise": "Rajasthan Royals (IPL 2026) / Mumbai Indians",
-            "total_balls_dataset": 73,
-            "hp_balls_dataset": 6,
+            "category": "Tier C: High-Potential (Insufficient Career Exposure)",
+            "role": "Slow Left-Arm Wrist/Orthodox Spinner",
+            "franchise": "Rajasthan Royals (IPL 2026 Auction Signing / Pending 2027 Verification)",
+            "total_balls_dataset": vp_leg,
+            "hp_balls_dataset": vp_hp,
             "dataset_strike_rate": "N/A (Bowler)",
-            "pressure_reliability_score": "N/A (Small Sample)",
-            "tactical_assessment": "Uncapped Kerala spinner scouted for deceptive flight and drift. Limited IPL exposure (73 balls in dataset), showing tight control in domestic circuits.",
-            "recommendation_for_rr": "Develop as high-upside domestic spin depth for Jaipur home conditions; evaluate in pre-season camps against elite RHB batters."
+            "pressure_reliability_score": f"Unqualified ({vp_leg}/400 legal balls)",
+            "tactical_assessment": f"Uncapped Kerala spinner acquired by RR at Dec 2025 auction ({vp_leg} legal balls, {vp_hp} BoPI>=50 balls).",
+            "recommendation_for_rr": "Develop as high-upside domestic spin depth for Jaipur home conditions."
         },
         {
             "player_name": "Naman Dhir",
             "player_id": 37052,
             "age": 24,
             "nationality": "India",
-            "category": "Tier A: Proven Pressure Performer (Selected #6)",
+            "category": f"Tier A: Proven Pressure Performer (Selected #{int(bat_by_id.loc[37052, 'rank'])})",
             "role": "Top/Middle-Order Batter & Off-Break Bowler",
-            "franchise": "Mumbai Indians",
-            "total_balls_dataset": 603,
-            "hp_balls_dataset": 184,
-            "dataset_strike_rate": 158.4,
-            "pressure_reliability_score": "93.30 (Rank #6 Batter)",
-            "tactical_assessment": "Breakout young Indian star. Demonstrates Clutch Climber archetype (+0.078 PRC slope). Hits high pace over midwicket and inside-out against spin under steep run-rate pressure.",
-            "recommendation_for_rr": "Top priority trade/auction target if un-retained; provides versatile top-3 tempo or middle-overs power."
+            "franchise": "Mumbai Indians (IPL 2026 / Pending 2027 Verification)",
+            "total_balls_dataset": int(bat_by_id.loc[37052, "total_balls"]),
+            "hp_balls_dataset": int(bat_by_id.loc[37052, "hp_balls"]),
+            "dataset_strike_rate": round(float(bat_by_id.loc[37052, "career_sr"]), 1),
+            "pressure_reliability_score": f"{bat_by_id.loc[37052, 'reliability_score']:.2f} (Rank #{int(bat_by_id.loc[37052, 'rank'])} Batter)",
+            "tactical_assessment": f"Breakout young Indian batter (SR {bat_by_id.loc[37052, 'career_sr']:.1f}, slope {bat_by_id.loc[37052, 'prc_slope']:+.4f} {bat_by_id.loc[37052, 'prc_archetype']}).",
+            "recommendation_for_rr": "Watchlist target if released by MI on Nov 17, 2026; provides versatile top-order/middle tempo."
         },
         {
             "player_name": "Prince Yadav",
             "player_id": 58246,
             "age": 23,
             "nationality": "India",
-            "category": "Tier B: Emerging Pressure Performer (Rank #11 Bowler)",
+            "category": f"Tier B: Emerging Pressure Performer (Rank #{int(bowl_by_id.loc[58246, 'rank'])} Bowler)",
             "role": "Right-Arm Fast Bowler",
-            "franchise": "Lucknow Super Giants / India",
-            "total_balls_dataset": 747,
-            "hp_balls_dataset": 297,
+            "franchise": "Lucknow Super Giants (IPL 2026 / Pending 2027 Verification)",
+            "total_balls_dataset": int(bowl_by_id.loc[58246, "legal_balls"]),
+            "hp_balls_dataset": int(bowl_by_id.loc[58246, "hp_balls"]),
             "dataset_strike_rate": "N/A (Bowler)",
-            "pressure_reliability_score": "88.87 (Rank #11 Bowler)",
-            "tactical_assessment": "Elite domestic pace discovery. Ice Cold Anchor archetype (88.87 score across 297 HP deliveries). Bowls heavy hard lengths with 140+ km/h speed, highly resilient at death.",
-            "recommendation_for_rr": "Prime fast-bowling acquisition target; solves domestic pace depth alongside Prasidh Krishna."
+            "pressure_reliability_score": f"{bowl_by_id.loc[58246, 'reliability_score']:.2f} (Rank #{int(bowl_by_id.loc[58246, 'rank'])} Bowler)",
+            "tactical_assessment": "Domestic pace discovery with strong high-pressure resilience across nearly 300 BoPI>=50 balls.",
+            "recommendation_for_rr": "Monitor Nov 17 LSG retention decision as domestic fast-bowling depth candidate."
         },
         {
             "player_name": "Rasikh Salam",
             "player_id": 7327,
             "age": 24,
             "nationality": "India",
-            "category": "Tier B: Emerging Pressure Performer (Rank #20 Bowler)",
+            "category": f"Tier B: Emerging Pressure Performer (Rank #{int(bowl_by_id.loc[7327, 'rank'])} Bowler)",
             "role": "Right-Arm Medium-Fast Bowler",
-            "franchise": "Royal Challengers Bengaluru / DC / India A",
-            "total_balls_dataset": 571,
-            "hp_balls_dataset": 140,
+            "franchise": "Royal Challengers Bengaluru / Domestic India",
+            "total_balls_dataset": int(bowl_by_id.loc[7327, "legal_balls"]),
+            "hp_balls_dataset": int(bowl_by_id.loc[7327, "hp_balls"]),
             "dataset_strike_rate": "N/A (Bowler)",
-            "pressure_reliability_score": "82.06 (Rank #20 Bowler)",
-            "tactical_assessment": "Skilful death executor with deceptive back-of-the-hand slower balls and yorkers. Strong performance in Emerging Teams Asia Cup.",
-            "recommendation_for_rr": "High-value Indian pace asset for middle and death overs; cost-effective domestic squad depth."
+            "pressure_reliability_score": f"{bowl_by_id.loc[7327, 'reliability_score']:.2f} (Rank #{int(bowl_by_id.loc[7327, 'rank'])} Bowler)",
+            "tactical_assessment": "Skilful death executor with slower-ball and yorker variations across IPL and India A fixtures.",
+            "recommendation_for_rr": "Domestic middle/death pace option pending official Nov 17 retention lists."
         },
         {
             "player_name": "Allah Ghazanfar",
-            "player_id": 48312,
+            "player_id": 32862,
             "age": 18,
             "nationality": "Afghanistan",
-            "category": "Tier B: Emerging Pressure Performer (Rank #17 Bowler)",
+            "category": f"Tier B: Emerging Pressure Performer (Rank #{int(bowl_by_id.loc[32862, 'rank'])} Bowler)",
             "role": "Right-Arm Mystery Off-Break Spinner",
-            "franchise": "Kolkata Knight Riders / Afghanistan A",
-            "total_balls_dataset": 612,
-            "hp_balls_dataset": 212,
+            "franchise": "Afghanistan / Franchise Pool",
+            "total_balls_dataset": int(bowl_by_id.loc[32862, "legal_balls"]),
+            "hp_balls_dataset": int(bowl_by_id.loc[32862, "hp_balls"]),
             "dataset_strike_rate": "N/A (Bowler)",
-            "pressure_reliability_score": "83.68 (Rank #17 Bowler)",
-            "tactical_assessment": "Teenage mystery spinner with carrom ball and quick arm speed. Holds Ice Cold Anchor profile across 212 high-pressure balls in international and emerging fixtures.",
-            "recommendation_for_rr": "Elite overseas wrist/finger spin target; extreme ceiling for Jaipur surfaces."
+            "pressure_reliability_score": f"{bowl_by_id.loc[32862, 'reliability_score']:.2f} (Rank #{int(bowl_by_id.loc[32862, 'rank'])} Bowler)",
+            "tactical_assessment": "Teenage mystery spinner holding positive execution surplus across 212 high-pressure legal balls.",
+            "recommendation_for_rr": "High-upside overseas mystery spin watchlist candidate for Jaipur surfaces."
         },
         {
             "player_name": "Abbas Afridi",
-            "player_id": 36341,
+            "player_id": 7699,
             "age": 23,
             "nationality": "Pakistan",
-            "category": "Tier A: Proven Pressure Performer (Rank #3 Bowler)",
+            "category": f"Tier A: Proven Pressure Performer (Rank #{int(bowl_by_id.loc[7699, 'rank'])} Bowler)",
             "role": "Right-Arm Medium-Fast Seamer",
-            "franchise": "Pakistan / Pakistan A",
-            "total_balls_dataset": 589,
-            "hp_balls_dataset": 232,
+            "franchise": "Pakistan (Policy/Eligibility Review)",
+            "total_balls_dataset": int(bowl_by_id.loc[7699, "legal_balls"]),
+            "hp_balls_dataset": int(bowl_by_id.loc[7699, "hp_balls"]),
             "dataset_strike_rate": "N/A (Bowler)",
-            "pressure_reliability_score": "91.88 (Rank #3 Bowler)",
-            "tactical_assessment": "Elite change-of-pace death bowler. Possesses dip, wide yorkers, and cutter variations under extreme leverage. Statistical excellence benchmark.",
-            "recommendation_for_rr": "Benchmark for death-overs variation modeling (BCCI policy restricts IPL participation; study tactical mechanics for RR bowling group)."
+            "pressure_reliability_score": f"{bowl_by_id.loc[7699, 'reliability_score']:.2f} (Rank #{int(bowl_by_id.loc[7699, 'rank'])} Bowler)",
+            "tactical_assessment": "Change-of-pace death bowler under extreme leverage; serves strictly as an analytical benchmark.",
+            "recommendation_for_rr": "Global analytical benchmark only (BCCI geopolitical stance precludes IPL participation since 2008)."
         },
         {
             "player_name": "Sufiyan Muqeem",
-            "player_id": 49925,
+            "player_id": 34485,
             "age": 24,
             "nationality": "Pakistan",
-            "category": "Tier A: Proven Pressure Performer (Rank #5 Bowler)",
+            "category": f"Tier A: Proven Pressure Performer (Rank #{int(bowl_by_id.loc[34485, 'rank'])} Bowler)",
             "role": "Left-Arm Wrist Spinner (Chinaman)",
-            "franchise": "Pakistan / Pakistan A",
-            "total_balls_dataset": 528,
-            "hp_balls_dataset": 213,
+            "franchise": "Pakistan (Policy/Eligibility Review)",
+            "total_balls_dataset": int(bowl_by_id.loc[34485, "legal_balls"]),
+            "hp_balls_dataset": int(bowl_by_id.loc[34485, "hp_balls"]),
             "dataset_strike_rate": "N/A (Bowler)",
-            "pressure_reliability_score": "91.41 (Rank #5 Bowler)",
-            "tactical_assessment": "Rare left-arm wrist spin angle, high revs, sharp googly under pressure. Unflappable economy when batters are on the attack.",
-            "recommendation_for_rr": "Tactical benchmark for wrist-spin release points and defensive line variation."
+            "pressure_reliability_score": f"{bowl_by_id.loc[34485, 'reliability_score']:.2f} (Rank #{int(bowl_by_id.loc[34485, 'rank'])} Bowler)",
+            "tactical_assessment": "Left-arm wrist spin with sub-6.00 economy under high BoPI; serves strictly as an analytical benchmark.",
+            "recommendation_for_rr": "Global analytical benchmark only (BCCI geopolitical stance precludes IPL participation since 2008)."
         },
         {
             "player_name": "Harpreet Brar",
-            "player_id": 6019,
+            "player_id": 7325,
             "age": 29,
             "nationality": "India",
-            "category": "Tier B: Emerging/Established Pressure Asset (Rank #14 Bowler)",
+            "category": f"Tier B: Emerging/Established Pressure Asset (Rank #{int(bowl_by_id.loc[7325, 'rank'])} Bowler)",
             "role": "Slow Left-Arm Orthodox Spinner",
-            "franchise": "Punjab Kings",
-            "total_balls_dataset": 782,
-            "hp_balls_dataset": 257,
+            "franchise": "Punjab Kings (IPL 2026 / Pending 2027 Verification)",
+            "total_balls_dataset": int(bowl_by_id.loc[7325, "legal_balls"]),
+            "hp_balls_dataset": int(bowl_by_id.loc[7325, "hp_balls"]),
             "dataset_strike_rate": "N/A (Bowler)",
-            "pressure_reliability_score": "87.73 (Rank #14 Bowler)",
-            "tactical_assessment": "Clutch Climber archetype. Unmatched ability to fire flat, tight lengths at 95 km/h against high-leverage right-hand power hitters.",
-            "recommendation_for_rr": "Prime domestic acquisition target to execute the Jaipur Squeeze at SMS Stadium."
+            "pressure_reliability_score": f"{bowl_by_id.loc[7325, 'reliability_score']:.2f} (Rank #{int(bowl_by_id.loc[7325, 'rank'])} Bowler)",
+            "tactical_assessment": "Clutch Climber SLA spinner firing flat, tight lengths against right-hand power hitters.",
+            "recommendation_for_rr": "Monitor PBKS Nov 17 list as domestic SLA squeeze target for SMS Stadium."
         },
         {
             "player_name": "Rinku Singh",
-            "player_id": 6023,
+            "player_id": 4708,
             "age": 27,
             "nationality": "India",
-            "category": "Tier A: Proven Pressure Performer (Rank #11 Batter)",
+            "category": f"Tier A: Proven Pressure Performer (Rank #{int(bat_by_id.loc[4708, 'rank'])} Batter)",
             "role": "Left-Hand Middle-Order Finisher",
-            "franchise": "Kolkata Knight Riders (Retained)",
-            "total_balls_dataset": 1120,
-            "hp_balls_dataset": 418,
-            "dataset_strike_rate": 152.6,
-            "pressure_reliability_score": "92.37 (Rank #11 Batter)",
-            "tactical_assessment": "The gold standard of Indian domestic clutch hitting. Missed top 10 by a razor-thin 0.08 points. Exceptional calm in final-over chases.",
-            "recommendation_for_rr": "Tactical case study in pressure mindset and bat-speed timing; benchmark for Dhruv Jurel and lower-order development."
+            "franchise": "Kolkata Knight Riders (IPL 2026 / Pending 2027 Verification)",
+            "total_balls_dataset": int(bat_by_id.loc[4708, "total_balls"]),
+            "hp_balls_dataset": int(bat_by_id.loc[4708, "hp_balls"]),
+            "dataset_strike_rate": round(float(bat_by_id.loc[4708, "career_sr"]), 1),
+            "pressure_reliability_score": f"{bat_by_id.loc[4708, 'reliability_score']:.2f} (Rank #{int(bat_by_id.loc[4708, 'rank'])} Batter)",
+            "tactical_assessment": "Elite domestic finisher missing Model A top-10 by 0.08 points across 418 HP balls.",
+            "recommendation_for_rr": "Tactical case study / watchlist asset depending on KKR Nov 17 retention announcement."
         }
     ]
     

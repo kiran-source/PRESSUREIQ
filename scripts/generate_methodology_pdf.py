@@ -190,9 +190,9 @@ def build_pdf():
     story.append(Paragraph(
         "<b>Core Methodological Principles:</b><br/>"
         "• <b>Zero Data Leakage:</b> Machine learning expectation baselines are trained chronologically with walk-forward isolation.<br/>"
-        "• <b>Unamplified Execution Surplus:</b> Execution value is strictly $(E - \\hat{E})$, eliminating quadratic pressure double-counting.<br/>"
+        "• <b>Unamplified Execution Surplus:</b> Execution value separates raw surplus (E - E_hat) from pressure leverage, eliminating double-counting.<br/>"
         "• <b>2,000 Match-Clustered Bootstrap:</b> Rigorous uncertainty quantification reflecting real-world match clustering.<br/>"
-        "• <b>Rigorous Regulatory Governance:</b> Clear delineation between actionable auction targets, franchise benchmark archetypes, and international benchmarks.",
+        "• <b>Rigorous Regulatory Governance:</b> Clear separation between Model A performance ranks, confirmed Nov 5 trades, Pending Verification 2026 squads, and Policy/Eligibility benchmarks.",
         callout_style
     ))
 
@@ -202,7 +202,7 @@ def build_pdf():
     story.append(Spacer(1, 5))
     story.append(Paragraph("2. Official Deliverable: 10 Most Reliable Batters Under Pressure", h1_style))
     story.append(Paragraph(
-        "Eligible pool: Minimum 20 matches, 400 total career balls, and 30 high-pressure deliveries ($BPI \\ge 50$). "
+        "Eligible pool: Minimum 20 matches, 400 total career balls, and 30 high-pressure deliveries (BPI &gt;= 50). "
         "Rankings reflect composite reliability scores under Model A across the 5 canonical evaluation pillars.",
         body_style
     ))
@@ -263,7 +263,7 @@ def build_pdf():
     story.append(Spacer(1, 10))
     story.append(Paragraph("3. Official Deliverable: 10 Most Reliable Bowlers Under Pressure", h1_style))
     story.append(Paragraph(
-        "Eligible pool: Minimum 20 matches, 400 total career balls, and 30 high-pressure deliveries ($BoPI \\ge 50$). "
+        "Eligible pool: Minimum 20 matches, 400 total career balls, and 30 high-pressure deliveries (BoPI &gt;= 50). "
         "Rankings reflect composite reliability scores under Model A across the 5 canonical evaluation pillars.",
         body_style
     ))
@@ -330,49 +330,46 @@ def build_pdf():
 
     story.append(Paragraph("Stage 1: Dynamic Match-State & Pressure Index Formulation", h2_style))
     story.append(Paragraph(
-        "Pressure is evaluated ball-by-ball. Batting Pressure Index (BPI) and Bowling Pressure Index (BoPI) combine "
-        "Required Run Rate pressure ($P_{RRR}$), Resource Exhaustion ($P_{Res}$), Phase Stress ($P_{Phase}$), and Match Closeness:<br/>"
-        "$$\\text{BPI} = 0.40 \\cdot P_{RRR} + 0.30 \\cdot P_{Res} + 0.15 \\cdot P_{Phase} + 0.15 \\cdot P_{Leverage}$$<br/>"
-        "Deliveries are partitioned into Low Pressure ($< 35$), Neutral ($35 - 50$), and High Pressure ($\\ge 50$).",
+        "Pressure is evaluated ball-by-ball on a [0, 100] scale:<br/>"
+        "<b>BPI</b> = clip(0.35 * C_RRR + 0.30 * C_res + 0.25 * C_climax + 0.10 * (B_ko + B_chase), 0, 100)<br/>"
+        "<b>BoPI</b> = clip(0.38 * C_defend + 0.26 * C_res_opp + 0.24 * C_climax + 0.12 * (B_ko + B_tight), 0, 100)<br/>"
+        "The operational high-pressure pool selects deliveries with P &gt;= 50.0, while descriptive tiers partition Low (&lt;35), Medium [35,65), High [65,85), and Extreme (&gt;=85).",
         body_style
     ))
 
     story.append(Paragraph("Stage 2: Performance Above Value Added (PAVA)", h2_style))
     story.append(Paragraph(
-        "To prevent double-counting of pressure, execution surplus is computed strictly without quadratic multipliers:<br/>"
-        "$$\\Delta V_{i,\\text{bat}} = \\text{Runs}_i - \\hat{E}[\\text{Runs}_i] - \\lambda_{\\text{wkt}} \\cdot P(\\text{Wicket}_i)$$<br/>"
-        "$$\\Delta V_{i,\\text{bowl}} = \\hat{E}[\\text{Runs}_i] - \\text{Runs}_i + \\lambda_{\\text{wkt}} \\cdot (\\mathbb{I}_{\\text{wkt}} - P(\\text{Wicket}_i))$$<br/>"
-        "Where $\\lambda_{\\text{wkt}} = 2.50$ runs. Expected runs and dismissal probabilities are produced by LightGBM models "
-        "trained strictly on historical prior seasons (walk-forward out-of-fold estimation).",
+        "Raw execution surplus separates context-adjusted skill from leverage weighting (`leverage_pava = raw_value * (1 + P/50)`):<br/>"
+        "<b>PAVA_raw,bat</b> = delta_runs + V_W(phase) * delta_wkt + 0.50 * delta_bnd<br/>"
+        "<b>PAVA_raw,bowl</b> = (E[R_conc] - R_conc) + V_W(phase) * (W_act - P[wicket])<br/>"
+        "Phase wicket values V_W(phase) = {Powerplay: 5.2, Middle: 4.5, Death: 3.6} runs. Expected baselines are generated strictly via walk-forward out-of-fold LightGBM estimation.",
         body_style
     ))
 
     story.append(Paragraph("Stage 3: The 5 Pillars of Player Reliability", h2_style))
     story.append(Paragraph(
-        "Composite reliability ($R \\in [0, 100]$) aggregates five essential performance dimensions:<br/>"
-        "1. <b>Volume & Magnitude (35%):</b> Shrunk PAVA under high pressure: $\\text{PAVA}_{\\text{shrunk}} = \\frac{N_{\\text{HP}}}{N_{\\text{HP}} + K} \\overline{\\Delta V}_{\\text{HP}}$ (with $K=15$ shrinkage).<br/>"
-        "2. <b>Retention / Clutch Delta (20%):</b> Resistance to drop-off: $\\Delta_{\\text{retention}} = \\overline{\\Delta V}_{\\text{HP}} - \\overline{\\Delta V}_{\\text{LP}}$.<br/>"
-        "3. <b>Opportunity-Adjusted Consistency (20%):</b> Variance across match clusters weighted by exposure: $\\sigma_{\\text{adj}} = \\text{IQR}_{\\text{match}} / \\sqrt{N_{\\text{matches}}}$.<br/>"
-        "4. <b>Cross-Condition Adaptability (15%):</b> Stability across IPL vs T20Is, home vs away, and pace vs spin.<br/>"
-        "5. <b>Sample Reliability & Evidence Weight (10%):</b> Sigmoidal confidence weight based on HP ball volume.",
+        "Composite reliability Z_composite = 0.50 * Z(PAVA_shrunk) + 0.20 * Z(S_ret) + 0.15 * (S_cons / 50) + 0.15 * (S_adapt / 50), mapped via standard normal CDF Phi(Z_composite) * 100:<br/>"
+        "1. <b>High-Pressure Value Added (50% weight):</b> Empirical Bayes shrunk mean raw PAVA at P &gt;= 50 using K_shrink = 45.0 pseudo-deliveries.<br/>"
+        "2. <b>Baseline Retention Delta (20% weight):</b> Resistance to drop-off between high pressure and low pressure (shrunk toward cohort mean when N_LP &lt; 10).<br/>"
+        "3. <b>Opportunity-Adjusted Consistency (15% weight):</b> Match-cluster IQR/spread stability.<br/>"
+        "4. <b>Cross-Condition Adaptability (15% weight):</b> Phase/context stability (defaults to 60.0 when sparse).<br/>"
+        "5. <b>Evidence Weight:</b> Regularizes low-HP players via K_shrink = 45.0.",
         body_style
     ))
 
     story.append(Paragraph("Stage 4: 2,000 Match-Clustered Bootstrap Engine", h2_style))
     story.append(Paragraph(
-        "Because deliveries within a match are correlated, resampling must occur at the <b>match level</b>. "
-        "PRESSUREIQ resamples 867 match clusters with replacement across 2,000 independent iterations. "
-        "In each resample, eligibility is dynamically re-verified and composite scores are re-computed. "
-        "Ineligible players in a resample receive tail rank ($N_{\\text{eligible}} + 1$).",
+        "Because deliveries within a match are correlated, resampling occurs at the <b>match level</b> across 867 completed matches "
+        "for 2,000 independent iterations. In each resample, eligibility is re-verified and scores are recomputed; ineligible resamples receive tail rank.",
         body_style
     ))
 
     story.append(Paragraph("Stage 5: Pressure Response Curves (PRC)", h2_style))
     story.append(Paragraph(
-        "A logistic/linear slope $\\beta_{\\text{PRC}}$ is fitted across pressure tiers. Players are classified into:<br/>"
-        "• <b>Clutch Climber ($\\beta > +0.50$):</b> Performance actively increases as pressure spikes (e.g., Ruturaj Gaikwad, Haris Rauf).<br/>"
-        "• <b>Ice Cold Anchor ($-0.50 \\le \\beta \\le +0.50$):</b> Unflappable execution identical in low and high pressure (e.g., Nathan Ellis, Phil Salt).<br/>"
-        "• <b>Pressure Fragile ($\\beta < -0.50$):</b> Performance degrades significantly under extreme duress (e.g., Romario Shepherd).",
+        "An OLS linear regression slope beta_PRC = linregress(p / 100.0, raw_pava) is fitted across all deliveries:<br/>"
+        "• <b>Clutch Climber (beta &gt;= +0.15, p &lt;= 0.15):</b> Output strengthens under pressure (e.g., Ruturaj Gaikwad +1.1487, Haris Rauf +1.7352).<br/>"
+        "• <b>Ice Cold Anchor / Universal:</b> Stable execution across leverage regimes (e.g., Nathan Ellis +0.1151, Jos Buttler -0.0538).<br/>"
+        "• <b>Pressure Fragile (extreme collapse &lt;= -0.25 or beta &lt;= -0.30, p &lt;= 0.15):</b> Climax degradation despite high bulk volume (e.g., Romario Shepherd).",
         body_style
     ))
 
@@ -382,53 +379,39 @@ def build_pdf():
     story.append(PageBreak())
     story.append(Paragraph("5. Rajasthan Royals (IPL 2027) Strategic Analysis", h1_style))
     story.append(Paragraph(
-        "Rajasthan Royals must optimize their squad construction around the distinct physical conditions of <b>Sawai Mansingh Stadium (Jaipur)</b>: "
-        "large square boundaries (68–72m), abrasive multi-soil surfaces, and significant dew in evening chases.",
+        "Rajasthan Royals must optimize squad construction around <b>Sawai Mansingh Stadium (Jaipur)</b> while enforcing strict "
+        "market-status separation ahead of the 17 November 2026 retention filing deadline.",
         body_style
     ))
 
-    story.append(Paragraph("5.1 Strategic Categorization of the Top 20 Candidates", h2_style))
+    story.append(Paragraph("5.1 Strategic Categorization of the Top 20 Candidates (As of 11 Nov 2026)", h2_style))
 
     strat_table_data = [
         [Paragraph("Category", table_header), Paragraph("Players Included", table_header), Paragraph("Strategic Function for Rajasthan Royals", table_header)],
         [
-            Paragraph("<b>Actionable Auction & Trade Targets</b>", table_cell_bold),
-            Paragraph("• <b>Nathan Ellis</b> (Death Pacer)<br/>"
-                      "• <b>Romario Shepherd</b> (Finisher #7)<br/>"
-                      "• <b>Jitesh Sharma</b> (Wicketkeeper Finisher)<br/>"
-                      "• <b>Liam Dawson</b> (Powerplay/Middle Spinner)<br/>"
-                      "• <b>Phil Salt</b> (Powerplay Opener)<br/>"
-                      "• <b>Shoriful Islam</b> (Left-Arm Pacer)", table_cell),
-            Paragraph("<b>Directly acquirable assets</b> in upcoming mini/mega auctions. "
-                      "Nathan Ellis provides death-overs yorkers to pair with Sandeep Sharma. "
-                      "Romario Shepherd solves RR's historic #7 finishing vulnerability. "
-                      "Jitesh Sharma secures an Indian wicketkeeper-finisher, liberating an overseas slot.", table_cell)
+            Paragraph("<b>Watchlist &amp; 2026 Contracted Assets (Pending Nov 17)</b>", table_cell_bold),
+            Paragraph("• <b>Liam Dawson</b>, <b>Nasum Ahmed</b>, <b>Shoriful Islam</b>, <b>Tim Southee</b> (Uncontracted 2026)<br/>"
+                      "• <b>Romario Shepherd</b>, <b>Jitesh Sharma</b>, <b>Phil Salt</b> (RCB 2026; Pending Nov 17)<br/>"
+                      "• <b>Naman Dhir</b> (MI 2026) | <b>Ishant Sharma</b> (GT 2026) | <b>Jos Buttler</b> (GT 2026)", table_cell),
+            Paragraph("<b>Pending Nov 17 confirmation.</b> Uncontracted overseas specialists (Dawson, Shoriful) and any "
+                      "players released on 17 Nov 2026 can be evaluated for Jaipur squad roles without assuming availability pre-announcement.", table_cell)
         ],
         [
-            Paragraph("<b>Franchise Archetype Blueprints</b>", table_cell_bold),
-            Paragraph("• <b>Ruturaj Gaikwad</b> (Top Order)<br/>"
-                      "• <b>Suryakumar Yadav</b> (Middle Order)<br/>"
-                      "• <b>Nicholas Pooran</b> (Spin Destroyer)<br/>"
-                      "• <b>Matheesha Pathirana</b> (Death Yorker)<br/>"
-                      "• <b>Rohit Sharma</b> (Powerplay Intent)", table_cell),
-            Paragraph("<b>Locked franchise retentions</b> (CSK, MI, LSG). These players represent the "
-                      "ideal statistical blueprints for recruitment. For example, RR scouts should target "
-                      "domestic batters mirroring Gaikwad's low dot-ball rate against spin rather than "
-                      "unrealistic auction pursuit.", table_cell)
+            Paragraph("<b>Confirmed Unavailable / Contracted Opposition Benchmarks</b>", table_cell_bold),
+            Paragraph("• <b>Nathan Ellis</b> (<b>Confirmed Trade</b>: CSK -&gt; SRH, 5 Nov 2026)<br/>"
+                      "• <b>Ruturaj Gaikwad</b> (CSK) | <b>Suryakumar Yadav</b>, <b>Rohit Sharma</b> (MI)<br/>"
+                      "• <b>Nicholas Pooran</b> (LSG) | <b>Matheesha Pathirana</b> (KKR, bought Dec 2025)", table_cell),
+            Paragraph("<b>Unavailable or core 2026 assets.</b> Nathan Ellis is officially contracted to SRH for IPL 2027. "
+                      "Pathirana (KKR), Gaikwad (CSK), SKY/Rohit (MI), and Pooran (LSG) serve as statistical archetype benchmarks.", table_cell)
         ],
         [
-            Paragraph("<b>Global Analytical Benchmarks</b>", table_cell_bold),
-            Paragraph("• <b>Haris Rauf</b> (Fast Bowler)<br/>"
-                      "• <b>Fakhar Zaman</b> (Top Order)<br/>"
-                      "• <b>Abbas Afridi</b> (Change-of-Pace)<br/>"
-                      "• <b>Sufiyan Muqeem</b> (Mystery Wrist-Spin)", table_cell),
-            Paragraph("<b>Ineligible for IPL</b> under longstanding BCCI policy. Evaluated strictly as international "
-                      "calibration benchmarks to ensure the PRESSUREIQ framework is validated against the absolute "
-                      "highest global standards of T20 bowling pace and mystery spin.", table_cell)
+            Paragraph("<b>Global Analytical Benchmarks (Policy/Eligibility Review)</b>", table_cell_bold),
+            Paragraph("• <b>Haris Rauf</b>, <b>Fakhar Zaman</b>, <b>Abbas Afridi</b>, <b>Sufiyan Muqeem</b>", table_cell),
+            Paragraph("<b>Ineligible for IPL</b> under prevailing BCCI/geopolitical policy since 2008. Evaluated strictly as global pace and mystery-spin calibration benchmarks.", table_cell)
         ]
     ]
 
-    t_strat = Table(strat_table_data, colWidths=[100, 160, 244])
+    t_strat = Table(strat_table_data, colWidths=[105, 165, 234])
     t_strat.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0f2a4a")),
         ("ALIGN", (0, 0), (-1, -1), "LEFT"),
@@ -441,14 +424,11 @@ def build_pdf():
     story.append(t_strat)
 
     story.append(Spacer(1, 10))
-    story.append(Paragraph("5.2 Recommended Tactical Blueprints for RR IPL 2027", h2_style))
+    story.append(Paragraph("5.2 Conditional Tactical Blueprints (Contingent on Nov 17 Releases)", h2_style))
     story.append(Paragraph(
-        "1. <b>The Death-Overs Tandem:</b> Deploy <b>Nathan Ellis</b> (Overseas) alongside <b>Sandeep Sharma</b> (Domestic). "
-        "Ellis's dipped yorkers and slower-ball variations in overs 18 and 20 prevent the boundary leaking that cost RR playoff games.<br/>"
-        "2. <b>The Lower-Order Finishing Engine:</b> Sign <b>Romario Shepherd</b> to bat at #7 following Shimron Hetmyer and Dhruv Jurel. "
-        "Shepherd's 482 career high-pressure balls and 159.3 death strike rate provide insurance against late-innings collapses.<br/>"
-        "3. <b>Jaipur Boundary Exploitation:</b> Target <b>Liam Dawson</b> as an overseas spinning asset. His 7.38 Powerplay economy "
-        "and flat trajectory allow RR to squeeze opposition top orders when defending totals at Sawai Mansingh Stadium.",
+        "1. <b>Spin &amp; Left-Arm Seam Watchlist:</b> Uncontracted Model A performers <b>Liam Dawson</b> (#1 Bowler) and <b>Shoriful Islam</b> (#9 Bowler) provide Jaipur-suited finger spin and left-arm death execution.<br/>"
+        "2. <b>Benchmarked Death Role:</b> Because <b>Nathan Ellis</b> joined SRH via the confirmed 5 Nov 2026 trade, use his death-overs profile as the statistical target when screening Nov 17 released pacers.<br/>"
+        "3. <b>Rostered &amp; Watchlist Youth:</b> Existing RR assets <b>Vaibhav Sooryavanshi</b> and <b>Vignesh Puthur</b> pair with Nov 17 domestic watchlist monitoring (<b>Naman Dhir</b>, <b>Prince Yadav</b>).",
         body_style
     ))
 
@@ -466,33 +446,28 @@ def build_pdf():
     story.append(Paragraph(
         "As proven in the 2,000 match-clustered bootstrap challenge:<br/>"
         "• <b>Phil Salt</b> ([14.5, 98.6]) and <b>Rohit Sharma</b> ([60.0, 98.2]) exhibit wide intervals because their high-pressure "
-        "deliveries are concentrated in very few matches (4 matches for Salt, 3 for Rohit). When these matches are omitted in cluster "
-        "sampling, their pressure volume drops below the 30-ball eligibility threshold, causing scores to drop.<br/>"
-        "• <b>Haris Rauf</b> (444 HP balls across 40 matches) and <b>Romario Shepherd</b> (482 HP balls across 53 matches) represent "
-        "the most stable profiles in the entire competition pool, with tight bootstrap distributions.",
+        "deliveries are concentrated in few matches. When these matches are omitted in cluster sampling, their pressure volume drops.<br/>"
+        "• <b>Haris Rauf</b> (444 HP balls) and <b>Romario Shepherd</b> (482 HP balls) exhibit tight bootstrap distributions.",
         body_style
     ))
 
     story.append(Paragraph("6.2 Future Methodological Evolution (The Hybrid Roadmap)", h2_style))
     story.append(Paragraph(
-        "To address sample boundaries in future iterations, research was conducted on the <b>Continuous Delivery Pressure Index (CDPI)</b> "
-        "and <b>Win-Probability Leverage (WPL)</b>. CDPI replaces arbitrary discrete thresholds with continuous bell-curve weighting "
-        "($\\mu = 10.5, \\sigma = 3.8$) and smooth blowout discounts, increasing effective sample size by $2.5\\times$. "
-        "In accordance with strict competition governance, Model A remains the frozen baseline for official rankings, "
-        "while CDPI is documented as the technical evolution for future seasons.",
+        "To address hard step-cutoff cliffs and blowout BoPI inversion in future iterations, research was conducted on the <b>Continuous Delivery Pressure Index (CDPI)</b> "
+        "with smooth sigmoid weighting (center 42.0, scale 8.0), smooth blowout discount (center 4.5, scale 1.0), and Kish Effective Sample Size (ESS). "
+        "Model A remains the frozen baseline for official competition rankings (109 batters, 147 bowlers).",
         body_style
     ))
 
     story.append(Paragraph("7. Certified Reproducibility & Audit Provenance", h1_style))
     story.append(Paragraph(
-        "PRESSUREIQ guarantees 100% byte-for-byte reproducibility across all environments:<br/>"
+        "PRESSUREIQ preserves complete provenance and hash verification across baseline and remediation branches:<br/>"
         "• <b>Raw Data Integrity:</b> All 6 raw CSV files pass SHA-256 checksum verification against official data pack.<br/>"
         "• <b>Official Rankings Checksums:</b><br/>"
-        "  - <code>final_batter_rankings.csv</code>: <code>887f0c104047eb7b5c7d662b83600bacaf6263fa7162fc343b27800760b99b87</code><br/>"
-        "  - <code>final_bowler_rankings.csv</code>: <code>344d63c55cecc7bce9de3cd06d82b6ac8217fcd448bb3f2e93d55da314f1e7bb</code><br/>"
-        "• <b>Test Suite:</b> 52 / 52 pytest unit and integration tests pass (100% green in 13.53s).<br/>"
-        "• <b>Interactive Dashboard:</b> Headless Streamlit verification exits with code 0.<br/>"
-        "• <b>Submission Package:</b> <code>PRESSUREIQ_Final_Submission.zip</code> (SHA-256: <code>0f62506a866344103a364e5afc855b5671a302ef9415f13a4f8473d66af4f1a1</code>).",
+        "  - <code>final_batter_rankings.csv</code> (109 rows): <code>887f0c104047eb7b5c7d662b83600bacaf6263fa7162fc343b27800760b99b87</code><br/>"
+        "  - <code>final_bowler_rankings.csv</code> (147 rows): <code>344d63c55cecc7bce9de3cd06d82b6ac8217fcd448bb3f2e93d55da314f1e7bb</code><br/>"
+        "• <b>Frozen Baseline Archive:</b> <code>PRESSUREIQ_Final_Submission.zip</code> (569 files, 62,296,913 bytes; SHA-256: <code>76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db</code>).<br/>"
+        "• <b>Updated 14-Page Competition Report:</b> <code>docs/PRESSUREIQ_FINAL_METHODOLOGY_REPORT.pdf</code>.",
         body_style
     ))
 

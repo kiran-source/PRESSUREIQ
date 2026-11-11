@@ -27,7 +27,7 @@ Re-evaluation on identical 2026 held-out records reveals the true empirical perf
 | **Delivery Outcome** | **Boundary Probability** | 33,082 | **0.1603** (Brier) | **0.1576** (LightGBM Brier) | -1.7% Brier, AUC 0.5995 |
 | **Delivery Outcome** | **Dismissal Probability** | 33,082 | **0.0506** (Brier) | **0.0496** (LightGBM Brier) | -2.0% Brier, AUC 0.5909 |
 | **Delivery Outcome** | **Expected Runs** | 33,082 | **1.8075** (RMSE) | **1.7919** (LightGBM RMSE) | -0.0156 runs/ball |
-| **Match Leverage** | **2nd Innings Win Prob** | 15,614 | **0.1162** (Brier) | **0.1134** (Logistic Brier) | -2.4% Brier, AUC 0.8016 |
+| **Match Leverage** | **2nd Innings Win Prob** | 15,614 | **0.2185** (Stratified Brier) | **0.1866** (Logistic Brier) | -14.6% Brier, AUC 0.8016 |
 
 Both models were evaluated on **strictly identical records** with zero test-fold contamination.
 
@@ -86,8 +86,8 @@ python scripts/reproduce_ml_metrics.py
 1. EXPECTED OUTCOMES REPRODUCTION (DELIVERY-LEVEL)
 ==========================================================================================
 Dataset split: Train (<=2024) = 120,243, Val (2025) = 47,636, Test (2026) = 33,082
-Boundary Prob (Test 2026): Baseline Brier = 0.1603 | LightGBM Brier = 0.1576
-Dismissal Prob (Test 2026): Baseline Brier = 0.0506 | LightGBM Brier = 0.0496
+Boundary Prob (Test 2026): Baseline Brier = 0.1603 (AUC=0.5679) | LightGBM Brier = 0.1576 (AUC=0.5995)
+Dismissal Prob (Test 2026): Baseline Brier = 0.0506 (AUC=0.5680) | LightGBM Brier = 0.0496 (AUC=0.5909)
 Expected Runs (Test 2026):  Baseline RMSE  = 1.8075 | LightGBM RMSE  = 1.7919
 
 ==========================================================================================
@@ -95,21 +95,21 @@ Expected Runs (Test 2026):  Baseline RMSE  = 1.8075 | LightGBM RMSE  = 1.7919
 ==========================================================================================
 2nd Innings split: Train = 57,396, Val = 22,224, Test = 15,614
 Full Test 2026 (N=15,614):
-  Unconditional Chase Baseline Brier: 0.1185
-  Stratified Context Baseline Brier:  0.1162
-  Logistic Win-Prob Model Brier:      0.1134
+  Unconditional Chase Baseline Brier: 0.2419
+  Stratified Context Baseline Brier:  0.2185
+  Logistic Win-Prob Model Brier:      0.1866
 
 Powerplay Sub-Population (N=5,120):
-  Stratified Context Baseline Brier:  0.1199
-  Logistic Win-Prob Model Brier:      0.1226
+  Stratified Context Baseline Brier:  0.2378
+  Logistic Win-Prob Model Brier:      0.2301
 ```
 
 ---
 
 ## 5. Verification of Zero Test-Fold Leakage
 
-1. **No In-Sample Contamination:** Neither LightGBM nor the Logistic regression model saw a single delivery from the 2026 test fold during training.
+1. **No In-Sample Contamination:** Neither LightGBM nor the Logistic regression model saw a single delivery from the 2026 test fold during training, and LightGBM metrics above are evaluated live via `engine.preprocess_features(test_df, fit=False)`.
 2. **Categorical Preprocessing Isolation:** Ordinal encoders were fitted strictly on the $\le 2024$ slice. Any novel categories appearing in 2025 or 2026 were assigned the unknown index `-1`.
-3. **Platt Calibration Isolation:** Temperature/Platt scaling parameters were fitted strictly on the 2025 validation fold and evaluated out-of-sample on 2026.
-4. **Conclusion:** While the previously reported `0.1982 vs 0.2291` comparison was incorrect and is now formally retracted, the genuine ML models demonstrate rigorous, statistically significant out-of-sample superiority over context baselines across all prediction targets on identical records.
+3. **Chronological Chase Label Fix (`cum_team_runs`):** Following the CodeRabbit remediation fixing `bat_won` from `team_runs_before` last to `cum_team_runs` max, 2nd-innings test Brier improved cleanly from stratified baseline `0.2185` to logistic regression `0.1866`. Note also that 2025 Platt scaling slightly worsened 2026 ECE (`0.0894 -> 0.0963`), so raw un-Platt-scaled chronological logistic probabilities remain preferred (`hybrid_validation_gate.py`).
+4. **Conclusion:** While the previously reported `0.1982 vs 0.2291` comparison was incorrect and is now formally retracted, the genuine ML models demonstrate rigorous out-of-sample superiority over context baselines across all prediction targets on identical records.
 

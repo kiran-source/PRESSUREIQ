@@ -417,24 +417,24 @@ def build_pdf():
     
     story.append(Paragraph("Mathematical Formulation", h2_style))
     pava_math = """
-    $$\\text{PAVA}_{\\text{batter}, t} = (R_t - \\mathbb{E}[R_t]) - \\lambda_{\\text{wicket}}(\\text{Phase}_t) \\cdot (W_t - \\mathbb{P}(W_t))$$
+    <b>PAVA_batter,t</b> = (R_t - E[R_t]) + V_W(Phase_t) * (P(W_t) - W_t) + 0.50 * (I_bnd,t - P(Bnd_t))
     <br/>
-    $$\\text{PAVA}_{\\text{bowler}, t} = (\\mathbb{E}[R_t] - R_t) + \\lambda_{\\text{wicket}}(\\text{Phase}_t) \\cdot (W_t - \\mathbb{P}(W_t))$$
+    <b>PAVA_bowler,t</b> = (E[R_t] - R_t) + V_W(Phase_t) * (W_t - P(W_t))
     <br/>
-    Where $R_t$ is runs scored off the bat, $\\mathbb{E}[R_t]$ is the expected runs from the LightGBM baseline, $W_t \\in \\{0, 1\\}$ indicates a dismissal credited to the bowler, and $\\mathbb{P}(W_t)$ is the predicted wicket probability.
+    Where R_t is runs scored off the bat, E[R_t] is the expected runs from the LightGBM baseline, W_t in {0, 1} indicates a dismissal credited to the bowler, and P(W_t) is the predicted wicket probability.
     """
     story.append(Paragraph(pava_math, body_style))
     story.append(Spacer(1, 6))
     
-    story.append(Paragraph("Phase-Conditioned Wicket Weights ($\\lambda_{\\text{wicket}}$)", h2_style))
+    story.append(Paragraph("Phase-Conditioned Wicket Weights V_W(phase)", h2_style))
     lambda_text = """
     In traditional cricket metrics, a wicket is treated as a static event. In reality, losing a top-order anchor in the powerplay caps the total innings ceiling, whereas losing an aggressive slogger in the 20th over has negligible marginal cost compared to hitting a boundary.
     <br/><br/>
-    PRESSUREIQ calibrates dynamic wicket weights based on empirical run-expectancy matrix shifts:
+    PRESSUREIQ calibrates dynamic wicket weights based on empirical run-expectancy matrix shifts (CANONICAL_MODEL_SPECIFICATION.md):
     <br/>
-    • <b>Powerplay (Overs 1–6):</b> $\\lambda = 3.5\\text{ runs}$ (Severe penalty; preserves top-order wicket survival value).<br/>
-    • <b>Middle Overs (Overs 7–15):</b> $\\lambda = 4.2\\text{ runs}$ (Maximum penalty; premature tail exposure collapses innings).<br/>
-    • <b>Death Overs (Overs 16–20):</b> $\\lambda = 2.8\\text{ runs}$ (Reduced penalty; rewards boundary maximization over dot-ball survival).
+    • <b>Powerplay (Overs 1–6):</b> V_W = <b>5.20 runs</b> (Severe penalty; preserves top-order wicket survival value).<br/>
+    • <b>Middle Overs (Overs 7–15):</b> V_W = <b>4.50 runs</b> (Substantial penalty balancing consolidation and wicket preservation).<br/>
+    • <b>Death Overs (Overs 16–20):</b> V_W = <b>3.60 runs</b> (Lowered penalty; rewards boundary maximization over dot-ball survival).
     """
     story.append(Paragraph(lambda_text, body_style))
     story.append(Spacer(1, 6))
@@ -456,18 +456,20 @@ def build_pdf():
     p7_text = """
     A primary discovery of our research is that summary clutch scores mask critical behavioral trajectories. Two players can possess identical aggregate clutch averages while exhibiting opposite psychological profiles when pressure escalates from high to extreme.
     <br/><br/>
-    We model each player's <b>Pressure Response Curve (PRC)</b> via linear quantile regression of delivery PAVA against continuous pressure $P_t \\in [0, 100]$:
-    $$\\text{PAVA}_{i, t} = \\alpha_i + \\beta_i P_t + \\epsilon_{i, t}$$
-    The slope coefficient $\\beta_i$ categorizes players into three empirically verified archetypes:
+    We model each player's <b>Pressure Response Curve (PRC)</b> via Ordinary Least Squares linear regression (scipy.stats.linregress) of raw delivery PAVA against normalized pressure x = P_t / 100.0 in [0, 1]:
+    <br/>
+    <b>y(x) = alpha_i + beta_i * (P_t / 100.0)</b>
+    <br/>
+    The empirical slope coefficient beta_i and descriptive extreme/high-tier shifts classify players into archetypes:
     """
     story.append(Paragraph(p7_text, body_style))
     story.append(Spacer(1, 4))
     
     archetype_data = [
         [Paragraph("PRC Archetype", table_header), Paragraph("Mathematical Criterion", table_header), Paragraph("Behavioral Characteristics", table_header), Paragraph("Exemplar Players", table_header)],
-        [Paragraph("<b>Clutch Climber</b>", table_cell_bold), Paragraph("$\\beta_i > +0.05$", table_cell), Paragraph("Actively elevates output as pressure surges. Accelerates boundary hitting or wicket creation in crises.", table_cell), Paragraph("Ruturaj Gaikwad (+0.084)<br/>Naman Dhir (+0.078)<br/>Haris Rauf (+0.054)", table_cell)],
-        [Paragraph("<b>Ice Cold Anchor</b>", table_cell_bold), Paragraph("$|\\beta_i| \\le 0.05$", table_cell), Paragraph("Completely unshakable execution. Baseline productivity remains rock-solid whether RRR is 6.0 or 14.0.", table_cell), Paragraph("Jos Buttler (+0.018)<br/>Nathan Ellis (+0.014)<br/>Nicholas Pooran (+0.005)", table_cell)],
-        [Paragraph("<b>Pressure Fragile</b>", table_cell_bold), Paragraph("$\\beta_i < -0.05$", table_cell), Paragraph("Aggregates strong statistics in low leverage, but output deteriorates under extreme heat.", table_cell), Paragraph("Romario Shepherd (-0.068)<br/>Rovman Powell (-0.055)", table_cell)],
+        [Paragraph("<b>Clutch Climber</b>", table_cell_bold), Paragraph("beta_i &gt;= +0.15, p &lt;= 0.15", table_cell), Paragraph("Actively elevates output as pressure surges. Accelerates boundary hitting or wicket creation in crises.", table_cell), Paragraph("Ruturaj Gaikwad (+1.149)<br/>Naman Dhir (+1.246)<br/>Haris Rauf (+1.735)", table_cell)],
+        [Paragraph("<b>Ice Cold Anchor / Universal</b>", table_cell_bold), Paragraph("Invariant / Balanced across bands", table_cell), Paragraph("Steady execution. Baseline productivity remains resilient whether RRR is low or extreme.", table_cell), Paragraph("Jos Buttler (-0.054)<br/>Nathan Ellis (+0.115)<br/>Nicholas Pooran (-0.047)", table_cell)],
+        [Paragraph("<b>Pressure Fragile</b>", table_cell_bold), Paragraph("Ext collapse &lt;= -0.25 or beta &lt;= -0.30", table_cell), Paragraph("Aggregates strong production overall, with output dipping under extreme climax leverage.", table_cell), Paragraph("Romario Shepherd (+0.697 overall; ext dip)<br/>Climax-sensitive finishers", table_cell)],
     ]
     t_arch = Table(archetype_data, colWidths=[90, 84, 190, 140])
     t_arch.setStyle(TableStyle([
@@ -481,11 +483,10 @@ def build_pdf():
     
     story.append(Paragraph("Strategic Utility of PRC Archetypes for Rajasthan Royals", h2_style))
     arch_strategy_text = """
-    Understanding a player's PRC archetype transforms tactical decision-making:
-    <br/>
-    • <b>Deploying Clutch Climbers:</b> Players like Jitesh Sharma and Naman Dhir should be pushed up the order when chasing steep targets (RRR > 11.0), as their strokeplay improves as pressure mounts.<br/>
-    • <b>Deploying Ice Cold Anchors:</b> Jos Buttler and Nathan Ellis provide structural equilibrium. They should be tasked with stabilizing unpredictable match phases.<br/>
-    • <b>Managing Pressure Fragile Assets:</b> Romario Shepherd is ranked #5 due to massive run production in overs 15–18. However, his negative PRC slope warns RR management <i>never</i> to leave him as the solitary savior requiring 18 runs off the final over.
+    Understanding a player's PRC archetype informs tactical role design:<br/>
+    • <b>Clutch Climbers (e.g., Jitesh Sharma, Naman Dhir):</b> Improve relative to expected par under rising leverage; monitor Nov 17 availability.<br/>
+    • <b>Ice Cold Anchors (e.g., Jos Buttler, Nathan Ellis):</b> Provide structural equilibrium; note Ellis is SRH-bound via Confirmed Trade (5 Nov) while Buttler is GT-contracted pending Nov 17.<br/>
+    • <b>Managing Climax-Sensitive Assets:</b> Romario Shepherd ranks #5 across 482 HP balls in bulk overs, while showing extreme-band sensitivity.
     """
     story.append(Paragraph(arch_strategy_text, body_style))
     story.append(PageBreak())
@@ -497,11 +498,13 @@ def build_pdf():
     story.append(HRFlowable(width="100%", thickness=0.75, color=c_pink, spaceBefore=2, spaceAfter=8))
     
     p8_text = """
-    Sports datasets suffer severely from small-sample distortion: an uncapped batter facing 8 deliveries under extreme pressure who hits two lucky boundaries will display an astronomical raw PAVA.
+    Sports datasets suffer severely from small-sample distortion: a player facing few deliveries under high pressure who benefits from variance will display an inflated raw PAVA.
     <br/><br/>
-    PRESSUREIQ implements Empirical Bayes Shrinkage (EBS) to regularize small samples toward empirical cohort priors:
-    $$\\hat{\\theta}_i = \\frac{n_i}{n_i + K} \\bar{y}_i + \\frac{K}{n_i + K} \\mu_0$$
-    Where $\\bar{y}_i$ is observed high-pressure PAVA, $n_i$ is delivery count ($P_t \\ge 60$), $\\mu_0 = 0.0$ is the cohort prior, and $K$ is the marginal maximum likelihood shrinkage constant ($K_{\\text{bat}} = 45$, $K_{\\text{bowl}} = 60$).
+    PRESSUREIQ implements Empirical Bayes Shrinkage (EBS) to regularize small samples toward neutral replacement priors (mu_0 = 0.0):
+    <br/>
+    <b>theta_hat_i = [n_i / (n_i + K)] * y_bar_i + [K / (n_i + K)] * mu_0</b>
+    <br/>
+    Where y_bar_i is observed high-pressure raw PAVA, n_i is the operational high-pressure delivery count (P_t &gt;= 50), mu_0 = 0.0, and K = 45.0 pseudo-deliveries for both batters and bowlers (src/analysis/reliability_engine.py).
     """
     story.append(Paragraph(p8_text, body_style))
     story.append(Spacer(1, 6))
@@ -591,17 +594,17 @@ def build_pdf():
     story.append(Spacer(1, 4))
     
     b_data = [
-        [Paragraph("Rank", table_header), Paragraph("Player Name", table_header), Paragraph("Role", table_header), Paragraph("Score", table_header), Paragraph("HP Balls", table_header), Paragraph("Matches", table_header), Paragraph("95% CI", table_header), Paragraph("PRC Archetype", table_header), Paragraph("Strategic Context for RR", table_header)],
-        [Paragraph("<b>1</b>", table_cell_bold), Paragraph("Ruturaj Gaikwad", table_cell), Paragraph("Top Order", table_cell), Paragraph("<b>97.71</b>", table_cell_bold), Paragraph("45", table_cell), Paragraph("77", table_cell), Paragraph("[76.3, 99.1]", table_cell), Paragraph("Climber (+0.084)", table_cell), Paragraph("Opposition Benchmark (CSK Retained)", table_cell)],
-        [Paragraph("<b>2</b>", table_cell_bold), Paragraph("Rohit Sharma", table_cell), Paragraph("Top Order", table_cell), Paragraph("<b>95.27</b>", table_cell_bold), Paragraph("35", table_cell), Paragraph("91", table_cell), Paragraph("[60.0, 98.2]", table_cell), Paragraph("Climber (+0.076)", table_cell), Paragraph("Opposition Benchmark (MI Retained)", table_cell)],
-        [Paragraph("<b>3</b>", table_cell_bold), Paragraph("Fakhar Zaman", table_cell), Paragraph("Top Order", table_cell), Paragraph("<b>95.25</b>", table_cell_bold), Paragraph("52", table_cell), Paragraph("47", table_cell), Paragraph("[52.5, 98.4]", table_cell), Paragraph("Climber (+0.071)", table_cell), Paragraph("Global Benchmark (PAK / Ineligible)", table_cell)],
-        [Paragraph("<b>4</b>", table_cell_bold), Paragraph("Suryakumar Yadav", table_cell), Paragraph("Middle", table_cell), Paragraph("<b>94.68</b>", table_cell_bold), Paragraph("236", table_cell), Paragraph("139", table_cell), Paragraph("[66.7, 98.6]", table_cell), Paragraph("Climber (+0.065)", table_cell), Paragraph("Opposition Benchmark (MI Retained)", table_cell)],
-        [Paragraph("<b>5</b>", table_cell_bold), Paragraph("Romario Shepherd", table_cell), Paragraph("Finisher", table_cell), Paragraph("<b>93.69</b>", table_cell_bold), Paragraph("482", table_cell), Paragraph("68", table_cell), Paragraph("[71.3, 97.6]", table_cell), Paragraph("Fragile (-0.068)", table_cell), Paragraph("<b>Prime Acquisition Target</b> (#7 Finisher)", table_cell_bold)],
-        [Paragraph("<b>6</b>", table_cell_bold), Paragraph("Naman Dhir", table_cell), Paragraph("Top/Middle", table_cell), Paragraph("<b>93.30</b>", table_cell_bold), Paragraph("184", table_cell), Paragraph("46", table_cell), Paragraph("[58.1, 98.1]", table_cell), Paragraph("Climber (+0.078)", table_cell), Paragraph("<b>Emerging Target</b> (MI Young Core)", table_cell_bold)],
-        [Paragraph("<b>7</b>", table_cell_bold), Paragraph("Phil Salt", table_cell), Paragraph("Top Order", table_cell), Paragraph("<b>93.01</b>", table_cell_bold), Paragraph("49", table_cell), Paragraph("84", table_cell), Paragraph("[14.5, 98.6]", table_cell), Paragraph("Anchor (+0.012)", table_cell), Paragraph("High-Value Target (England / WK)", table_cell)],
-        [Paragraph("<b>8</b>", table_cell_bold), Paragraph("Jitesh Sharma", table_cell), Paragraph("Finisher", table_cell), Paragraph("<b>92.79</b>", table_cell_bold), Paragraph("218", table_cell), Paragraph("73", table_cell), Paragraph("[63.5, 97.7]", table_cell), Paragraph("Climber (+0.058)", table_cell), Paragraph("<b>Prime Domestic Target</b> (Indian WK)", table_cell_bold)],
-        [Paragraph("<b>9</b>", table_cell_bold), Paragraph("Nicholas Pooran", table_cell), Paragraph("Middle", table_cell), Paragraph("<b>92.58</b>", table_cell_bold), Paragraph("300", table_cell), Paragraph("115", table_cell), Paragraph("[68.3, 97.5]", table_cell), Paragraph("Anchor (+0.005)", table_cell), Paragraph("Opposition Benchmark (LSG Retained)", table_cell)],
-        [Paragraph("<b>10</b>", table_cell_bold), Paragraph("Jos Buttler", table_cell), Paragraph("Top Order", table_cell), Paragraph("<b>92.45</b>", table_cell_bold), Paragraph("99", table_cell), Paragraph("121", table_cell), Paragraph("[40.6, 98.4]", table_cell), Paragraph("Anchor (+0.018)", table_cell), Paragraph("<b>RR Priority Asset</b> (Franchise Pillar)", table_cell_bold)],
+        [Paragraph("Rank", table_header), Paragraph("Player Name", table_header), Paragraph("Role", table_header), Paragraph("Score", table_header), Paragraph("HP Balls", table_header), Paragraph("Matches", table_header), Paragraph("95% CI", table_header), Paragraph("PRC Archetype", table_header), Paragraph("Strategic Context (Nov 11 Audit)", table_header)],
+        [Paragraph("<b>1</b>", table_cell_bold), Paragraph("Ruturaj Gaikwad", table_cell), Paragraph("Top Order", table_cell), Paragraph("<b>97.71</b>", table_cell_bold), Paragraph("45", table_cell), Paragraph("77", table_cell), Paragraph("[76.3, 99.1]", table_cell), Paragraph("Climber (+1.149)", table_cell), Paragraph("CSK 2026 (Pending Nov 17)", table_cell)],
+        [Paragraph("<b>2</b>", table_cell_bold), Paragraph("Rohit Sharma", table_cell), Paragraph("Top Order", table_cell), Paragraph("<b>95.27</b>", table_cell_bold), Paragraph("35", table_cell), Paragraph("91", table_cell), Paragraph("[60.0, 98.2]", table_cell), Paragraph("Climber (+1.083)", table_cell), Paragraph("MI 2026 (Pending Nov 17)", table_cell)],
+        [Paragraph("<b>3</b>", table_cell_bold), Paragraph("Fakhar Zaman", table_cell), Paragraph("Top Order", table_cell), Paragraph("<b>95.25</b>", table_cell_bold), Paragraph("52", table_cell), Paragraph("47", table_cell), Paragraph("[52.5, 98.4]", table_cell), Paragraph("Climber (+1.072)", table_cell), Paragraph("Global Benchmark (Policy Review)", table_cell)],
+        [Paragraph("<b>4</b>", table_cell_bold), Paragraph("Suryakumar Yadav", table_cell), Paragraph("Middle", table_cell), Paragraph("<b>94.68</b>", table_cell_bold), Paragraph("236", table_cell), Paragraph("139", table_cell), Paragraph("[66.7, 98.6]", table_cell), Paragraph("Climber (+0.795)", table_cell), Paragraph("MI 2026 (Pending Nov 17)", table_cell)],
+        [Paragraph("<b>5</b>", table_cell_bold), Paragraph("Romario Shepherd", table_cell), Paragraph("Finisher", table_cell), Paragraph("<b>93.69</b>", table_cell_bold), Paragraph("482", table_cell), Paragraph("68", table_cell), Paragraph("[71.3, 97.6]", table_cell), Paragraph("Fragile (+0.697)", table_cell), Paragraph("RCB 2026 Watchlist (Pending Nov 17)", table_cell)],
+        [Paragraph("<b>6</b>", table_cell_bold), Paragraph("Naman Dhir", table_cell), Paragraph("Top/Middle", table_cell), Paragraph("<b>93.30</b>", table_cell_bold), Paragraph("184", table_cell), Paragraph("46", table_cell), Paragraph("[58.1, 98.1]", table_cell), Paragraph("Climber (+1.246)", table_cell), Paragraph("MI 2026 Watchlist (Pending Nov 17)", table_cell)],
+        [Paragraph("<b>7</b>", table_cell_bold), Paragraph("Phil Salt", table_cell), Paragraph("Top Order", table_cell), Paragraph("<b>93.01</b>", table_cell_bold), Paragraph("49", table_cell), Paragraph("84", table_cell), Paragraph("[14.5, 98.6]", table_cell), Paragraph("Anchor (-0.176)", table_cell), Paragraph("RCB 2026 Watchlist (Pending Nov 17)", table_cell)],
+        [Paragraph("<b>8</b>", table_cell_bold), Paragraph("Jitesh Sharma", table_cell), Paragraph("Finisher", table_cell), Paragraph("<b>92.79</b>", table_cell_bold), Paragraph("218", table_cell), Paragraph("73", table_cell), Paragraph("[63.5, 97.7]", table_cell), Paragraph("Climber (+1.709)", table_cell), Paragraph("RCB 2026 Watchlist (Pending Nov 17)", table_cell)],
+        [Paragraph("<b>9</b>", table_cell_bold), Paragraph("Nicholas Pooran", table_cell), Paragraph("Middle", table_cell), Paragraph("<b>92.58</b>", table_cell_bold), Paragraph("300", table_cell), Paragraph("115", table_cell), Paragraph("[68.3, 97.5]", table_cell), Paragraph("Anchor (-0.047)", table_cell), Paragraph("LSG 2026 (Pending Nov 17)", table_cell)],
+        [Paragraph("<b>10</b>", table_cell_bold), Paragraph("Jos Buttler", table_cell), Paragraph("Top Order", table_cell), Paragraph("<b>92.45</b>", table_cell_bold), Paragraph("99", table_cell), Paragraph("121", table_cell), Paragraph("[40.6, 98.4]", table_cell), Paragraph("Anchor (-0.054)", table_cell), Paragraph("GT 2026 (Pending Nov 17)", table_cell)],
     ]
     t_b = Table(b_data, colWidths=[24, 76, 46, 32, 38, 38, 56, 68, 126])
     t_b.setStyle(TableStyle([
@@ -614,7 +617,7 @@ def build_pdf():
     story.append(Spacer(1, 8))
     
     story.append(callout_box(
-        "<b>Batting Ranking Takeaway:</b> Ruturaj Gaikwad holds the highest score through unmatched run-chase conversion. Romario Shepherd and Jitesh Sharma emerge as the most impactful actionable targets for RR, while Naman Dhir proves that emerging talent can compete at the highest statistical tier.",
+        "<b>Batting Ranking Takeaway:</b> Ruturaj Gaikwad leads Model A on chase PAVA efficiency, while high-HP players Suryakumar Yadav, Romario Shepherd, Nicholas Pooran, and Jitesh Sharma sustain strong reliability across 200+ pressure deliveries. All IPL-contracted 2026 players remain <i>Pending Verification</i> until Nov 17.",
         "#EBF8FF", "#004BA0"
     ))
     story.append(PageBreak())
@@ -632,17 +635,17 @@ def build_pdf():
     story.append(Spacer(1, 4))
     
     w_data = [
-        [Paragraph("Rank", table_header), Paragraph("Player Name", table_header), Paragraph("Bowling Type", table_header), Paragraph("Score", table_header), Paragraph("HP Balls", table_header), Paragraph("Matches", table_header), Paragraph("95% CI", table_header), Paragraph("PRC Archetype", table_header), Paragraph("Strategic Context for RR", table_header)],
-        [Paragraph("<b>1</b>", table_cell_bold), Paragraph("Liam Dawson", table_cell), Paragraph("SLA Orthodox", table_cell), Paragraph("<b>95.39</b>", table_cell_bold), Paragraph("83", table_cell), Paragraph("22", table_cell), Paragraph("[74.2, 98.1]", table_cell), Paragraph("Climber (+0.068)", table_cell), Paragraph("High-Value Target (England Spin Depth)", table_cell)],
-        [Paragraph("<b>2</b>", table_cell_bold), Paragraph("Haris Rauf", table_cell), Paragraph("Right-arm Fast", table_cell), Paragraph("<b>92.36</b>", table_cell_bold), Paragraph("444", table_cell), Paragraph("48", table_cell), Paragraph("[71.1, 96.5]", table_cell), Paragraph("Climber (+0.054)", table_cell), Paragraph("Global Benchmark (PAK / Ineligible)", table_cell)],
-        [Paragraph("<b>3</b>", table_cell_bold), Paragraph("Abbas Afridi", table_cell), Paragraph("Right-arm Med-Fast", table_cell), Paragraph("<b>91.88</b>", table_cell_bold), Paragraph("232", table_cell), Paragraph("25", table_cell), Paragraph("[69.2, 95.7]", table_cell), Paragraph("Anchor (+0.021)", table_cell), Paragraph("Global Benchmark (PAK / Ineligible)", table_cell)],
-        [Paragraph("<b>4</b>", table_cell_bold), Paragraph("Nathan Ellis", table_cell), Paragraph("Right-arm Medium", table_cell), Paragraph("<b>91.84</b>", table_cell_bold), Paragraph("251", table_cell), Paragraph("43", table_cell), Paragraph("[70.9, 96.0]", table_cell), Paragraph("Anchor (+0.014)", table_cell), Paragraph("<b>Prime Acquisition Target</b> (Sandeep Partner)", table_cell_bold)],
-        [Paragraph("<b>5</b>", table_cell_bold), Paragraph("Sufiyan Muqeem", table_cell), Paragraph("Left-arm Wrist", table_cell), Paragraph("<b>91.41</b>", table_cell_bold), Paragraph("213", table_cell), Paragraph("25", table_cell), Paragraph("[64.4, 96.9]", table_cell), Paragraph("Anchor (+0.015)", table_cell), Paragraph("Global Benchmark (PAK / Ineligible)", table_cell)],
-        [Paragraph("<b>6</b>", table_cell_bold), Paragraph("Matheesha Pathirana", table_cell), Paragraph("Right-arm Fast", table_cell), Paragraph("<b>91.11</b>", table_cell_bold), Paragraph("400", table_cell), Paragraph("54", table_cell), Paragraph("[70.3, 95.1]", table_cell), Paragraph("Anchor (+0.018)", table_cell), Paragraph("Opposition Benchmark (CSK Retained)", table_cell)],
-        [Paragraph("<b>7</b>", table_cell_bold), Paragraph("Nasum Ahmed", table_cell), Paragraph("SLA Orthodox", table_cell), Paragraph("<b>90.77</b>", table_cell_bold), Paragraph("122", table_cell), Paragraph("29", table_cell), Paragraph("[57.0, 98.2]", table_cell), Paragraph("Climber (+0.052)", table_cell), Paragraph("High-Value Target (Bangladesh Finger Spin)", table_cell)],
-        [Paragraph("<b>8</b>", table_cell_bold), Paragraph("Ishant Sharma", table_cell), Paragraph("Right-arm Fast-Med", table_cell), Paragraph("<b>90.42</b>", table_cell_bold), Paragraph("64", table_cell), Paragraph("24", table_cell), Paragraph("[72.4, 94.3]", table_cell), Paragraph("Anchor (-0.005)", table_cell), Paragraph("Veteran Indian Pace Depth Target", table_cell)],
-        [Paragraph("<b>9</b>", table_cell_bold), Paragraph("Shoriful Islam", table_cell), Paragraph("Left-arm Med-Fast", table_cell), Paragraph("<b>90.36</b>", table_cell_bold), Paragraph("279", table_cell), Paragraph("39", table_cell), Paragraph("[65.4, 96.6]", table_cell), Paragraph("Anchor (+0.012)", table_cell), Paragraph("<b>Prime Acquisition Target</b> (Left-arm Death)", table_cell_bold)],
-        [Paragraph("<b>10</b>", table_cell_bold), Paragraph("Tim Southee", table_cell), Paragraph("Right-arm Med-Fast", table_cell), Paragraph("<b>89.16</b>", table_cell_bold), Paragraph("300", table_cell), Paragraph("36", table_cell), Paragraph("[64.0, 95.5]", table_cell), Paragraph("Anchor (+0.008)", table_cell), Paragraph("Veteran Leadership & Death Seam Target", table_cell)],
+        [Paragraph("Rank", table_header), Paragraph("Player Name", table_header), Paragraph("Bowling Type", table_header), Paragraph("Score", table_header), Paragraph("HP Balls", table_header), Paragraph("Matches", table_header), Paragraph("95% CI", table_header), Paragraph("PRC Archetype", table_header), Paragraph("Strategic Context (Nov 11 Audit)", table_header)],
+        [Paragraph("<b>1</b>", table_cell_bold), Paragraph("Liam Dawson", table_cell), Paragraph("SLA Orthodox", table_cell), Paragraph("<b>95.39</b>", table_cell_bold), Paragraph("83", table_cell), Paragraph("22", table_cell), Paragraph("[74.2, 98.1]", table_cell), Paragraph("Climber (+1.589)", table_cell), Paragraph("Uncontracted Overseas Watchlist", table_cell)],
+        [Paragraph("<b>2</b>", table_cell_bold), Paragraph("Haris Rauf", table_cell), Paragraph("Right-arm Fast", table_cell), Paragraph("<b>92.36</b>", table_cell_bold), Paragraph("444", table_cell), Paragraph("48", table_cell), Paragraph("[71.1, 96.5]", table_cell), Paragraph("Climber (+1.735)", table_cell), Paragraph("Global Benchmark (Policy Review)", table_cell)],
+        [Paragraph("<b>3</b>", table_cell_bold), Paragraph("Abbas Afridi", table_cell), Paragraph("Right-arm Med-Fast", table_cell), Paragraph("<b>91.88</b>", table_cell_bold), Paragraph("232", table_cell), Paragraph("25", table_cell), Paragraph("[69.2, 95.7]", table_cell), Paragraph("Anchor (+1.241)", table_cell), Paragraph("Global Benchmark (Policy Review)", table_cell)],
+        [Paragraph("<b>4</b>", table_cell_bold), Paragraph("Nathan Ellis", table_cell), Paragraph("Right-arm Medium", table_cell), Paragraph("<b>91.84</b>", table_cell_bold), Paragraph("251", table_cell), Paragraph("43", table_cell), Paragraph("[70.9, 96.0]", table_cell), Paragraph("Anchor (+0.115)", table_cell), Paragraph("<b>Confirmed Trade</b> (CSK -&gt; SRH Nov 5)", table_cell_bold)],
+        [Paragraph("<b>5</b>", table_cell_bold), Paragraph("Sufiyan Muqeem", table_cell), Paragraph("Left-arm Wrist", table_cell), Paragraph("<b>91.41</b>", table_cell_bold), Paragraph("213", table_cell), Paragraph("25", table_cell), Paragraph("[64.4, 96.9]", table_cell), Paragraph("Anchor (+0.173)", table_cell), Paragraph("Global Benchmark (Policy Review)", table_cell)],
+        [Paragraph("<b>6</b>", table_cell_bold), Paragraph("Matheesha Pathirana", table_cell), Paragraph("Right-arm Fast", table_cell), Paragraph("<b>91.11</b>", table_cell_bold), Paragraph("400", table_cell), Paragraph("54", table_cell), Paragraph("[70.3, 95.1]", table_cell), Paragraph("Anchor (+0.229)", table_cell), Paragraph("KKR 2026 Squad (Pending Nov 17)", table_cell)],
+        [Paragraph("<b>7</b>", table_cell_bold), Paragraph("Nasum Ahmed", table_cell), Paragraph("SLA Orthodox", table_cell), Paragraph("<b>90.77</b>", table_cell_bold), Paragraph("122", table_cell), Paragraph("29", table_cell), Paragraph("[57.0, 98.2]", table_cell), Paragraph("Climber (+2.010)", table_cell), Paragraph("Uncontracted Overseas Watchlist", table_cell)],
+        [Paragraph("<b>8</b>", table_cell_bold), Paragraph("Ishant Sharma", table_cell), Paragraph("Right-arm Fast-Med", table_cell), Paragraph("<b>90.42</b>", table_cell_bold), Paragraph("64", table_cell), Paragraph("24", table_cell), Paragraph("[72.4, 94.3]", table_cell), Paragraph("Anchor (+0.980)", table_cell), Paragraph("GT 2026 Watchlist (Pending Nov 17)", table_cell)],
+        [Paragraph("<b>9</b>", table_cell_bold), Paragraph("Shoriful Islam", table_cell), Paragraph("Left-arm Med-Fast", table_cell), Paragraph("<b>90.36</b>", table_cell_bold), Paragraph("279", table_cell), Paragraph("39", table_cell), Paragraph("[65.4, 96.6]", table_cell), Paragraph("Anchor (+1.123)", table_cell), Paragraph("Uncontracted Overseas Watchlist", table_cell)],
+        [Paragraph("<b>10</b>", table_cell_bold), Paragraph("Tim Southee", table_cell), Paragraph("Right-arm Med-Fast", table_cell), Paragraph("<b>89.16</b>", table_cell_bold), Paragraph("300", table_cell), Paragraph("36", table_cell), Paragraph("[64.0, 95.5]", table_cell), Paragraph("Anchor (+0.389)", table_cell), Paragraph("Uncontracted Veteran Watchlist", table_cell)],
     ]
     t_w = Table(w_data, colWidths=[24, 76, 60, 32, 38, 38, 56, 64, 116])
     t_w.setStyle(TableStyle([
@@ -655,7 +658,7 @@ def build_pdf():
     story.append(Spacer(1, 8))
     
     story.append(callout_box(
-        "<b>Bowling Ranking Takeaway:</b> Nathan Ellis represents the single highest-value actionable bowling acquisition in world cricket for Rajasthan Royals, delivering ice-cold yorker execution to partner Sandeep Sharma in overs 18–20. Liam Dawson leads spin control, while Shoriful Islam offers a potent left-arm death angle.",
+        "<b>Bowling Ranking Takeaway:</b> Liam Dawson leads Model A on defensive finger spin, while Nathan Ellis (#4, traded CSK -> SRH Nov 5) and Matheesha Pathirana (#6, KKR 2026 squad) set the statistical benchmark for death-overs pace execution.",
         "#EBF8FF", "#004BA0"
     ))
     story.append(PageBreak())
@@ -713,11 +716,11 @@ def build_pdf():
     
     story.append(Paragraph("Solving Rajasthan Royals' Four Critical Tactical Deficits", h2_style))
     rr_gaps_data = [
-        [Paragraph("Tactical Deficit", table_header), Paragraph("The Tactical Problem", table_header), Paragraph("PRESSUREIQ Solution", table_header), Paragraph("Operational Impact", table_header)],
-        [Paragraph("<b>Deficit 1: Death Partner for Sandeep</b>", table_cell_bold), Paragraph("Over-reliance on Sandeep Sharma in overs 18–20 leaves RR vulnerable if attacked.", table_cell), Paragraph("<b>Nathan Ellis</b> (Bowler #4)<br/><b>Shoriful Islam</b> (Bowler #9)", table_cell_bold), Paragraph("Guarantees 24 balls of wide-yorkers and reverse swing at death.", table_cell)],
-        [Paragraph("<b>Deficit 2: #7 Seam Power Finisher</b>", table_cell_bold), Paragraph("Lack of power hitting at #7 causes collapses when top 4 depart.", table_cell), Paragraph("<b>Romario Shepherd</b> (Batter #5)<br/><b>Jason Holder</b> (Near Miss #13)", table_cell_bold), Paragraph("Provides 185+ death strike rate and 138 km/h seam overs.", table_cell)],
-        [Paragraph("<b>Deficit 3: The Jaipur Squeeze</b>", table_cell_bold), Paragraph("Need economical finger spin to suffocate middle overs at SMS Stadium.", table_cell), Paragraph("<b>Harpreet Brar</b> (Bowler #14)<br/><b>Liam Dawson</b> (Bowler #1)", table_cell_bold), Paragraph("Bowls flat 95 km/h stump-to-stump trajectories; forces false shots.", table_cell)],
-        [Paragraph("<b>Deficit 4: Domestic Pace Depth</b>", table_cell_bold), Paragraph("Fragility behind Prasidh Krishna across the 14-match IPL grind.", table_cell), Paragraph("<b>Prince Yadav</b> (Bowler #11)<br/><b>Rasikh Salam</b> (Bowler #20)", table_cell_bold), Paragraph("High-ceiling domestic pacers bowling 140+ km/h; preserves overseas slots.", table_cell)],
+        [Paragraph("Tactical Deficit", table_header), Paragraph("The Tactical Problem", table_header), Paragraph("PRESSUREIQ Solution (Nov 11 Audit)", table_header), Paragraph("Operational Impact", table_header)],
+        [Paragraph("<b>Deficit 1: Death Partner Benchmarked</b>", table_cell_bold), Paragraph("Over-reliance on Sandeep Sharma in overs 18–20 requires contingency screening.", table_cell), Paragraph("<b>Shoriful Islam</b> (Bowler #9, Watchlist)<br/><i>Benchmark: Nathan Ellis (SRH Confirmed Trade)</i>", table_cell_bold), Paragraph("Provides left-arm angle at death while benchmarking against SRH-traded Ellis.", table_cell)],
+        [Paragraph("<b>Deficit 2: #7 Seam Power Finisher</b>", table_cell_bold), Paragraph("Lack of power hitting at #7 risks collapses when top 4 depart.", table_cell), Paragraph("<b>Romario Shepherd</b> (RCB 2026 Watchlist)<br/><b>Jason Holder</b> (Near Miss #13)", table_cell_bold), Paragraph("Conditional targets pending 17 Nov official franchise release lists.", table_cell)],
+        [Paragraph("<b>Deficit 3: The Jaipur Squeeze</b>", table_cell_bold), Paragraph("Need economical finger spin to suffocate middle overs at SMS Stadium.", table_cell), Paragraph("<b>Liam Dawson</b> (Bowler #1, Uncontracted)<br/><b>Harpreet Brar</b> (PBKS 2026 Watchlist)", table_cell_bold), Paragraph("Bowls flat stump-to-stump trajectories suited to large SMS square pockets.", table_cell)],
+        [Paragraph("<b>Deficit 4: Domestic Pace Depth</b>", table_cell_bold), Paragraph("Domestic pace contingency for the 14-match IPL season.", table_cell), Paragraph("<b>Prince Yadav</b> (LSG 2026 Watchlist)<br/><b>Rasikh Salam</b> (Bowler #20)", table_cell_bold), Paragraph("Monitors emerging domestic death pacers pending Nov 17 retention filings.", table_cell)],
     ]
     t_rr = Table(rr_gaps_data, colWidths=[100, 134, 130, 140])
     t_rr.setStyle(TableStyle([
@@ -729,12 +732,11 @@ def build_pdf():
     story.append(t_rr)
     story.append(Spacer(1, 6))
     
-    story.append(Paragraph("Projected Rajasthan Royals High-Pressure Starting XI (IPL 2027)", h2_style))
+    story.append(Paragraph("Illustrative Rajasthan Royals Scenario Blueprint (Contingent on Nov 17 Releases)", h2_style))
     xi_text = """
-    <b>1. Yashasvi Jaiswal</b> (Retained Core) &nbsp;|&nbsp; <b>2. Jos Buttler / Phil Salt [OS]</b> &nbsp;|&nbsp; <b>3. Sanju Samson (C/WK)</b><br/>
-    <b>4. Riyan Parag</b> (Retained Core) &nbsp;|&nbsp; <b>5. Dhruv Jurel</b> (Clutch Anchor) &nbsp;|&nbsp; <b>6. Shimron Hetmyer [OS] / Jitesh Sharma</b><br/>
-    <b>7. Romario Shepherd [OS]</b> (Seam Finisher) &nbsp;|&nbsp; <b>8. Harpreet Brar</b> (Jaipur Squeeze) &nbsp;|&nbsp; <b>9. Nathan Ellis [OS]</b> (Death Yorker)<br/>
-    <b>10. Prasidh Krishna</b> (Hit-the-Deck Pace) &nbsp;|&nbsp; <b>11. Sandeep Sharma</b> (Death Knuckleball) &nbsp;|&nbsp; <i>Impact: Vaibhav Sooryavanshi / Prince Yadav</i>
+    <b>RR Rostered / 2026 Core (Pending Nov 17):</b> Yashasvi Jaiswal, Riyan Parag, Dhruv Jurel, Shimron Hetmyer, Sandeep Sharma, Vaibhav Sooryavanshi, Vignesh Puthur.<br/>
+    <b>Uncontracted Model A Overseas Watchlist:</b> Liam Dawson (#1 Bowler), Shoriful Islam (#9 Bowler), Nasum Ahmed (#7 Bowler).<br/>
+    <b>Conditional Franchise Watchlist (Pending Nov 17 Release):</b> Romario Shepherd (RCB), Jitesh Sharma (RCB), Harpreet Brar (PBKS), Prince Yadav (LSG).
     """
     story.append(Paragraph(xi_text, body_style))
     story.append(PageBreak())

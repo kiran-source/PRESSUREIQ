@@ -125,23 +125,22 @@ def compute_player_phase_summary(player_delivs: pd.DataFrame, is_batting: bool =
     if player_delivs.empty:
         return pd.DataFrame()
 
-    ball_col = "is_batter_ball" if is_batting else "is_legal_ball"
     p_col = "bpi" if is_batting else "bopi"
     raw_col = "raw_bat_value" if is_batting else "raw_bowl_value"
-    sub = player_delivs[player_delivs[ball_col] == 1].copy()
-    if sub.empty:
-        return pd.DataFrame()
 
     rows = []
     for ph in ["Powerplay", "Middle", "Death"]:
-        ph_df = sub[sub["phase"] == ph]
-        if ph_df.empty:
+        ph_all = player_delivs[player_delivs["phase"] == ph]
+        if ph_all.empty:
             continue
-        balls = int(len(ph_df))
-        hp_balls = int((ph_df[p_col] >= 50.0).sum())
-        mean_p = _safe_float(ph_df[p_col].mean(), 0.0)
-        mean_raw_pava = _safe_float(ph_df[raw_col].mean(), 0.0)
         if is_batting:
+            ph_df = ph_all[ph_all["is_batter_ball"] == 1]
+            if ph_df.empty:
+                continue
+            balls = int(len(ph_df))
+            hp_balls = int((ph_df[p_col] >= 50.0).sum())
+            mean_p = _safe_float(ph_df[p_col].mean(), 0.0)
+            mean_raw_pava = _safe_float(ph_df[raw_col].mean(), 0.0)
             runs = int(ph_df["batter_runs"].sum())
             rate_val = round(runs * 100.0 / balls, 1) if balls > 0 else 0.0
             events = int(ph_df["is_boundary"].sum()) if "is_boundary" in ph_df.columns else 0
@@ -156,9 +155,16 @@ def compute_player_phase_summary(player_delivs: pd.DataFrame, is_batting: bool =
                 "Raw PAVA / Ball": round(mean_raw_pava, 4),
             })
         else:
-            runs_c = int(ph_df["bowler_runs_conceded"].sum())
+            # MCC-compliant economy: include wide/no-ball runs from all deliveries,
+            # while legal deliveries serve as the ball denominator and BoPI>=50 pool.
+            ph_legal = ph_all[ph_all["is_legal_ball"] == 1]
+            balls = int(len(ph_legal))
+            hp_balls = int((ph_legal[p_col] >= 50.0).sum()) if not ph_legal.empty else 0
+            mean_p = _safe_float(ph_legal[p_col].mean(), 0.0) if not ph_legal.empty else 0.0
+            mean_raw_pava = _safe_float(ph_legal[raw_col].mean(), 0.0) if not ph_legal.empty else 0.0
+            runs_c = int(ph_all["bowler_runs_conceded"].sum())
             rate_val = round(runs_c * 6.0 / balls, 2) if balls > 0 else 0.0
-            wkts = int(ph_df["is_bowler_wicket"].sum()) if "is_bowler_wicket" in ph_df.columns else 0
+            wkts = int(ph_all["is_bowler_wicket"].sum()) if "is_bowler_wicket" in ph_all.columns else 0
             rows.append({
                 "Phase": ph,
                 "Legal Balls": balls,

@@ -98,9 +98,33 @@ def verify_reproduced_numbers(df: pd.DataFrame) -> Dict[str, Any]:
             "rohit_drop_pct": float(rohit_row["drop_pct_50_to_55"]),
             "rohit_sig_ess": float(rohit_row["continuous_sig_ess"])
         }
+        if "gaikwad_step_50" in weighting_verification:
+            # Cross-verify against live deliveries_with_pava dataframe
+            g_del = df[(df["striker_name"] == "Ruturaj Gaikwad") & (df["is_batter_ball"] == 1)]
+            r_del = df[(df["striker_name"] == "Rohit Sharma") & (df["is_batter_ball"] == 1)]
+            g50 = int((g_del["bpi"] >= 50.0).sum())
+            g55 = int((g_del["bpi"] >= 55.0).sum())
+            r50 = int((r_del["bpi"] >= 50.0).sum())
+            r55 = int((r_del["bpi"] >= 55.0).sum())
+            checks = [
+                total_deliveries == 200961,
+                total_matches == 867,
+                bool(reproduced_sweep),
+                train_auc is not None and val_auc is not None and test_auc is not None,
+                g50 == weighting_verification["gaikwad_step_50"],
+                g55 == weighting_verification["gaikwad_step_55"],
+                r50 == weighting_verification["rohit_step_50"],
+                r55 == weighting_verification["rohit_step_55"],
+            ]
+        else:
+            checks = [total_deliveries == 200961, total_matches == 867]
     else:
         weighting_verification = {}
-        
+        checks = [total_deliveries == 200961, total_matches == 867]
+
+    all_ok = all(checks)
+    status_str = "ALL_NUMBERS_VERIFIED_EXACT_MATCH" if all_ok else "VERIFICATION_MISMATCH"
+
     res = {
         "dataset_integrity": {
             "total_deliveries": total_deliveries,
@@ -118,13 +142,15 @@ def verify_reproduced_numbers(df: pd.DataFrame) -> Dict[str, Any]:
             "test_ece": test_ece
         },
         "reproduced_weighting": weighting_verification,
-        "verification_status": "ALL_NUMBERS_VERIFIED_EXACT_MATCH"
+        "verification_status": status_str
     }
     
     with open(OUTPUT_DIR / "reproduction_verification.json", "w") as fp:
         json.dump(res, fp, indent=2)
         
-    logger.info("Section 1 Verified: Deliveries=200,961, Matches=867, All numbers verified.")
+    logger.info(
+        f"Section 1 Verified: Deliveries={total_deliveries:,}, Matches={total_matches}, Status={status_str}."
+    )
     return res
 
 
@@ -208,19 +234,30 @@ def validate_pressure_measurement_monotonicity(df: pd.DataFrame) -> Dict[str, An
     df_mono = pd.DataFrame(results)
     df_mono.to_csv(OUTPUT_DIR / "conditional_monotonicity_audit.csv", index=False)
     
+    total_violations = monotonic_violations_bpi + monotonic_violations_cdpi_bat
+    if total_violations == 0:
+        verdict = "Both Baseline BPI and CDPI Batting exhibit 100% conditional monotonicity across all (balls, wickets) slices."
+    else:
+        verdict = (
+            f"Conditional monotonicity violations detected: "
+            f"BPI={monotonic_violations_bpi}, CDPI_Bat={monotonic_violations_cdpi_bat}."
+        )
+
     summary = {
         "total_slices_evaluated": len(results),
         "bpi_monotonic_slices": len(results) - monotonic_violations_bpi,
+        "bpi_violations": monotonic_violations_bpi,
         "bpi_monotonicity_pct": 100.0 * (len(results) - monotonic_violations_bpi) / len(results),
         "cdpi_bat_monotonic_slices": len(results) - monotonic_violations_cdpi_bat,
+        "cdpi_bat_violations": monotonic_violations_cdpi_bat,
         "cdpi_bat_monotonicity_pct": 100.0 * (len(results) - monotonic_violations_cdpi_bat) / len(results),
-        "verdict": "Both Baseline BPI and CDPI Batting exhibit 100% conditional monotonicity across all (balls, wickets) slices."
+        "verdict": verdict,
     }
-    
+
     with open(OUTPUT_DIR / "conditional_monotonicity_summary.json", "w") as fp:
         json.dump(summary, fp, indent=2)
-        
-    logger.info(f"Section 2 Complete: Monotonicity={summary['bpi_monotonicity_pct']}%, Violations=0.")
+
+    logger.info(f"Section 2 Complete: Monotonicity={summary['bpi_monotonicity_pct']}%, Violations={total_violations}.")
     return summary
 
 
@@ -442,10 +479,10 @@ def audit_win_probability_calibration(df: pd.DataFrame) -> Dict[str, Any]:
     inn2 = inn2[inn2["match_date"].notna()]
     inn2["year"] = pd.to_datetime(inn2["match_date"]).dt.year
     
-    # Define match outcome
+    # Define match outcome cleanly from post-delivery max cumulative runs
     if "bat_won" not in inn2.columns:
         match_outcomes = inn2.groupby("match_id").agg(
-            final_runs=("team_runs_before", "last"),
+            final_runs=("cum_team_runs", "max"),
             target=("target_score", "first")
         )
         match_outcomes["bat_won"] = (match_outcomes["final_runs"] >= match_outcomes["target"]).astype(int)
@@ -521,11 +558,23 @@ def audit_win_probability_calibration(df: pd.DataFrame) -> Dict[str, Any]:
     test_logits = base_model.decision_function(X_test).reshape(-1, 1)
     calib_probs_test = platt_scaler.predict_proba(test_logits)[:, 1]
     
-    # Compute metrics post-calibration on 2026 test
+    # Compute metrics pre-calibration on 2026 test dynamically
+    brier_raw = float(brier_score_loss(y_test, raw_probs_test))
+    auc_raw = float(roc_auc_score(y_test, raw_probs_test))
+    logloss_raw = float(log_loss(y_test, raw_probs_test))
+    test_cut_raw = pd.cut(raw_probs_test, bins=np.linspace(0, 1, 11), include_lowest=True)
+    grp_raw = test_df.groupby(test_cut_raw, observed=True).agg(
+        n=("bat_won", "count"),
+        pred_mean=("prob_raw", "mean"),
+        act_mean=("bat_won", "mean"),
+    )
+    ece_raw = float(np.sum((grp_raw["n"] / len(test_df)) * np.abs(grp_raw["pred_mean"] - grp_raw["act_mean"])))
+
+    # Compute metrics post-calibration on 2026 test dynamically
     brier_calib = float(brier_score_loss(y_test, calib_probs_test))
     auc_calib = float(roc_auc_score(y_test, calib_probs_test))
     logloss_calib = float(log_loss(y_test, calib_probs_test))
-    
+
     test_df["prob_calib"] = calib_probs_test
     test_cut_calib = pd.cut(calib_probs_test, bins=np.linspace(0, 1, 11), include_lowest=True)
     grp_calib = test_df.groupby(test_cut_calib, observed=True).agg(
@@ -534,13 +583,14 @@ def audit_win_probability_calibration(df: pd.DataFrame) -> Dict[str, Any]:
         act_mean=("bat_won", "mean")
     )
     ece_calib = float(np.sum((grp_calib["n"] / len(test_df)) * np.abs(grp_calib["pred_mean"] - grp_calib["act_mean"])))
-    
+    ece_reduction_pct = round(((ece_raw - ece_calib) / ece_raw) * 100.0, 1) if ece_raw > 0 else 0.0
+
     audit_res = {
         "raw_test_2026": {
-            "auc": 0.8016,
-            "brier": 0.1866,
-            "log_loss": 0.5475,
-            "ece": 0.0892
+            "auc": round(auc_raw, 4),
+            "brier": round(brier_raw, 4),
+            "log_loss": round(logloss_raw, 4),
+            "ece": round(ece_raw, 4),
         },
         "platt_calibrated_test_2026": {
             "scaler_coefficients": {
@@ -551,20 +601,21 @@ def audit_win_probability_calibration(df: pd.DataFrame) -> Dict[str, Any]:
             "brier": round(brier_calib, 4),
             "log_loss": round(logloss_calib, 4),
             "ece": round(ece_calib, 4),
-            "ece_reduction_pct": round((0.0892 - ece_calib) / 0.0892 * 100.0, 1)
+            "ece_reduction_pct": ece_reduction_pct,
         },
         "phase_breakdown_test_2026": phase_calib,
         "cause_of_deterioration": (
             "2026 witnessed an increase in successful high-run chases (200+ scores), "
             "causing standard logistic models trained on <=2024 to slightly underestimate chasing win probabilities in middle overs. "
-            "Chronological Platt scaling fitted on 2025 validation successfully reduces test ECE from 0.0892 to 0.0514."
+            f"Chronological Platt scaling fitted on 2025 validation changed 2026 test ECE from {round(ece_raw, 4)} to {round(ece_calib, 4)} "
+            f"({ece_reduction_pct}% reduction)."
         )
     }
-    
+
     with open(OUTPUT_DIR / "win_prob_calibration_audit.json", "w") as fp:
         json.dump(audit_res, fp, indent=2)
-        
-    logger.info(f"Section 5 Complete: Platt calibration on 2025 reduced 2026 ECE from 0.0892 to {round(ece_calib, 4)} ({audit_res['platt_calibrated_test_2026']['ece_reduction_pct']}% reduction).")
+
+    logger.info(f"Section 5 Complete: Platt calibration on 2025 changed 2026 ECE from {round(ece_raw, 4)} to {round(ece_calib, 4)} ({ece_reduction_pct}% reduction).")
     return audit_res
 
 
@@ -729,16 +780,17 @@ def compare_hybrid_vs_baseline_rankings(df: pd.DataFrame) -> Dict[str, Any]:
     jaccard_bat = len(top10_base_bat.intersection(top10_hybrid_bat)) / len(top10_base_bat.union(top10_hybrid_bat))
     
     # ---------------- BOWLING ----------------
-    bowl_deliv = df[df["bowler_id"].notna()].copy()
+    # Enforce MCC legal-ball population parity with Model A (147 qualified bowlers)
+    bowl_deliv = df[(df["bowler_id"].notna()) & (df["is_legal_ball"] == 1)].copy()
     
     # Career stats per bowler
     bowl_career = bowl_deliv.groupby("bowler_name").agg(
-        career_balls=("bowler_id", "count"),
+        career_balls=("is_legal_ball", "count"),
         career_matches=("match_id", "nunique")
     ).reset_index()
     qual_bowlers = set(bowl_career[(bowl_career["career_balls"] >= 400) & (bowl_career["career_matches"] >= 20)]["bowler_name"])
     
-    # Baseline Model A (Step BoPI >= 50, min 30 balls, career qualified)
+    # Single-PAVA Proxy Baseline (Step BoPI >= 50, min 30 legal balls, career qualified)
     bowl_high_base = bowl_deliv[(bowl_deliv["bopi"] >= 50.0) & (bowl_deliv["bowler_name"].isin(qual_bowlers))].copy()
     bowl_agg_base = bowl_high_base.groupby("bowler_name").agg(
         balls=("bopi", "count"),
@@ -807,37 +859,74 @@ def compare_hybrid_vs_baseline_rankings(df: pd.DataFrame) -> Dict[str, Any]:
     top10_hybrid_bowl = set(bowl_agg_hybrid.head(10)["bowler_name"])
     jaccard_bowl = len(top10_base_bowl.intersection(top10_hybrid_bowl)) / len(top10_base_bowl.union(top10_hybrid_bowl))
     
-    # Save CSVs
-    merged_bat[["striker_name", "rank_base", "rank_hybrid", "reliability_base", "reliability_hybrid", "balls", "ess"]].to_csv(
+    # Load frozen 5-pillar Official Model A rankings for direct comparison
+    official_bat = pd.read_csv(DATA_DIR / "final_batter_rankings.csv")[["player_name", "rank", "reliability_score"]].rename(
+        columns={"player_name": "striker_name", "rank": "rank_model_a", "reliability_score": "reliability_model_a"}
+    )
+    official_bowl = pd.read_csv(DATA_DIR / "final_bowler_rankings.csv")[["player_name", "rank", "reliability_score"]].rename(
+        columns={"player_name": "bowler_name", "rank": "rank_model_a", "reliability_score": "reliability_model_a"}
+    )
+
+    bat_cmp = merged_bat.rename(columns={"rank_base": "rank_proxy_base", "reliability_base": "reliability_proxy_base"}).merge(
+        official_bat, on="striker_name", how="inner"
+    )
+    bowl_cmp = merged_bowl.rename(columns={"rank_base": "rank_proxy_base", "reliability_base": "reliability_proxy_base"}).merge(
+        official_bowl, on="bowler_name", how="inner"
+    )
+
+    spearman_bat_ma, _ = spearmanr(bat_cmp["rank_model_a"], bat_cmp["rank_hybrid"])
+    spearman_bowl_ma, _ = spearmanr(bowl_cmp["rank_model_a"], bowl_cmp["rank_hybrid"])
+    top10_ma_bat = set(official_bat[official_bat["rank_model_a"] <= 10]["striker_name"])
+    top10_ma_bowl = set(official_bowl[official_bowl["rank_model_a"] <= 10]["bowler_name"])
+    jaccard_bat_ma = len(top10_ma_bat.intersection(top10_hybrid_bat)) / len(top10_ma_bat.union(top10_hybrid_bat))
+    jaccard_bowl_ma = len(top10_ma_bowl.intersection(top10_hybrid_bowl)) / len(top10_ma_bowl.union(top10_hybrid_bowl))
+
+    # Save clearly labeled CSVs (Model A 5-pillar vs single-PAVA proxy vs Hybrid)
+    bat_cmp[["striker_name", "rank_model_a", "rank_proxy_base", "rank_hybrid", "reliability_model_a", "reliability_proxy_base", "reliability_hybrid", "balls", "ess"]].to_csv(
         OUTPUT_DIR / "batter_ranking_comparison_base_vs_hybrid.csv", index=False
     )
-    merged_bowl[["bowler_name", "rank_base", "rank_hybrid", "reliability_base", "reliability_hybrid", "balls", "ess"]].to_csv(
+    bowl_cmp[["bowler_name", "rank_model_a", "rank_proxy_base", "rank_hybrid", "reliability_model_a", "reliability_proxy_base", "reliability_hybrid", "balls", "ess"]].to_csv(
         OUTPUT_DIR / "bowler_ranking_comparison_base_vs_hybrid.csv", index=False
     )
-    
+
     comp_summary = {
+        "methodology_note": (
+            "Distinguishes canonical 5-pillar Official Model A CSV rankings (final_batter_rankings.csv=109, final_bowler_rankings.csv=147) "
+            "from the simplified single-PAVA Step-50 proxy baseline used in linear weighting sensitivity checks."
+        ),
         "batters": {
-            "eligible_baseline": len(bat_agg_base),
+            "eligible_official_model_a": len(official_bat),
+            "eligible_proxy_base": len(bat_agg_base),
             "eligible_hybrid": len(bat_agg_hybrid),
-            "spearman_rank_correlation": round(float(spearman_bat), 4),
-            "top10_jaccard_overlap": round(float(jaccard_bat), 4),
-            "top10_baseline": list(bat_agg_base.head(10)["striker_name"]),
-            "top10_hybrid": list(bat_agg_hybrid.head(10)["striker_name"])
+            "spearman_vs_official_model_a": round(float(spearman_bat_ma), 4),
+            "top10_jaccard_vs_official_model_a": round(float(jaccard_bat_ma), 4),
+            "spearman_rank_correlation_proxy": round(float(spearman_bat), 4),
+            "top10_jaccard_overlap_proxy": round(float(jaccard_bat), 4),
+            "top10_official_model_a": list(official_bat.sort_values("rank_model_a").head(10)["striker_name"]),
+            "top10_proxy_base": list(bat_agg_base.head(10)["striker_name"]),
+            "top10_hybrid": list(bat_agg_hybrid.head(10)["striker_name"]),
         },
         "bowlers": {
-            "eligible_baseline": len(bowl_agg_base),
+            "eligible_official_model_a": len(official_bowl),
+            "eligible_proxy_base": len(bowl_agg_base),
             "eligible_hybrid": len(bowl_agg_hybrid),
-            "spearman_rank_correlation": round(float(spearman_bowl), 4),
-            "top10_jaccard_overlap": round(float(jaccard_bowl), 4),
-            "top10_baseline": list(bowl_agg_base.head(10)["bowler_name"]),
-            "top10_hybrid": list(bowl_agg_hybrid.head(10)["bowler_name"])
-        }
+            "spearman_vs_official_model_a": round(float(spearman_bowl_ma), 4),
+            "top10_jaccard_vs_official_model_a": round(float(jaccard_bowl_ma), 4),
+            "spearman_rank_correlation_proxy": round(float(spearman_bowl), 4),
+            "top10_jaccard_overlap_proxy": round(float(jaccard_bowl), 4),
+            "top10_official_model_a": list(official_bowl.sort_values("rank_model_a").head(10)["bowler_name"]),
+            "top10_proxy_base": list(bowl_agg_base.head(10)["bowler_name"]),
+            "top10_hybrid": list(bowl_agg_hybrid.head(10)["bowler_name"]),
+        },
     }
-    
+
     with open(OUTPUT_DIR / "ranking_comparison_summary.json", "w") as fp:
         json.dump(comp_summary, fp, indent=2)
-        
-    logger.info(f"Section 7 Complete: Batters Spearman={round(spearman_bat, 4)}, Top10 Jaccard={round(jaccard_bat, 4)}; Bowlers Spearman={round(spearman_bowl, 4)}, Top10 Jaccard={round(jaccard_bowl, 4)}.")
+
+    logger.info(
+        f"Section 7 Complete: Batters Spearman(ModelA)={round(spearman_bat_ma, 4)} / Proxy={round(spearman_bat, 4)}; "
+        f"Bowlers Spearman(ModelA)={round(spearman_bowl_ma, 4)} / Proxy={round(spearman_bowl, 4)}."
+    )
     return comp_summary
 
 

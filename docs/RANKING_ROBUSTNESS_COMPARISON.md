@@ -67,9 +67,9 @@ Heinrich Klaasen        Middle Order           31             14         72.54  
 ```
 
 ### 2.2 Batting Metrics Summary:
-- **Eligible Batters Evaluated:** 109 qualified players.
-- **Spearman Rank Correlation ($\rho$):** **0.5585** ($p < 10^{-9}$).
-- **Top-10 Overlap:** 4 players in common (Rohit Sharma, Suryakumar Yadav, Naman Dhir, Phil Salt).
+- **Eligible Batters Evaluated:** **109** qualified batters (`final_batter_rankings.csv`).
+- **Spearman Rank Correlation vs Official 5-Pillar Model A ($\rho$):** **0.5520** (Jaccard Top-10 Overlap = **0.1765**).
+- **Spearman Rank Correlation vs Single-PAVA Proxy ($\rho$):** **0.5585** (Jaccard Top-10 Overlap = **0.1765**).
 - **Key Shift:** Pure finishers who face consistent death-over pressure (Tim David, Andre Russell, Shashank Singh, Heinrich Klaasen) rise into top contention under continuous weighting, whereas top-order anchors who qualified with exactly 35–45 clutch balls (Gaikwad, Rohit) settle into robust top-15 positions.
 
 ---
@@ -102,16 +102,12 @@ Abrar Ahmed             Spin             27              7         60.45        
 Mohammad Nawaz          Spin             17              9         62.97           63.82           422       952.2
 ```
 
-### 3.2 Bowling Metrics Summary:
-- **Eligible Bowlers Evaluated:** 153 qualified players.
-- **Spearman Rank Correlation ($\rho$):** **0.6547** ($p < 10^{-15}$).
-- **Top-10 Overlap:** **5 of the top 6 bowlers are identical** across both models:
-  - Sufiyan Muqeem (#2 Base $\to$ #1 Hybrid)
-  - Matheesha Pathirana (#6 Base $\to$ #2 Hybrid)
-  - Abbas Afridi (#3 Base $\to$ #3 Hybrid)
-  - Nathan Ellis (#4 Base $\to$ #5 Hybrid)
-  - Haris Rauf (#5 Base $\to$ #6 Hybrid)
-- **The Jasprit Bumrah Breakthrough:** Bumrah jumps from #25 in Baseline to **#4 in the Hybrid Model**. In the baseline model, Bumrah's elite economy was diluted by blowout matches where other bowlers bowled easy final overs. The Hybrid Model's smooth blowout discount strips away garbage-time stats, allowing Bumrah's true clutch mastery to surface.
+### 3.2 Bowling Metrics Summary (MCC Legal-Ball Population = 147 Bowlers):
+- **Eligible Bowlers Evaluated:** **147** legal-ball qualified bowlers (`is_legal_ball == 1`, matching `final_bowler_rankings.csv`).
+- **Spearman Rank Correlation vs Official 5-Pillar Model A ($\rho$):** **0.5714** (Jaccard Top-10 Overlap = **0.3333**).
+- **Spearman Rank Correlation vs Single-PAVA Proxy ($\rho$):** **0.6230** (Jaccard Top-10 Overlap = **0.3333**).
+- **Top-10 Overlap:** **5 bowlers** appear in both Model A and Hybrid Top-10 lists (Sufiyan Muqeem, Matheesha Pathirana, Abbas Afridi, Nathan Ellis, Haris Rauf).
+- **The Jasprit Bumrah Correction:** Bumrah jumps into **#4 in the Hybrid Model** once smooth blowout suppression removes artificial garbage-time score inflation in decided chases.
 
 ---
 

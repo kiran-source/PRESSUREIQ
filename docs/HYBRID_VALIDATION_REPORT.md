@@ -24,10 +24,10 @@ Acting as an independent cricket analytics research panel, we subjected every co
 **RECOMMENDATION: OPTION B (ADOPT SELECTED VALIDATED HYBRID COMPONENTS FOR PRODUCTION ROADMAP; RETAIN MODEL A FOR THE FROZEN COMPETITION SUBMISSION BASELINE).**
 
 1. **Official Competition Integrity:** The official competition baseline established at commit `fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2` and snapshotted in `data/processed/official_baseline_v2/` must be **preserved without modification**. Changing official rankings at this stage would create submission ambiguity and undermine audit provenance.
-2. **Validated Methodology Improvements:** The research has conclusively demonstrated three breakthrough improvements that are ready for immediate inclusion in the Rajasthan Royals technical methodology dossier:
+2. **Validated Methodology Improvements:** The research has demonstrated two clear architectural improvements for the next-generation roadmap alongside one negative calibration finding (retained raw logistic):
    - **Continuous Sigmoidal Weighting & Kish ESS:** Eliminates the knife-edge threshold cliff that disqualified Ruturaj Gaikwad and Rohit Sharma at $BPI \ge 55$.
-   - **Smooth Blowout Suppression:** Eliminates the baseline BoPI blowout inversion (suppressing garbage-time scores from 80.96 to 55.4/100).
-   - **Chronological Platt Calibration:** Reduces 2026 out-of-sample win-probability calibration drift by 14.1% with zero test leakage.
+   - **Smooth Blowout Suppression:** Eliminates the baseline BoPI blowout inversion (suppressing garbage-time scores cleanly).
+   - **Chronological 2025 Platt Check (Audited Finding):** Under corrected post-delivery chase outcomes (`cum_team_runs` max), fitting a Platt scaler on 2025 validation shifted 2026 test ECE from **$0.0894$ to $0.0963$ (-7.6% reduction, i.e., slight deterioration)**, confirming raw logistic win probabilities should not be adjusted by a 2025 intercept shift.
 
 ---
 
@@ -70,10 +70,10 @@ $$Z(u, w) = Z_0 \cdot \left[\frac{1 - e^{-L \cdot u}}{1 - e^{-L \cdot U_{\max}}}
 ---
 
 ### 2.5 Win-Probability Calibration & 2026 ECE Audit (Audit Section 5)
-Investigated the ECE increase from 0.0319 in 2025 to 0.0892 in 2026:
-- **Root Cause:** Modern T20 scoring surges in 2026 (teams chasing 200+ at 34.8% vs 18.2% historically) caused historical models trained on $\le 2024$ to underestimate chasing chances in middle overs.
+Investigated 2026 out-of-sample calibration cleanly using `cum_team_runs` max match outcomes ($N = 15,614$):
+- **Raw 2026 Test LR:** $\text{AUC} = 0.8016$, $\text{Brier} = 0.1866$, $\text{Log-Loss} = 0.5475$, $\text{ECE} = 0.0894$.
 - **Strict Invariant Applied:** Zero calibration on 2026 test data.
-- **Solution:** Chronological Platt scaling fitted strictly on the **2025 Validation Fold** was evaluated on the **2026 Test Fold**, reducing test ECE from **$0.0892$ to $0.0766$ (14.1% reduction)** while preserving ROC-AUC at $0.8016$.
+- **2025 Platt Transfer Check:** Fitting Platt scaling ($a = 0.9719, b = -0.0746$) strictly on the **2025 Validation Fold** shifted 2026 Test ECE from **$0.0894$ to $0.0963$ (-7.6% change)** and Brier from $0.1866$ to $0.1882$ while preserving ROC-AUC at $0.8016$. Because 2025 scaling degraded 2026 ECE, uncalibrated chronological logistic regression (`ECE = 0.0894`) is preferred.
 
 ---
 
@@ -85,13 +85,12 @@ Parameter grid sweep across centers $\mu \in [38, 50]$ and scales $s \in [6, 10]
 
 ---
 
-### 2.7 Side-by-Side Hybrid vs Baseline Rankings Comparison (Audit Section 7)
-Evaluated across identical career-qualified players ($400+$ balls, $20+$ matches):
-- **Batting Spearman Correlation ($\rho$):** **0.5585** ($p < 10^{-9}$, $N = 109$ eligible batters).
-- **Bowling Spearman Correlation ($\rho$):** **0.6547** ($p < 10^{-15}$, $N = 153$ eligible bowlers).
-- **Bowler Alignment:** **5 of the top 6 bowlers are identical** across both models (Sufiyan Muqeem, Matheesha Pathirana, Abbas Afridi, Nathan Ellis, Haris Rauf).
-- **The Jasprit Bumrah Correction:** Bumrah moves from **#25 in Baseline to #4 in the Hybrid Model**, properly recognizing his world-class clutch bowling once garbage-time blowout inflation is removed.
-- **Batting Alignment:** Rohit Sharma (#3 $\to$ #9), Suryakumar Yadav (#4 $\to$ #6), and Naman Dhir (#6 $\to$ #4) maintain elite Top-10 standing across both architectures.
+### 2.7 Side-by-Side Hybrid vs Official Model A & Proxy Rankings (Audit Section 7)
+Evaluated across identical legal-ball career-qualified players ($400+$ balls, $20+$ matches) separating official 5-pillar `final_*_rankings.csv` ($109$ batters, $147$ bowlers) from the simplified single-PAVA proxy:
+- **Batting Spearman Correlation ($\rho$):** **0.5520** vs Official Model A (**0.5585** vs Single-PAVA Proxy, $N = 109$ eligible batters).
+- **Bowling Spearman Correlation ($\rho$):** **0.5714** vs Official Model A (**0.6230** vs Single-PAVA Proxy, $N = 147$ eligible legal-ball bowlers).
+- **Top-10 Overlap (Jaccard):** Batting Jaccard = **0.1765**; Bowling Jaccard = **0.3333**.
+- **Key Contrast:** Smooth blowout attenuation elevates **Jasprit Bumrah** from outside the Model A top 10 into **#4** in the Hybrid Bowler top 10 alongside Sufiyan Muqeem, Matheesha Pathirana, Abbas Afridi, Nathan Ellis, and Haris Rauf.
 
 ---
 

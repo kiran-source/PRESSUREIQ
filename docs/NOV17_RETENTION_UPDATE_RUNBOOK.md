@@ -18,11 +18,11 @@ The purpose of this runbook is to provide Rajasthan Royals analysts with a **fai
 flowchart TD
     Official["17 Nov Official BCCI/Franchise Retention Announcements"] --> ManualCSV["Populate data/processed/ipl_2027_player_market_template.csv"]
     ManualCSV --> ImportScript["Run: python scripts/import_market_retentions.py --file <csv> --apply"]
-    ImportScript --> Validation{"Validation Engine<br/>(10 Franchises, Duplicates, Schema)"}
+    ImportScript --> Validation{"Validation Engine<br/>(10 Franchises, Duplicates, 19-Column Schema)"}
     Validation -- "Fail" --> Abort["Abort & Display Offending Rows"]
     Validation -- "Pass" --> ChangeLog["Append Transitions to data/processed/ipl_2027_market_change_log.csv"]
-    ChangeLog --> Dashboard["Update Streamlit Dashboard View E Market Annotations"]
-    Dashboard --> IntegrityCheck["Verify Model A Hashes & Scores 100% Intact"]
+    ChangeLog --> Dashboard["Audit Log Visible in Dashboard Page 8; Baseline Ledger Frozen to Snapshot"]
+    Dashboard --> IntegrityCheck["Verify Model A Top-10 Identities & Frozen Hashes"]
 ```
 
 ---
@@ -50,11 +50,13 @@ flowchart TD
    - Gujarat Titans (GT)
    - Punjab Kings (PBKS)
 2. Open the verified template: `data/processed/ipl_2027_player_market_template.csv`.
-3. Update the fields for shortlisted candidates:
-   - `official_retention_status`: Set to `Officially retained` or `Officially released`.
-   - `current_verified_franchise`: Update to the retaining franchise, or `Unknown` if released into auction pool.
-   - `source_url`: Enter the verified press release link.
-   - `verification_timestamp`: Record current UTC/IST timestamp.
+3. Update the fields for shortlisted candidates using only the **6 strict statuses** (`Confirmed Retained`, `Confirmed Released`, `Confirmed Trade`, `Pending Verification`, `Rumour`, `Policy/Eligibility Review`):
+   - `official_retention_status`: Set to `Confirmed Retained`, `Confirmed Released`, `Confirmed Trade`, `Pending Verification`, `Rumour`, or `Policy/Eligibility Review`.
+   - `official_release_status`: Set using the same strict 6-status taxonomy (or `Not Applicable (Trade)` on confirmed swaps; never mark unconfirmed players `Confirmed Available`).
+   - `confirmed_trade_status`: Set to `Confirmed Trade` for verified player trades, or `None`.
+   - `current_verified_franchise`: Update to the verified IPL franchise (e.g. `Chennai Super Kings`) or `None` if released/uncontracted.
+   - `source_url`, `source_title`, `publisher`, `source_publication_date`: Enter the live verified official press release metadata.
+   - `verification_timestamp`: Record current timestamp (`YYYY-MM-DD HH:MM:SS`).
 
 ### Step 2: Running Dry-Run Validation
 Execute the ingestion script in dry-run mode (without `--apply`):
@@ -62,11 +64,11 @@ Execute the ingestion script in dry-run mode (without `--apply`):
 python scripts/import_market_retentions.py --file data/processed/ipl_2027_player_market_template.csv
 ```
 The script will verify:
-- Presence of all 14 required columns.
+- Presence of all **19** required columns (`REQUIRED_COLUMNS`).
 - Franchise naming consistency against `VALID_FRANCHISES`.
 - Zero duplicate player IDs.
-- Valid status enumerations.
-- It will preview all detected movements in the terminal.
+- Strict 6-status validation against `VALID_STATUSES` (plus live HTTPS URL & rejection of placeholder URLs).
+- It will preview all detected movements in the terminal without mutating files.
 
 ### Step 3: Applying Updates to the Live Intelligence Ledger
 Once dry-run validation outputs `PASS` for all checks, apply the updates:
@@ -74,10 +76,9 @@ Once dry-run validation outputs `PASS` for all checks, apply the updates:
 python scripts/import_market_retentions.py --file data/processed/ipl_2027_player_market_template.csv --apply
 ```
 This command automatically:
-1. Reconciles player identities.
-2. Logs each movement into `data/processed/ipl_2027_market_change_log.csv`.
-3. Updates the live market dataset feeding View E of the Streamlit dashboard.
-4. Executes an automated integrity assertion confirming Model A rankings (`final_batter_rankings.csv` and `final_bowler_rankings.csv`) remain byte-for-byte identical.
+1. Reconciles player identities and writes the updated `data/processed/ipl_2027_player_market_template.csv`.
+2. Logs each movement into `data/processed/ipl_2027_market_change_log.csv` (rendered in the Audit Log table on Dashboard Page 8 `Auction & Market Intelligence`; note that the baseline 11 Nov panel remains pinned to the immutable snapshot unless `build_market_snapshot` is intentionally refreshed after audit verification).
+3. Verifies top-10 Model A player name order remains intact against `final_batter_rankings.csv` and `final_bowler_rankings.csv` (pair with `pytest tests/test_player_market_intelligence.py` to assert full SHA-256 checksums).
 
 ---
 
@@ -85,21 +86,21 @@ This command automatically:
 
 | Market Scenario | Example | Required Operational Handling |
 |:---|:---|:---|
-| **High-Priority Target is Retained** | Romario Shepherd or Nathan Ellis retained by franchise. | Update status to `Officially retained`. In RR strategy, shift player from *Prime Acquisition Target* to *Opposition Benchmark*. Retain Model A score unchanged. |
-| **Marquee Core Star is Released** | Unforeseen release of a top-tier Indian star due to purse dynamics. | Update status to `Officially released`. Model immediately unlocks candidate in Leaderboard B for RR auction bidding. |
-| **Player Traded During Window** | Confirmed cash or player swap trade. | Update `confirmed_trade_status` to `Officially traded` and record trade partner in notes. |
-| **Uncapped Star Retained on High Slab** | Naman Dhir or Prince Yadav retained by MI/LSG. | Record retention slab in notes; update developmental intelligence report. |
+| **High-Priority Watchlist Player is Retained** | Romario Shepherd (RCB 2026 squad) retained ahead of 2027. | Update `official_retention_status` to `Confirmed Retained`. Reclassify strategy from watchlist candidate to *Opposition Benchmark*. Retain Model A score unchanged. |
+| **Star Player is Released** | Unforeseen Nov 17 release of a contracted player (e.g., Naman Dhir / Jitesh Sharma). | Update `official_retention_status` & `official_release_status` to `Confirmed Released` with official BCCI press-release URL. Unlocks auction bidding analysis in Page 8/9. |
+| **Player Traded During Window** | Nathan Ellis traded CSK -> SRH (5 Nov 2026). | Record `Confirmed Trade` in `official_retention_status` and `confirmed_trade_status`, set `official_release_status` to `Not Applicable (Trade)`, and cite official IPL announcement. |
+| **Uncapped Domestic Pacer Retained** | Prince Yadav (LSG 2026 squad) retained on Nov 17. | Record `Confirmed Retained` with official source URL; maintain Model A #11 rank unchanged. |
 
 ---
 
 ## 5. Pre-Submission Re-Verification Checklist (18 November 2026)
 
 Before final portal entry on 18 November:
-- [ ] Run `python -m pytest tests/` and verify **all unit tests pass**.
+- [ ] Run `python -m pytest tests/ -v` and verify **all unit tests pass**.
 - [ ] Run `python scripts/test_streamlit_headless.py` and verify **clean dashboard execution**.
-- [ ] Verify `git status --short` confirms 0 tracked modifications.
 - [ ] Verify `PRESSUREIQ_Final_Submission.zip` checksum matches `76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db`.
-- [ ] Review View E in the dashboard to confirm all market annotations reflect verified 17 November releases.
+- [ ] Verify `docs/PRESSUREIQ_FINAL_METHODOLOGY_REPORT.pdf` (14 pages) and `final_*_rankings.csv` hashes remain intact.
+- [ ] Review Page 8 (`Auction & Market Intelligence`) and `ipl_2027_market_change_log.csv` to confirm logged Nov 17 announcements.
 
 **Verdict:** The November 17 ingestion pipeline is fully operational, hardened, and ready for execution upon official announcements.
 

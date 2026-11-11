@@ -42,3 +42,4 @@
 1. **Bootstrap Rank Instability:** Top-10 inclusion probabilities remain sensitive to match resampling (e.g., Ruturaj Gaikwad 60.9% on 45 HP balls; Liam Dawson 41.9% on 83 HP balls).
 2. **Pre-Nov 17 Auction Blindness:** Leaderboard B cannot forecast which `Pending Verification` players franchises will release on **17 November 2026**.
 3. **Archive-Only Test Scope:** Tests checking `PRESSUREIQ_Final_Submission.zip` or `git rev-parse master` require a Git repository root alongside the frozen submission archive and cannot pass in a bare ZIP extraction without `.git`.
+

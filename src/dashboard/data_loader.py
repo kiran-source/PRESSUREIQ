@@ -193,9 +193,10 @@ def query_season_format_stats(
     id_col = "striker_id" if is_batting else "bowler_id"
     p_col = "bpi" if is_batting else "bopi"
     raw_col = "raw_bat_value" if is_batting else "raw_bowl_value"
-    ball_filter = "d.is_batter_ball = 1" if is_batting else "d.is_legal_ball = 1"
 
-    clauses = [ball_filter]
+    # For bowling economy (MCC rules), include all bowler deliveries so wide/no-ball
+    # conceded runs are summed while legal balls remain the denominator.
+    clauses: List[str] = ["d.is_batter_ball = 1"] if is_batting else []
     params: List[Any] = [p_str, m_str]
     if season is not None:
         clauses.append("EXTRACT(YEAR FROM TRY_CAST(m.match_date AS TIMESTAMP)) = ?")
@@ -204,21 +205,23 @@ def query_season_format_stats(
         clauses.append("d.comp_category = ?")
         params.append(str(comp_category))
 
-    where_sql = " AND ".join(clauses)
+    where_sql = " AND ".join(clauses) if clauses else "1=1"
+    ball_expr = "COUNT(*)" if is_batting else "SUM(CASE WHEN d.is_legal_ball = 1 THEN 1 ELSE 0 END)"
+    hp_cond = f"d.{p_col} >= 50.0" if is_batting else f"d.is_legal_ball = 1 AND d.{p_col} >= 50.0"
     metric_sql = (
-        "ROUND(SUM(d.batter_runs) * 100.0 / NULLIF(COUNT(*), 0), 1) AS slice_rate_stat"
+        f"ROUND(SUM(d.batter_runs) * 100.0 / NULLIF({ball_expr}, 0), 1) AS slice_rate_stat"
         if is_batting
-        else "ROUND(SUM(d.bowler_runs_conceded) * 6.0 / NULLIF(COUNT(*), 0), 2) AS slice_rate_stat"
+        else f"ROUND(SUM(d.bowler_runs_conceded) * 6.0 / NULLIF({ball_expr}, 0), 2) AS slice_rate_stat"
     )
 
     sql = f"""
     SELECT
         d.{id_col} AS player_id,
         COUNT(DISTINCT d.match_id) AS slice_matches,
-        COUNT(*) AS slice_balls,
-        SUM(CASE WHEN d.{p_col} >= 50.0 THEN 1 ELSE 0 END) AS slice_hp_balls,
+        {ball_expr} AS slice_balls,
+        SUM(CASE WHEN {hp_cond} THEN 1 ELSE 0 END) AS slice_hp_balls,
         {metric_sql},
-        ROUND(AVG(CASE WHEN d.{p_col} >= 50.0 THEN d.{raw_col} ELSE NULL END), 4) AS slice_hp_raw_pava
+        ROUND(AVG(CASE WHEN {hp_cond} THEN d.{raw_col} ELSE NULL END), 4) AS slice_hp_raw_pava
     FROM read_parquet(?) d
     JOIN read_parquet(?) m ON d.match_id = m.match_id
     WHERE {where_sql}

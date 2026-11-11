@@ -282,9 +282,9 @@ A competitive analytics submission cannot maintain two contradictory official ra
 
 ### 7.3 Final Recommended Strategy:
 1. **Official Submission Baseline (Model A — Commit `fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2`):**
-   - Retain the official, fully audited, 48-test verified baseline as the primary submission deliverable (`data/processed/official_baseline_v2/`).
-   - Official Top-10 Batters: Ruturaj Gaikwad (#1), Rohit Sharma (#2), Phil Salt (#3), Romario Shepherd (#4), Suryakumar Yadav (#5), Rinku Singh (#6), Heinrich Klaasen (#7), Nicholas Pooran (#8), Shashank Singh (#9), Sanju Samson (#10).
-   - Official Top-10 Bowlers: Liam Dawson (#1), Haris Rauf (#2), Rashid Khan (#3), Jasprit Bumrah (#4), Naveen-ul-Haq (#5), Mustafizur Rahman (#6), Anrich Nortje (#7), Matheesha Pathirana (#8), Sandeep Sharma (#9), Mohit Sharma (#10).
+   - Retain the official, fully audited, frozen Model A baseline as the primary submission deliverable (`data/processed/official_baseline_v2/`).
+   - Official Top-10 Batters: Ruturaj Gaikwad (#1), Rohit Sharma (#2), Fakhar Zaman (#3), Suryakumar Yadav (#4), Romario Shepherd (#5), Naman Dhir (#6), Phil Salt (#7), Jitesh Sharma (#8), Nicholas Pooran (#9), Jos Buttler (#10).
+   - Official Top-10 Bowlers: Liam Dawson (#1), Haris Rauf (#2), Abbas Afridi (#3), Nathan Ellis (#4), Sufiyan Muqeem (#5), Matheesha Pathirana (#6), Nasum Ahmed (#7), Ishant Sharma (#8), Shoriful Islam (#9), Tim Southee (#10).
    - Provenance: Validated across 2,000 bootstrap resamples, with zero leakage, MCC-compliant extra handling, and full test suite passing.
 
 2. **Advanced Research & Next-Generation Roadmap (Hybrid Architecture):**

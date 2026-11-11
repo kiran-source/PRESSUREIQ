@@ -6,7 +6,9 @@ opened HTTP 200 sources, strict 6-status taxonomy, canonical player IDs,
 and immutable historical snapshot preservation.
 """
 
+import argparse
 import os
+import sys
 from pathlib import Path
 import pandas as pd
 
@@ -16,6 +18,26 @@ SNAPSHOT_LABEL = "audit_2026_11_11_verified"
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Build baseline audited IPL 2027 player-market ledger.")
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Allow overwriting existing market ledger, immutable snapshot, and change log files.",
+    )
+    args = parser.parse_args()
+
+    template_path = Path("data/processed/ipl_2027_player_market_template.csv")
+    snap_path = Path(f"data/processed/snapshots/ipl_2027_market_snapshot_{AUDIT_DATE}.csv")
+    log_path = Path("data/processed/ipl_2027_market_change_log.csv")
+    existing_targets = [p for p in (template_path, snap_path, log_path) if p.exists()]
+    if existing_targets and not args.force:
+        joined = ", ".join(str(p) for p in existing_targets)
+        print(
+            f"Refusing to overwrite existing market artifacts without --force: {joined}. "
+            "Use scripts/import_market_retentions.py to ingest new announcements safely."
+        )
+        sys.exit(1)
+
     print("Building Audited IPL 2027 Player-Market Intelligence Ledger & Change Log...")
     os.makedirs("data/processed", exist_ok=True)
     os.makedirs("data/processed/snapshots", exist_ok=True)

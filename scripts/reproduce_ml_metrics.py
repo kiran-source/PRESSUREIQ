@@ -66,15 +66,30 @@ base_wkt_preds = np.array([base_wkt_map.get((p, w), global_wkt) for p, w in zip(
 brier_base_wkt = brier_score_loss(test_df["is_wicket"], base_wkt_preds)
 auc_base_wkt = roc_auc_score(test_df["is_wicket"], base_wkt_preds)
 
-# Load trained LightGBM models from expected_outcome_models.pkl
+# Evaluate pickled LightGBM models directly on identical chronological 2026 test_df records
 with open(PROCESSED_DIR / "models" / "expected_outcome_models.pkl", "rb") as f:
     engine = pickle.load(f)
 
-# Inspect stored test metrics from model benchmark
-bm = engine.benchmark_results
-print(f"Boundary Prob (Test 2026): Baseline Brier = {brier_base_bnd:.4f} | LightGBM Brier = {bm['batting_boundary_prob']['untouched_test_2026']['Brier_Score']:.4f}")
-print(f"Dismissal Prob (Test 2026): Baseline Brier = {brier_base_wkt:.4f} | LightGBM Brier = {bm['batting_dismissal_prob']['untouched_test_2026']['Brier_Score']:.4f}")
-print(f"Expected Runs (Test 2026):  Baseline RMSE  = {bm['batting_expected_runs']['untouched_test_2026']['Baseline']['RMSE']:.4f} | LightGBM RMSE  = {bm['batting_expected_runs']['untouched_test_2026']['LightGBM']['RMSE']:.4f}")
+X_te_lgb, _ = engine.preprocess_features(test_df, fit=False)
+lgb_bnd_preds = engine.models["batting_boundary_prob"].predict_proba(X_te_lgb)[:, 1]
+lgb_wkt_preds = engine.models["batting_dismissal_prob"].predict_proba(X_te_lgb)[:, 1]
+lgb_runs_preds = engine.models["batting_expected_runs"].predict(X_te_lgb)
+
+w_col = "is_striker_out" if "is_striker_out" in test_df.columns else "is_wicket"
+brier_lgb_bnd = brier_score_loss(test_df["is_boundary"], lgb_bnd_preds)
+auc_lgb_bnd = roc_auc_score(test_df["is_boundary"], lgb_bnd_preds)
+brier_lgb_wkt = brier_score_loss(test_df[w_col], lgb_wkt_preds)
+auc_lgb_wkt = roc_auc_score(test_df[w_col], lgb_wkt_preds)
+
+base_runs_map = train_df.groupby([phase_tr, w_bucket_tr])["batter_runs"].mean().to_dict()
+global_runs = train_df["batter_runs"].mean()
+base_runs_preds = np.array([base_runs_map.get((p, w), global_runs) for p, w in zip(phase_te, w_bucket_te)])
+rmse_base_runs = float(np.sqrt(mean_squared_error(test_df["batter_runs"], base_runs_preds)))
+rmse_lgb_runs = float(np.sqrt(mean_squared_error(test_df["batter_runs"], lgb_runs_preds)))
+
+print(f"Boundary Prob (Test 2026): Baseline Brier = {brier_base_bnd:.4f} (AUC={auc_base_bnd:.4f}) | LightGBM Brier = {brier_lgb_bnd:.4f} (AUC={auc_lgb_bnd:.4f})")
+print(f"Dismissal Prob (Test 2026): Baseline Brier = {brier_base_wkt:.4f} (AUC={auc_base_wkt:.4f}) | LightGBM Brier = {brier_lgb_wkt:.4f} (AUC={auc_lgb_wkt:.4f})")
+print(f"Expected Runs (Test 2026):  Baseline RMSE  = {rmse_base_runs:.4f} | LightGBM RMSE  = {rmse_lgb_runs:.4f}")
 
 print("\n" + "=" * 90)
 print("2. IN-GAME WIN PROBABILITY (2ND INNINGS CHASE OUTCOME)")
@@ -82,7 +97,7 @@ print("=" * 90)
 
 inn2 = df[df["innings"] == 2].copy()
 match_outcomes = inn2.groupby("match_id").agg(
-    final_runs=("team_runs_before", "last"),
+    final_runs=("cum_team_runs", "max"),
     target=("target_score", "first")
 )
 match_outcomes["bat_won"] = (match_outcomes["final_runs"] >= match_outcomes["target"]).astype(int)

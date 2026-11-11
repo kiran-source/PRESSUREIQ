@@ -183,3 +183,21 @@ def test_charts_and_player_intelligence_render_cleanly():
     ]
     for f in figs:
         assert len(f.data) > 0
+
+
+def test_bowler_economy_includes_illegal_delivery_runs():
+    """Verify Pathirana (8661) phase and slice economy includes wide/no-ball runs (MCC parity)."""
+    delivs = query_player_deliveries(8661, is_batting=False)
+    phase_df = compute_player_phase_summary(delivs, is_batting=False)
+    assert not phase_df.empty
+    total_legal_balls = int(phase_df["Legal Balls"].sum())
+    total_runs_conceded = int(phase_df["Runs Conceded"].sum())
+    assert total_legal_balls == 1132
+    assert total_runs_conceded == 1630
+    assert round(total_runs_conceded * 6.0 / total_legal_balls, 2) == 8.64
+
+    slice_df = query_season_format_stats(is_batting=False)
+    pat_row = slice_df[slice_df["player_id"] == 8661].iloc[0]
+    assert int(pat_row["slice_balls"]) == 1132
+    assert float(pat_row["slice_rate_stat"]) == 8.64
+

@@ -19,9 +19,9 @@ Every statutory competition requirement was verified against the certified deliv
 | :--- | :--- | :--- | :---: |
 | **1. Official Batters List** | Exactly 10 ordered most reliable batters under pressure | Exactly 10 batters ranked #1 to #10 in `data/processed/final_batter_rankings.csv` (SHA-256: `887f0c10...`) and Page 1 of `PRESSUREIQ_METHODOLOGY_REPORT.pdf`. | 🟢 PASS |
 | **2. Official Bowlers List** | Exactly 10 ordered most reliable bowlers under pressure | Exactly 10 bowlers ranked #1 to #10 in `data/processed/final_bowler_rankings.csv` (SHA-256: `344d63c5...`) and Page 2 of `PRESSUREIQ_METHODOLOGY_REPORT.pdf`. | 🟢 PASS |
-| **3. Methodology Presentation** | Presentation-grade report in PDF or PPT | `PRESSUREIQ_METHODOLOGY_REPORT.pdf` (17,443 bytes, 5 pages) verified in `data/processed/` inside the ZIP and in `docs/`. | 🟢 PASS |
-| **4. Rajasthan Royals 2027 Fit** | Strategic tactical integration for IPL 2027 | Detailed in Section 5 (Page 4) of PDF, in `docs/TOP_20_PLAYER_EVIDENCE_PROFILES.md`, and in `docs/COMPETITION_METHODOLOGY_REPORT.md`. | 🟢 PASS |
-| **5. Full Population Scope** | Unbiased dataset pool (not only RR players) | Evaluated across all 867 matches (371 IPL, 482 T20Is); eligible pool includes 94 batters and 137 bowlers meeting career exposure thresholds. | 🟢 PASS |
+| **3. Methodology Presentation** | Presentation-grade report in PDF or PPT | `PRESSUREIQ_METHODOLOGY_REPORT.pdf` (5-page Nov 11 baseline archived in frozen ZIP; superseded for current upload by 14-page `docs/PRESSUREIQ_FINAL_METHODOLOGY_REPORT.pdf`). | 🟢 PASS |
+| **4. Rajasthan Royals 2027 Fit** | Strategic tactical integration for IPL 2027 | Detailed in `docs/PRESSUREIQ_FINAL_METHODOLOGY_REPORT.pdf`, `docs/PUBLIC_PLAYER_INTELLIGENCE.md`, and `docs/COMPETITION_METHODOLOGY_REPORT.md`. | 🟢 PASS |
+| **5. Full Population Scope** | Unbiased dataset pool (not only RR players) | Evaluated across all 867 matches; eligible pool includes **109 batters** and **147 bowlers** (`final_*_rankings.csv`). | 🟢 PASS |
 | **6. Methodological Transparency** | Clear explanation of BPI, BoPI, PAVA, ML, uncertainty | Explicitly articulated across 5-stage architecture in PDF Page 3 and full markdown dossier. Unamplified PAVA formula verified. | 🟢 PASS |
 | **7. Reproducibility & Integrity** | 100% deterministic reproducibility | 52/52 pytest tests pass in 19.11s. Raw data SHA-256 hashes pass (6/6). Clean Git working tree in extracted archive. | 🟢 PASS |
 | **8. Interactive Dashboard** | Optional functional dashboard | Streamlit application in `src/dashboard/app.py` passes headless execution test (`scripts/test_streamlit_headless.py`) with exit code 0. | 🟢 PASS |
@@ -140,7 +140,7 @@ The Streamlit dashboard (`src/dashboard/app.py`) was evaluated from the perspect
    - **Batters:** Ruturaj Gaikwad (#1), Rohit Sharma (#2), Fakhar Zaman (#3), Suryakumar Yadav (#4), Romario Shepherd (#5), Naman Dhir (#6), Phil Salt (#7), Jitesh Sharma (#8), Nicholas Pooran (#9), Jos Buttler (#10).
    - **Bowlers:** Liam Dawson (#1), Haris Rauf (#2), Abbas Afridi (#3), Nathan Ellis (#4), Sufiyan Muqeem (#5), Matheesha Pathirana (#6), Nasum Ahmed (#7), Ishant Sharma (#8), Shoriful Islam (#9), Tim Southee (#10).
 3. **Archive Upload:** Upload `PRESSUREIQ_Final_Submission.zip` (SHA-256: `76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db`).
-4. **PDF Submission (if separate slot provided):** Upload `docs/PRESSUREIQ_METHODOLOGY_REPORT.pdf`.
+4. **PDF Submission (if separate slot provided):** Upload `docs/PRESSUREIQ_FINAL_METHODOLOGY_REPORT.pdf` (14-page current competition report; the frozen Nov 11 ZIP preserves the historical 5-page `PRESSUREIQ_METHODOLOGY_REPORT.pdf`).
 5. **Dashboard URL (optional field):** Provide link to deployed Streamlit dashboard if hosted.
 
 ---
