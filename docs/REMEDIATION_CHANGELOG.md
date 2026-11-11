@@ -2,8 +2,8 @@
 **Phase:** Phase 1 Final Closure Remediation  
 **Date:** 11 November 2026  
 **Git Branch:** `remediation-phase1-audit`  
-**Git Baseline Commit:** `fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2` (Preserved Official Baseline)  
-**Test Suite Status:** 74 / 74 Unit Tests Passing (100%)  
+**Git Baseline Commit:** `fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2` (Preserved Official Baseline on `master`)  
+**Test Suite Status:** 77 / 77 Unit Tests Passing (100%)  
 
 ---
 
@@ -23,19 +23,19 @@ This changelog records the full audit trail of technical remediations, source-to
 ---
 
 ### 2.2 `data/processed/ipl_2027_player_market_template.csv` & `ipl_2027_market_change_log.csv`
-- **Remediation 1 (Chronology Repair):** Quarantined all future-dated 15 November 2026 claims; updated all verification timestamps and last updated fields to $\le$ `2026-11-11 18:00:00`.
-- **Remediation 2 (Nathan Ellis CSK-to-SRH Trade Date):** Set official trade announcement date to **5 November 2026 (`2026-11-05`)**, exactly 6 days prior to audit date. Classified Ellis as `Officially traded` and contracted to SRH (Class C).
-- **Remediation 3 (Traceable Source Taxonomy):** Every player assigned traceable URLs, publication dates, and clean categories (Confirmed Trade, Confirmed Release, Retained/Contracted, Pending verification, or Ineligible).
+- **Remediation 1 (Source URL Verification & Evidence Schema):** Eliminated all 13 unreachable placeholder URLs (404/403) and 1 non-substantiating generic URL; replaced with live opened HTTP 200 URLs carrying `source_title`, `publisher`, `source_publication_date`, `transaction_mechanism`, `evidence_excerpt`, and `snapshot_label`.
+- **Remediation 2 (Strict 6-Status Taxonomy & Pre-Nov 17 Honesty):** Enforced `Confirmed Retained`, `Confirmed Released`, `Confirmed Trade`, `Pending Verification`, `Rumour`, and `Policy/Eligibility Review`. Set Nathan Ellis to `Confirmed Trade` (`2026-11-05` CSK -> SRH), Haris Rauf to `Policy/Eligibility Review`, and all remaining 15 players to `Pending Verification` ahead of the 17 November 2026 deadline (`0` confirmed open-auction releases).
+- **Remediation 3 (Factual Franchise & Mechanism Corrections):** Corrected Jos Buttler (`Gujarat Titans`), Matheesha Pathirana (`Kolkata Knight Riders`), Vignesh Puthur (`Rajasthan Royals` via 2026 auction, NOT trade), Jitesh Sharma (`Royal Challengers Bengaluru`), Romario Shepherd (`Royal Challengers Bengaluru`), and Harpreet Brar (`Punjab Kings`). Archived pre-audit legacy CSVs safely in `data/processed/snapshots/`.
 
 ---
 
 ### 2.3 `scripts/import_market_retentions.py`
-- **Remediation:** Added `"Pending verification"` to `VALID_STATUSES` to support rigorous classification of unconfirmed uncapped/mini-auction entries without speculative inflation.
+- **Remediation:** Enforced the exact 6-value `VALID_STATUSES` enum, blocked known placeholder URL patterns, prohibited contradictory confirmed-release labels on unconfirmed/pending records, and implemented non-overwriting historical snapshot preservation (`preserve_historical_snapshot()`).
 
 ---
 
 ### 2.4 `scripts/build_rr_2027_recommendations.py`
-- **Remediation:** Added Nathan Ellis to `FRANCHISE_RETENTIONS` under SRH via trade agreement. Recomputed candidate rankings: Ellis receives score 72.85 (Class C) and is excluded from RR Top 10 bowler targets; Bhuvneshwar Kumar enters at Rank 10 (Priority Score: 87.64).
+- **Remediation:** Integrated `ipl_2027_player_market_template.csv` directly into `player_eligibility_audit.csv` and `rr_2027_*.csv`, corrected stale 2026 franchise contracts (moving Buttler and Krishna from RR Class A to GT Class C, Boult to MI Class C, Pathirana to KKR Class C, Jitesh and Shepherd to RCB Class C, Brar to PBKS Class C), and prevented pending/unverified candidates from being labeled as `"Confirmed Available"` or `"Confirmed Target"`.
 
 ---
 

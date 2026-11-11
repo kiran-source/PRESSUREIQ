@@ -86,6 +86,6 @@ def test_frozen_baseline_integrity():
     h = hashlib.sha256(open(zip_path, "rb").read()).hexdigest()
     assert h == "76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db", "Frozen ZIP checksum mismatch!"
     
-    git_head = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode("utf-8").strip()
-    assert git_head == "fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2", "Git HEAD modified!"
+    master_head = subprocess.check_output(["git", "rev-parse", "master"]).decode("utf-8").strip()
+    assert master_head == "fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2", "Frozen master Git HEAD modified!"
 

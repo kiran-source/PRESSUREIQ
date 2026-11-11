@@ -57,14 +57,15 @@ All non-negotiable safeguards have been maintained without exception:
 
 ---
 
-## 4. Market Chronology & Traceable Evidence Audit
+## 4. Market Chronology & Source-by-Source Evidence Audit
 
-### Chronology Repair:
-All 17 records in `data/processed/ipl_2027_player_market_template.csv` have been reviewed and certified. All verification timestamps and publication dates are strictly on or before **11 November 2026**:
-- **Nathan Ellis Trade:** Officially announced on **5 November 2026 (`2026-11-05`)** by Chennai Super Kings and Sunrisers Hyderabad (Ellis & Khaleel traded to SRH; Livingstone & Edwards to CSK). Ellis is officially contracted to SRH (Class C) and excluded from RR recruitment targets.
-- **PBKS Releases (Jitesh Sharma, Harpreet Brar):** Confirmed via official squad notification on **7 November 2026 (`2026-11-07`)**.
-- **MI Release (Romario Shepherd):** Confirmed on **8 November 2026 (`2026-11-08`)**.
-- **Pending Status Applied:** Naman Dhir, Prince Yadav, and Jos Buttler are classified as `Pending verification` awaiting the formal BCCI mini-auction shortlist.
+### Verified Status Summary (As of 11 November 2026):
+All 17 records in `data/processed/ipl_2027_player_market_template.csv` have been audited against live HTTP 200 sources (`iplt20.com`, `mumbaiindians.com`, `business-standard.com`, `onmanorama.com`, `livemint.com`). Ahead of the official **17 November 2026** retention deadline:
+- **Nathan Ellis (`Confirmed Trade`):** Officially announced on **5 November 2026 (`2026-11-05`)** via live `iplt20.com` release (Ellis & Khaleel CSK -> SRH; Livingstone & Edwards SRH -> CSK). Contracted to SRH (Class C) and excluded from RR recruitment targets.
+- **Retracted Unverified Releases & Trades:** Previous legacy claims that Jitesh Sharma (RCB), Harpreet Brar (PBKS), Romario Shepherd (RCB) were released on 7–8 November, or that Vignesh Puthur (RR via Dec 2025 auction) was traded on 6 November, failed source verification and were retracted. Stale franchise attributions for Jos Buttler (Gujarat Titans) and Matheesha Pathirana (Kolkata Knight Riders) were also corrected.
+- **Pending Verification (15 Players):** Because official 2027 retention lists are due **17 November 2026**, 15 tracked players carry `Pending Verification` status (`0` confirmed open-auction releases).
+- **Haris Rauf (`Policy/Eligibility Review`):** Classified under longstanding post-2008 geopolitical/BCCI policy context affecting Pakistan-registered players rather than a fabricated individual ban document.
+- **Snapshot Separation:** Pre-audit legacy CSVs remain archived in `data/processed/snapshots/` and are never overwritten.
 
 ---
 
@@ -95,7 +96,7 @@ All reports, dashboards, and CSVs have been synchronized to use the canonical Mo
 ### 6.2 Test Suite Execution
 - **Command:** `python -m pytest tests/`
 - **Environment:** Windows 11 AMD64, `Python 3.13.5`, `pandas 2.3.3`, `numpy 2.2.2`, `scipy 1.16.3`, `scikit-learn 1.8.0`, `lightgbm 4.7.0`, `pytest 9.1.1`.
-- **Results:** **74 passed, 0 failed, 0 skipped in 17.36s (100% pass rate)**.
+- **Results:** **77 passed, 0 failed, 0 skipped in 16.66s (100% pass rate)**.
 
 ### 6.3 Baseline Cryptographic Hashes (Byte-for-Byte Verification)
 
@@ -113,9 +114,9 @@ All reports, dashboards, and CSVs have been synchronized to use the canonical Mo
 
 **Summary of Certification:**
 1. All mathematical equations, operational thresholds ($P \ge 50.0$), PAVA definitions (raw vs. leverage), and PRC linear slope engines match executable code verbatim.
-2. Market chronology is fully repaired: zero future dates, Nathan Ellis CSK-to-SRH trade date verified as 5 November 2026, and segregated available vs. pending lists established.
+2. Market intelligence is strictly source-verified against live HTTP 200 URLs: 13 dead placeholder URLs eliminated, strict 6-status taxonomy enforced (`Confirmed Trade` for Nathan Ellis; `Policy/Eligibility Review` for Haris Rauf; `Pending Verification` for 15 players ahead of Nov 17), historical snapshots separated, and zero unverified claims displayed as confirmed available.
 3. Population counts (109 batters, 147 bowlers) are fully reconciled against filtering stages.
-4. Test suite passes at 100% (74/74) with frozen baseline hashes preserved.
+4. Test suite passes at 100% (77/77) with frozen baseline hashes preserved.
 5. All changes committed on clean branch `remediation-phase1-audit`.
 
 Phase 1 is officially closed. The repository is certified ready for Phase 2 dashboard prototyping and presentation polish.

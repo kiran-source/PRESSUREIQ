@@ -98,9 +98,9 @@ def test_nathan_ellis_trade_and_contracted_status():
     ellis = ellis_rows.iloc[0]
     
     assert ellis["current_verified_franchise"] == "Sunrisers Hyderabad"
-    assert ellis["confirmed_trade_status"] == "Officially traded"
-    assert ellis["official_retention_status"] == "Officially retained"
-    assert ellis["official_release_status"] == "Unknown"
+    assert ellis["confirmed_trade_status"] == "Confirmed Trade"
+    assert ellis["official_retention_status"] == "Confirmed Trade"
+    assert ellis["official_release_status"] == "Not Applicable (Trade)"
     
     # Check candidate rankings
     cand_df = pd.read_csv(PROCESSED_DIR / "rr_2027_candidate_rankings.csv")
