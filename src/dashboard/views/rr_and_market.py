@@ -28,13 +28,6 @@ from src.dashboard.design_tokens import IPL_FRANCHISES, PALETTE
 def render_rr_intelligence(bundle: DashboardDataBundle) -> None:
     """Page 7: Rajasthan Royals tactical squad intelligence and SMS Jaipur strategy."""
     st.title("Rajasthan Royals Intelligence")
-    render_callout(
-        "<b>Performance Fit vs Confirmed Auction Availability:</b> Statistical role fit (<code>rr_priority_score</code>) ranks cricket "
-        "utility at Sawai Mansingh Stadium (Jaipur). It does <b>NOT</b> grant open-auction availability: ahead of the <b>17 November 2026</b> "
-        "IPL retention deadline, <b>0 external watchlist targets are confirmed released</b>.",
-        accent=PALETTE["accent_violet"],
-    )
-
     intel = summarize_rr_squad_intelligence(bundle.eligibility_audit_df, bundle.rr_candidates_df)
     rr_core = intel["rr_core"]
     role_depth = intel["role_depth"]
@@ -42,6 +35,14 @@ def render_rr_intelligence(bundle: DashboardDataBundle) -> None:
 
     confirmed_rel_cnt = int(targets["market_verified_available"].sum()) if (not targets.empty and "market_verified_available" in targets.columns) else 0
     avg_core_score = float(rr_core["reliability_score"].mean()) if not rr_core.empty else 0.0
+
+    rel_noun = "target is" if confirmed_rel_cnt == 1 else "targets are"
+    render_callout(
+        f"<b>Performance Fit vs Confirmed Auction Availability:</b> Statistical role fit (<code>rr_priority_score</code>) ranks cricket "
+        f"utility at Sawai Mansingh Stadium (Jaipur). It does <b>NOT</b> grant open-auction availability: ahead of the <b>17 November 2026</b> "
+        f"IPL retention deadline, <b>{confirmed_rel_cnt} external watchlist {rel_noun} confirmed released</b>.",
+        accent=PALETTE["accent_violet"],
+    )
 
     render_kpi_grid(
         [
@@ -99,14 +100,28 @@ def render_rr_intelligence(bundle: DashboardDataBundle) -> None:
             view_t = view_t[view_t["discipline"] == disc_f]
         if sel_stats:
             view_t = view_t[view_t["market_status"].isin(sel_stats)]
+        else:
+            view_t = view_t.iloc[0:0].copy()
         if only_rel:
             view_t = view_t[view_t["market_verified_available"]]
 
         if view_t.empty:
-            render_empty_state(
-                "0 candidates currently satisfy Confirmed Released filter",
-                "Expected pre-Nov 17 state: official IPL 2027 release lists have not been submitted yet. Uncheck 'Only Confirmed Auction Releases' to view statistical fit.",
-            )
+            if only_rel:
+                empty_title = "0 candidates currently satisfy Confirmed Released filter"
+                empty_desc = (
+                    "Expected pre-Nov 17 state: official IPL 2027 release lists have not been submitted yet. "
+                    "Uncheck 'Only Confirmed Auction Releases' to view statistical role fit."
+                )
+            elif not sel_stats:
+                empty_title = "No Market Status selected"
+                empty_desc = "Select at least one Market Status value in the filter above to inspect watchlist candidates."
+            else:
+                empty_title = "No candidates match the active discipline and market-status filters"
+                empty_desc = (
+                    f"Active filters (Discipline: {disc_f}; Market Statuses selected: {len(sel_stats)}) returned 0 rows. "
+                    "Broaden the Market Status selection or switch Discipline back to 'All'."
+                )
+            render_empty_state(empty_title, empty_desc)
         else:
             show_cols = [
                 "rr_priority_rank", "player_name", "discipline", "latest_ipl_franchise", "model_a_rank",

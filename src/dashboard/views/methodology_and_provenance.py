@@ -18,6 +18,7 @@ from src.dashboard.data_loader import (
     FROZEN_ARCHIVE_ZIP_SHA256,
     FROZEN_BATTER_SHA256,
     FROZEN_BOWLER_SHA256,
+    FROZEN_MARKET_SNAPSHOT_SHA256,
     DashboardDataBundle,
 )
 from src.dashboard.design_tokens import PALETTE, PRODUCT_VERSION, RETENTION_DEADLINE_DATE, SNAPSHOT_ANCHOR_DATE
@@ -125,13 +126,22 @@ def render_provenance(bundle: DashboardDataBundle) -> None:
         ]
     )
 
+    snap_expected = FROZEN_MARKET_SNAPSHOT_SHA256
+    snap_observed = str(integrity.get("market_snapshot_sha256", "MISSING"))
+    if snap_observed == "MISSING" or not snap_observed:
+        snap_status = "MISSING"
+    elif snap_observed == snap_expected:
+        snap_status = "EXACT MATCH"
+    else:
+        snap_status = "MISMATCH"
+
     render_section_header("Cryptographic Checksum & Artifact Lineage Registry", "Verified at runtime against immutable SHA-256 expectations", icon="shield")
     prov_rows = pd.DataFrame(
         [
             {"Artifact": "Frozen Official Batters CSV (`final_batter_rankings.csv`)", "Expected SHA-256": FROZEN_BATTER_SHA256, "Observed SHA-256": integrity.get("batter_csv_sha256", "MISSING"), "Status": "EXACT MATCH" if bat_ok else "MISMATCH"},
             {"Artifact": "Frozen Official Bowlers CSV (`final_bowler_rankings.csv`)", "Expected SHA-256": FROZEN_BOWLER_SHA256, "Observed SHA-256": integrity.get("bowler_csv_sha256", "MISSING"), "Status": "EXACT MATCH" if bowl_ok else "MISMATCH"},
             {"Artifact": "Original Submission Archive (`PRESSUREIQ_Final_Submission.zip`)", "Expected SHA-256": FROZEN_ARCHIVE_ZIP_SHA256, "Observed SHA-256": integrity.get("archive_zip_sha256", "NOT_PRESENT"), "Status": "EXACT MATCH" if zip_ok else ("NOT PRESENT" if zip_ok is None else "MISMATCH")},
-            {"Artifact": "Pinned Market Snapshot (`ipl_2027_market_snapshot_2026-11-11.csv`)", "Expected SHA-256": "8d1e1bdaa57eb3491abc78139e234420477f1414c448b5a68f4897f07b7efd4d", "Observed SHA-256": integrity.get("market_snapshot_sha256", "MISSING"), "Status": "VERIFIED"},
+            {"Artifact": "Pinned Market Snapshot (`ipl_2027_market_snapshot_2026-11-11.csv`)", "Expected SHA-256": snap_expected, "Observed SHA-256": snap_observed, "Status": snap_status},
         ]
     )
     st.dataframe(prov_rows, width="stretch", hide_index=True)

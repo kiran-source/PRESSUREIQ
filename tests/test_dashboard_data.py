@@ -265,3 +265,71 @@ def test_v3_teams_comparison_pressure_analytics_and_charts():
         assert len(f.data) > 0
 
 
+def test_coderabbit_findings_remediation():
+    """Verify all 9 CodeRabbit findings remediations behave correctly and deterministically."""
+    from src.dashboard.analytics import build_all_ipl_teams_overview
+    from src.dashboard.charts import PLOTLY_SERIES, build_player_color_map, fig_multi_player_ci_bars, fig_multi_player_radar
+    from src.dashboard.data_loader import FROZEN_MARKET_SNAPSHOT_SHA256, compute_file_sha256
+
+    bundle = load_dashboard_bundle_uncached()
+
+    # 1. Color consistency across radar and sorted CI bars
+    sample_df = bundle.bat_df.head(3).copy()
+    names = sample_df["player_name"].tolist()
+    cmap = build_player_color_map(names)
+    assert cmap[names[0]] == PLOTLY_SERIES[0]
+    assert cmap[names[1]] == PLOTLY_SERIES[1]
+    assert cmap[names[2]] == PLOTLY_SERIES[2]
+
+    # Force inverse sorting by reliability score
+    sample_df["reliability_score"] = [10.0, 50.0, 90.0]
+    radar = fig_multi_player_radar(sample_df, color_map=cmap)
+    ci_bars = fig_multi_player_ci_bars(sample_df, color_map=cmap)
+
+    # In radar, traces are in sample_df order (index 0 is names[0])
+    assert radar.data[0].line.color == cmap[names[0]]
+    assert radar.data[1].line.color == cmap[names[1]]
+    assert radar.data[2].line.color == cmap[names[2]]
+
+    # In sorted CI bars, trace x is sorted desc (names[2], names[1], names[0])
+    bar_x = list(ci_bars.data[0].x)
+    bar_colors = list(ci_bars.data[0].marker.color)
+    assert bar_x == [names[2], names[1], names[0]]
+    assert bar_colors[0] == cmap[names[2]]
+    assert bar_colors[1] == cmap[names[1]]
+    assert bar_colors[2] == cmap[names[0]]
+
+    # 2. Franchise status labels for retentions, releases, and missing 2026 coverage
+    dummy_mkt = pd.DataFrame(
+        [
+            {"player_id": 1, "player_name": "P1", "current_verified_franchise": "Chennai Super Kings", "previous_franchise": "Chennai Super Kings", "official_retention_status": "Confirmed Retained"},
+            {"player_id": 2, "player_name": "P2", "current_verified_franchise": "None", "previous_franchise": "Royal Challengers Bengaluru", "official_retention_status": "Confirmed Released"},
+            {"player_id": 3, "player_name": "P3", "current_verified_franchise": "Kolkata Knight Riders", "previous_franchise": "Kolkata Knight Riders", "official_retention_status": "Confirmed Retained"},
+            {"player_id": 4, "player_name": "P4", "current_verified_franchise": "None", "previous_franchise": "Kolkata Knight Riders", "official_retention_status": "Confirmed Released"},
+        ]
+    )
+    dummy_pl = pd.DataFrame(
+        [
+            {"player_id": 1, "player_name": "P1", "team_name": "Chennai Super Kings", "comp_name": "IPL 2026"},
+            # Notice Lucknow Super Giants has historical row but NO IPL 2026 row
+            {"player_id": 5, "player_name": "P5", "team_name": "Lucknow Super Giants", "comp_name": "IPL 2024"},
+        ]
+    )
+    teams_summary = build_all_ipl_teams_overview(dummy_pl, dummy_mkt, bundle.bat_df, bundle.bowl_df, pd.DataFrame())
+    csk = teams_summary[teams_summary["Code"] == "CSK"].iloc[0]
+    rcb = teams_summary[teams_summary["Code"] == "RCB"].iloc[0]
+    kkr = teams_summary[teams_summary["Code"] == "KKR"].iloc[0]
+    lsg = teams_summary[teams_summary["Code"] == "LSG"].iloc[0]
+
+    assert csk["Franchise Ledger Status"] == "Confirmed Retention Active"
+    assert rcb["Franchise Ledger Status"] == "Confirmed Release Active"
+    assert kkr["Franchise Ledger Status"] == "Confirmed Retained & Released"
+    assert lsg["2026 Roster Coverage"] == "Missing IPL 2026 Rows"
+    assert lsg["IPL 2026 Dataset Roster"] == 0
+
+    # 3. Market snapshot integrity comparison
+    assert bundle.integrity_status["market_snapshot_match"] is True
+    assert bundle.integrity_status["market_snapshot_sha256"] == FROZEN_MARKET_SNAPSHOT_SHA256
+
+
+

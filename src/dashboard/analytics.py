@@ -395,10 +395,7 @@ def build_all_ipl_teams_overview(
     rows = []
     for code, team_name in franchises:
         squad_ids = set(ipl26_pl[ipl26_pl["team_name"] == team_name]["player_id"].tolist()) if not ipl26_pl.empty else set()
-        if squad_ids or pl.empty:
-            pass
-        else:
-            squad_ids = set(pl[pl["team_name"] == team_name]["player_id"].tolist())
+        has_2026_coverage = bool(squad_ids)
 
         # Reflect confirmed 2027 ledger arrivals/departures transparently
         if not mkt.empty and "current_verified_franchise" in mkt.columns:
@@ -406,7 +403,7 @@ def build_all_ipl_teams_overview(
             prev_only = mkt[(mkt["previous_franchise"] == team_name) & (mkt["current_verified_franchise"] != team_name)]
             conf_trades_in = int((curr_rows["official_retention_status"] == "Confirmed Trade").sum())
             conf_ret = int((curr_rows["official_retention_status"] == "Confirmed Retained").sum())
-            conf_rel = int((mkt[(mkt["previous_franchise"] == team_name)]["official_retention_status"] == "Confirmed Released").sum())
+            conf_rel = int((mkt[mkt["previous_franchise"] == team_name]["official_retention_status"] == "Confirmed Released").sum())
             pending_cnt = int((curr_rows["official_retention_status"] == "Pending Verification").sum())
             tracked_names = ", ".join(curr_rows["player_name"].astype(str).tolist()[:5])
             if len(curr_rows) > 5:
@@ -424,20 +421,35 @@ def build_all_ipl_teams_overview(
         qual_bowl = len(squad_ids & bowl_ids)
         cand_cnt = int((cand["latest_ipl_franchise"] == team_name).sum()) if (not cand.empty and "latest_ipl_franchise" in cand.columns) else 0
 
-        status_label = "Confirmed Trade Active" if conf_trades_in > 0 else ("Pending Verification (Nov 17)" if pending_cnt > 0 else "Historical (2026 Roster)")
+        if conf_trades_in > 0:
+            status_label = "Confirmed Trade Active"
+        elif conf_ret > 0 and conf_rel > 0:
+            status_label = "Confirmed Retained & Released"
+        elif conf_ret > 0:
+            status_label = "Confirmed Retention Active"
+        elif conf_rel > 0:
+            status_label = "Confirmed Release Active"
+        elif pending_cnt > 0:
+            status_label = "Pending Verification (Nov 17)"
+        elif has_2026_coverage:
+            status_label = "Historical (2026 Roster)"
+        else:
+            status_label = "Missing 2026 Coverage"
+
         rows.append(
             {
                 "Code": code,
                 "Franchise": team_name,
+                "2026 Roster Coverage": "Verified IPL 2026" if has_2026_coverage else "Missing IPL 2026 Rows",
                 "IPL 2026 Dataset Roster": len(squad_ids),
-                "Model A Qualifiers (Bat/Bowl)": f"{qual_bat} / {qual_bowl}",
+                "Model A Qualifiers (Bat/Bowl)": f"{qual_bat} / {qual_bowl}" if has_2026_coverage else "N/A (No 2026 Roster)",
                 "Candidate Pool Mapped": cand_cnt,
                 "Confirmed Trades In": conf_trades_in,
                 "Confirmed Retained": conf_ret,
                 "Confirmed Released": conf_rel,
                 "Pending Verification": pending_cnt,
                 "Franchise Ledger Status": status_label,
-                "Audited Key Players": tracked_names or "Historical 2026 Roster Only",
+                "Audited Key Players": tracked_names or ("Historical 2026 Roster Only" if has_2026_coverage else "No 2026 Coverage"),
                 "Verified Transitions Out": departed_names,
             }
         )

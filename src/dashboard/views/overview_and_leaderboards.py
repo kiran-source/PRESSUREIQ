@@ -250,10 +250,25 @@ def _render_single_discipline_leaderboard(bundle: DashboardDataBundle, is_battin
     )
 
     if sel_season != season_opts[0] or sel_format != "All Formats":
+        if not DELIVERIES_PAVA_PATH.exists() or not MATCHES_PATH.exists():
+            render_empty_state(
+                "Season / format delivery slice unavailable",
+                "Parquet telemetry files (`deliveries_with_pava.parquet` and `matches.parquet`) are required for empirical slice filtering.",
+            )
+            return
         yr = None if sel_season == season_opts[0] else int(sel_season)
         fmt = None if sel_format == "All Formats" else sel_format
-        slice_df = _cached_slice_stats(is_batting=is_batting, season=yr, comp_category=fmt)
-        if not slice_df.empty:
+        try:
+            slice_df = _cached_slice_stats(is_batting=is_batting, season=yr, comp_category=fmt)
+        except Exception as exc:
+            render_empty_state(
+                "Season / format slice query failed",
+                f"Unable to evaluate the requested empirical slice ({exc}).",
+            )
+            return
+        if slice_df.empty:
+            filtered = filtered.iloc[0:0].copy()
+        else:
             filtered = filtered.merge(slice_df, on="player_id", how="inner")
             filtered = filtered[filtered["slice_balls"] > 0].copy()
 
@@ -261,7 +276,7 @@ def _render_single_discipline_leaderboard(bundle: DashboardDataBundle, is_battin
     if sort_col in filtered.columns:
         filtered = filtered.sort_values(sort_col, ascending=sort_asc, na_position="last")
 
-    display_df = filtered.head(10).copy() if scope_mode == "Featured Top 10" and sel_sort == "Official Model A Rank (Default)" else filtered.copy()
+    display_df = filtered.head(10).copy() if scope_mode == "Featured Top 10" else filtered.copy()
 
     if display_df.empty:
         render_empty_state(

@@ -17,6 +17,7 @@ from src.dashboard.charts import (
     RR_BLUE,
     RR_PINK,
     _apply_base_layout,
+    build_player_color_map,
     fig_five_pillar_radar,
     fig_multi_player_ci_bars,
     fig_multi_player_prc_overlay,
@@ -114,9 +115,12 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
     mkt_team = str(row.get("dataset_ipl_team", "International / Non-IPL"))
     if not bundle.market_current.empty and pid in bundle.market_current["player_id"].values:
         m_row = bundle.market_current[bundle.market_current["player_id"] == pid].iloc[0]
-        mkt_status = str(m_row.get("official_retention_status", mkt_status))
-        if m_row.get("current_verified_franchise"):
-            mkt_team = str(m_row["current_verified_franchise"])
+        raw_status = m_row.get("official_retention_status")
+        if pd.notna(raw_status) and str(raw_status).strip() != "":
+            mkt_status = str(raw_status).strip()
+        raw_curr_team = m_row.get("current_verified_franchise")
+        if pd.notna(raw_curr_team) and str(raw_curr_team).strip() != "":
+            mkt_team = str(raw_curr_team).strip()
 
     render_kpi_grid(
         [
@@ -284,11 +288,13 @@ def render_player_comparison(bundle: DashboardDataBundle) -> None:
     comp_tbl = build_multi_player_comparison(sel_df, is_batting=is_batting)
     st.dataframe(comp_tbl, width="stretch", hide_index=True)
 
+    color_map = build_player_color_map(sel_df["player_name"].tolist())
+
     c1, c2 = st.columns(2)
     with c1:
-        st.plotly_chart(fig_multi_player_radar(sel_df), width="stretch")
+        st.plotly_chart(fig_multi_player_radar(sel_df, color_map=color_map), width="stretch")
     with c2:
-        st.plotly_chart(fig_multi_player_ci_bars(sel_df), width="stretch")
+        st.plotly_chart(fig_multi_player_ci_bars(sel_df, color_map=color_map), width="stretch")
 
     # Fetch delivery telemetry for overlaid PRC + phase comparisons
     deliv_map = {}
@@ -305,7 +311,7 @@ def render_player_comparison(bundle: DashboardDataBundle) -> None:
 
     c3, c4 = st.columns(2)
     with c3:
-        st.plotly_chart(fig_multi_player_prc_overlay(deliv_map, is_batting=is_batting), width="stretch")
+        st.plotly_chart(fig_multi_player_prc_overlay(deliv_map, is_batting=is_batting, color_map=color_map), width="stretch")
     with c4:
         if phase_rows:
             comb_phase = pd.concat(phase_rows, ignore_index=True)
@@ -314,6 +320,7 @@ def render_player_comparison(bundle: DashboardDataBundle) -> None:
                 x="Phase",
                 y="Raw PAVA / Ball",
                 color="Player",
+                color_discrete_map=color_map,
                 barmode="group",
                 text="Balls",
                 labels={"Raw PAVA / Ball": "Mean Raw PAVA (Runs/Ball)"},

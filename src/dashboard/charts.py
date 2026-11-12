@@ -421,23 +421,35 @@ def fig_player_expected_vs_observed(player_delivs: pd.DataFrame, player_name: st
     return fig
 
 
-def fig_multi_player_radar(selected_df: pd.DataFrame) -> go.Figure:
+def build_player_color_map(player_names: Any) -> Dict[str, str]:
+    """Build a deterministic player-to-color mapping preserving original selection order."""
+    mapping: Dict[str, str] = {}
+    for name in player_names:
+        key = str(name)
+        if key not in mapping:
+            mapping[key] = PLOTLY_SERIES[len(mapping) % len(PLOTLY_SERIES)]
+    return mapping
+
+
+def fig_multi_player_radar(selected_df: pd.DataFrame, color_map: Optional[Dict[str, str]] = None) -> go.Figure:
     """Overlaid 5-pillar comparative radar for 2–4 comparable players within the same discipline."""
     if selected_df.empty:
         return go.Figure()
+    cmap = color_map or build_player_color_map(selected_df["player_name"].tolist())
     fig = go.Figure()
     for idx, (_, row) in enumerate(selected_df.iterrows()):
         pillars = compute_player_five_pillars(row)
         cats = list(pillars.keys())
         vals = list(pillars.values())
-        col = PLOTLY_SERIES[idx % len(PLOTLY_SERIES)]
+        pname = str(row["player_name"])
+        col = cmap.get(pname, PLOTLY_SERIES[idx % len(PLOTLY_SERIES)])
         fig.add_trace(
             go.Scatterpolar(
                 r=vals + [vals[0]],
                 theta=cats + [cats[0]],
                 fill="toself",
                 opacity=0.65,
-                name=str(row["player_name"]),
+                name=pname,
                 line=dict(color=col, width=2.4),
             )
         )
@@ -453,20 +465,23 @@ def fig_multi_player_radar(selected_df: pd.DataFrame) -> go.Figure:
     return fig
 
 
-def fig_multi_player_ci_bars(selected_df: pd.DataFrame) -> go.Figure:
+def fig_multi_player_ci_bars(selected_df: pd.DataFrame, color_map: Optional[Dict[str, str]] = None) -> go.Figure:
     """Compare Reliability Score and 95% Bootstrap CIs across 2–4 selected players."""
     if selected_df.empty:
         return go.Figure()
+    # Assign colors from selection order BEFORE sorting so player colors stay identical across charts
+    cmap = color_map or build_player_color_map(selected_df["player_name"].tolist())
     sub = selected_df.sort_values("reliability_score", ascending=False).copy()
     scores = pd.to_numeric(sub["reliability_score"], errors="coerce").fillna(0.0)
     lo = pd.to_numeric(sub["ci_lower_95"], errors="coerce").fillna(scores)
     hi = pd.to_numeric(sub["ci_upper_95"], errors="coerce").fillna(scores)
+    bar_colors = [cmap.get(str(n), PLOTLY_SERIES[i % len(PLOTLY_SERIES)]) for i, n in enumerate(sub["player_name"])]
     fig = go.Figure(
         go.Bar(
             x=sub["player_name"],
             y=scores,
             error_y=dict(type="data", symmetric=False, array=(hi - scores).clip(lower=0), arrayminus=(scores - lo).clip(lower=0), color="#F8FAFC", thickness=1.5),
-            marker_color=PLOTLY_SERIES[: len(sub)],
+            marker_color=bar_colors,
             showlegend=False,
         )
     )
@@ -486,10 +501,15 @@ def fig_multi_player_ci_bars(selected_df: pd.DataFrame) -> go.Figure:
     return fig
 
 
-def fig_multi_player_prc_overlay(deliv_map: Dict[str, pd.DataFrame], is_batting: bool = True) -> go.Figure:
+def fig_multi_player_prc_overlay(
+    deliv_map: Dict[str, pd.DataFrame],
+    is_batting: bool = True,
+    color_map: Optional[Dict[str, str]] = None,
+) -> go.Figure:
     """Overlay tier-wise Mean Raw PAVA curves for 2–4 selected players."""
     if not deliv_map:
         return go.Figure()
+    cmap = color_map or build_player_color_map(deliv_map.keys())
     ball_col = "is_batter_ball" if is_batting else "is_legal_ball"
     p_col = "bpi" if is_batting else "bopi"
     raw_col = "raw_bat_value" if is_batting else "raw_bowl_value"
@@ -506,6 +526,7 @@ def fig_multi_player_prc_overlay(deliv_map: Dict[str, pd.DataFrame], is_batting:
             continue
         sub["tier"] = pd.cut(sub[p_col], bins=[0, 35, 65, 85, 100.1], labels=labels, right=False)
         agg = sub.groupby("tier", observed=False).agg(mean_raw=(raw_col, "mean"), n=(raw_col, "count")).reset_index()
+        col = cmap.get(str(pname), PLOTLY_SERIES[idx % len(PLOTLY_SERIES)])
         fig.add_trace(
             go.Scatter(
                 x=agg["tier"].astype(str),
@@ -513,7 +534,7 @@ def fig_multi_player_prc_overlay(deliv_map: Dict[str, pd.DataFrame], is_batting:
                 mode="lines+markers",
                 name=pname,
                 customdata=agg["n"],
-                line=dict(color=PLOTLY_SERIES[idx % len(PLOTLY_SERIES)], width=2.5, dash=dash_styles[idx % len(dash_styles)]),
+                line=dict(color=col, width=2.5, dash=dash_styles[idx % len(dash_styles)]),
                 marker=dict(size=8, symbol=symbols[idx % len(symbols)]),
                 hovertemplate=f"<b>{pname}</b><br>%{{x}}: %{{y:+.3f}} PAVA/ball (n=%{{customdata}})<extra></extra>",
             )
