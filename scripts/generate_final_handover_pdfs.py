@@ -6,6 +6,8 @@ exact numerical provenance with zero manual transcription.
 
 from __future__ import annotations
 
+import argparse
+from datetime import date
 import hashlib
 import shutil
 from pathlib import Path
@@ -37,7 +39,45 @@ RR_BG = colors.HexColor("#F8FAFC")
 RR_BORDER = colors.HexColor("#CBD5E1")
 RR_MUTED = colors.HexColor("#475569")
 
-AS_OF_LABEL = "12 November 2026 (Pre-Nov 17 Retention Baseline; Snapshot Audited 2026-11-11)"
+def _resolve_market_context(market_df: pd.DataFrame, report_date: str | None = None) -> dict[str, object]:
+    """Derive current publication state and dates dynamically from market ledger metadata."""
+    date_label = report_date or date.today().strftime("%d %B %Y").lstrip("0")
+    has_official_retentions = bool(
+        market_df["official_retention_status"].isin(["Confirmed Retained", "Confirmed Released"]).any()
+    )
+    latest_ver = (
+        str(market_df["verification_timestamp"].dropna().max())
+        if "verification_timestamp" in market_df.columns and market_df["verification_timestamp"].notna().any()
+        else "Unknown"
+    )
+    if has_official_retentions:
+        as_of_label = f"{date_label} (Post-Retention Verified Ledger; Ledger Verified {latest_ver}; Pre-Retention Archive 2026-11-11 Preserved)"
+        governance_title = f"Strict Post-Retention Market Governance Rules (As of {date_label}):"
+        rule_1 = (
+            "(1) Official IPL 2027 franchise retention/release updates are ingested and audited "
+            f"(latest ledger verification: <b>{_esc(latest_ver)}</b>); frozen Model A statistics remain unchanged."
+        )
+        protocol_heading = "3. Post-Retention Verification &amp; Audit Protocol"
+        protocol_intro = (
+            "Official IPL 2027 retention updates have been ingested using the audited pipeline in "
+            "<code>docs/NOV17_RETENTION_UPDATE_RUNBOOK.md</code> without modifying frozen Model A statistics:"
+        )
+    else:
+        as_of_label = f"{date_label} (Pre-Nov 17 Retention Baseline; Frozen Snapshot Audited 2026-11-11)"
+        governance_title = f"Strict Pre-Retention Market Governance Rules (As of {date_label}):"
+        rule_1 = "(1) Official IPL 2027 franchise retention/release lists are scheduled for <b>17 November 2026</b> and have NOT been published yet."
+        protocol_heading = "3. 17 November 2026 Retention Update Readiness Protocol"
+        protocol_intro = (
+            "When BCCI/IPL publishes official 2027 retention lists on <b>17 November 2026</b>, execute the deterministic update workflow in "
+            "<code>docs/NOV17_RETENTION_UPDATE_RUNBOOK.md</code> without modifying frozen Model A statistics:"
+        )
+    return {
+        "as_of_label": as_of_label,
+        "governance_title": governance_title,
+        "rule_1": rule_1,
+        "protocol_heading": protocol_heading,
+        "protocol_intro": protocol_intro,
+    }
 
 
 def _sha256(path: Path) -> str:
@@ -153,22 +193,27 @@ def _callout(text: str, styles: dict[str, ParagraphStyle], bg: str = "#EFF6FF", 
     return tbl
 
 
-def _add_footer(canvas, doc) -> None:
-    canvas.saveState()
-    canvas.setFont("Helvetica", 7)
-    canvas.setFillColor(RR_MUTED)
-    canvas.drawString(12 * mm, 8 * mm, f"PRESSUREIQ — Rajasthan Royals SupeRR Selector Season 2 (2026) | Prepared {AS_OF_LABEL}")
-    canvas.drawRightString(landscape(A4)[0] - 12 * mm, 8 * mm, f"Page {doc.page}")
-    canvas.restoreState()
+def _make_footer(as_of_label: str):
+    def _footer(canvas, doc) -> None:
+        canvas.saveState()
+        canvas.setFont("Helvetica", 7)
+        canvas.setFillColor(RR_MUTED)
+        canvas.drawString(12 * mm, 8 * mm, f"PRESSUREIQ — Rajasthan Royals SupeRR Selector Season 2 (2026) | Prepared {as_of_label}")
+        canvas.drawRightString(landscape(A4)[0] - 12 * mm, 8 * mm, f"Page {doc.page}")
+        canvas.restoreState()
+    return _footer
 
 
-def generate_selection_sheet(out_paths: list[Path]) -> None:
+def generate_selection_sheet(out_paths: list[Path], report_date: str | None = None) -> None:
     """Build PRESSUREIQ_FINAL_SELECTION_SHEET.pdf directly from frozen Model A CSVs."""
     bat_df = pd.read_csv(DATA_DIR / "final_batter_rankings.csv")
     bowl_df = pd.read_csv(DATA_DIR / "final_bowler_rankings.csv")
     bat_top = pd.read_csv(DATA_DIR / "final_competition_batter_top10.csv")
     bowl_top = pd.read_csv(DATA_DIR / "final_competition_bowler_top10.csv")
     em_df = pd.read_csv(DATA_DIR / "emerging_talent_watchlist.csv")
+    market_df = pd.read_csv(DATA_DIR / "ipl_2027_player_market_template.csv")
+    ctx = _resolve_market_context(market_df, report_date=report_date)
+    as_of_label = str(ctx["as_of_label"])
 
     bat_hash = _sha256(DATA_DIR / "final_batter_rankings.csv")[:16]
     bowl_hash = _sha256(DATA_DIR / "final_bowler_rankings.csv")[:16]
@@ -180,7 +225,7 @@ def generate_selection_sheet(out_paths: list[Path]) -> None:
     story.append(Paragraph("PRESSUREIQ — FINAL MODEL A SELECTION SHEET", styles["title"]))
     story.append(
         Paragraph(
-            f"Rajasthan Royals SupeRR Selector Season 2 (2026) | Separate 10-Batter &amp; 10-Bowler Pressure Rankings | As Of: {AS_OF_LABEL}",
+            f"Rajasthan Royals SupeRR Selector Season 2 (2026) | Separate 10-Batter &amp; 10-Bowler Pressure Rankings | As Of: {_esc(as_of_label)}",
             styles["subtitle"],
         )
     )
@@ -426,6 +471,7 @@ def generate_selection_sheet(out_paths: list[Path]) -> None:
     )
     story.append(t_em)
 
+    footer_fn = _make_footer(as_of_label)
     for out_path in out_paths:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         doc = SimpleDocTemplate(
@@ -436,16 +482,18 @@ def generate_selection_sheet(out_paths: list[Path]) -> None:
             topMargin=12 * mm,
             bottomMargin=14 * mm,
         )
-        doc.build(list(story), onFirstPage=_add_footer, onLaterPages=_add_footer)
+        doc.build(list(story), onFirstPage=footer_fn, onLaterPages=footer_fn)
 
 
-def generate_market_appendix(out_paths: list[Path]) -> None:
+def generate_market_appendix(out_paths: list[Path], report_date: str | None = None) -> None:
     """Build PRESSUREIQ_FINAL_MARKET_APPENDIX.pdf from audited market intelligence CSVs."""
     market_df = pd.read_csv(DATA_DIR / "ipl_2027_player_market_template.csv")
     log_df = pd.read_csv(DATA_DIR / "ipl_2027_market_change_log.csv")
     cand_df = pd.read_csv(DATA_DIR / "rr_2027_candidate_rankings.csv")
     snap_path = DATA_DIR / "snapshots" / "ipl_2027_market_snapshot_2026-11-11.csv"
     snap_hash = _sha256(snap_path) if snap_path.exists() else "MISSING"
+    ctx = _resolve_market_context(market_df, report_date=report_date)
+    as_of_label = str(ctx["as_of_label"])
 
     styles = _build_styles()
     story = []
@@ -453,7 +501,7 @@ def generate_market_appendix(out_paths: list[Path]) -> None:
     story.append(Paragraph("PRESSUREIQ — IPL 2027 MARKET &amp; RETENTION GOVERNANCE APPENDIX", styles["title"]))
     story.append(
         Paragraph(
-            f"Separate Market Status Ledger as of {AS_OF_LABEL} | Archived Snapshot SHA-256: {snap_hash[:16]}...",
+            f"Separate Market Status Ledger as of {_esc(as_of_label)} | Frozen Pre-Retention Snapshot SHA-256: {snap_hash[:16]}...",
             styles["subtitle"],
         )
     )
@@ -463,8 +511,8 @@ def generate_market_appendix(out_paths: list[Path]) -> None:
     cand_counts = cand_df["market_status"].value_counts().to_dict()
     story.append(
         _callout(
-            "<b>Strict Pre-Retention Market Governance Rules (As of 12 November 2026):</b> "
-            "(1) Official IPL 2027 franchise retention/release lists are scheduled for <b>17 November 2026</b> and have NOT been published yet. "
+            f"<b>{ctx['governance_title']}</b> "
+            f"{ctx['rule_1']} "
             "(2) Every confirmed status requires an open-web verifiable <code>source_url</code>, <code>source_publication_date</code>, and <code>verification_timestamp</code>. "
             "(3) <b>Absence from a retention/announcement article NEVER implies Confirmed Released or Auction Available.</b> "
             "(4) Market availability is kept strictly separate from Model A statistical reliability scores. "
@@ -558,10 +606,9 @@ def generate_market_appendix(out_paths: list[Path]) -> None:
     story.append(t_log)
     story.append(Spacer(1, 8))
 
-    story.append(Paragraph("3. 17 November 2026 Retention Update Readiness Protocol", styles["h2"]))
+    story.append(Paragraph(str(ctx["protocol_heading"]), styles["h2"]))
     proto_text = (
-        "When BCCI/IPL publishes official 2027 retention lists on <b>17 November 2026</b>, execute the deterministic update workflow in "
-        "<code>docs/NOV17_RETENTION_UPDATE_RUNBOOK.md</code> without modifying frozen Model A statistics:<br/>"
+        f"{ctx['protocol_intro']}<br/>"
         "1. Record official IPL/BCCI retention announcement URLs, publication date (2026-11-17), and exact retention/release/trade rows in a validated update CSV.<br/>"
         "2. Run <code>python scripts/import_market_retentions.py --input &lt;csv&gt; --dry-run</code> to verify schema compliance, status taxonomy, and mandatory provenance URLs.<br/>"
         "3. Apply with <code>--apply</code> to update <code>ipl_2027_player_market_template.csv</code>, append audit rows to <code>ipl_2027_market_change_log.csv</code>, "
@@ -570,6 +617,7 @@ def generate_market_appendix(out_paths: list[Path]) -> None:
     )
     story.append(_callout(proto_text, styles))
 
+    footer_fn = _make_footer(as_of_label)
     for out_path in out_paths:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         doc = SimpleDocTemplate(
@@ -580,15 +628,19 @@ def generate_market_appendix(out_paths: list[Path]) -> None:
             topMargin=12 * mm,
             bottomMargin=14 * mm,
         )
-        doc.build(list(story), onFirstPage=_add_footer, onLaterPages=_add_footer)
+        doc.build(list(story), onFirstPage=footer_fn, onLaterPages=footer_fn)
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate PRESSUREIQ selection sheet and market appendix PDFs.")
+    parser.add_argument("--report-date", default=None, help="Explicit report date string (e.g. '17 November 2026'). Defaults to local date.")
+    args = parser.parse_args()
+
     HANDOVER_SUBMISSION_DIR.mkdir(parents=True, exist_ok=True)
     sel_root = ROOT / "PRESSUREIQ_FINAL_SELECTION_SHEET.pdf"
     mkt_root = ROOT / "PRESSUREIQ_FINAL_MARKET_APPENDIX.pdf"
-    generate_selection_sheet([sel_root])
-    generate_market_appendix([mkt_root])
+    generate_selection_sheet([sel_root], report_date=args.report_date)
+    generate_market_appendix([mkt_root], report_date=args.report_date)
     shutil.copy2(sel_root, HANDOVER_SUBMISSION_DIR / sel_root.name)
     shutil.copy2(mkt_root, HANDOVER_SUBMISSION_DIR / mkt_root.name)
     print("Generated byte-identical PRESSUREIQ_FINAL_SELECTION_SHEET.pdf and PRESSUREIQ_FINAL_MARKET_APPENDIX.pdf")

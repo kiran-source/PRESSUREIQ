@@ -19,9 +19,9 @@
 
 ## 2. Primary Competition PDF Deliverables (`01_Unstop_Submission_Files/`)
 
-- [x] `PRESSUREIQ_FINAL_SELECTION_SHEET.pdf` (3 pages; SHA-256 `b16f28e77681153dfb92ea2b61f5c5bba7113a53db863fcad93f3e9b078b0752`; generated directly from frozen Model A CSVs via `scripts/generate_final_handover_pdfs.py`)
+- [x] `PRESSUREIQ_FINAL_SELECTION_SHEET.pdf` (3 pages; SHA-256 `ac62501e546fd463ab8bc8ab3dc19c3bfa07acabbab402b6ac3a88b35dd63c1e`; generated directly from frozen Model A CSVs via `scripts/generate_final_handover_pdfs.py`)
 - [x] `docs/PRESSUREIQ_FINAL_METHODOLOGY_REPORT.pdf` (14 pages; SHA-256 `044f89a9db2c56b22d474cfe9e55b2d2db4a54517d8ae3a0549a4efa8e60d9a3`; audited and regenerated cleanly with canonical `src/models/pressure_index.py` BPI/BoPI math, `docs/MODEL_BENCHMARK_REPORT.json` 2026 holdout metrics, verified dataset stats, `INR` formatting, and zero raw LaTeX `$`)
-- [x] `PRESSUREIQ_FINAL_MARKET_APPENDIX.pdf` (3 pages; SHA-256 `05615747d9065646d1a6336a93a5055ce30ac959eb67efe989bc11d7f82947af`; separates IPL 2027 market status as of 12 Nov 2026 with verified source URLs, publication dates, verification timestamps, audit log, and Nov 17 update protocol)
+- [x] `PRESSUREIQ_FINAL_MARKET_APPENDIX.pdf` (3 pages; SHA-256 `426305de9c9d0610c75a5254d959bdeab5598013dce29e1d7b5d2e388d35ff7a`; separates IPL 2027 market status as of 12 Nov 2026 with verified source URLs, publication dates, verification timestamps, audit log, and Nov 17 update protocol)
 
 ## 3. Automated Verification & Dashboard QA
 
@@ -38,3 +38,4 @@
   3. `python scripts/generate_final_handover_pdfs.py` (refreshes `PRESSUREIQ_FINAL_MARKET_APPENDIX.pdf` without altering Model A selection CSVs/rankings)
   4. `python -m pytest tests/ -v`
 - [ ] **On 17–18 November 2026 (before Unstop deadline):** Review the final PDFs in `submission_handover/01_Unstop_Submission_Files/`, optionally prepare the companion ZIP (`docs/UNSTOP_SUBMISSION_GUIDE.md`), and manually submit via the Unstop competition portal. *(Automated submission was intentionally not performed.)*
+

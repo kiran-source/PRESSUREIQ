@@ -48,9 +48,9 @@ PRESSUREIQ evaluates delivery-level T20 reliability across **200,999 raw deliver
 
 | Artifact | Bytes | SHA-256 | Role |
 |---|---:|---|---|
-| `PRESSUREIQ_FINAL_SELECTION_SHEET.pdf` | 14,419 | `b16f28e77681153dfb92ea2b61f5c5bba7113a53db863fcad93f3e9b078b0752` | Primary Selection Sheet |
+| `PRESSUREIQ_FINAL_SELECTION_SHEET.pdf` | 14,448 | `ac62501e546fd463ab8bc8ab3dc19c3bfa07acabbab402b6ac3a88b35dd63c1e` | Primary Selection Sheet |
 | `docs/PRESSUREIQ_FINAL_METHODOLOGY_REPORT.pdf` | 40,098 | `044f89a9db2c56b22d474cfe9e55b2d2db4a54517d8ae3a0549a4efa8e60d9a3` | Audited 14-Page Methodology PDF |
-| `PRESSUREIQ_FINAL_MARKET_APPENDIX.pdf` | 11,411 | `05615747d9065646d1a6336a93a5055ce30ac959eb67efe989bc11d7f82947af` | Separate Market Appendix (Nov 12) |
+| `PRESSUREIQ_FINAL_MARKET_APPENDIX.pdf` | 11,429 | `426305de9c9d0610c75a5254d959bdeab5598013dce29e1d7b5d2e388d35ff7a` | Separate Market Appendix (Nov 12) |
 | `data/processed/final_batter_rankings.csv` | 18,444 | `887f0c104047eb7b5c7d662b83600bacaf6263fa7162fc343b27800760b99b87` | Frozen Model A Batters |
 | `data/processed/final_bowler_rankings.csv` | 27,959 | `344d63c55cecc7bce9de3cd06d82b6ac8217fcd448bb3f2e93d55da314f1e7bb` | Frozen Model A Bowlers |
 | `data/processed/snapshots/ipl_2027_market_snapshot_2026-11-11.csv` | 12,066 | `8d1e1bdaa57eb3491abc78139e234420477f1414c448b5a68f4897f07b7efd4d` | Audited Pre-Nov 17 Market Snapshot |
@@ -94,3 +94,4 @@ python scripts/import_market_retentions.py --input <official_nov17_csv> --apply
 python scripts/generate_final_handover_pdfs.py
 python -m pytest tests/ -v
 ```
+
