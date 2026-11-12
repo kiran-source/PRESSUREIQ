@@ -539,13 +539,20 @@ def generate_market_appendix(out_paths: list[Path], report_date: str | None = No
     story.append(Spacer(1, 5))
 
     story.append(Paragraph("1. Source-Audited Market Ledger (data/processed/ipl_2027_player_market_template.csv)", styles["h2"]))
-    story.append(
-        Paragraph(
-            "All 6 cited publisher URLs returned HTTP 200 upon re-verification on 2026-11-12, with source publication dates matched directly against HTML metadata "
-            "(2025-02-04, 2025-11-15, 2025-12-16, 2026-11-05). Pre-2026 audit timestamps on historical squad corrections are logged explicitly in Section 2.",
-            styles["subtitle"],
+    pub_dates_str = ", ".join(sorted({str(d) for d in market_df["source_publication_date"].dropna()}))
+    url_count = int(market_df["source_url"].dropna().nunique())
+    ver_latest = str(market_df["verification_timestamp"].dropna().max()) if market_df["verification_timestamp"].notna().any() else "Unknown"
+    has_post_ret = bool(market_df["official_retention_status"].isin(["Confirmed Retained", "Confirmed Released"]).any())
+    ledger_sub = (
+        f"Currently tracks {url_count} unique source URL(s) (publication dates: {_esc(pub_dates_str)}; latest ledger verification: {_esc(ver_latest)}). "
+        "The 6 pre-retention baseline publisher URLs (2025-02-04, 2025-11-15, 2025-12-16, 2026-11-05) returned HTTP 200 on 2026-11-12; "
+        + (
+            "post-retention entries rely on validated ingestion timestamps in the table below."
+            if has_post_ret
+            else "audit timestamps for historical corrections are documented in Section 2."
         )
     )
+    story.append(Paragraph(ledger_sub, styles["subtitle"]))
     m_rows = [
         [
             Paragraph("Player (ID)", styles["th"]),

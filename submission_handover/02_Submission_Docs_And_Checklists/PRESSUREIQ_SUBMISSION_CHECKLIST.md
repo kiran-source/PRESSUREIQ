@@ -19,9 +19,9 @@
 
 ## 2. Primary Competition PDF Deliverables (`01_Unstop_Submission_Files/`)
 
-- [x] `PRESSUREIQ_FINAL_SELECTION_SHEET.pdf` (3 pages; SHA-256 `1869129d5a02785709b9d54fb6191a6ad4faa1b8c034041afa86d5570d53f441`; generated directly from frozen Model A CSVs via `scripts/generate_final_handover_pdfs.py`)
-- [x] `docs/PRESSUREIQ_FINAL_METHODOLOGY_REPORT.pdf` (14 pages; SHA-256 `642367ea66391928fb1b02ca77b70966ce0c5c262a62ce09b9cfa6050eaddd3e`; audited and regenerated cleanly with canonical `src/models/pressure_index.py` BPI/BoPI math, `docs/MODEL_BENCHMARK_REPORT.json` 2026 holdout metrics, verified dataset stats, `INR` formatting, and zero raw LaTeX `$`)
-- [x] `PRESSUREIQ_FINAL_MARKET_APPENDIX.pdf` (3 pages; SHA-256 `5ab1bea17a9bf94ee688b3df5700fc1e54452224b104feb03b34b12ef1ba87f2`; separates IPL 2027 market status as of 12 Nov 2026 with verified source URLs, publication dates, verification timestamps, audit log, and Nov 17 update protocol)
+- [x] `PRESSUREIQ_FINAL_SELECTION_SHEET.pdf` (3 pages; SHA-256 `d8d4e380539299b95b16834dc5d97edec8d4a8ff00edbcbb2579f80db3b0aaae`; generated directly from frozen Model A CSVs via `scripts/generate_final_handover_pdfs.py`)
+- [x] `docs/PRESSUREIQ_FINAL_METHODOLOGY_REPORT.pdf` (14 pages; SHA-256 `64f1ef6aa3b0bf99f3cc887761419b1b658f9cd61877b91dfa245b2363f0f7c2`; audited and regenerated cleanly with canonical `src/models/pressure_index.py` BPI/BoPI math, `docs/MODEL_BENCHMARK_REPORT.json` 2026 holdout metrics, verified dataset stats, `INR` formatting, and zero raw LaTeX `$`)
+- [x] `PRESSUREIQ_FINAL_MARKET_APPENDIX.pdf` (3 pages; SHA-256 `99677b53f320c8925530fdf5851432a8e8100e2fbd3991d757d30583aabc22ba`; separates IPL 2027 market status as of 12 Nov 2026 with verified source URLs, publication dates, verification timestamps, audit log, and Nov 17 update protocol)
 
 ## 3. Automated Verification & Dashboard QA
 
