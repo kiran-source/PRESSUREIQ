@@ -43,8 +43,10 @@
 | Verification Gate | Command / Tool | Result Observed |
 |:---|:---|:---|
 | **CodeRabbit Pass 1 (Initial)** | `cr review --committed --base master --agent` | `0` critical, `15` major (`CR-01`..`CR-15`), `0` minor — **100% resolved** |
-| **CodeRabbit Pass 2 (Final vs `master`)** | `cr review --committed --base master --agent` (on `ece2cc7`) | `0` critical, **0 Pass-1 recurrences**, `19` sampled findings (`CR2-01`..`CR2-19`) — **100% remediated locally** |
-| **Unit & Integration Test Suite** | `python -m pytest tests/ -v` | `86 / 86 PASSED` (`0 failed`, `0 skipped`) in `12.55s` |
-| **Hybrid Validation Gate** | `python scripts/hybrid_validation_gate.py` | Exit `0`, `ALL_NUMBERS_VERIFIED_EXACT_MATCH`, `0` monotonicity violations |
+| **CodeRabbit Pass 2 (Full Diff vs `master`)** | `cr review --committed --base master --agent` (on `ece2cc7`) | `0` critical, **0 Pass-1 recurrences**, `19` sampled findings (`CR2-01`..`CR2-19`) — **100% remediated** |
+| **CodeRabbit Pass 3 Delta (`ece2cc7..c4ac81a`)** | `cr review --committed --base ece2cc7 --agent` | `0` critical, `3` major (`CR3-01`..`CR3-03`), `1` minor (`CR3-04`) — **100% remediated & regression-tested** |
+| **Unit & Integration Test Suite** | `python -m pytest tests/ -v` | `89 / 89 PASSED` (`0 failed`, `0 skipped`; incl. 3 new failure/success-path gate tests) |
+| **Hybrid Validation Gate** | `python scripts/hybrid_validation_gate.py` | Exit `0` on valid inputs (`ALL_NUMBERS_VERIFIED_EXACT_MATCH`); exit `1` on missing CSV or metric mismatch |
 | **Headless Streamlit Import Check** | `python scripts/test_streamlit_headless.py` | Exit `0` |
 | **Playwright End-to-End Dashboard QA** | `qa_dashboard_playwright.py` (`10` pages + desktop/laptop viewports) | Exit `0`, `2 interactions`, `zero_mutation: True`, `errors: []` |
+

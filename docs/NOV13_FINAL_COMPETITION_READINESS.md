@@ -61,14 +61,17 @@ Verified against [`FINAL_PLAYER_CLAIMS_VERIFICATION.md`](file:///c:/Users/kiran/
 
 1. **Regulatory Compliance (Pakistani Players):**
    - *Haris Rauf, Fakhar Zaman, Abbas Afridi, Sufiyan Muqeem* are properly contextualized. The documentation explicitly clarifies that Pakistani players are **ineligible for the IPL under longstanding BCCI policy**. They are evaluated strictly as **international analytical benchmarks** to calibrate world-class pace and mystery spin.
-2. **Auction Availability Realities (Franchise Retentions):**
-   - *Ruturaj Gaikwad (CSK Captain), Suryakumar Yadav (MI / India T20I Captain), Nicholas Pooran (LSG Core), Matheesha Pathirana (CSK Core)* are acknowledged as core retentions. They are designated as **"Tactical Archetype Blueprints"** to guide RR scouting rather than unrealistic auction targets.
-3. **Actionable Acquisition Targets for RR:**
-   - **Nathan Ellis (#4 Bowler):** Prime death-overs yorker specialist to pair with Sandeep Sharma.
-   - **Romario Shepherd (#5 Batter):** Solves RR's #7 finishing dilemma (482 HP balls, 159.3 death SR).
-   - **Jitesh Sharma (#8 Batter):** Attacks death bowling from ball one; frees an overseas slot.
-   - **Liam Dawson (#1 Bowler):** Economical left-arm finger spinner (7.38 Powerplay economy).
-   - **Shoriful Islam (#9 Bowler):** Left-arm swing backup to Trent Boult.
+2. **Contracted Franchise Players & Confirmed Nov 5 Trade (Statistical Benchmarks Only Prior to Nov 17):**
+   - *Verified 2026 Franchise Squads (`Pending Verification` for 2027 until 17 Nov 2026 official lists):* *Ruturaj Gaikwad (CSK), Suryakumar Yadav (MI), Rohit Sharma (MI), Nicholas Pooran (LSG), Matheesha Pathirana (KKR — acquired Dec 2025 ahead of IPL 2026), Jos Buttler (GT), Ishant Sharma (GT), Phil Salt (RCB), Jitesh Sharma (RCB), and Romario Shepherd (RCB)*. None of these players should be labeled auction-available ahead of the 17 November 2026 filings.
+   - *Unavailable (`Confirmed Trade`, 5 Nov 2026):* **Nathan Ellis (#4 Bowler)** was officially traded from CSK to **Sunrisers Hyderabad (SRH)** in a 4-player pre-2027 trade and is **unavailable** for Rajasthan Royals auction bidding; he is retained solely as a statistical death-bowling benchmark.
+3. **Statistical Fit vs. Audited Market Watchlist Separation (Per Market Ledger):**
+   - **Uncontracted Overseas Statistical Targets (`Pending Verification`, Class B Watchlist):**
+     - **Liam Dawson (#1 Bowler):** Economical left-arm finger spinner (`7.79` career economy; `7.38` Powerplay).
+     - **Shoriful Islam (#9 Bowler):** Left-arm seam angle and death execution option.
+   - **2026 Squad Statistical Fits (`Pending Verification`, Class C — Monitor Nov 17 Releases Only):**
+     - **Romario Shepherd (#5 Batter — RCB 2026):** Statistical #7 finisher archetype (`482` HP balls, `159.3` death SR).
+     - **Jitesh Sharma (#8 Batter — RCB 2026):** Statistical domestic keeper-finisher archetype.
+     - *(Note: Nathan Ellis is excluded from RR acquisition targets due to his confirmed CSK -> SRH trade.)*
 4. **Sensor & Velocity Claims:**
    - Broadcast radar figures (e.g., Haris Rauf 150+ km/h; Pathirana 145+ km/h) are explicitly demarcated as Hawkeye radar telemetry, not raw dataset artifacts.
 

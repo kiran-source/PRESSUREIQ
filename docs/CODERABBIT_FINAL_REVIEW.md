@@ -63,6 +63,20 @@ Pass 2 reported **19 newly sampled findings** (`0 critical`, `15 major`, `4 mino
 ## 3. Final Verification Posture After Pass 2 Fixes
 
 - **Open Critical Issues:** `0`
-- **Open Major Issues From Initial & Second CodeRabbit Passes:** `0` (all 15 Pass-1 findings and all 19 Pass-2 findings remediated locally and verified via re-execution).
-- **Pytest Full Suite Post-Fix:** `86 / 86 PASSED` (`0 failed`, `0 skipped`) in `12.55s` (prior to final commit; final post-commit run recorded in [`docs/COMPETITION_READINESS_DECISION.md`](COMPETITION_READINESS_DECISION.md)).
+- **Open Major Issues From Initial, Second & Pass 3 Targeted Delta CodeRabbit Passes:** `0` (all 15 Pass-1 findings, all 19 Pass-2 findings, and all 4 Pass-3 delta findings remediated and verified locally).
+- **Pytest Full Suite Post-Fix:** `89 / 89 PASSED` (`0 failed`, `0 skipped`; includes `3` new regression tests in `tests/test_hybrid_validation.py`).
 - **Playwright Browser QA Post-Fix:** All 10 Streamlit pages + interactive filter/selector flows passed with `zero_mutation: True` and `errors: []`.
+
+---
+
+## 4. Targeted Delta Review & Pass 3 Remediation (`ece2cc7..c4ac81a`)
+
+A narrowly scoped CodeRabbit delta review (`cr review --committed --base ece2cc7 --agent`, `task-4045`, log `.system_generated/steps/4045/output.txt`) inspected `20` changed text files introduced after `ece2cc7` and reported `4` findings (`0 critical`, `3 major`, `1 minor`), all verified genuine and remediated in Pass 3:
+
+| ID | CodeRabbit Severity | File (Lines) | Finding Summary | Fix & Validation Proof |
+|:---|:---|:---|:---|:---|
+| `CR3-01` | `major` | `scripts/hybrid_validation_gate.py:86-100, 160` | `weighting_verification` uninitialized when `weighting_fairness_comparison.csv` is missing (`UnboundLocalError`). | Initialized `weighting_verification: Dict[str, Any] = {}` before conditional so missing CSV records `missing_weighting_csv` cleanly; verified by `test_validation_gate_missing_weighting_csv_returns_nonzero`. |
+| `CR3-02` | `major` | `scripts/hybrid_validation_gate.py:174, main()` | `main()` ignored `verification_status == "VERIFICATION_MISMATCH"` and returned exit code `0`. | Updated `main() -> int` with `sys.exit(main())` to print/log failures and return `1` on any missing/mismatched check or monotonicity violation while still writing JSON diagnostics; verified by all `3` new `tests/test_hybrid_validation.py` tests. |
+| `CR3-03` | `major` | `docs/EMERGING_TALENT_REVIEW.md:45-46, 72` | Conflicting Vaibhav Sooryavanshi (`ID 50284`) stats between Section 2 (`714` balls, `139.8` SR, `0` HP balls) and Section 4 (`676` balls, `223.2` SR, `7` HP balls). | Reconciled both sections directly from `deliveries_with_pava.parquet`: `714` total delivery rows (`473` IPL, `139` T20I, `102` Other T20, including `38` wides), `676` valid batter balls (`is_batter_ball == 1`), `1,509` runs (`223.2` SR), `7` HP balls at `BPI >= 50`, and `0` balls at `BPI >= 65`. |
+| `CR3-04` | `minor` | `docs/NOV13_FINAL_COMPETITION_READINESS.md:65-71` | Section 3 listed Matheesha Pathirana as `CSK Core` and Nathan Ellis as an actionable acquisition target. | Corrected Pathirana to `KKR` (`2026` squad, `Pending Verification`), removed Ellis (`Confirmed Trade CSK -> SRH, 5 Nov 2026`) from acquisition targets, and separated uncontracted Class B watchlists from Class C `2026` squads (`Pending Verification` until Nov 17). |
+

@@ -17,6 +17,7 @@ Usage:
 import json
 import logging
 import math
+import sys
 from pathlib import Path
 from typing import Dict, List, Tuple, Any
 
@@ -84,6 +85,7 @@ def verify_reproduced_numbers(df: pd.DataFrame) -> Dict[str, Any]:
         
     # 4. Check weighting fairness comparison
     weighting_path = CHALLENGE_DIR / "weighting_fairness_comparison.csv"
+    weighting_verification: Dict[str, Any] = {}
     if weighting_path.exists():
         wf_df = pd.read_csv(weighting_path)
         gaikwad_row = wf_df[wf_df["player_name"] == "Ruturaj Gaikwad"].iloc[0]
@@ -194,12 +196,18 @@ def verify_reproduced_numbers(df: pd.DataFrame) -> Dict[str, Any]:
         "verification_status": status_str
     }
     
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     with open(OUTPUT_DIR / "reproduction_verification.json", "w") as fp:
         json.dump(res, fp, indent=2)
-        
-    logger.info(
-        f"Section 1 Verified: Deliveries={total_deliveries:,}, Matches={total_matches}, Status={status_str}."
-    )
+
+    if failed_checks:
+        msg = f"Section 1 Mismatch/Missing Checks: {failed_checks}"
+        logger.error(msg)
+        print(f"VALIDATION GATE CHECK FAILURE: {msg}", file=sys.stderr)
+    else:
+        logger.info(
+            f"Section 1 Verified: Deliveries={total_deliveries:,}, Matches={total_matches}, Status={status_str}."
+        )
     return res
 
 
@@ -983,33 +991,47 @@ def compare_hybrid_vs_baseline_rankings(df: pd.DataFrame) -> Dict[str, Any]:
     return comp_summary
 
 
-def main():
+def main() -> int:
     logger.info(f"Starting PRESSUREIQ Hybrid Methodology Validation Gate on {DELIVERIES_PAVA_PATH}...")
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     df = pd.read_parquet(DELIVERIES_PAVA_PATH)
-    
+
     # 1. Reproduce & Verify
-    verify_reproduced_numbers(df)
-    
+    repro_res = verify_reproduced_numbers(df)
+
     # 2. Pressure Monotonicity & Measurement Validation
-    validate_pressure_measurement_monotonicity(df)
-    
+    mono_res = validate_pressure_measurement_monotonicity(df)
+
     # 3. Blowout Functions Benchmark
     benchmark_blowout_functions(df)
-    
+
     # 4. Resource Model Validation
     validate_resource_model_specification(df)
-    
+
     # 5. Win Probability Calibration & ECE Audit
     audit_win_probability_calibration(df)
-    
+
     # 6. Continuous Weighting Sweep
     sweep_continuous_weighting_parameters(df)
-    
+
     # 7. Hybrid vs Baseline Rankings Comparison
     compare_hybrid_vs_baseline_rankings(df)
-    
+
+    failed_checks = list(repro_res.get("failed_checks", []))
+    bpi_v = int(mono_res.get("bpi_violations", 0))
+    cdpi_v = int(mono_res.get("cdpi_bat_violations", 0))
+    if bpi_v > 0 or cdpi_v > 0:
+        failed_checks.append(f"monotonicity_violations(bpi={bpi_v},cdpi={cdpi_v})")
+
+    if failed_checks or repro_res.get("verification_status") != "ALL_NUMBERS_VERIFIED_EXACT_MATCH":
+        msg = f"Hybrid Validation Gate FAILED: {failed_checks}"
+        logger.error(msg)
+        print(msg, file=sys.stderr)
+        return 1
+
     logger.info("Hybrid Validation Gate experiments executed successfully!")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

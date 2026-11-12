@@ -10,9 +10,13 @@ Validates:
 6. Continuous opportunity weighting and Kish ESS positivity.
 """
 
+import json
+import shutil
 import numpy as np
+import pandas as pd
 import pytest
 
+import scripts.hybrid_validation_gate as hvg
 from scripts.hybrid_validation_gate import sigmoid
 
 
@@ -70,4 +74,65 @@ def test_kish_effective_sample_size_formula():
     w_unequal = np.linspace(0.1, 1.0, N)
     ess_unequal = (np.sum(w_unequal) ** 2) / np.sum(w_unequal ** 2)
     assert 0 < ess_unequal < N
+
+
+def test_validation_gate_main_succeeds_on_valid_data(tmp_path, monkeypatch):
+    """Verify validation gate main() returns exit code 0 when all checks match."""
+    out_dir = tmp_path / "out_valid"
+    monkeypatch.setattr(hvg, "OUTPUT_DIR", out_dir)
+    rc = hvg.main()
+    assert rc == 0
+    rep = json.loads((out_dir / "reproduction_verification.json").read_text(encoding="utf-8"))
+    assert rep["verification_status"] == "ALL_NUMBERS_VERIFIED_EXACT_MATCH"
+    assert rep["failed_checks"] == []
+
+
+def test_validation_gate_missing_weighting_csv_returns_nonzero(tmp_path, monkeypatch, capsys):
+    """Verify missing weighting_fairness_comparison.csv avoids UnboundLocalError and returns nonzero."""
+    src_chal = hvg.CHALLENGE_DIR
+    chal_dir = tmp_path / "challenge_missing"
+    chal_dir.mkdir()
+    shutil.copy2(src_chal / "cdpi_parameter_sweep.csv", chal_dir / "cdpi_parameter_sweep.csv")
+    shutil.copy2(src_chal / "win_prob_chronological_validation.json", chal_dir / "win_prob_chronological_validation.json")
+    out_dir = tmp_path / "out_missing"
+
+    monkeypatch.setattr(hvg, "CHALLENGE_DIR", chal_dir)
+    monkeypatch.setattr(hvg, "OUTPUT_DIR", out_dir)
+
+    rc = hvg.main()
+    assert rc != 0
+    captured = capsys.readouterr()
+    assert "missing_weighting_csv" in captured.err
+
+    rep = json.loads((out_dir / "reproduction_verification.json").read_text(encoding="utf-8"))
+    assert rep["verification_status"] == "VERIFICATION_MISMATCH"
+    assert "missing_weighting_csv" in rep["failed_checks"]
+    assert rep["reproduced_weighting"] == {}
+
+
+def test_validation_gate_mismatched_values_return_nonzero(tmp_path, monkeypatch, capsys):
+    """Verify deliberately mismatched reproduced metrics return nonzero and log detailed JSON failure."""
+    src_chal = hvg.CHALLENGE_DIR
+    chal_dir = tmp_path / "challenge_bad"
+    chal_dir.mkdir()
+    shutil.copy2(src_chal / "cdpi_parameter_sweep.csv", chal_dir / "cdpi_parameter_sweep.csv")
+    shutil.copy2(src_chal / "win_prob_chronological_validation.json", chal_dir / "win_prob_chronological_validation.json")
+
+    wf = pd.read_csv(src_chal / "weighting_fairness_comparison.csv")
+    wf.loc[wf["player_name"] == "Ruturaj Gaikwad", "step_50_balls"] = 999
+    wf.to_csv(chal_dir / "weighting_fairness_comparison.csv", index=False)
+
+    out_dir = tmp_path / "out_bad"
+    monkeypatch.setattr(hvg, "CHALLENGE_DIR", chal_dir)
+    monkeypatch.setattr(hvg, "OUTPUT_DIR", out_dir)
+
+    rc = hvg.main()
+    assert rc != 0
+    captured = capsys.readouterr()
+    assert "gaikwad_step_50_mismatch" in captured.err
+
+    rep = json.loads((out_dir / "reproduction_verification.json").read_text(encoding="utf-8"))
+    assert rep["verification_status"] == "VERIFICATION_MISMATCH"
+    assert "gaikwad_step_50_mismatch" in rep["failed_checks"]
+
 

@@ -1,8 +1,8 @@
 # PRESSUREIQ — Dedicated Emerging Talent Evaluation Module
 
 **Document:** `docs/EMERGING_TALENT_REVIEW.md`  
-**Date:** 15 November 2026  
-**Status:** Certified Strategy & Scouting Report  
+**Date:** 12 November 2026  
+**Status:** Reconciled Strategy & Scouting Report  
 **Framework:** Rajasthan Royals SupeRR Selector Season 2 — Round 1  
 **Competition Deadline:** 18 November 2026  
 
@@ -42,9 +42,9 @@ quadrantChart
 
 An adversarial audit of the baseline Model A architecture revealed an unintended structural bias:
 1. **The Top-Order Exposure Dilemma (The Vaibhav Sooryavanshi Paradox):**
-   - In our 200,999-delivery dataset, **Vaibhav Sooryavanshi (ID 50284)** has faced **714 deliveries** across IPL 2025, IPL 2026, Asia Cup Rising Stars 2025, and India bilateral T20Is, compiling an explosive strike rate of $139.8$.
-   - However, because Vaibhav bats at #1 or #2, he primarily bats in the powerplay and early middle overs. Under strict late-game high-pressure definitions ($\text{RRR} \ge 10.0$ in overs 16–20), he records **0 high-pressure balls**.
-   - Standard models would discard him as having "zero pressure data." In reality, batting as a teenager against express pace in an IPL powerplay is an intense psychological pressure environment that traditional RRR-based definitions fail to capture.
+   - In our `deliveries_with_pava.parquet` dataset (`473` IPL, `139` T20I, and `102` Other T20 / Asia Cup rows), **Vaibhav Sooryavanshi (`ID 50284`)** appears across **`714` total deliveries** (including `38` wides) and **`676` valid batter balls (`is_batter_ball == 1`)**, scoring **`1,509` runs** at an explosive batter-ball strike rate of **`223.2`** (`211.3` across all `714` delivery rows).
+   - Because Vaibhav opens in the powerplay, only **`7` valid batter balls** reach the operational high-pressure threshold ($\text{BPI} \ge 50$, well below Model A's $30$-ball eligibility cutoff), and **`0` balls** reach the descriptive high/extreme tiers ($\text{BPI} \ge 65$).
+   - Standard late-overs models therefore exclude him from Model A rankings despite elite powerplay striking. In reality, batting as a teenager against express pace in an IPL powerplay is an intense pressure environment that late-innings RRR thresholds alone fail to reflect.
 2. **The Empirical Bayes Solution:**
    - Rather than forcing young players into the top 10 without proof or discarding them entirely, PRESSUREIQ applies role-conditioned peer priors. We evaluate their powerplay run creation relative to teenage historical benchmarks while transparently categorizing their sample confidence.
 
@@ -69,9 +69,9 @@ The complete tabular data is compiled in [`data/processed/emerging_talent_watchl
 
 ### 1. Vaibhav Sooryavanshi (India / Rajasthan Royals) — Tier C
 - **Player ID:** `50284` | **Age:** 14 | **Role:** Top-Order Left-Hand Batter
-- **Dataset Metrics:** 676 Total Balls | 7 HP Balls ($\text{BPI} \ge 50$) | Strike Rate: 223.2
+- **Dataset Metrics:** `676` valid batter balls (`714` total delivery rows incl. `38` wides) | `1,509` runs | Strike Rate: **`223.2`** (`is_batter_ball == 1`) | **`7`** HP balls ($\text{BPI} \ge 50$; **`0`** balls at $\text{BPI} \ge 65$)
 - **Tactical Breakdown:** A generational batting prodigy signed by Rajasthan Royals. Possesses exceptional hand speed, bat swing, and back-foot punch through the offside. Fearless against pace bowling in powerplays.
-- **Why He Missed Top 10:** Only 7 high-pressure deliveries (below the 30-ball Model A threshold). Ranking him in the official top 10 most reliable pressure batters would confuse future ceiling with demonstrated late-game clutch execution.
+- **Why He Missed Top 10:** Only `7` high-pressure deliveries (`BPI >= 50`, well below the $30$-ball Model A threshold) and `0` at `BPI >= 65`. Ranking him in the official top 10 most reliable pressure batters would confuse future ceiling with demonstrated late-game clutch execution.
 - **RR Action Plan:** Retain as a core developmental prospect. Shield from late-overs crisis finishing; deploy strictly in the top order with a license to attack the powerplay.
 
 ### 2. Vignesh Puthur (India / Rajasthan Royals — Dec 2025 Auction) — Tier C
