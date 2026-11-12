@@ -41,6 +41,8 @@ PHASE2_MANIFEST_PATH = PROCESSED_DATA_DIR / "phase2_verification_manifest.json"
 
 FROZEN_BATTER_SHA256 = "887f0c104047eb7b5c7d662b83600bacaf6263fa7162fc343b27800760b99b87"
 FROZEN_BOWLER_SHA256 = "344d63c55cecc7bce9de3cd06d82b6ac8217fcd448bb3f2e93d55da314f1e7bb"
+FROZEN_ARCHIVE_ZIP_PATH = ROOT / "PRESSUREIQ_Final_Submission.zip"
+FROZEN_ARCHIVE_ZIP_SHA256 = "76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db"
 
 
 def _read_csv_safe(path: Path) -> pd.DataFrame:
@@ -247,8 +249,9 @@ def query_player_deliveries(
     id_col = "striker_id" if is_batting else "bowler_id"
     cols = (
         "match_id, innings, match_date, comp_category, phase, runs, batter_runs, "
-        "is_batter_ball, is_legal_ball, is_boundary, is_wicket, is_bowler_wicket, "
-        "bowler_runs_conceded, bpi, bopi, raw_bat_value, raw_bowl_value, pava_bat, pava_bowl"
+        "is_batter_ball, is_legal_ball, is_boundary, is_wicket, is_bowler_wicket, is_striker_out, "
+        "bowler_runs_conceded, bpi, bopi, exp_batter_runs, prob_dismissal, prob_boundary, "
+        "exp_bowler_runs, prob_bowler_wicket, raw_bat_value, raw_bowl_value, pava_bat, pava_bowl"
     )
     sql = f"SELECT {cols} FROM read_parquet(?) WHERE {id_col} = ?"
     con = duckdb.connect()
@@ -351,6 +354,131 @@ def query_cohort_phase_summary(pava_path: Path = DELIVERIES_PAVA_PATH) -> pd.Dat
         con.close()
 
 
+def query_pressure_analytics_summary(pava_path: Path = DELIVERIES_PAVA_PATH) -> Dict[str, pd.DataFrame]:
+    """Aggregate 10-bin pressure distributions and Observed vs Expected tier outcomes via DuckDB."""
+    if not pava_path.exists():
+        return {"hist": pd.DataFrame(), "tiers": pd.DataFrame(), "phase_outcomes": pd.DataFrame()}
+    p_str = str(pava_path.resolve())
+    con = duckdb.connect()
+    try:
+        hist_sql = """
+        WITH bat_bins AS (
+            SELECT
+                LEAST(CAST(FLOOR(bpi / 10.0) AS INT) * 10, 90) AS bin_start,
+                COUNT(*) AS bat_deliveries,
+                ROUND(AVG(raw_bat_value), 4) AS bat_mean_raw_pava
+            FROM read_parquet(?)
+            WHERE is_batter_ball = 1 AND bpi IS NOT NULL
+            GROUP BY 1
+        ),
+        bowl_bins AS (
+            SELECT
+                LEAST(CAST(FLOOR(bopi / 10.0) AS INT) * 10, 90) AS bin_start,
+                COUNT(*) AS bowl_deliveries,
+                ROUND(AVG(raw_bowl_value), 4) AS bowl_mean_raw_pava
+            FROM read_parquet(?)
+            WHERE is_legal_ball = 1 AND bopi IS NOT NULL
+            GROUP BY 1
+        )
+        SELECT
+            COALESCE(b.bin_start, w.bin_start) AS bin_start,
+            COALESCE(b.bat_deliveries, 0) AS bat_deliveries,
+            COALESCE(b.bat_mean_raw_pava, 0.0) AS bat_mean_raw_pava,
+            COALESCE(w.bowl_deliveries, 0) AS bowl_deliveries,
+            COALESCE(w.bowl_mean_raw_pava, 0.0) AS bowl_mean_raw_pava
+        FROM bat_bins b
+        FULL OUTER JOIN bowl_bins w ON b.bin_start = w.bin_start
+        ORDER BY bin_start
+        """
+        hist_df = con.execute(hist_sql, [p_str, p_str]).df()
+        hist_df["bin_label"] = hist_df["bin_start"].apply(lambda v: f"{int(v)}–{int(v)+10}")
+
+        tiers_sql = """
+        SELECT
+            CASE
+                WHEN bpi < 35 THEN 'Low (<35)'
+                WHEN bpi < 65 THEN 'Medium [35–65)'
+                WHEN bpi < 85 THEN 'High [65–85)'
+                ELSE 'Extreme (>=85)'
+            END AS pressure_tier,
+            CASE
+                WHEN bpi < 35 THEN 1
+                WHEN bpi < 65 THEN 2
+                WHEN bpi < 85 THEN 3
+                ELSE 4
+            END AS tier_order,
+            COUNT(*) AS bat_balls,
+            ROUND(AVG(batter_runs), 4) AS obs_bat_runs,
+            ROUND(AVG(exp_batter_runs), 4) AS exp_bat_runs,
+            ROUND(AVG(CAST(is_boundary AS DOUBLE)) * 100.0, 2) AS obs_boundary_pct,
+            ROUND(AVG(prob_boundary) * 100.0, 2) AS exp_boundary_pct,
+            ROUND(AVG(CAST(is_striker_out AS DOUBLE)) * 100.0, 2) AS obs_dismissal_pct,
+            ROUND(AVG(prob_dismissal) * 100.0, 2) AS exp_dismissal_pct
+        FROM read_parquet(?)
+        WHERE is_batter_ball = 1 AND bpi IS NOT NULL
+        GROUP BY 1, 2
+        ORDER BY tier_order
+        """
+        tiers_df = con.execute(tiers_sql, [p_str]).df()
+
+        phase_sql = """
+        SELECT
+            phase,
+            COUNT(*) AS deliveries,
+            ROUND(AVG(batter_runs), 4) AS obs_bat_runs,
+            ROUND(AVG(exp_batter_runs), 4) AS exp_bat_runs,
+            ROUND(AVG(bowler_runs_conceded), 4) AS obs_bowl_runs,
+            ROUND(AVG(exp_bowler_runs), 4) AS exp_bowl_runs,
+            ROUND(AVG(bpi), 2) AS mean_bpi,
+            ROUND(AVG(bopi), 2) AS mean_bopi
+        FROM read_parquet(?)
+        GROUP BY phase
+        """
+        phase_df = con.execute(phase_sql, [p_str]).df()
+        return {"hist": hist_df, "tiers": tiers_df, "phase_outcomes": phase_df}
+    finally:
+        con.close()
+
+
+def query_dataset_missingness(pava_path: Path = DELIVERIES_PAVA_PATH) -> pd.DataFrame:
+    """Summarize observed missingness and telemetry exclusions cleanly via DuckDB."""
+    if not pava_path.exists():
+        return pd.DataFrame()
+    p_str = str(pava_path.resolve())
+    sql = """
+    SELECT
+        COUNT(*) AS total_rows,
+        SUM(CASE WHEN bowl_speed IS NULL OR bowl_speed <= 0 THEN 1 ELSE 0 END) AS missing_or_zero_bowl_speed,
+        SUM(CASE WHEN stroke IS NULL OR TRIM(CAST(stroke AS VARCHAR)) = '' THEN 1 ELSE 0 END) AS missing_stroke,
+        SUM(CASE WHEN delivery_style IS NULL OR TRIM(CAST(delivery_style AS VARCHAR)) = '' THEN 1 ELSE 0 END) AS missing_delivery_style,
+        SUM(CASE WHEN TRY_CAST(is_dls_or_revised AS BOOLEAN) THEN 1 ELSE 0 END) AS revised_dls_deliveries
+    FROM read_parquet(?)
+    """
+    con = duckdb.connect()
+    try:
+        row = con.execute(sql, [p_str]).df().iloc[0]
+        total = max(int(row["total_rows"]), 1)
+        items = [
+            ("Bowl Speed (`<=0` or null)", int(row["missing_or_zero_bowl_speed"]), "Filtered to [50, 165] km/h; excluded from baseline ML models"),
+            ("Batter Shot / Stroke Metadata", int(row["missing_stroke"]), "Informational telemetry only; excluded from PAVA features"),
+            ("Bowler Delivery Style", int(row["missing_delivery_style"]), "Retained as null without imputation"),
+            ("DLS / Revised-Target Deliveries", int(row["revised_dls_deliveries"]), "Handicapped cleanly with revised legal balls & target rules"),
+        ]
+        return pd.DataFrame(
+            [
+                {
+                    "Field / Telemetry Category": name,
+                    "Affected Deliveries": cnt,
+                    "Share (%)": round(cnt * 100.0 / total, 2),
+                    "Governance Handling": note,
+                }
+                for name, cnt, note in items
+            ]
+        )
+    finally:
+        con.close()
+
+
 @dataclass
 class DashboardDataBundle:
     bat_df: pd.DataFrame
@@ -369,6 +497,8 @@ class DashboardDataBundle:
     provenance: Dict[str, Any]
     phase2_manifest: Dict[str, Any]
     integrity_status: Dict[str, Any]
+    pressure_summary: Optional[Dict[str, pd.DataFrame]] = None
+    missingness_df: Optional[pd.DataFrame] = None
 
 
 def load_dashboard_bundle_uncached() -> DashboardDataBundle:
@@ -394,6 +524,8 @@ def load_dashboard_bundle_uncached() -> DashboardDataBundle:
 
     bat_sha = compute_file_sha256(BATTER_RANKINGS_PATH)
     bowl_sha = compute_file_sha256(BOWLER_RANKINGS_PATH)
+    snap_sha = compute_file_sha256(MARKET_SNAPSHOT_NOV11_PATH)
+    orig_zip_sha = compute_file_sha256(FROZEN_ARCHIVE_ZIP_PATH) if FROZEN_ARCHIVE_ZIP_PATH.exists() else "NOT_PRESENT"
 
     market_snap = _clean_market_frame(_read_csv_safe(MARKET_SNAPSHOT_NOV11_PATH))
     market_curr = _clean_market_frame(_read_csv_safe(MARKET_CURRENT_PATH))
@@ -419,7 +551,12 @@ def load_dashboard_bundle_uncached() -> DashboardDataBundle:
         integrity_status={
             "batter_csv_sha256": bat_sha,
             "bowler_csv_sha256": bowl_sha,
+            "market_snapshot_sha256": snap_sha,
+            "archive_zip_sha256": orig_zip_sha,
             "batter_frozen_match": bat_sha == FROZEN_BATTER_SHA256,
             "bowler_frozen_match": bowl_sha == FROZEN_BOWLER_SHA256,
+            "archive_zip_match": orig_zip_sha == FROZEN_ARCHIVE_ZIP_SHA256 if orig_zip_sha != "NOT_PRESENT" else None,
         },
+        pressure_summary=query_pressure_analytics_summary(DELIVERIES_PAVA_PATH),
+        missingness_df=query_dataset_missingness(DELIVERIES_PAVA_PATH),
     )

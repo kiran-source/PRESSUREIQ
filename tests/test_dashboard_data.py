@@ -211,3 +211,57 @@ def test_rr_core_visible_when_candidates_empty():
     assert out["targets"].empty
 
 
+def test_v3_teams_comparison_pressure_analytics_and_charts():
+    """Verify v3 10-team overview, multi-player comparison, DuckDB pressure summary & new charts."""
+    from src.dashboard.analytics import build_all_ipl_teams_overview, build_multi_player_comparison
+    from src.dashboard.charts import (
+        fig_bpi_bopi_distribution,
+        fig_emerging_opportunity_matrix,
+        fig_expected_vs_observed_tiers,
+        fig_market_team_matrix,
+        fig_multi_player_ci_bars,
+        fig_multi_player_prc_overlay,
+        fig_multi_player_radar,
+        fig_player_expected_vs_observed,
+        fig_shrinkage_curve,
+    )
+
+    bundle = load_dashboard_bundle_uncached()
+    teams_df = build_all_ipl_teams_overview(
+        bundle.players_df,
+        bundle.market_current,
+        bundle.bat_df,
+        bundle.bowl_df,
+        bundle.rr_candidates_df,
+    )
+    assert len(teams_df) == 10
+    srh_row = teams_df[teams_df["Code"] == "SRH"].iloc[0]
+    assert srh_row["Confirmed Trades In"] == 1
+
+    cmp_bat = build_multi_player_comparison(bundle.bat_df.head(3), is_batting=True)
+    cmp_bowl = build_multi_player_comparison(bundle.bowl_df.head(2), is_batting=False)
+    assert len(cmp_bat) == 3 and "Career SR" in cmp_bat.columns
+    assert len(cmp_bowl) == 2 and "Career Economy" in cmp_bowl.columns
+
+    ps = bundle.pressure_summary or {}
+    assert not ps["hist"].empty
+    assert not ps["tiers"].empty
+    assert bundle.missingness_df is not None and not bundle.missingness_df.empty
+
+    p1 = query_player_deliveries(int(bundle.bat_df.iloc[0]["player_id"]), is_batting=True)
+    p2 = query_player_deliveries(int(bundle.bat_df.iloc[3]["player_id"]), is_batting=True)
+    new_figs = [
+        fig_player_expected_vs_observed(p1, str(bundle.bat_df.iloc[0]["player_name"]), is_batting=True),
+        fig_multi_player_radar(bundle.bat_df.head(3)),
+        fig_multi_player_ci_bars(bundle.bat_df.head(3)),
+        fig_multi_player_prc_overlay({str(bundle.bat_df.iloc[0]["player_name"]): p1, str(bundle.bat_df.iloc[3]["player_name"]): p2}, is_batting=True),
+        fig_bpi_bopi_distribution(ps["hist"]),
+        fig_expected_vs_observed_tiers(ps["tiers"]),
+        fig_shrinkage_curve(45.0),
+        fig_emerging_opportunity_matrix(bundle.emerging_df),
+        fig_market_team_matrix(teams_df),
+    ]
+    for f in new_figs:
+        assert len(f.data) > 0
+
+

@@ -350,3 +350,139 @@ def summarize_market_counts(market_df: pd.DataFrame) -> Dict[str, int]:
     for s in STRICT_MARKET_STATUSES:
         counts[s] = int(vc.get(s, 0))
     return counts
+
+
+ALL_DISPLAY_MARKET_STATUSES = [
+    "Confirmed Trade",
+    "Confirmed Retained",
+    "Confirmed Released",
+    "Reported",
+    "Pending Verification",
+    "Rumour",
+    "Policy/Eligibility Review",
+    "Historical",
+]
+
+
+def build_all_ipl_teams_overview(
+    players_df: pd.DataFrame,
+    market_df: pd.DataFrame,
+    bat_df: pd.DataFrame,
+    bowl_df: pd.DataFrame,
+    candidates_df: pd.DataFrame,
+) -> pd.DataFrame:
+    """Summarize all 10 IPL franchises cleanly with strict market-status separation."""
+    franchises = [
+        ("CSK", "Chennai Super Kings"),
+        ("DC", "Delhi Capitals"),
+        ("GT", "Gujarat Titans"),
+        ("KKR", "Kolkata Knight Riders"),
+        ("LSG", "Lucknow Super Giants"),
+        ("MI", "Mumbai Indians"),
+        ("PBKS", "Punjab Kings"),
+        ("RR", "Rajasthan Royals"),
+        ("RCB", "Royal Challengers Bengaluru"),
+        ("SRH", "Sunrisers Hyderabad"),
+    ]
+    mkt = market_df if market_df is not None else pd.DataFrame()
+    pl = players_df if players_df is not None else pd.DataFrame()
+    cand = candidates_df if candidates_df is not None else pd.DataFrame()
+
+    ipl26_pl = pl[pl["comp_name"] == "IPL 2026"] if (not pl.empty and "comp_name" in pl.columns) else pd.DataFrame()
+    bat_ids = set(bat_df["player_id"].tolist()) if (bat_df is not None and not bat_df.empty) else set()
+    bowl_ids = set(bowl_df["player_id"].tolist()) if (bowl_df is not None and not bowl_df.empty) else set()
+
+    rows = []
+    for code, team_name in franchises:
+        squad_ids = set(ipl26_pl[ipl26_pl["team_name"] == team_name]["player_id"].tolist()) if not ipl26_pl.empty else set()
+        if squad_ids or pl.empty:
+            pass
+        else:
+            squad_ids = set(pl[pl["team_name"] == team_name]["player_id"].tolist())
+
+        # Reflect confirmed 2027 ledger arrivals/departures transparently
+        if not mkt.empty and "current_verified_franchise" in mkt.columns:
+            curr_rows = mkt[mkt["current_verified_franchise"] == team_name]
+            prev_only = mkt[(mkt["previous_franchise"] == team_name) & (mkt["current_verified_franchise"] != team_name)]
+            conf_trades_in = int((curr_rows["official_retention_status"] == "Confirmed Trade").sum())
+            conf_ret = int((curr_rows["official_retention_status"] == "Confirmed Retained").sum())
+            conf_rel = int((mkt[(mkt["previous_franchise"] == team_name)]["official_retention_status"] == "Confirmed Released").sum())
+            pending_cnt = int((curr_rows["official_retention_status"] == "Pending Verification").sum())
+            tracked_names = ", ".join(curr_rows["player_name"].astype(str).tolist()[:5])
+            if len(curr_rows) > 5:
+                tracked_names += f" (+{len(curr_rows)-5} more)"
+            if not prev_only.empty:
+                departed_names = ", ".join(f"{r['player_name']} ({r['official_retention_status']})" for _, r in prev_only.iterrows())
+            else:
+                departed_names = "None"
+        else:
+            conf_trades_in = conf_ret = conf_rel = pending_cnt = 0
+            tracked_names = "Pending"
+            departed_names = "None"
+
+        qual_bat = len(squad_ids & bat_ids)
+        qual_bowl = len(squad_ids & bowl_ids)
+        cand_cnt = int((cand["latest_ipl_franchise"] == team_name).sum()) if (not cand.empty and "latest_ipl_franchise" in cand.columns) else 0
+
+        status_label = "Confirmed Trade Active" if conf_trades_in > 0 else ("Pending Verification (Nov 17)" if pending_cnt > 0 else "Historical (2026 Roster)")
+        rows.append(
+            {
+                "Code": code,
+                "Franchise": team_name,
+                "IPL 2026 Dataset Roster": len(squad_ids),
+                "Model A Qualifiers (Bat/Bowl)": f"{qual_bat} / {qual_bowl}",
+                "Candidate Pool Mapped": cand_cnt,
+                "Confirmed Trades In": conf_trades_in,
+                "Confirmed Retained": conf_ret,
+                "Confirmed Released": conf_rel,
+                "Pending Verification": pending_cnt,
+                "Franchise Ledger Status": status_label,
+                "Audited Key Players": tracked_names or "Historical 2026 Roster Only",
+                "Verified Transitions Out": departed_names,
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def compute_eb_shrinkage_curve(k_shrink: float = K_SHRINK_CANONICAL) -> pd.DataFrame:
+    """Compute Empirical Bayes shrinkage weight progression across sample sizes."""
+    ns = np.array([10, 20, 30, 45, 60, 83, 120, 180, 250, 350, 450, 500], dtype=float)
+    w = ns / (ns + float(k_shrink))
+    return pd.DataFrame(
+        {
+            "hp_balls": ns.astype(int),
+            "shrinkage_weight": np.round(w, 4),
+            "prior_weight": np.round(1.0 - w, 4),
+        }
+    )
+
+
+def build_multi_player_comparison(selected_df: pd.DataFrame, is_batting: bool = True) -> pd.DataFrame:
+    """Assemble strictly comparable metrics across 2–4 selected batters OR 2–4 bowlers."""
+    if selected_df.empty:
+        return pd.DataFrame()
+    rows = []
+    for _, r in selected_df.iterrows():
+        item = {
+            "Player": str(r.get("player_name", "")),
+            "Model A Rank": f"#{int(r['rank'])}" if pd.notna(r.get("rank")) else "N/A",
+            "Reliability Score": round(_safe_float(r.get("reliability_score")), 2),
+            "95% Score CI": f"[{_safe_float(r.get('ci_lower_95')):.1f}, {_safe_float(r.get('ci_upper_95')):.1f}]",
+            "Top-10 Prob (%)": round(_safe_float(r.get("top10_inclusion_prob")) * 100.0, 2),
+            "Matches": int(_safe_float(r.get("matches"))),
+            "HP Balls (P>=50)": int(_safe_float(r.get("hp_balls"))),
+            "Kish Match ESS": round(_safe_float(r.get("kish_match_ess")), 1) if pd.notna(r.get("kish_match_ess")) else "N/A",
+            "Shrunk HP PAVA/ball": f"{_safe_float(r.get('shrunk_hp_pava_per_ball')):+.3f}",
+            "Retention Delta": f"{_safe_float(r.get('retention_delta')):+.3f}",
+            "PRC Slope (OLS)": f"{_safe_float(r.get('prc_slope')):+.3f}",
+            "PRC Class": str(r.get("prc_archetype", "Unclassified")),
+        }
+        if is_batting:
+            item["Valid Balls"] = int(_safe_float(r.get("total_balls")))
+            item["Career SR"] = round(_safe_float(r.get("career_sr")), 1)
+        else:
+            item["Legal / Deliv"] = f"{int(_safe_float(r.get('legal_balls')))} / {int(_safe_float(r.get('total_deliveries', r.get('legal_balls'))))}"
+            item["Career Economy"] = round(_safe_float(r.get("career_economy")), 2)
+            item["Wickets"] = int(_safe_float(r.get("total_wickets")))
+        rows.append(item)
+    return pd.DataFrame(rows)
