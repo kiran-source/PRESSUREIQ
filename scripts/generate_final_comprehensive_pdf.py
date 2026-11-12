@@ -216,13 +216,13 @@ def build_pdf():
     <br/><br/>
     <b>PRESSUREIQ</b> introduces a fully context-aware, delivery-level evaluation intelligence architecture engineered specifically for the Rajasthan Royals. Built upon 200,999 raw deliveries from the official competition data pack, the framework reconstructs the real-time match state vector for every ball, estimates expected outcomes using calibrated gradient-boosted decision trees (LightGBM, 2026 holdout Brier score = 0.0496 batting dismissal / 0.0482 bowling wicket), and measures marginal <b>Pressure-Adjusted Value Added (PAVA)</b>.
     <br/><br/>
-    Crucially, PRESSUREIQ avoids two major pitfalls: (1) it refuses to ignore emerging young talent by establishing a dedicated <b>Emerging Talent Evaluation Module</b> that tracks prodigies like Vaibhav Sooryavanshi and Prince Yadav, and (2) it decouples pure, uncompromised statistical reliability (<b>Leaderboard A</b>) from practical franchise recruitment and auction feasibility (<b>Leaderboard B</b>), protecting RR from bidding on legally ineligible Pakistani players or contractually locked rival captains.
+    Crucially, PRESSUREIQ avoids two major pitfalls: (1) it refuses to ignore emerging young talent by establishing a dedicated <b>Emerging Talent Evaluation Module</b> that tracks prodigies like Vaibhav Sooryavanshi and Prince Yadav, and (2) it decouples pure, uncompromised statistical reliability (<b>Leaderboard A</b>) from practical franchise recruitment and auction feasibility (<b>Leaderboard B</b>), segregating players subject to historical BCCI/IPL participation policy review and unverified 2027 franchise retentions.
     """
     story.append(Paragraph(exec_summary_text, body_style))
     story.append(Spacer(1, 6))
     
     story.append(callout_box(
-        "<b>Core Finding:</b> Pressure reliability is an empirical trait measurable through the slope of performance value-added across continuous leverage tiers. Top-ranked players demonstrate positive adaptability slopes ('Clutch Climbers') or flat, unflappable baselines ('Ice Cold Anchors'), validated across 2,000 match-clustered bootstrap resamples.",
+        "<b>Core Finding:</b> Aggregate batting/bowling averages conceal context-dependent delivery performance under pressure. Top-ranked candidates exhibit positive descriptive PAVA slopes across BPI/BoPI ('Clutch Climbers') or balanced cross-band slopes ('Ice Cold Anchors'), evaluated with 2,000 match-clustered bootstrap resamples.",
         "#EBF8FF", "#004BA0"
     ))
     story.append(PageBreak())
@@ -254,7 +254,7 @@ def build_pdf():
     
     story.append(Paragraph("The Two-Tier Architecture: Statistical Truth vs Auction Actionability", h2_style))
     tier_text = """
-    An unconstrained statistical model identifies four Pakistani internationals (Haris Rauf #2 Bowler, Abbas Afridi #3 Bowler, Sufiyan Muqeem #5 Bowler, Fakhar Zaman #3 Batter) among the world's most clutch performers. However, under prevailing BCCI policy established following the 2008 Mumbai attacks, Pakistani cricketers cannot register for the IPL auction. Furthermore, marquee stars like Ruturaj Gaikwad (CSK Captain, INR 18 Cr 2026 contract) and Nicholas Pooran (LSG, INR 21 Cr 2026 contract) are on 2026 franchise rosters with IPL 2027 retention status Pending Verification until 17 November 2026 official filings.
+    An unconstrained statistical model identifies four Pakistani internationals (Haris Rauf #2 Bowler, Abbas Afridi #3 Bowler, Sufiyan Muqeem #5 Bowler, Fakhar Zaman #3 Batter) among the world's top empirical performers under pressure. Historically, following BCCI/IPL participation policy in place since the 2008 inaugural season (reflected in public BCCI vice-president statements), Pakistan-registered cricketers have not participated in the IPL; they are tagged <i>Policy/Eligibility Review</i> and excluded from RR actionable recruitment targets unless individual BCCI/IPL registration eligibility is formally verified. Meanwhile, stars like Ruturaj Gaikwad (CSK Captain, INR 18 Cr 2026 contract) and Nicholas Pooran (LSG, INR 21 Cr 2026 contract) remain <i>Pending Verification</i> until 17 November 2026 official filings.
     <br/><br/>
     To resolve this without corrupting scientific objectivity, PRESSUREIQ establishes a transparent dual architecture:
     """
@@ -262,9 +262,9 @@ def build_pdf():
     story.append(Spacer(1, 4))
     
     tier_table_data = [
-        [Paragraph("Framework Layer", table_header), Paragraph("Primary Analytical Question", table_header), Paragraph("Treatment of Ineligibility / Retentions", table_header)],
+        [Paragraph("Framework Layer", table_header), Paragraph("Primary Analytical Question", table_header), Paragraph("Treatment of Policy Review / Retentions", table_header)],
         [Paragraph("<b>Leaderboard A: Pure Statistical Baseline</b>", table_cell_bold), Paragraph("Who are the purest pressure performers globally based strictly on delivery PAVA?", table_cell), Paragraph("Agnostic. Preserves exact empirical performance for all nationalities and franchises.", table_cell)],
-        [Paragraph("<b>Leaderboard B: RR Actionable Recruitment</b>", table_cell_bold), Paragraph("Who should Rajasthan Royals actually target, bid on, or retain for IPL 2027?", table_cell), Paragraph("Hard gate: Pakistani players excluded (Class D). Retained stars discounted (Class C).", table_cell)]
+        [Paragraph("<b>Leaderboard B: RR Actionable Recruitment</b>", table_cell_bold), Paragraph("Who should Rajasthan Royals actually target, bid on, or retain for IPL 2027?", table_cell), Paragraph("Policy/Eligibility Review gate (Class D): excluded pending verified BCCI eligibility. Retained stars discounted (Class C).", table_cell)]
     ]
     t_tier = Table(tier_table_data, colWidths=[130, 204, 170])
     t_tier.setStyle(TableStyle([
@@ -339,24 +339,24 @@ def build_pdf():
     bpi_math = """
     <b>BPI_t = clip(0.42 * C_eff_rate,t + 0.30 * C_resource,t + 0.18 * C_climax,t + 0.10 * (B_ko,t + B_lev,t), 0, 100)</b>
     <br/>
-    Where (in src/models/pressure_index.py):
+    Authoritative formula verified to 0.00 max difference across all 200,961 rows in frozen <code>deliveries_with_pava.parquet</code> (<code>src/models/pressure_index.py</code>; <code>docs/CANONICAL_MODEL_SPECIFICATION.md</code> reconciled from legacy 0.35/0.30/0.25/0.10 draft):
     <br/>
-    1. <b>Rate Demand (C_eff_rate):</b> Innings 2 uses sigmoid((clip(RRR, 2, 24) - 8.5) / 2.2) * 100; Innings 1 uses sigmoid(-runs_above_par / 14.0) * 100, modulated by completion_ratio r = clip(balls_bowled / max_innings_balls, 0, 1) as C_eff_rate = C_rate * (0.5 + 0.5 * r).
+    1. <b>Rate Demand (C_eff_rate):</b> Innings 2 uses sigmoid((clip(RRR, 2, 24) - 8.5) / 2.2) * 100; Innings 1 uses sigmoid(-runs_above_par / 14.0) * 100; C_eff_rate = C_rate * (0.5 + 0.5 * r).
     <br/>
-    2. <b>Resource Scarcity (C_resource):</b> C_resource = (clip(wickets_lost / 9.0, 0, 1) ^ 1.2) * 100.
+    2. <b>Resource Scarcity (C_resource) &amp; Climax (C_climax):</b> C_resource = (clip(wickets_lost / 9.0, 0, 1) ^ 1.2) * 100; C_climax = (r ^ 1.3) * 100.
     <br/>
-    3. <b>Climax Acceleration &amp; Leverage (C_climax):</b> C_climax = (r ^ 1.3) * 100, plus B_ko = 12.0 (knockout stage) and B_lev = 15.0 (final 25% of chase with &lt;= 50 runs required).
+    3. <b>Denominator &amp; Leverage:</b> Frozen Model A parquet uses fixed T20 r = clip((120 - balls_remaining)/120, 0, 1) and B_lev = 15.0 (balls_remaining &lt;= 30, runs_req &lt;= 50); the subsequent P0-3 code refinement scales r and chase threshold by <code>max_innings_balls</code> (preserving all 199,320 full-over deliveries identically across 20-over matches).
     """
     story.append(Paragraph(bpi_math, body_style))
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 4))
     
     story.append(Paragraph("Bowling Pressure Index (BoPI)", h2_style))
     bopi_math = """
     <b>BoPI_t = clip(0.38 * C_defend,t + 0.26 * C_res_opp,t + 0.24 * C_climax,t + 0.12 * (B_ko,t + B_tight,t), 0, 100)</b>
     <br/>
-    Where Innings 2 C_defend = sigmoid((10.5 - clip(RRR, 2, 24)) / 2.2) * 100 (high defense demand when chaser is comfortable or balanced) and Innings 1 C_defend = sigmoid(runs_above_par / 14.0) * 100; C_res_opp = (clip(wickets_remaining / 10.0, 0, 1) ^ 1.1) * 100; C_climax = (r ^ 1.4) * 100; with B_ko = 12.0 and B_tight = 18.0 (final 15% of chase, &lt;= 30 runs required).
-    <br/><br/>
-    <b>Strict Zero Future Leakage:</b> Every input feature is computed strictly using state variables known before the delivery is bowled. No post-match margins or full-innings outcomes are ever used.
+    Reproduced to 0.00 max diff across all 200,961 frozen rows: Innings 2 C_defend = sigmoid((10.5 - clip(RRR, 2, 24)) / 2.2) * 100, Innings 1 C_defend = sigmoid(runs_above_par / 14.0) * 100, C_res_opp = (clip(wickets_remaining / 10.0, 0, 1) ^ 1.1) * 100, C_climax = (r ^ 1.4) * 100, B_ko = 12.0, B_tight = 18.0 (final 15% of chase / &lt;= 18 balls in frozen 120-ball run, &lt;= 30 runs required).
+    <br/>
+    <b>Strict Zero Future Leakage:</b> Every input feature uses strictly pre-delivery match state variables; no post-match outcomes enter.
     """
     story.append(Paragraph(bopi_math, body_style))
     story.append(PageBreak())
@@ -450,26 +450,26 @@ def build_pdf():
     # =========================================================================
     # PAGE 7: PRESSURE RESPONSE CURVES & PLAYER ARCHETYPES
     # =========================================================================
-    story.append(Paragraph("6. Pressure Response Curves (PRC) & Behavioral Archetypes", h1_style))
+    story.append(Paragraph("6. Pressure Response Curves (PRC) &amp; Statistical Slope Classes", h1_style))
     story.append(HRFlowable(width="100%", thickness=0.75, color=c_pink, spaceBefore=2, spaceAfter=8))
     
     p7_text = """
-    A primary discovery of our research is that summary clutch scores mask critical behavioral trajectories. Two players can possess identical aggregate clutch averages while exhibiting opposite psychological profiles when pressure escalates from high to extreme.
+    Aggregate pressure averages conceal systematic variation across leverage levels. Two players can record similar mean PAVA across P_t &gt;= 50 while displaying sharply different empirical slopes from moderate to extreme pressure bands.
     <br/><br/>
-    We model each player's <b>Pressure Response Curve (PRC)</b> via Ordinary Least Squares linear regression (scipy.stats.linregress) of raw delivery PAVA against normalized pressure x = P_t / 100.0 in [0, 1]:
+    We compute each player's <b>Pressure Response Curve (PRC)</b> as a descriptive OLS slope (<code>scipy.stats.linregress</code>) of raw delivery PAVA against normalized pressure x = P_t / 100.0 in [0, 1]:
     <br/>
     <b>y(x) = alpha_i + beta_i * (P_t / 100.0)</b>
     <br/>
-    The empirical slope coefficient beta_i and descriptive extreme/high-tier shifts classify players into archetypes:
+    <i>Methodological Boundary:</i> PRC labels ('Clutch Climber', 'Ice Cold Anchor', 'Pressure Fragile') summarize statistical regression slopes and tier shifts only; they do <b>not</b> measure player psychology or mental temperament:
     """
     story.append(Paragraph(p7_text, body_style))
     story.append(Spacer(1, 4))
     
     archetype_data = [
-        [Paragraph("PRC Archetype", table_header), Paragraph("Mathematical Criterion", table_header), Paragraph("Behavioral Characteristics", table_header), Paragraph("Exemplar Players", table_header)],
-        [Paragraph("<b>Clutch Climber</b>", table_cell_bold), Paragraph("beta_i &gt;= +0.15, p &lt;= 0.15", table_cell), Paragraph("Actively elevates output as pressure surges. Accelerates boundary hitting or wicket creation in crises.", table_cell), Paragraph("Ruturaj Gaikwad (+1.149)<br/>Naman Dhir (+1.246)<br/>Haris Rauf (+1.735)", table_cell)],
-        [Paragraph("<b>Ice Cold Anchor / Universal</b>", table_cell_bold), Paragraph("Invariant / Balanced across bands", table_cell), Paragraph("Steady execution. Baseline productivity remains resilient whether RRR is low or extreme.", table_cell), Paragraph("Jos Buttler (-0.054)<br/>Nathan Ellis (+0.115)<br/>Nicholas Pooran (-0.047)", table_cell)],
-        [Paragraph("<b>Pressure Fragile</b>", table_cell_bold), Paragraph("Ext collapse &lt;= -0.25 or beta &lt;= -0.30", table_cell), Paragraph("Aggregates strong production overall, with output dipping under extreme climax leverage.", table_cell), Paragraph("Romario Shepherd (+0.697 overall; ext dip)<br/>Climax-sensitive finishers", table_cell)],
+        [Paragraph("PRC Statistical Class", table_header), Paragraph("Mathematical Criterion", table_header), Paragraph("Empirical Delivery Pattern", table_header), Paragraph("Exemplar Players", table_header)],
+        [Paragraph("<b>Clutch Climber</b>", table_cell_bold), Paragraph("beta_i &gt;= +0.15, p &lt;= 0.15", table_cell), Paragraph("Observed per-ball PAVA increases positively with normalized pressure index P_t / 100.", table_cell), Paragraph("Ruturaj Gaikwad (+1.149)<br/>Naman Dhir (+1.246)<br/>Haris Rauf (+1.735)", table_cell)],
+        [Paragraph("<b>Ice Cold Anchor / Universal</b>", table_cell_bold), Paragraph("No significant slope or Ext collapse", table_cell), Paragraph("Mean per-ball PAVA stays statistically flat or balanced across low-to-extreme pressure tiers.", table_cell), Paragraph("Jos Buttler (-0.054)<br/>Nathan Ellis (+0.115)<br/>Nicholas Pooran (-0.047)", table_cell)],
+        [Paragraph("<b>Pressure Fragile</b>", table_cell_bold), Paragraph("Ext collapse &lt;= -0.25 or beta &lt;= -0.30", table_cell), Paragraph("Positive aggregate PAVA paired with a lower extreme-tier (&gt;=85) mean vs high tier [65, 85).", table_cell), Paragraph("Romario Shepherd (+0.697 slope; ext-band dip)<br/>Tail-sensitive sample pattern", table_cell)],
     ]
     t_arch = Table(archetype_data, colWidths=[90, 84, 190, 140])
     t_arch.setStyle(TableStyle([
@@ -481,12 +481,12 @@ def build_pdf():
     story.append(t_arch)
     story.append(Spacer(1, 8))
     
-    story.append(Paragraph("Strategic Utility of PRC Archetypes for Rajasthan Royals", h2_style))
+    story.append(Paragraph("Contextual Interpretation of PRC Classes", h2_style))
     arch_strategy_text = """
-    Understanding a player's PRC archetype informs tactical role design:<br/>
-    • <b>Clutch Climbers (e.g., Jitesh Sharma, Naman Dhir):</b> Improve relative to expected par under rising leverage; monitor Nov 17 availability.<br/>
-    • <b>Ice Cold Anchors (e.g., Jos Buttler, Nathan Ellis):</b> Provide structural equilibrium; note Ellis is SRH-bound via Confirmed Trade (5 Nov) while Buttler is GT-contracted pending Nov 17.<br/>
-    • <b>Managing Climax-Sensitive Assets:</b> Romario Shepherd ranks #5 across 482 HP balls in bulk overs, while showing extreme-band sensitivity.
+    Descriptive PRC profiles distinguish how empirical value distributes across game states:<br/>
+    • <b>Positive-Slope Profiles (e.g., Jitesh Sharma, Naman Dhir):</b> Higher marginal PAVA observed in upper leverage bands; monitor Nov 17 retention status.<br/>
+    • <b>Flat-Slope Profiles (e.g., Jos Buttler, Nathan Ellis):</b> Steady empirical per-ball output across quantiles; note Ellis is SRH-bound via Confirmed Trade (5 Nov) while Buttler is GT-contracted pending Nov 17.<br/>
+    • <b>Band-Dispersed Profiles (Romario Shepherd):</b> Strong #5 overall score across 482 HP balls paired with a negative extreme-tier (&gt;=85) band shift.
     """
     story.append(Paragraph(arch_strategy_text, body_style))
     story.append(PageBreak())
@@ -536,7 +536,7 @@ def build_pdf():
     story.append(Spacer(1, 6))
     
     story.append(callout_box(
-        "<b>Key Uncertainty &amp; Score Scale Disclosure:</b> No single player possesses a 100% guarantee of remaining in the top 10 across all bootstrap resamples, showing that ranks 5–12 are closely matched. Furthermore, <b>Reliability Score (0–100) = Phi(Z_composite) * 100</b> is a standardized normal CDF score across the 5 pillars, <b>NOT</b> a probability of match success.",
+        "<b>Small-Sample Uncertainty &amp; Score Scale Disclosure:</b> No player holds a 100% bootstrap Top-10 probability. Players with modest high-pressure samples (e.g., Rohit Sharma 35 HP, Gaikwad 45 HP, Salt 49 HP, Dawson 83 HP / 22 matches) exhibit wide 95% CIs (e.g., Salt [14.48, 98.55]) and wide rank ranges because match-level resampling can drop key leverage matches below the 30-HP eligibility gate (assigning stronger Empirical Bayes pull or tail rank N+1). <b>Reliability Score (0–100) = Phi(Z_composite)*100</b> is a standardized normal CDF index, <b>NOT</b> a probability of match success.",
         "#EBF8FF", "#004BA0"
     ))
     story.append(PageBreak())
@@ -548,7 +548,7 @@ def build_pdf():
     story.append(HRFlowable(width="100%", thickness=0.75, color=c_pink, spaceBefore=2, spaceAfter=8))
     
     p9_text = """
-    A key strategic requirement for Rajasthan Royals is uncovering emerging, young, and uncapped talent. Standard sports analytics models fail young players through <b>selection censorship</b>: young top-order prodigies face powerplay overs where required run rates are not yet extreme, recording zero 'high-pressure' deliveries despite elite performance under intense psychological tension.
+    A key strategic requirement for Rajasthan Royals is uncovering emerging, young, and uncapped talent. Standard pressure filters create <b>selection censorship</b> for top-order prodigies: opening batters primarily face new-ball powerplay overs where BPI mostly remains below 50.0, accumulating insufficient operational HP exposure (&lt; 30 balls) to qualify for Model A.
     """
     story.append(Paragraph(p9_text, body_style))
     story.append(Spacer(1, 4))
@@ -617,7 +617,7 @@ def build_pdf():
     story.append(Spacer(1, 8))
     
     story.append(callout_box(
-        "<b>Batting Ranking Takeaway:</b> Ruturaj Gaikwad leads Model A on chase PAVA efficiency, while high-HP players Suryakumar Yadav, Romario Shepherd, Nicholas Pooran, and Jitesh Sharma sustain strong reliability across 200+ pressure deliveries. All IPL-contracted 2026 players remain <i>Pending Verification</i> until Nov 17.",
+        "<b>Batting Ranking Takeaway:</b> Ruturaj Gaikwad leads Model A on chase PAVA efficiency (+0.938 raw / +0.469 shrunk), while high-volume batters Suryakumar Yadav (236 HP), Romario Shepherd (482 HP), Nicholas Pooran (300 HP), and Jitesh Sharma (218 HP) combine strong scores with tight bootstrap rank bounds. Smaller-HP qualifiers (35–49 HP: Rohit, Gaikwad, Salt) naturally carry wider score CIs. All IPL-contracted 2026 players remain <i>Pending Verification</i> until Nov 17.",
         "#EBF8FF", "#004BA0"
     ))
     story.append(PageBreak())
@@ -658,7 +658,7 @@ def build_pdf():
     story.append(Spacer(1, 8))
     
     story.append(callout_box(
-        "<b>Bowling Ranking Takeaway:</b> Liam Dawson leads Model A on defensive finger spin, while Nathan Ellis (#4, traded CSK -> SRH Nov 5) and Matheesha Pathirana (#6, KKR 2026 squad) set the statistical benchmark for death-overs pace execution.",
+        "<b>Bowling Ranking Takeaway:</b> Liam Dawson leads Model A on defensive finger spin (83 HP across 22 matches, yielding wider bootstrap rank dispersion [1, 152]), while high-volume pacers Haris Rauf (444 HP, 55.20% Top-10 prob), Nathan Ellis (251 HP, CSK -&gt; SRH Nov 5 trade), and Matheesha Pathirana (400 HP, KKR 2026 squad) provide tighter multi-match precision.",
         "#EBF8FF", "#004BA0"
     ))
     story.append(PageBreak())
@@ -678,8 +678,8 @@ def build_pdf():
     story.append(Paragraph("Defending the Cutoffs: Near-Miss Batters", h2_style))
     near_bat_text = """
     • <b>Rinku Singh (#11, Score 92.37 vs Jos Buttler #10, Score 92.45):</b> Missed the top 10 by an agonizing <b>0.08 points</b>. Buttler edged Rinku due to a higher multi-year consistency score across top-order chasing equity (121 matches vs 83 matches). In our 2,000 bootstrap resamples, Rinku achieved a 28.10% inclusion rate. He represents the premier domestic alternative.<br/>
-    • <b>Tristan Stubbs (#12, Score 91.63):</b> Elite strike rate against spin (164.2), but higher variance in early 2022 fixtures slightly lowered his shrunk PAVA.<br/>
-    • <b>Jason Holder (#13, Score 91.33):</b> Experienced finisher with 233 HP balls, but lower boundary frequency (16.4%) compared to Romario Shepherd (22.1%).
+    • <b>Tristan Stubbs (#12, Score 91.63):</b> Career SR 149.5 across 1,081 balls (141.2 SR vs spin, 338 HP balls), with shrunk HP PAVA +0.317 just behind Jos Buttler (+0.357).<br/>
+    • <b>Jason Holder (#13, Score 91.33):</b> Experienced finisher across 233 HP balls (447 total balls, shrunk PAVA +0.291), with a lower boundary rate (17.9%) than Romario Shepherd (21.1% across 687 balls).
     """
     story.append(Paragraph(near_bat_text, body_style))
     story.append(Spacer(1, 6))
@@ -751,7 +751,7 @@ def build_pdf():
     Genuine data science demands complete transparency regarding research boundaries and ethical practices:
     <br/>
     • <b>Sensor Telemetry Noise:</b> 38.7% of raw <code>bowl_speed</code> values are missing or zero. Speed telemetry was filtered to [50, 165] km/h and excluded from core regression baselines to prevent noise contamination.<br/>
-    • <b>Sample Tail Scarcity:</b> Extreme pressure (BPI &gt;= 80) accounts for 0.61% of all deliveries. Empirical Bayes shrinkage and 2,000 bootstrap iterations were applied to prevent small-sample distortion.<br/>
+    • <b>Sample Tail Scarcity:</b> Extreme pressure tier (BPI &gt;= 85) accounts for 0.61% of all deliveries (while BPI &gt;= 80 accounts for 1.41%). Empirical Bayes shrinkage and 2,000 bootstrap iterations were applied to prevent small-sample distortion.<br/>
     • <b>Zero Temporal Leakage:</b> All pipelines operate strictly in forward chronological sequence. No future deliveries or match results inform state predictions.<br/>
     • <b>Zero Data Fabrication:</b> Every metric, strike rate, and score is computed deterministically from the 200,999 raw deliveries.<br/>
     • <b>Frozen Baseline Preservation:</b> Git HEAD <code>fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2</code> and official submission ZIP (SHA-256: <code>76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db</code>) remain 100% intact and unmodified.

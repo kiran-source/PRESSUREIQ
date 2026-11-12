@@ -440,7 +440,7 @@ def main():
     # 2. Clean, Honest Audit Change Log (Retracting Unverified Legacy Claims + Verified Movements)
     change_log_records = [
         {
-            "timestamp": "2025-11-15 12:57:00",
+            "timestamp": AUDIT_TIMESTAMP,
             "player_id": 813,
             "player_name": "Jos Buttler",
             "event_type": "AUDIT_FRANCHISE_CORRECTION",
@@ -448,7 +448,7 @@ def main():
             "new_status": "Gujarat Titans (Pending Verification for 2027)",
             "verified_by": "IPLT20 (BCCI)",
             "source_url": "https://www.iplt20.com/news/article/tata-ipl-2026-player-retentions-announced",
-            "notes": "Confirmed retained by Gujarat Titans for IPL 2026; awaiting GT Nov 17, 2026 retention list."
+            "notes": "Confirmed retained by Gujarat Titans for IPL 2026 (source article pub: 2025-11-15); awaiting GT Nov 17, 2026 retention list."
         },
         {
             "timestamp": "2025-12-16 17:53:59",
@@ -515,6 +515,17 @@ def main():
             "verified_by": "IPLT20 (BCCI)",
             "source_url": "https://www.iplt20.com/news/article/tata-ipl-2026-player-retentions-announced",
             "notes": "Retracted unsupported release claim citing generic hub URL. Retained by PBKS for IPL 2026; 2027 pending Nov 17."
+        },
+        {
+            "timestamp": "2026-11-12 17:15:00",
+            "player_id": 813,
+            "player_name": "Jos Buttler",
+            "event_type": "AUDIT_TIMESTAMP_CORRECTION",
+            "previous_status": "Timestamp 2025-11-15 12:57:00 (Source Article Pub Time) | RR (2018-2024) -> GT (2025-2026)",
+            "new_status": "Audit Correction Timestamp: 2026-11-11 21:35:00 | Historical RR -> GT Lineage Preserved",
+            "verified_by": "IPLT20 (BCCI)",
+            "source_url": "https://www.iplt20.com/news/article/tata-ipl-2026-player-retentions-announced",
+            "notes": "Replaced article publication timestamp (2025-11-15 12:57:00 UTC) with actual Phase 1 audit execution timestamp (2026-11-11 21:35:00); historical RR -> GT move intact."
         },
     ]
 

@@ -12,7 +12,7 @@ This matrix establishes the exact file paths, function names, and line numbers c
 
 | Mathematical Dimension | Canonical Code Implementation | Source File Path | Function / Class | Verified Line Range | Specification Status |
 |:---|:---|:---|:---|:---:|:---:|
-| **BPI Formulation** | $0.35 C_{\text{RRR}} + 0.30 C_{\text{res}} + 0.25 C_{\text{climax}} + 0.10 \text{Lev}$ | `src/models/pressure_index.py` | `compute_batting_pressure_index` | Lines 25–101 | **100% Verbatim Match** |
+| **BPI Formulation** | $0.42 C_{\text{eff\_rate}} + 0.30 C_{\text{res}} + 0.18 C_{\text{climax}} + 0.10 \text{Lev}$ | `src/models/pressure_index.py` | `compute_batting_pressure_index` | Lines 17–101 | **Reconciled Verbatim to Frozen Parquet & Code** |
 | **BoPI Formulation** | $0.38 C_{\text{defend}} + 0.26 C_{\text{res}} + 0.24 C_{\text{climax}} + 0.12 \text{Lev}$ | `src/models/pressure_index.py` | `compute_bowling_pressure_index` | Lines 104–185 | **100% Verbatim Match** |
 | **Raw PAVA vs. Leverage PAVA** | `raw_bat_value = delta_runs + wkt_val*delta_wkt + 0.5*delta_bnd`<br>`leverage_pava = raw_bat_value * (1 + P/50)` | `src/models/pressure_value.py` | `compute_pressure_adjusted_value` | Lines 45–78 | **100% Verbatim Match** |
 | **Phase Wicket Values ($V_W$)** | `Powerplay: 5.2, Middle: 4.5, Death: 3.6` runs | `src/models/pressure_value.py` | `WICKET_VALUE_BY_PHASE` dictionary | Lines 12–16 | **100% Verbatim Match** |
@@ -31,22 +31,21 @@ This matrix establishes the exact file paths, function names, and line numbers c
 Pressure is computed on a continuous scale $[0, 100]$ using game-theoretic leverage, resource depletion, and match climax metrics.
 
 ### 2.1 Batting Pressure Index (BPI)
-Batting pressure quantifies scoring demand and catastrophe risk facing the striker:
+Batting pressure quantifies scoring demand and wicket-resource scarcity facing the striker (`src/models/pressure_index.py`, verified to `0.00` max difference across all `200,961` rows in `deliveries_with_pava.parquet`):
 
-$$\text{BPI} = \text{clip}\left( 0.35 \cdot C_{\text{RRR}} + 0.30 \cdot C_{\text{res}} + 0.25 \cdot C_{\text{climax}} + 0.10 \cdot (B_{\text{ko}} + B_{\text{chase}}), 0.0, 100.0 \right)$$
+$$\text{BPI} = \text{clip}\left( 0.42 \cdot C_{\text{eff\_rate}} + 0.30 \cdot C_{\text{res}} + 0.18 \cdot C_{\text{climax}} + 0.10 \cdot (B_{\text{ko}} + B_{\text{chase}}), 0.0, 100.0 \right)$$
 
-- **Chasing Component ($C_{\text{RRR}}$):**
-  - **Innings 2:**
-    $$C_{\text{RRR}} = \sigma\left(\frac{\text{RRR}_{\text{clean}} - 8.5}{2.5}\right) \times 100.0, \quad \text{where } \text{RRR}_{\text{clean}} = \text{clip}(\text{RRR}, 2.0, 24.0)$$
-  - **Innings 1:**
-    $$C_{\text{RRR}} = \sigma\left(\frac{-\Delta_{\text{par}}}{16.0}\right) \times 100.0, \quad \text{where } \Delta_{\text{par}} = \text{runs\_scored} - \text{par\_score}$$
-- **Resource Deficit Component ($C_{\text{res}}$):**
-  $$C_{\text{res}} = \left(1.0 - \left(\frac{\text{wickets\_remaining}}{10.0}\right)^{0.8}\right) \times 100.0$$
+- **Effective Rate Demand ($C_{\text{eff\_rate}} = C_{\text{rate}} \cdot (0.5 + 0.5 \cdot r)$):**
+  - **Innings 2:** $C_{\text{rate}} = \sigma\left(\frac{\text{RRR}_{\text{clean}} - 8.5}{2.2}\right) \times 100.0$, where $\text{RRR}_{\text{clean}} = \text{clip}(\text{RRR}, 2.0, 24.0)$.
+  - **Innings 1:** $C_{\text{rate}} = \sigma\left(\frac{-\text{runs\_above\_par}}{14.0}\right) \times 100.0$.
+- **Resource Scarcity ($C_{\text{res}}$):**
+  $$C_{\text{res}} = \left(\text{clip}\left(\frac{\text{wickets\_lost\_before}}{9.0}, 0.0, 1.0\right)\right)^{1.2} \times 100.0$$
 - **Climax Exposure ($C_{\text{climax}}$):**
-  $$C_{\text{climax}} = \left(\frac{\text{balls\_bowled}}{\text{max\_innings\_balls}}\right)^{1.6} \times 100.0$$
+  $$C_{\text{climax}} = r^{1.3} \times 100.0, \quad r = \text{clip}\left(\frac{\text{balls\_bowled}}{\text{max\_balls}}, 0.0, 1.0\right)$$
+  *(Frozen Model A `deliveries_with_pava.parquet` used $\text{max\_balls}=120.0$, $\text{balls\_bowled}=120.0-\text{balls\_remaining\_before}$, and $B_{\text{chase}}=15.0$ for $\text{balls\_remaining}\le 30, \text{runs\_req}\le 50$; the subsequent `P0-3` code refinement in `src/models/pressure_index.py` uses dynamic `max_innings_balls` across 1,641 shortened-match deliveries while keeping all 199,320 full 20-over deliveries identical.)*
 - **Leverage Bonuses ($B_{\text{ko}}, B_{\text{chase}}$):**
-  - Knockout Stage: $B_{\text{ko}} = 15.0$ if playoff/knockout match, else $0.0$.
-  - Tight Chase Finish: $B_{\text{chase}} = 20.0$ if Innings 2, balls $\le 18$, and runs required $\le 30$.
+  - Knockout Stage: $B_{\text{ko}} = 12.0$ if playoff/knockout match, else $0.0$.
+  - Close Chase: $B_{\text{chase}} = 15.0$ if Innings 2, `balls_remaining <= threshold` ($30.0$ in frozen run; $\max(12.0, 0.25 \cdot \text{max\_innings\_balls})$ in `P0-3` code), and $0 < \text{runs\_required} \le 50$.
 
 ---
 
