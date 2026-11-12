@@ -214,7 +214,7 @@ def build_pdf():
     exec_summary_text = """
     Traditional cricket analytics rely heavily on context-blind aggregate counting statistics such as batting average, strike rate, and bowling economy rate. These metrics systematically fail in high-leverage decision environments because they treat a boundary struck in a low-stakes blowout identically to a boundary struck requiring 14 runs off the final over of an IPL chase.
     <br/><br/>
-    <b>PRESSUREIQ</b> introduces a fully context-aware, delivery-level evaluation intelligence architecture engineered specifically for the Rajasthan Royals. Built upon 200,999 raw deliveries from the official competition data pack, the framework reconstructs the real-time match state vector for every ball, estimates expected outcomes using calibrated gradient-boosted decision trees (LightGBM, Brier score = 0.052), and measures marginal <b>Pressure-Adjusted Value Added (PAVA)</b>.
+    <b>PRESSUREIQ</b> introduces a fully context-aware, delivery-level evaluation intelligence architecture engineered specifically for the Rajasthan Royals. Built upon 200,999 raw deliveries from the official competition data pack, the framework reconstructs the real-time match state vector for every ball, estimates expected outcomes using calibrated gradient-boosted decision trees (LightGBM, 2026 holdout Brier score = 0.0496 batting dismissal / 0.0482 bowling wicket), and measures marginal <b>Pressure-Adjusted Value Added (PAVA)</b>.
     <br/><br/>
     Crucially, PRESSUREIQ avoids two major pitfalls: (1) it refuses to ignore emerging young talent by establishing a dedicated <b>Emerging Talent Evaluation Module</b> that tracks prodigies like Vaibhav Sooryavanshi and Prince Yadav, and (2) it decouples pure, uncompromised statistical reliability (<b>Leaderboard A</b>) from practical franchise recruitment and auction feasibility (<b>Leaderboard B</b>), protecting RR from bidding on legally ineligible Pakistani players or contractually locked rival captains.
     """
@@ -254,7 +254,7 @@ def build_pdf():
     
     story.append(Paragraph("The Two-Tier Architecture: Statistical Truth vs Auction Actionability", h2_style))
     tier_text = """
-    An unconstrained statistical model identifies four Pakistani internationals (Haris Rauf #2 Bowler, Abbas Afridi #3 Bowler, Sufiyan Muqeem #5 Bowler, Fakhar Zaman #3 Batter) among the world's most clutch performers. However, under prevailing BCCI policy established following the 2008 Mumbai attacks, Pakistani cricketers cannot register for the IPL auction. Furthermore, marquee stars like Ruturaj Gaikwad (CSK Captain, ₹18 Cr) and Nicholas Pooran (LSG, ₹21 Cr) are locked into multi-year franchise retentions.
+    An unconstrained statistical model identifies four Pakistani internationals (Haris Rauf #2 Bowler, Abbas Afridi #3 Bowler, Sufiyan Muqeem #5 Bowler, Fakhar Zaman #3 Batter) among the world's most clutch performers. However, under prevailing BCCI policy established following the 2008 Mumbai attacks, Pakistani cricketers cannot register for the IPL auction. Furthermore, marquee stars like Ruturaj Gaikwad (CSK Captain, INR 18 Cr 2026 contract) and Nicholas Pooran (LSG, INR 21 Cr 2026 contract) are on 2026 franchise rosters with IPL 2027 retention status Pending Verification until 17 November 2026 official filings.
     <br/><br/>
     To resolve this without corrupting scientific objectivity, PRESSUREIQ establishes a transparent dual architecture:
     """
@@ -330,32 +330,31 @@ def build_pdf():
     p4_text = """
     A major flaw in cricket research is the use of arbitrary binary labels (e.g. 'overs 16–20 = pressure' or 'RRR > 10 = pressure'). In reality, pressure is a continuous, multi-dimensional stress vector determined by resource scarcity relative to scoring targets.
     <br/><br/>
-    PRESSUREIQ introduces two distinct, continuous, scale-invariant indices bounded in $[0, 100]$:
+    PRESSUREIQ introduces two distinct, continuous, scale-invariant indices bounded in [0, 100]:
     """
     story.append(Paragraph(p4_text, body_style))
     story.append(Spacer(1, 4))
     
     story.append(Paragraph("Batting Pressure Index (BPI)", h2_style))
     bpi_math = """
-    $$\\text{BPI}_t = 0.45 \\cdot C_{\\text{rate}, t} + 0.35 \\cdot C_{\\text{resource}, t} + 0.20 \\cdot C_{\\text{climax}, t}$$
+    <b>BPI_t = clip(0.42 * C_eff_rate,t + 0.30 * C_resource,t + 0.18 * C_climax,t + 0.10 * (B_ko,t + B_lev,t), 0, 100)</b>
     <br/>
-    Where:
+    Where (in src/models/pressure_index.py):
     <br/>
-    1. <b>Rate Stress ($C_{\\text{rate}}$):</b> Quantifies required run rate tension in chases or scoring deficits in 1st innings:
-    $$C_{\\text{rate}} = \\min\\left(100, \\max\\left(0, \\frac{\\text{RRR}_t - 6.0}{14.0 - 6.0} \\times 100\\right)\\right)$$
-    2. <b>Resource Scarcity ($C_{\\text{resource}}$):</b> Models exponential wicket loss penalty:
-    $$C_{\\text{resource}} = 100 \\times \\left(1 - \\frac{W_{\\text{in\\_hand}, t}}{10}\\right)^{1.4}$$
-    3. <b>Climax Acceleration ($C_{\\text{climax}}$):</b> Depletes non-linearly as balls remaining diminish:
-    $$C_{\\text{climax}} = 100 \\times \\left(1 - \\frac{\\text{Balls Remaining}}{120}\\right)^{2.0}$$
+    1. <b>Rate Demand (C_eff_rate):</b> Innings 2 uses sigmoid((clip(RRR, 2, 24) - 8.5) / 2.2) * 100; Innings 1 uses sigmoid(-runs_above_par / 14.0) * 100, modulated by completion_ratio r = clip(balls_bowled / max_innings_balls, 0, 1) as C_eff_rate = C_rate * (0.5 + 0.5 * r).
+    <br/>
+    2. <b>Resource Scarcity (C_resource):</b> C_resource = (clip(wickets_lost / 9.0, 0, 1) ^ 1.2) * 100.
+    <br/>
+    3. <b>Climax Acceleration &amp; Leverage (C_climax):</b> C_climax = (r ^ 1.3) * 100, plus B_ko = 12.0 (knockout stage) and B_lev = 15.0 (final 25% of chase with &lt;= 50 runs required).
     """
     story.append(Paragraph(bpi_math, body_style))
     story.append(Spacer(1, 6))
     
     story.append(Paragraph("Bowling Pressure Index (BoPI)", h2_style))
     bopi_math = """
-    $$\\text{BoPI}_t = 0.40 \\cdot C_{\\text{defend}, t} + 0.35 \\cdot C_{\\text{threat}, t} + 0.25 \\cdot C_{\\text{leverage}, t}$$
+    <b>BoPI_t = clip(0.38 * C_defend,t + 0.26 * C_res_opp,t + 0.24 * C_climax,t + 0.12 * (B_ko,t + B_tight,t), 0, 100)</b>
     <br/>
-    Where $C_{\\text{defend}}$ tracks current boundary concession vs target economy, $C_{\\text{threat}}$ measures the facing batter's rolling high-pressure strike rate, and $C_{\\text{leverage}} = 4 \\cdot P_{\\text{win}} \\cdot (1 - P_{\\text{win}})$ captures win-probability volatility, peaking at $P_{\\text{win}} = 0.50$.
+    Where Innings 2 C_defend = sigmoid((10.5 - clip(RRR, 2, 24)) / 2.2) * 100 (high defense demand when chaser is comfortable or balanced) and Innings 1 C_defend = sigmoid(runs_above_par / 14.0) * 100; C_res_opp = (clip(wickets_remaining / 10.0, 0, 1) ^ 1.1) * 100; C_climax = (r ^ 1.4) * 100; with B_ko = 12.0 and B_tight = 18.0 (final 15% of chase, &lt;= 30 runs required).
     <br/><br/>
     <b>Strict Zero Future Leakage:</b> Every input feature is computed strictly using state variables known before the delivery is bowled. No post-match margins or full-innings outcomes are ever used.
     """
@@ -369,22 +368,23 @@ def build_pdf():
     story.append(HRFlowable(width="100%", thickness=0.75, color=c_pink, spaceBefore=2, spaceAfter=8))
     
     p5_text = """
-    To calculate how much value a player adds under pressure, we must establish a calibrated probabilistic baseline of what an average league player would produce from the exact same match state vector $S_t = (\\text{over}, \\text{wickets}, \\text{RRR}, \\text{CRR}, \\text{venue}, \\text{phase})$.
+    To calculate how much value a player adds under pressure, we must establish a calibrated probabilistic baseline of what an average league player would produce from the exact same pre-ball match state vector S_t (over, wickets, RRR, CRR, venue, phase, and historical rolling skill).
     <br/><br/>
-    We conducted rigorous out-of-fold benchmark experiments across candidate machine learning architectures using strict chronological validation (Training: 2022–2024; Out-of-Sample Holdout: 2025–2026):
+    We conducted chronological out-of-sample benchmark validation (Training: 2022–2024; Validation: 2025; Untouched Holdout Test: 2026) recorded in <code>docs/MODEL_BENCHMARK_REPORT.json</code>:
     """
     story.append(Paragraph(p5_text, body_style))
     story.append(Spacer(1, 4))
     
     ml_data = [
-        [Paragraph("Model Architecture", table_header), Paragraph("Target Task", table_header), Paragraph("Loss / Brier Score", table_header), Paragraph("Calibration Slope", table_header), Paragraph("Decision", table_header)],
-        [Paragraph("Logistic Regression (GLM)", table_cell), Paragraph("Wicket Probability $\\mathbb{P}(W_t)$", table_cell), Paragraph("0.0612", table_cell), Paragraph("0.84 (Underconfident)", table_cell), Paragraph("Rejected", table_cell)],
-        [Paragraph("Random Forest (100 Trees)", table_cell), Paragraph("Wicket Probability $\\mathbb{P}(W_t)$", table_cell), Paragraph("0.0574", table_cell), Paragraph("0.91 (Tail distortion)", table_cell), Paragraph("Rejected", table_cell)],
-        [Paragraph("<b>LightGBM Classifier (Tuned)</b>", table_cell_bold), Paragraph("<b>Wicket Probability $\\mathbb{P}(W_t)$</b>", table_cell_bold), Paragraph("<b>0.0521</b>", table_cell_bold), Paragraph("<b>0.992 (Near-perfect)</b>", table_cell_bold), Paragraph("<b>Champion</b>", table_cell_bold)],
-        [Paragraph("Ridge Regression", table_cell), Paragraph("Expected Runs $\\mathbb{E}[R_t]$", table_cell), Paragraph("1.284 RMSE", table_cell), Paragraph("N/A (Linear bias in death)", table_cell), Paragraph("Rejected", table_cell)],
-        [Paragraph("<b>LightGBM Regressor (Tuned)</b>", table_cell_bold), Paragraph("<b>Expected Runs $\\mathbb{E}[R_t]$</b>", table_cell_bold), Paragraph("<b>1.141 RMSE</b>", table_cell_bold), Paragraph("<b>0.988 (Optimal fit)</b>", table_cell_bold), Paragraph("<b>Champion</b>", table_cell_bold)],
+        [Paragraph("Model Architecture", table_header), Paragraph("Target Task", table_header), Paragraph("2025 Val Metric", table_header), Paragraph("2026 Holdout Test", table_header), Paragraph("Decision", table_header)],
+        [Paragraph("Context Baseline", table_cell), Paragraph("Batting Expected Runs", table_cell), Paragraph("1.7383 RMSE", table_cell), Paragraph("1.8075 RMSE", table_cell), Paragraph("Baseline", table_cell)],
+        [Paragraph("<b>LightGBM Regressor (Prod)</b>", table_cell_bold), Paragraph("<b>Batting Expected Runs</b>", table_cell_bold), Paragraph("<b>1.7270 RMSE</b>", table_cell_bold), Paragraph("<b>1.7919 RMSE</b>", table_cell_bold), Paragraph("<b>Champion</b>", table_cell_bold)],
+        [Paragraph("XGBoost / CatBoost", table_cell), Paragraph("Batting Expected Runs", table_cell), Paragraph("1.7278 / 1.7259", table_cell), Paragraph("1.7913 / 1.7901", table_cell), Paragraph("Benchmarked", table_cell)],
+        [Paragraph("<b>LightGBM Classifier (Prod)</b>", table_cell_bold), Paragraph("<b>Batting Dismissal P(out)</b>", table_cell_bold), Paragraph("<b>0.0508 Brier (0.0015 ECE)</b>", table_cell_bold), Paragraph("<b>0.0496 Brier (0.5909 AUC)</b>", table_cell_bold), Paragraph("<b>Champion</b>", table_cell_bold)],
+        [Paragraph("<b>LightGBM Classifier (Prod)</b>", table_cell_bold), Paragraph("<b>Batting Boundary P(4/6)</b>", table_cell_bold), Paragraph("<b>0.1441 Brier (0.0033 ECE)</b>", table_cell_bold), Paragraph("<b>0.1576 Brier (0.5995 AUC)</b>", table_cell_bold), Paragraph("<b>Champion</b>", table_cell_bold)],
+        [Paragraph("<b>LightGBM Bowl Reg / Clf</b>", table_cell_bold), Paragraph("<b>Bowling Runs / Wicket</b>", table_cell_bold), Paragraph("<b>1.7075 RMSE / 0.0495 Brier</b>", table_cell_bold), Paragraph("<b>1.7687 RMSE / 0.0482 Brier</b>", table_cell_bold), Paragraph("<b>Champion</b>", table_cell_bold)],
     ]
-    t_ml = Table(ml_data, colWidths=[130, 114, 80, 100, 80])
+    t_ml = Table(ml_data, colWidths=[122, 108, 108, 108, 58])
     t_ml.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), c_blue),
         ('GRID', (0,0), (-1,-1), 0.5, c_border),
@@ -396,9 +396,9 @@ def build_pdf():
     
     story.append(Paragraph("Calibration & Probability Reliability", h2_style))
     calib_text = """
-    A model predicting wicket probability must be exceptionally well-calibrated. If a model predicts a 10% dismissal risk across 1,000 deliveries, exactly 100 wickets should fall.
+    A ball-by-ball baseline model predicting dismissal and boundary risk must be well-calibrated rather than chasing noisy high-variance accuracy. On the untouched 2026 holdout season, LightGBM achieved <b>0.0496 Brier / 0.0030 ECE</b> for batting dismissal probability, <b>0.1576 Brier / 0.0087 ECE</b> for batting boundary probability, and <b>0.0482 Brier / 0.0021 ECE</b> for bowling wicket probability.
     <br/><br/>
-    The champion LightGBM classifier achieved a <b>Brier score of 0.0521</b> and an out-of-fold calibration slope of <b>0.992</b>. This eliminates artificial class imbalance distortion and guarantees that expected run baselines reflect the surging scoring environment of death overs (where expected runs naturally surge from 1.15 to 1.72 per ball) without penalizing death bowlers for the phase they operate in.
+    LightGBM was selected over CatBoost for production because CPU inference is 8x faster with smaller memory footprint and near-identical generalization error (1.7919 vs 1.7901 RMSE). Note that composite 0–100 Reliability Scores are standardized normal CDF values Phi(Z_composite)*100, NOT probabilities of match success.
     """
     story.append(Paragraph(calib_text, body_style))
     story.append(PageBreak())
@@ -517,7 +517,7 @@ def build_pdf():
     story.append(Spacer(1, 4))
     
     boot_sample_data = [
-        [Paragraph("Player Name", table_header), Paragraph("Discipline", table_header), Paragraph("Reliability Score", table_header), Paragraph("95% Score CI", table_header), Paragraph("Top-10 Probability ($\\Pi_{10}$)", table_header), Paragraph("Stability Verdict", table_header)],
+        [Paragraph("Player Name", table_header), Paragraph("Discipline", table_header), Paragraph("Reliability Score", table_header), Paragraph("95% Score CI", table_header), Paragraph("Top-10 Probability (Pi_10)", table_header), Paragraph("Stability Verdict", table_header)],
         [Paragraph("Ruturaj Gaikwad", table_cell), Paragraph("Batter", table_cell), Paragraph("97.71", table_cell), Paragraph("[76.30, 99.09]", table_cell), Paragraph("<b>60.85%</b>", table_cell_bold), Paragraph("Strong Core Leader", table_cell)],
         [Paragraph("Haris Rauf", table_cell), Paragraph("Bowler", table_cell), Paragraph("92.36", table_cell), Paragraph("[71.13, 96.49]", table_cell), Paragraph("<b>55.20%</b>", table_cell_bold), Paragraph("Strong Core Leader", table_cell)],
         [Paragraph("Nathan Ellis", table_cell), Paragraph("Bowler", table_cell), Paragraph("91.84", table_cell), Paragraph("[70.87, 95.95]", table_cell), Paragraph("<b>48.90%</b>", table_cell_bold), Paragraph("High Certainty Target", table_cell)],
@@ -536,7 +536,7 @@ def build_pdf():
     story.append(Spacer(1, 6))
     
     story.append(callout_box(
-        "<b>Key Uncertainty Disclosure:</b> No single player possesses a 100% guarantee of remaining in the top 10 across all bootstrap resamples. Disclosing this transparently reflects scientific integrity and proves that ranking positions 5–12 represent closely matched elite performers.",
+        "<b>Key Uncertainty &amp; Score Scale Disclosure:</b> No single player possesses a 100% guarantee of remaining in the top 10 across all bootstrap resamples, showing that ranks 5–12 are closely matched. Furthermore, <b>Reliability Score (0–100) = Phi(Z_composite) * 100</b> is a standardized normal CDF score across the 5 pillars, <b>NOT</b> a probability of match success.",
         "#EBF8FF", "#004BA0"
     ))
     story.append(PageBreak())
@@ -555,19 +555,19 @@ def build_pdf():
     
     story.append(Paragraph("The Vaibhav Sooryavanshi Paradox", h2_style))
     soorya_text = """
-    In our 200,999-delivery dataset, <b>Vaibhav Sooryavanshi (ID 50284)</b> has faced <b>714 balls</b> across IPL 2025, IPL 2026, and Asia Cup Rising Stars 2025, compiling a blistering strike rate of 139.8 at age 14. Under naive definitions, his HP ball count is zero because he opens the batting. PRESSUREIQ establishes a dedicated 4-tier matrix to evaluate developmental assets without forcing them prematurely into statistical rankings:
+    In our 200,999-delivery dataset, <b>Vaibhav Sooryavanshi (ID 50284)</b> has faced <b>676 valid batter balls</b> (714 total deliveries) across IPL 2025, IPL 2026, and Asia Cup Rising Stars 2025, compiling a blistering strike rate of <b>223.2</b> at age 14. Yet he records only <b>7 deliveries at BPI &gt;= 50</b> (and 0 at BPI &gt;= 65), failing the 30-ball HP eligibility cutoff because powerplay openers rarely bat into late-chase crunches. PRESSUREIQ therefore separates a 4-tier emerging matrix from the frozen Top-10 Model A rankings:
     """
     story.append(Paragraph(soorya_text, body_style))
     story.append(Spacer(1, 4))
     
     em_data = [
-        [Paragraph("Player Name", table_header), Paragraph("Age", table_header), Paragraph("Role", table_header), Paragraph("Category Tier", table_header), Paragraph("Dataset Evidence", table_header), Paragraph("RR Strategic Recommendation", table_header)],
-        [Paragraph("<b>Vaibhav Sooryavanshi</b>", table_cell_bold), Paragraph("14", table_cell), Paragraph("Top-Order Batter", table_cell), Paragraph("Tier C (High-Potential)", table_cell), Paragraph("714 balls, 139.8 SR, 0 late HP", table_cell), Paragraph("Retain as crown jewel; shield from death overs.", table_cell)],
-        [Paragraph("<b>Vignesh Puthur</b>", table_cell_bold), Paragraph("22", table_cell), Paragraph("SLA Spinner", table_cell), Paragraph("Tier C (High-Potential)", table_cell), Paragraph("73 balls, 7.89 ER, 6 HP balls", table_cell), Paragraph("Develop for Jaipur conditions; spin depth.", table_cell)],
-        [Paragraph("<b>Naman Dhir</b>", table_cell_bold), Paragraph("24", table_cell), Paragraph("Top/Middle Batter", table_cell), Paragraph("Tier A (Selected #6)", table_cell), Paragraph("603 balls, 184 HP, 93.30 Score", table_cell), Paragraph("Top priority trade/auction target; Clutch Climber.", table_cell)],
-        [Paragraph("<b>Prince Yadav</b>", table_cell_bold), Paragraph("23", table_cell), Paragraph("Right-Arm Fast", table_cell), Paragraph("Tier B (Rank #11 Bowler)", table_cell), Paragraph("747 balls, 297 HP, 88.87 Score", table_cell), Paragraph("Prime domestic pace target; 140+ km/h death bowler.", table_cell)],
-        [Paragraph("<b>Rasikh Salam</b>", table_cell_bold), Paragraph("24", table_cell), Paragraph("Right-Arm Seamer", table_cell), Paragraph("Tier B (Rank #20 Bowler)", table_cell), Paragraph("571 balls, 140 HP, 82.06 Score", table_cell), Paragraph("Cost-effective Indian death seamer depth.", table_cell)],
-        [Paragraph("<b>Allah Ghazanfar</b>", table_cell_bold), Paragraph("18", table_cell), Paragraph("Mystery Off-Break", table_cell), Paragraph("Tier B (Rank #17 Bowler)", table_cell), Paragraph("612 balls, 212 HP, 83.68 Score", table_cell), Paragraph("Overseas mystery spin weapon for SMS Stadium.", table_cell)],
+        [Paragraph("Player Name", table_header), Paragraph("Age", table_header), Paragraph("Role", table_header), Paragraph("Category Tier", table_header), Paragraph("Dataset Evidence", table_header), Paragraph("RR Strategic Context (As of Nov 12)", table_header)],
+        [Paragraph("<b>Vaibhav Sooryavanshi</b>", table_cell_bold), Paragraph("14", table_cell), Paragraph("Top-Order Batter", table_cell), Paragraph("Tier C (Unqualified)", table_cell), Paragraph("676 valid balls (714 deliv), 223.2 SR, 7 HP", table_cell), Paragraph("RR 2026 core (Pending Nov 17); shield from death overs.", table_cell)],
+        [Paragraph("<b>Vignesh Puthur</b>", table_cell_bold), Paragraph("22", table_cell), Paragraph("SLA Spinner", table_cell), Paragraph("Tier C (Unqualified)", table_cell), Paragraph("72 legal balls, 36 HP balls (BoPI &gt;= 50)", table_cell), Paragraph("RR 2026 auction signing (Pending Nov 17); spin depth.", table_cell)],
+        [Paragraph("<b>Naman Dhir</b>", table_cell_bold), Paragraph("24", table_cell), Paragraph("Top/Middle Batter", table_cell), Paragraph("Tier A (Selected #6)", table_cell), Paragraph("589 valid balls, 184 HP, 168.4 SR, 93.30", table_cell), Paragraph("MI 2026 squad (Pending Nov 17); watchlist only if released.", table_cell)],
+        [Paragraph("<b>Prince Yadav</b>", table_cell_bold), Paragraph("23", table_cell), Paragraph("Right-Arm Fast", table_cell), Paragraph("Tier B (Rank #11 Bowler)", table_cell), Paragraph("709 legal balls, 297 HP, 88.87 Score", table_cell), Paragraph("LSG 2026 squad (Pending Nov 17); domestic pace watchlist.", table_cell)],
+        [Paragraph("<b>Rasikh Salam</b>", table_cell_bold), Paragraph("24", table_cell), Paragraph("Right-Arm Seamer", table_cell), Paragraph("Tier B (Rank #20 Bowler)", table_cell), Paragraph("542 legal balls, 140 HP, 82.06 Score", table_cell), Paragraph("Domestic seamer watchlist; verify 2027 status on Nov 17.", table_cell)],
+        [Paragraph("<b>Allah Ghazanfar</b>", table_cell_bold), Paragraph("18", table_cell), Paragraph("Mystery Off-Break", table_cell), Paragraph("Tier B (Rank #17 Bowler)", table_cell), Paragraph("461 legal balls, 212 HP, 83.68 Score", table_cell), Paragraph("Overseas mystery spin watchlist (verify availability).", table_cell)],
     ]
     t_em = Table(em_data, colWidths=[94, 24, 76, 90, 90, 130])
     t_em.setStyle(TableStyle([
@@ -686,9 +686,9 @@ def build_pdf():
     
     story.append(Paragraph("Defending the Cutoffs: Near-Miss Bowlers", h2_style))
     near_bowl_text = """
-    • <b>Prince Yadav (#11, Score 88.87 vs Tim Southee #10, Score 89.16):</b> The domestic sensation missed the top 10 by <b>0.29 points</b> across 297 HP deliveries. Southee edged him purely on international experience weighting. Prince Yadav is RR's highest-priority domestic pace target.<br/>
-    • <b>Dasun Shanaka (#12, Score 88.43):</b> Outstanding cutters, but lower sample in extreme death overs ($n=181$).<br/>
-    • <b>Harpreet Brar (#14, Score 87.73):</b> Elite economy at 7.15 RPO under pressure, but lower strike rate compared to the top 10 seamer group. Prime target for the Jaipur Squeeze.
+    • <b>Prince Yadav (#11, Score 88.87 vs Tim Southee #10, Score 89.16):</b> Missed the top 10 by <b>0.29 points</b> across 297 HP deliveries (709 legal balls). Southee's consistency edge separated them statistically; Prince Yadav remains on RR's domestic pace watchlist (LSG 2026, Pending Nov 17).<br/>
+    • <b>Dasun Shanaka (#12, Score 88.43):</b> Effective middle-to-death cutters across 181 HP deliveries (529 legal balls), just below Top-10 cutoff.<br/>
+    • <b>Harpreet Brar (#14, Score 87.73):</b> Strong retention delta (+0.623) and 8.20 career economy across 257 HP balls; finger-spin watchlist fit if released by PBKS on Nov 17.
     """
     story.append(Paragraph(near_bowl_text, body_style))
     story.append(Spacer(1, 6))
@@ -750,8 +750,8 @@ def build_pdf():
     p14_text = """
     Genuine data science demands complete transparency regarding research boundaries and ethical practices:
     <br/>
-    • <b>Sensor Telemetry Noise:</b> 38.7% of raw <code>bowl_speed</code> values are missing or zero. Speed telemetry was strictly filtered to $[50, 165]\\text{ km/h}$ and excluded from core regression baselines to prevent noise contamination.<br/>
-    • <b>Sample Tail Scarcity:</b> Extreme pressure ($\\text{BPI} \\ge 80$) accounts for 0.61% of all deliveries. Empirical Bayes shrinkage and 2,000 bootstrap iterations were applied to prevent small-sample distortion.<br/>
+    • <b>Sensor Telemetry Noise:</b> 38.7% of raw <code>bowl_speed</code> values are missing or zero. Speed telemetry was filtered to [50, 165] km/h and excluded from core regression baselines to prevent noise contamination.<br/>
+    • <b>Sample Tail Scarcity:</b> Extreme pressure (BPI &gt;= 80) accounts for 0.61% of all deliveries. Empirical Bayes shrinkage and 2,000 bootstrap iterations were applied to prevent small-sample distortion.<br/>
     • <b>Zero Temporal Leakage:</b> All pipelines operate strictly in forward chronological sequence. No future deliveries or match results inform state predictions.<br/>
     • <b>Zero Data Fabrication:</b> Every metric, strike rate, and score is computed deterministically from the 200,999 raw deliveries.<br/>
     • <b>Frozen Baseline Preservation:</b> Git HEAD <code>fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2</code> and official submission ZIP (SHA-256: <code>76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db</code>) remain 100% intact and unmodified.
@@ -761,10 +761,10 @@ def build_pdf():
     
     story.append(Paragraph("Formal Research Certification", h2_style))
     cert_box_text = """
-    <b>COMPETITION READINESS CERTIFICATION — 15 NOVEMBER 2026</b><br/>
-    This research document certifies that the <b>PRESSUREIQ</b> framework has completed all twelve analytical verification gates. It delivers an unassailable mathematical formulation, an adversarial model challenge, a dedicated emerging talent evaluation module, full data provenance, and an actionable tactical blueprint for the Rajasthan Royals.
+    <b>COMPETITION READINESS CERTIFICATION — 12 NOVEMBER 2026 (PRE-RETENTION PREP)</b><br/>
+    This research document certifies that the <b>PRESSUREIQ</b> Model A pipeline and governance audit are complete and verified as of 12 November 2026 (pre-17 Nov IPL retention announcement). It delivers full mathematical provenance, 2026 holdout benchmarks, emerging talent stratification, and strict separation of performance vs market status.
     <br/><br/>
-    <b>Status:</b> CERTIFIED READY FOR SUBMISSION &nbsp;|&nbsp; <b>Test Suite:</b> 57/57 Passed (100%) &nbsp;|&nbsp; <b>Author:</b> Lead Data Scientist & Research Team
+    <b>Status:</b> VERIFIED MODEL A METHODOLOGY &nbsp;|&nbsp; <b>Automated Test Suite:</b> 89/89 Passed (100%) &nbsp;|&nbsp; <b>Author:</b> Lead Data Scientist &amp; Research Team
     """
     story.append(callout_box(cert_box_text, "#F7FAFC", "#004BA0"))
     story.append(Spacer(1, 14))
