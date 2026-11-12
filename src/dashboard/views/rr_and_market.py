@@ -106,15 +106,15 @@ def render_rr_intelligence(bundle: DashboardDataBundle) -> None:
             view_t = view_t[view_t["market_verified_available"]]
 
         if view_t.empty:
-            if only_rel:
+            if not sel_stats:
+                empty_title = "No Market Status selected"
+                empty_desc = "Select at least one Market Status value in the filter above to inspect watchlist candidates."
+            elif only_rel:
                 empty_title = "0 candidates currently satisfy Confirmed Released filter"
                 empty_desc = (
                     "Expected pre-Nov 17 state: official IPL 2027 release lists have not been submitted yet. "
                     "Uncheck 'Only Confirmed Auction Releases' to view statistical role fit."
                 )
-            elif not sel_stats:
-                empty_title = "No Market Status selected"
-                empty_desc = "Select at least one Market Status value in the filter above to inspect watchlist candidates."
             else:
                 empty_title = "No candidates match the active discipline and market-status filters"
                 empty_desc = (
