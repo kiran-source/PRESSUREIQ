@@ -134,3 +134,4 @@ Verified at runtime and after all test runs:
 | **Original Submission ZIP** | `PRESSUREIQ_Final_Submission.zip` | `76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db` | `76059a8f5f8b8de5...` | **EXACT MATCH** |
 | **Pinned Market Snapshot** | `data/processed/snapshots/ipl_2027_market_snapshot_2026-11-11.csv` | `8d1e1bdaa57eb3491abc78139e234420477f1414c448b5a68f4897f07b7efd4d` | `8d1e1bdaa57eb349...` | **EXACT MATCH** |
 | **Frozen Baseline Commit** | `master` branch | `fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2` | `fc0e622c10d49b4b...` | **UNMODIFIED** |
+

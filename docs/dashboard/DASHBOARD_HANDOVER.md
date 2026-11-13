@@ -158,3 +158,4 @@ SuperRR/
 3. **Master Branch Clean:** Base commit `fc0e622c10d49b4b...` is completely preserved.
 4. **Market Separation Maintained:** Statistical performance is strictly segregated from open-auction availability.
 5. **No External Deployment:** Dashboard runs locally without external publishing or deployment.
+
