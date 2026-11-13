@@ -23,11 +23,14 @@ from src.dashboard.charts import (
     fig_top10_ci_bar,
 )
 from src.dashboard.components import (
+    jump_to_player,
     render_callout,
     render_chart_caption,
+    render_compact_leaderboard_list,
     render_editorial_hero,
     render_empty_state,
     render_kpi_grid,
+    render_player_podium_cards,
     render_section_header,
 )
 from src.dashboard.data_loader import (
@@ -312,6 +315,16 @@ def _render_single_discipline_leaderboard(bundle: DashboardDataBundle, is_battin
         "quantifies independent match-cluster concentration.",
         accent=accent,
     )
+
+    # Section 5: Top 3 Featured Podium Cards
+    if not filtered.empty:
+        render_section_header(f"Featured Podium — Top 3 {disc_name}", "Model A leaders evaluated under continuous pressure leverage", icon="trophy")
+        render_player_podium_cards(filtered.head(3), is_batting=is_batting, on_jump_callback=jump_to_player)
+
+    # Section 5: Ranks 4-10 Compact Editorial Cards (when in Featured Top 10 mode)
+    if scope_mode == "Featured Top 10" and len(filtered) > 3:
+        render_section_header(f"Ranks 4–10 {disc_name} — Compact Visual Registry", "Scouting cards with thumbnail portraits, 95% CI, and quick dossier jumps", icon="user")
+        render_compact_leaderboard_list(filtered.iloc[3:10], is_batting=is_batting, on_jump_callback=jump_to_player)
 
     c1, c2 = st.columns(2)
     with c1:

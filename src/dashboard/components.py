@@ -21,6 +21,7 @@ from src.dashboard.design_tokens import (
     SNAPSHOT_ANCHOR_DATE,
     STATUS_TONES,
 )
+from src.dashboard.player_images import get_player_image_b64
 
 _SVG_PATHS: Dict[str, str] = {
     # Lucide icons mapped to v4.1 navigation specification
@@ -258,6 +259,223 @@ def render_chart_caption(caption_text: str) -> None:
         f'</div>',
         unsafe_allow_html=True,
     )
+
+
+def render_player_profile_hero(
+    row: Any,
+    is_batting: bool,
+    mkt_team: str,
+    mkt_status: str,
+    base_df_len: int,
+) -> None:
+    """Render the master full-width player profile hero (v5.0 Section 2)."""
+    pname = str(row["player_name"])
+    pid = int(row["player_id"])
+    rank = int(row["rank"])
+    score = float(row["reliability_score"])
+    disc_label = "Batter" if is_batting else "Bowler"
+    role_val = str(row.get("role" if is_batting else "bowling_type", disc_label))
+    ci_str = str(row.get("score_ci_95", f"[{row.get('ci_lower_95', 0):.2f} – {row.get('ci_upper_95', 0):.2f}]"))
+    top10_prob_pct = f"{float(row.get('top10_inclusion_prob', 0.0)) * 100:.1f}"
+    hp_balls = int(row.get("hp_balls", 0))
+    matches = int(row.get("matches", 0))
+    prc_arch = str(row.get("prc_archetype", "N/A"))
+    prc_slope = float(row.get("prc_slope", 0.0))
+    b64_img = get_player_image_b64(pname)
+
+    hero_html = (
+        f'<section class="piq-player-hero" aria-label="Player Profile Dossier Hero">'
+        f'<div class="piq-player-hero-grid">'
+        f'<div class="piq-player-hero-portrait-col">'
+        f'<div class="piq-player-hero-portrait-frame">'
+        f'<img src="{b64_img}" alt="{html.escape(pname)}" class="piq-player-hero-img" loading="eager" />'
+        f'<div class="piq-player-hero-rank-medallion">'
+        f'<span class="piq-rank-num">#{rank}</span>'
+        f'<span style="color:#FAF6F0;font-size:0.68rem;letter-spacing:0.06em;">{disc_label.upper()}</span>'
+        f'</div>'
+        f'<div class="piq-player-hero-id-tag">ID {pid} · MODEL A</div>'
+        f'</div>'
+        f'</div>'
+        f'<div class="piq-player-hero-dossier-col">'
+        f'<div class="piq-player-hero-eyebrow">'
+        f'<span>PLAYER INTELLIGENCE DOSSIER</span>'
+        f'<span style="color:#D8CBBE;">·</span>'
+        f'<span>VERIFIED TELEMETRY</span>'
+        f'</div>'
+        f'<h1 class="piq-player-hero-name">{html.escape(pname)}</h1>'
+        f'<div class="piq-player-hero-badges">'
+        f'<span class="piq-badge piq-badge-role">{html.escape(role_val)}</span>'
+        f'<span class="piq-badge piq-badge-team">{html.escape(mkt_team)}</span>'
+        f'<span class="piq-badge piq-badge-market">{html.escape(mkt_status)}</span>'
+        f'</div>'
+        f'<div class="piq-player-hero-kpi-banner">'
+        f'<div class="piq-hero-kpi-item">'
+        f'<div class="piq-hero-kpi-label">RELIABILITY SCORE</div>'
+        f'<div class="piq-hero-kpi-val" style="color:var(--accent-terracotta);">{score:.2f}</div>'
+        f'<div class="piq-hero-kpi-sub">95% CI: {html.escape(ci_str)}</div>'
+        f'</div>'
+        f'<div class="piq-hero-kpi-item">'
+        f'<div class="piq-hero-kpi-label">TOP-10 INCLUSION</div>'
+        f'<div class="piq-hero-kpi-val">{top10_prob_pct}%</div>'
+        f'<div class="piq-hero-kpi-sub">N=2,000 Bootstraps</div>'
+        f'</div>'
+        f'<div class="piq-hero-kpi-item">'
+        f'<div class="piq-hero-kpi-label">PRESSURE PROFILE</div>'
+        f'<div class="piq-hero-kpi-val" style="font-size:1.10rem;font-family:var(--font-sans);font-weight:600;">{html.escape(prc_arch)}</div>'
+        f'<div class="piq-hero-kpi-sub">OLS Slope: {prc_slope:+.3f}</div>'
+        f'</div>'
+        f'</div>'
+        f'<div class="piq-player-hero-meta-strip">'
+        f'<span>High-Pressure Sample: <b>{hp_balls} HP Balls</b></span>'
+        f'<span>·</span>'
+        f'<span>Career Matches: <b>{matches}</b></span>'
+        f'<span>·</span>'
+        f'<span>Cohort Standing: <b>Rank #{rank} of {base_df_len} Qualified</b></span>'
+        f'</div>'
+        f'</div>'
+        f'</div>'
+        f'<div class="piq-player-hero-watermark">{rank:02d}</div>'
+        f'</section>'
+    )
+    st.markdown(hero_html, unsafe_allow_html=True)
+
+
+def jump_to_player(pname_val: str, disc_val: str = "Batting") -> None:
+    """Navigate directly to Player Intelligence dossier for a specific player (v5.0)."""
+    st.session_state["active_page"] = "Player Intelligence"
+    st.session_state["pi_disc"] = disc_val
+    st.session_state[f"pi_sel_{disc_val}"] = pname_val
+    try:
+        st.query_params["page"] = "Player Intelligence"
+    except Exception:
+        pass
+    st.rerun()
+
+
+def render_player_podium_cards(
+    top3_df: Any,
+    is_batting: bool,
+    on_jump_callback: Any = None,
+) -> None:
+    """Render top 3 leaderboard players in prominent featured podium cards with portraits (v5.0 Section 5)."""
+    if top3_df.empty:
+        return
+    n_cards = min(len(top3_df), 3)
+    cols = st.columns(n_cards)
+    disc_label = "Batting" if is_batting else "Bowling"
+    callback = on_jump_callback or jump_to_player
+
+    for idx, (_, row) in enumerate(top3_df.head(3).iterrows()):
+        pname = str(row["player_name"])
+        pid = int(row["player_id"])
+        rank = int(row["rank"])
+        score = float(row["reliability_score"])
+        role_val = str(row.get("role" if is_batting else "bowling_type", "Player"))
+        team_val = str(row.get("dataset_ipl_team", "International"))
+        ci_str = str(row.get("score_ci_95", f"[{row.get('ci_lower_95', 0):.2f} – {row.get('ci_upper_95', 0):.2f}]"))
+        b64_img = get_player_image_b64(pname)
+
+        rank_cls = f"rank-{idx+1}"
+        medallion_label = f"#{rank} {disc_label[:-3].upper()}ER"
+        medallion_color = "#C5A46D" if idx == 0 else ("#BD6548" if idx == 1 else "#77675D")
+
+        card_html = (
+            f'<div class="piq-podium-card {rank_cls}">'
+            f'<span class="piq-podium-badge" style="background:#282321;color:{medallion_color};border:1px solid {medallion_color};">{medallion_label}</span>'
+            f'<img src="{b64_img}" alt="{html.escape(pname)}" class="piq-podium-portrait" loading="eager" />'
+            f'<div class="piq-podium-name">{html.escape(pname)}</div>'
+            f'<div class="piq-podium-team">{html.escape(role_val)} · {html.escape(team_val)}</div>'
+            f'<div class="piq-podium-score">{score:.2f}</div>'
+            f'<div class="piq-podium-ci">95% CI: {html.escape(ci_str)}</div>'
+            f'</div>'
+        )
+        with cols[idx]:
+            st.markdown(card_html, unsafe_allow_html=True)
+            if st.button(f"Inspect {pname} →", key=f"podium_jump_{pid}_{idx}", use_container_width=True):
+                callback(pname, disc_label)
+
+
+def render_compact_leaderboard_list(
+    rows_df: Any,
+    is_batting: bool,
+    on_jump_callback: Any = None,
+) -> None:
+    """Render compact editorial card list for leaderboard ranks 4-10 with thumbnails and jump buttons (v5.0 Section 5)."""
+    if rows_df.empty:
+        return
+    disc_label = "Batting" if is_batting else "Bowling"
+    callback = on_jump_callback or jump_to_player
+
+    c1, c2 = st.columns(2)
+    rows_list = list(rows_df.iterrows())
+    mid = (len(rows_list) + 1) // 2
+
+    for col_idx, slice_rows in enumerate([rows_list[:mid], rows_list[mid:]]):
+        target_col = c1 if col_idx == 0 else c2
+        with target_col:
+            for _, r in slice_rows:
+                pname = str(r["player_name"])
+                pid = int(r["player_id"])
+                rank = int(r["rank"])
+                score = float(r["reliability_score"])
+                role = str(r.get("role" if is_batting else "bowling_type", "Player"))
+                team = str(r.get("dataset_ipl_team", "International"))
+                ci_str = str(r.get("score_ci_95", "N/A"))
+                hp_n = int(r.get("hp_balls", 0))
+                b64_img = get_player_image_b64(pname)
+
+                card_html = (
+                    f'<div class="piq-lb-compact-card">'
+                    f'<div style="font-family:var(--font-mono);font-size:0.95rem;font-weight:700;color:#BD6548;width:32px;">#{rank}</div>'
+                    f'<img src="{b64_img}" alt="{html.escape(pname)}" class="piq-lb-thumb" loading="eager" />'
+                    f'<div style="flex:1;min-width:0;">'
+                    f'<div style="font-family:var(--font-serif);font-size:0.98rem;font-weight:700;color:#282321;line-height:1.2;">{html.escape(pname)}</div>'
+                    f'<div style="font-size:0.72rem;color:#77675D;">{html.escape(role)} · {html.escape(team)} · {hp_n} HP balls</div>'
+                    f'<div style="font-size:0.68rem;color:#84927A;font-weight:600;">95% CI: {html.escape(ci_str)}</div>'
+                    f'</div>'
+                    f'<div style="text-align:right;">'
+                    f'<div style="font-family:var(--font-mono);font-size:1.15rem;font-weight:700;color:#282321;">{score:.2f}</div>'
+                    f'<div style="font-size:0.62rem;color:#77675D;text-transform:uppercase;">Score</div>'
+                    f'</div>'
+                    f'</div>'
+                )
+                st.markdown(card_html, unsafe_allow_html=True)
+                if st.button(f"Inspect {pname} →", key=f"lb_jump_compact_{pid}_{rank}", use_container_width=True):
+                    callback(pname, disc_label)
+
+
+def render_comparison_portrait_header(
+    players_data: List[Dict[str, Any]],
+    disc_label: str,
+) -> None:
+    """Render side-by-side player visual cards at the top of Player Comparison (v5.0 Section 6)."""
+    if not players_data:
+        return
+    cols = st.columns(len(players_data))
+    for i, p in enumerate(players_data):
+        pname = p["name"]
+        pid = p["id"]
+        rank = p["rank"]
+        score = p["score"]
+        role = p["role"]
+        team = p["team"]
+        color = p.get("color", PALETTE["accent_terracotta"])
+        b64_img = get_player_image_b64(pname)
+
+        card_html = (
+            f'<div class="piq-compare-card" style="border-top-color:{color};">'
+            f'<div style="font-size:0.68rem;font-weight:700;color:{color};letter-spacing:0.1em;margin-bottom:6px;">'
+            f'#{rank} {disc_label.upper()}ER'
+            f'</div>'
+            f'<img src="{b64_img}" alt="{html.escape(pname)}" class="piq-compare-portrait" style="border-color:{color};" loading="eager" />'
+            f'<div style="font-family:var(--font-serif);font-size:1.15rem;font-weight:700;color:#282321;margin:2px 0;">{html.escape(pname)}</div>'
+            f'<div style="font-size:0.75rem;color:#77675D;margin-bottom:8px;">{html.escape(role)} · {html.escape(team)}</div>'
+            f'<div style="font-family:var(--font-mono);font-size:1.40rem;font-weight:700;color:{color};">{score:.2f}</div>'
+            f'<div style="font-size:0.68rem;color:#77675D;margin-top:2px;">Reliability Score</div>'
+            f'</div>'
+        )
+        with cols[i]:
+            st.markdown(card_html, unsafe_allow_html=True)
 
 
 def render_empty_state(heading: str, guidance: str) -> None:

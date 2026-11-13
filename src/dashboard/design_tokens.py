@@ -9,7 +9,7 @@ from __future__ import annotations
 PRODUCT_NAME = "PRESSUREIQ"
 PRODUCT_TAGLINE = "Beyond Performance. Measuring Composure Under Pressure."
 PRODUCT_SUBTITLE = "An advanced cricket intelligence platform identifying players who deliver when the game is on the line."
-PRODUCT_VERSION = "v4.1 Editorial"
+PRODUCT_VERSION = "v5.0 Visual Intelligence"
 COMPETITION_TITLE = "Rajasthan Royals SupeRR Selector Season 2"
 SNAPSHOT_ANCHOR_DATE = "2026-11-11"
 RETENTION_DEADLINE_DATE = "2026-11-17"
@@ -86,6 +86,7 @@ NAV_ITEMS = [
     # PLAYER ANALYTICS Group
     {"id": "Player Intelligence", "label": "Player Intelligence", "icon": "user-round-search", "mat_icon": ":material/person_search:", "group": "PLAYER ANALYTICS", "subtitle": "Individual pressure profile & match evidence"},
     {"id": "Player Comparison", "label": "Player Comparison", "icon": "users", "mat_icon": ":material/group:", "group": "PLAYER ANALYTICS", "subtitle": "Head-to-head multi-player telemetry comparator"},
+    {"id": "Player Directory", "label": "Player Directory", "icon": "user", "mat_icon": ":material/badge:", "group": "PLAYER ANALYTICS", "subtitle": "Visual scouting catalog of 227 qualified athletes"},
     {"id": "Pressure Analytics", "label": "Pressure Analytics", "icon": "chart-no-axes-combined", "mat_icon": ":material/insights:", "group": "PLAYER ANALYTICS", "subtitle": "BPI, BoPI, PAVA & expected-outcome physics"},
 
     # FRANCHISE INTELLIGENCE Group

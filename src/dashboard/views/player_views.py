@@ -29,8 +29,10 @@ from src.dashboard.charts import (
 from src.dashboard.components import (
     render_callout,
     render_chart_caption,
+    render_comparison_portrait_header,
     render_empty_state,
     render_kpi_grid,
+    render_player_profile_hero,
     render_section_header,
 )
 from src.dashboard.data_loader import (
@@ -123,38 +125,73 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
         if pd.notna(raw_curr_team) and str(raw_curr_team).strip() != "":
             mkt_team = str(raw_curr_team).strip()
 
-    render_kpi_grid(
-        [
+    # Section A: Master Player Profile Hero (v5.0 Section 2)
+    render_player_profile_hero(row, is_batting, mkt_team, mkt_status, len(base_df))
+
+    # Section B: Premium Player Metrics Cards (v5.0 Section 3)
+    if is_batting:
+        kpi_cards = [
             {
                 "label": f"Frozen Model A Rank ({disc})",
                 "value": f"#{int(row['rank'])} of {len(base_df)}",
-                "sub": f"Player ID {pid} | {role_val} | Cohort Team: {mkt_team}",
+                "sub": f"Player ID {pid} | {role_val} | {mkt_team}",
                 "accent": PALETTE["accent_terracotta"],
                 "icon": "trophy",
             },
             {
                 "label": "Reliability Score & 95% CI",
                 "value": f"{row['reliability_score']:.2f}",
-                "sub": f"95% Boot CI: {row.get('score_ci_95', 'N/A')} | Top-10 Prob: {_safe_float(row.get('top10_inclusion_prob'))*100:.2f}%",
+                "sub": f"95% CI: {row.get('score_ci_95', 'N/A')} | Top-10: {_safe_float(row.get('top10_inclusion_prob'))*100:.1f}%",
                 "accent": PALETTE["accent_gold"],
                 "icon": "activity",
             },
             {
-                "label": "High-Pressure Sample & Kish ESS",
-                "value": f"{int(row['hp_balls'])} HP | {_safe_float(row.get('kish_match_ess')):.1f} ESS",
-                "sub": f"{int(row['matches'])} matches | EB Weight w={_safe_float(row.get('eb_shrinkage_weight')):.3f} (K=45)",
+                "label": "High-Pressure Deliveries",
+                "value": f"{int(row['hp_balls'])} HP Balls",
+                "sub": f"Raw HP PAVA: {row['raw_hp_pava_per_ball']:+.3f} | Career SR: {row['career_sr']:.1f}",
                 "accent": PALETTE["positive"],
                 "icon": "database",
             },
             {
-                "label": "Shrunk HP PAVA & PRC Class",
+                "label": "Shrunk HP PAVA & EB Weight",
                 "value": f"{_safe_float(row.get('shrunk_hp_pava_per_ball')):+.3f} / ball",
-                "sub": f"PRC: {row.get('prc_archetype', 'N/A')} (slope {_safe_float(row.get('prc_slope')):+.3f}) | Market: {mkt_status}",
+                "sub": f"Weight w={_safe_float(row.get('eb_shrinkage_weight')):.3f} | Kish ESS: {_safe_float(row.get('kish_match_ess')):.1f}",
                 "accent": PALETTE["accent_burnt_orange"],
                 "icon": "user",
             },
         ]
-    )
+    else:
+        kpi_cards = [
+            {
+                "label": f"Frozen Model A Rank ({disc})",
+                "value": f"#{int(row['rank'])} of {len(base_df)}",
+                "sub": f"Player ID {pid} | {role_val} | {mkt_team}",
+                "accent": PALETTE["accent_terracotta"],
+                "icon": "trophy",
+            },
+            {
+                "label": "Reliability Score & 95% CI",
+                "value": f"{row['reliability_score']:.2f}",
+                "sub": f"95% CI: {row.get('score_ci_95', 'N/A')} | Top-10: {_safe_float(row.get('top10_inclusion_prob'))*100:.1f}%",
+                "accent": PALETTE["accent_gold"],
+                "icon": "activity",
+            },
+            {
+                "label": "High-Pressure Deliveries",
+                "value": f"{int(row['hp_balls'])} HP Balls",
+                "sub": f"Career Econ: {row['career_economy']:.2f} | Wickets: {int(row['total_wickets'])}",
+                "accent": PALETTE["positive"],
+                "icon": "database",
+            },
+            {
+                "label": "Shrunk HP PAVA & EB Weight",
+                "value": f"{_safe_float(row.get('shrunk_hp_pava_per_ball')):+.3f} / ball",
+                "sub": f"Weight w={_safe_float(row.get('eb_shrinkage_weight')):.3f} | Kish ESS: {_safe_float(row.get('kish_match_ess')):.1f}",
+                "accent": PALETTE["accent_burnt_orange"],
+                "icon": "user",
+            },
+        ]
+    render_kpi_grid(kpi_cards)
 
     # Career metrics strip
     if is_batting:
@@ -290,11 +327,32 @@ def render_player_comparison(bundle: DashboardDataBundle) -> None:
     sel_df["_order"] = sel_df["player_name"].apply(lambda n: selected_names.index(n))
     sel_df = sel_df.sort_values("_order").drop(columns=["_order"])
 
+    color_map = build_player_color_map(sel_df["player_name"].tolist())
+
+    # Section 6: Side-by-side visual portraits
+    players_data = []
+    for _, r in sel_df.iterrows():
+        pname = str(r["player_name"])
+        pid = int(r["player_id"])
+        rank = int(r["rank"])
+        score = float(r["reliability_score"])
+        role = str(r.get("role" if is_batting else "bowling_type", "Player"))
+        team = str(r.get("dataset_ipl_team", "International"))
+        color = color_map.get(pname, PALETTE["accent_terracotta"])
+        players_data.append({
+            "name": pname,
+            "id": pid,
+            "rank": rank,
+            "score": score,
+            "role": role,
+            "team": team,
+            "color": color,
+        })
+    render_comparison_portrait_header(players_data, "Batt" if is_batting else "Bowl")
+
     render_section_header("Side-by-Side Comparable Telemetry Matrix", "Exact frozen metrics, uncertainty intervals, Kish ESS, and OLS PRC slope", icon="compare")
     comp_tbl = build_multi_player_comparison(sel_df, is_batting=is_batting)
     st.dataframe(comp_tbl, width="stretch", hide_index=True)
-
-    color_map = build_player_color_map(sel_df["player_name"].tolist())
 
     c1, c2 = st.columns(2)
     with c1:

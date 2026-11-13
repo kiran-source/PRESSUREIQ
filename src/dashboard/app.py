@@ -28,6 +28,7 @@ from src.dashboard.styles import inject_global_styles
 from src.dashboard.views.analytics_and_emerging import render_emerging_talent, render_pressure_analytics
 from src.dashboard.views.methodology_and_provenance import render_methodology, render_provenance
 from src.dashboard.views.overview_and_leaderboards import render_leaderboards, render_overview
+from src.dashboard.views.player_directory import render_player_directory
 from src.dashboard.views.player_views import render_player_comparison, render_player_intelligence
 from src.dashboard.views.rr_and_market import render_market_intelligence, render_rr_intelligence
 
@@ -90,6 +91,7 @@ def main() -> None:
         "Pressure Leaderboards": render_leaderboards,
         "Player Intelligence": render_player_intelligence,
         "Player Comparison": render_player_comparison,
+        "Player Directory": render_player_directory,
         "Pressure Analytics": render_pressure_analytics,
         "Emerging Talent": render_emerging_talent,
         "Rajasthan Royals Intelligence": render_rr_intelligence,
