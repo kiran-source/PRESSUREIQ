@@ -15,6 +15,9 @@
 | **Pass 1** | `82e77b2..f199482` | **9** | 0 | 3 | 6 | `735287e` | **Resolved** |
 | **Pass 2** | `f199482..735287e` | **1** | 0 | 0 | 1 | `462a37b` | **Resolved** |
 | **Pass 3** | `735287e..462a37b` | **0** | 0 | 0 | 0 | `462a37b` | **Clean / Complete** |
+| **Pass 4 (v4 Editorial)** | `dashboard-ui-v3..5117872` | **1** | 0 | 1 | 0 | `6fac083` | **Resolved** |
+| **Pass 5 (v4 Editorial)** | `5117872..6fac083` | **2** | 0 | 0 | 2 | `04ad952` | **Resolved** |
+| **Pass 6 (v4 Final)** | `dashboard-ui-v3..04ad952` | **0** | 0 | 0 | 0 | `04ad952` | **Clean / Complete** |
 
 ---
 
@@ -174,4 +177,49 @@
 - **HEAD Commit:** `462a37b`
 - **Findings Reported:** **0 Critical, 0 Major, 0 Minor**
 - **Outcome:** Clean review completion. All identified issues across the dashboard architecture are fully remediated and verified.
+
+---
+
+## 5. Pass 4 Kinfolk Luxury Editorial Review (`dashboard-ui-v3..5117872`)
+
+### Finding 11: Do not substitute fixed rankings when ranking data is unavailable
+- **File:** `src/dashboard/views/overview_and_leaderboards.py:56-61`
+- **Severity:** Major
+- **CodeRabbit Diagnostic:** If either ranking frame is empty, fallback defaults passed a named player ("Ruturaj Gaikwad", "Liam Dawson"), score, and confidence interval to `render_editorial_hero` without supporting ranking data while KPI reported "Frozen ranking unavailable."
+- **Root Cause:** Hardcoded strings in default fallback variables.
+- **Remediation Applied:**
+  - Updated `render_editorial_hero()` in `src/dashboard/components.py` to accept `Optional[str]` and `Optional[float]`.
+  - When ranking data is empty, renders an honest "Data Unavailable" card with neutral border and "No verified Model A data loaded" description. Never substitutes mock player names or numbers.
+  - Updated `overview_and_leaderboards.py` to pass `None` when dataframes are empty.
+  - Added unit test in `tests/test_dashboard_data.py`.
+- **Remediation Commit:** `6fac083`.
+
+---
+
+## 6. Pass 5 Kinfolk Polish & Responsiveness Review (`5117872..6fac083`)
+
+### Finding 12: Allow the hero columns to shrink on narrow screens
+- **File:** `src/dashboard/components.py:168`
+- **Severity:** Minor
+- **CodeRabbit Diagnostic:** Columns had fixed `min-width: 280px` and `min-width: 270px` which could cause clipping or overflow on screens narrower than 280px (e.g. 320px).
+- **Remediation Applied:** Changed hero column flex rules to `flex: 1 1 540px; min-width: 0; max-width: 100%;` and `flex: 1 1 380px; min-width: 0; max-width: 100%;`.
+
+### Finding 13: Derive featured role badges from the selected players
+- **File:** `src/dashboard/components.py:118`
+- **Severity:** Minor
+- **CodeRabbit Diagnostic:** Batter was hardcoded to "Top Order" and bowler to "Slow Orthodox" badges.
+- **Remediation Applied:** Parameterized `featured_bat_role` and `featured_bowl_role` in `render_editorial_hero()`. Extracted dynamic `role` (formatted as Title Case) from `top_bat` and `bowling_type` / `pace_or_spin` from `top_bowl`. Omitted badge when data is unavailable.
+- **Remediation Commit:** `04ad952`.
+
+---
+
+## 7. Pass 6 Final Verification Review (`dashboard-ui-v3..04ad952`)
+
+- **Command Executed:** `cr review --committed --base dashboard-ui-v3 --agent`
+- **Base Commit:** `dashboard-ui-v3`
+- **HEAD Commit:** `04ad952`
+- **Reviewed Files:** 12 files (`.streamlit/config.toml`, `src/dashboard/*.py`, `tests/test_dashboard_data.py`)
+- **Findings Reported:** **0 Critical, 0 Major, 0 Minor**
+- **Outcome:** Complete clean pass. Zero outstanding findings.
+
 

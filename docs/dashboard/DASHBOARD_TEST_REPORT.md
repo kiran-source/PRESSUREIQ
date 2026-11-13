@@ -1,8 +1,8 @@
 # PRESSUREIQ Dashboard — Comprehensive Test & Verification Report
 
-**Product:** PRESSUREIQ Premium Interactive Cricket Intelligence Dashboard (`v3.0`)  
-**Active Branch:** `dashboard-ui-v3`  
-**Evaluation Date:** 12 November 2026  
+**Product:** PRESSUREIQ Premium Interactive Cricket Intelligence Dashboard (`v4.0 Editorial`)  
+**Active Branch:** `redesign-editorial-v4`  
+**Evaluation Date:** 13 November 2026  
 **Test Engine:** `pytest 9.1.1` + Playwright Chromium Headless `1.50+`  
 **Execution Environment:** Windows PowerShell 5.1, Python 3.13.5  
 
@@ -12,23 +12,24 @@
 
 | Verification Pillar | Total Executed | Passed | Failed | Skipped | Status |
 |:---|:---:|:---:|:---:|:---:|:---:|
-| **Repository Pytest Suite** | 91 | 91 | 0 | 0 | **100% PASS** |
+| **Repository Pytest Suite** | 91 | 91 | 0 | 0 | **100% PASS (39.23s)** |
 | **Dashboard Unit & Data Tests** | 11 | 11 | 0 | 0 | **100% PASS** |
 | **Playwright Full View E2E (10 Pages)** | 10 | 10 | 0 | 0 | **100% PASS** |
 | **Playwright User Flow Interactions** | 2 | 2 | 0 | 0 | **100% PASS** |
 | **Responsive Viewports Tested** | 2 (`768x1024`, `375x812`) | 2 | 0 | 0 | **100% PASS (Zero Overflow)** |
 | **Cryptographic Frozen Hash Audits** | 4 | 4 | 0 | 0 | **100% EXACT MATCH** |
-| **CodeRabbit Review Findings** | 10 | 10 resolved | 0 remaining | 0 | **CLEAN (0 Findings)** |
+| **CodeRabbit Review Findings** | 13 | 13 resolved | 0 remaining | 0 | **CLEAN (0 Findings)** |
 
 ---
 
-## 2. Full Pytest Test Suite Results (91/91 Passed in 41.83s)
+## 2. Full Pytest Test Suite Results (91/91 Passed in 39.23s)
 
 ```text
 ============================= test session starts =============================
 platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.6.0
 rootdir: C:\Users\kiran\OneDrive\Documents\Desktop\SuperRR
 configfile: pytest.ini
+plugins: anyio-4.10.0, asyncio-1.4.0
 collected 91 items
 
 tests/test_audit_remediation.py .................................. [ 6%]
@@ -50,7 +51,7 @@ tests/test_rr_recommendation_system.py .....                       [84%]
 tests/test_shortened_innings_dls.py ........                       [93%]
 tests/test_state_reconstruction.py ..                              [95%]
 tests/test_validation_fixes.py ....                                [100%]
-============================= 91 passed in 41.83s =============================
+============================= 91 passed in 39.23s =============================
 ```
 
 ### Dashboard-Specific Unit Tests Breakdown (`tests/test_dashboard_data.py`):
@@ -58,27 +59,23 @@ tests/test_validation_fixes.py ....                                [100%]
 2. `test_effective_sample_distinguished_from_raw_opportunities`: Validates that raw opportunities (`hp_balls`) are strictly separated from Kish ESS and Empirical Bayes effective sample size.
 3. `test_filters_preserve_official_rank_without_mutation`: Ensures sorting and discipline filtering never overwrite frozen Model A rank integers.
 4. `test_duckdb_season_slice_and_unestablished_queries`: Validates parameterized DuckDB execution for dynamic season/format slicing and Tier C emerging profiles.
-5. `test_market_safeguards_and_nov5_trade_counterparties`: Enforces strict market status constraints and validates Khaleel Ahmed (SRH) and Liam Livingstone (CSK) trade counterparties.
-6. `test_missing_file_and_edge_case_resilience`: Verifies zero crashing and empty state rendering when data files or query parameters are null/missing.
-7. `test_charts_and_player_intelligence_render_cleanly`: Confirms all 9 original Plotly figures and 9 new telemetry figures render valid traces without NaN labels.
-8. `test_bowler_economy_includes_illegal_delivery_runs`: Tests MCC bowling economy compliance (wide/no-ball runs included, denominator strictly legal balls).
-9. `test_rr_core_visible_when_candidates_empty`: Tests fault-tolerant rendering of RR squad core even when external candidate pool is empty.
-10. `test_v3_teams_comparison_pressure_analytics_and_charts`: Verifies 10-team IPL overview, multi-player comparator, and 10-bin pressure distributions.
-11. `test_coderabbit_findings_remediation`: Validates color map consistency across charts, franchise status labels, and market snapshot integrity checking.
+5. `test_market_safeguards_and_nov5_trade_counterparties`: Confirms strict status isolation (Pending vs Confirmed) and non-interference with Model A rankings.
+6. `test_missing_file_and_edge_case_resilience`: Verifies empty dataframe robustness across all 18 Plotly builders and radar metrics.
+7. `test_charts_and_player_intelligence_render_cleanly`: Checks 5-pillar radar generation, deliverable phase breakdowns, and dynamic player lookups.
+8. `test_bowler_economy_includes_illegal_delivery_runs`: Tests strict MCC legal ball economy accounting vs illegal delivery run concessions.
+9. `test_rr_core_visible_when_candidates_empty`: Confirms RR retained core remains fully visible even when auction candidate filters return empty.
+10. `test_v3_teams_comparison_pressure_analytics_and_charts`: Tests multi-player radar traces, CI error bar overlays, and league-wide metrics.
+11. `test_coderabbit_findings_remediation`: Validates empty ranking fallback robustness, dynamic role badge rendering, and zero mock player substitution.
 
 ---
 
-## 3. Playwright Headless Chromium E2E QA Results
+## 3. Playwright Headless Browser QA Results
 
-Automated execution via `qa_dashboard_v3.py` against live local server:
-
+Automated headless Chromium audit across all 10 views:
 ```json
 {
   "pages": 10,
-  "interactions": [
-    "leaderboards_bowler_tab_ok",
-    "rr_empty_state_ok"
-  ],
+  "interactions": ["leaderboards_bowler_tab_ok", "rr_empty_state_ok"],
   "responsive": [
     {"viewport": "tablet_768", "overflow": false, "exceptions": 0},
     {"viewport": "mobile_375", "overflow": false, "exceptions": 0}
@@ -88,50 +85,17 @@ Automated execution via `qa_dashboard_v3.py` against live local server:
 }
 ```
 
-### Per-Page Layout & Exception Audit:
-
-| # | Page Name | Navigation Hash Anchor | Exceptions | Chart Count | Horizontal Overflow | Visual Status |
-|:---:|:---|:---:|:---:|:---:|:---:|:---:|
-| **1** | Executive Overview | `#/overview` | 0 | 3 | False | Verified |
-| **2** | Pressure Leaderboards | `#/leaderboards` | 0 | 8 | False | Verified |
-| **3** | Player Intelligence | `#/player-intelligence` | 0 | 5 | False | Verified |
-| **4** | Player Comparison | `#/player-comparison` | 0 | 4 | False | Verified |
-| **5** | Pressure Analytics | `#/pressure-analytics` | 0 | 6 | False | Verified |
-| **6** | Emerging Talent Watchlist | `#/emerging-talent` | 0 | 1 | False | Verified |
-| **7** | Rajasthan Royals Intelligence | `#/rr-intelligence` | 0 | 1 | False | Verified |
-| **8** | IPL 2027 Market Intelligence | `#/market-intelligence` | 0 | 1 | False | Verified |
-| **9** | Methodology & Validation | `#/methodology` | 0 | 1 | False | Verified |
-| **10** | Data Sources & Provenance | `#/provenance` | 0 | 0 | False | Verified |
+- **Visual Quality:** Kinfolk Luxury Editorial aesthetic verified across all 10 pages (`docs/dashboard/screenshots/01_overview_desktop.png` through `10_provenance_desktop.png`).
+- **Responsive Layout:** 0 horizontal overflow on 768px tablet and 375px mobile viewports.
+- **Zero Console Errors:** No JavaScript exceptions, failed assets, or broken network calls.
 
 ---
 
-## 4. Responsive Viewport Audits
+## 4. Cryptographic Provenance & Immutability Verification
 
-1. **Desktop Viewport (`1440x900`)**:
-   - Two-column KPI grids, synchronized radar + CI chart pairs, full-width dataframes.
-   - Fixed header bar with breadcrumb trail and integrity indicator badge.
-2. **Tablet Viewport (`768x1024`)**:
-   - Evaluated via `page.set_viewport_size({"width": 768, "height": 1024})`.
-   - Grid cards automatically wrap to 2 columns; Plotly charts scale down without clipping.
-   - Result: `overflow: false`, `exceptions: 0`.
-3. **Mobile Viewport (`375x812`)**:
-   - Evaluated via `page.set_viewport_size({"width": 375, "height": 812})`.
-   - Collapsible sidebar closes cleanly via Streamlit expander button.
-   - Hero banner and KPI cards collapse into a single vertical column (`1fr`).
-   - Plotly legends wrap horizontally below the plot canvas.
-   - Result: `overflow: false`, `exceptions: 0`.
-
----
-
-## 5. Non-Negotiable Cryptographic Baseline Integrity
-
-Verified at runtime and after all test runs:
-
-| Artifact | Path | Expected SHA-256 | Observed SHA-256 | Status |
-|:---|:---|:---|:---|:---:|
-| **Frozen Batters CSV** | `data/processed/final_batter_rankings.csv` | `887f0c104047eb7b5c7d662b83600bacaf6263fa7162fc343b27800760b99b87` | `887f0c104047eb7b...` | **EXACT MATCH** |
-| **Frozen Bowlers CSV** | `data/processed/final_bowler_rankings.csv` | `344d63c55cecc7bce9de3cd06d82b6ac8217fcd448bb3f2e93d55da314f1e7bb` | `344d63c55cecc7bc...` | **EXACT MATCH** |
-| **Original Submission ZIP** | `PRESSUREIQ_Final_Submission.zip` | `76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db` | `76059a8f5f8b8de5...` | **EXACT MATCH** |
-| **Pinned Market Snapshot** | `data/processed/snapshots/ipl_2027_market_snapshot_2026-11-11.csv` | `8d1e1bdaa57eb3491abc78139e234420477f1414c448b5a68f4897f07b7efd4d` | `8d1e1bdaa57eb349...` | **EXACT MATCH** |
-| **Frozen Baseline Commit** | `master` branch | `fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2` | `fc0e622c10d49b4b...` | **UNMODIFIED** |
-
+| File | Canonical SHA-256 Hash | Verification Result |
+|---|---|:---:|
+| `data/processed/final_batter_rankings.csv` | `887f0c104047eb7b5c7d662b83600bacaf6263fa7162fc343b27800760b99b87` | **MATCH** |
+| `data/processed/final_bowler_rankings.csv` | `344d63c55cecc7bce9de3cd06d82b6ac8217fcd448bb3f2e93d55da314f1e7bb` | **MATCH** |
+| `PRESSUREIQ_Final_Submission.zip` | `76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db` | **MATCH** |
+| `data/processed/snapshots/ipl_2027_market_snapshot_2026-11-11.csv` | `8d1e1bdaa57eb3491abc78139e234420477f1414c448b5a68f4897f07b7efd4d` | **MATCH** |
