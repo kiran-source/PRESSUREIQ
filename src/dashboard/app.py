@@ -9,6 +9,9 @@ from src.dashboard.components import (
     render_callout,
     render_footer,
     render_sidebar_brand,
+    render_sidebar_lookup,
+    render_sidebar_navigation,
+    render_sidebar_status,
     render_top_bar,
 )
 from src.dashboard.data_loader import DashboardDataBundle, load_dashboard_bundle_uncached
@@ -42,12 +45,11 @@ def _cached_bundle() -> DashboardDataBundle:
 
 
 def _init_session_state() -> None:
-    if "active_page" not in st.session_state:
-        qp = st.query_params.get("page")
-        if qp and qp in NAV_LABELS:
-            st.session_state["active_page"] = qp
-        else:
-            st.session_state["active_page"] = NAV_LABELS[0]
+    qp = st.query_params.get("page")
+    if qp and qp in NAV_LABELS:
+        st.session_state["active_page"] = qp
+    elif "active_page" not in st.session_state:
+        st.session_state["active_page"] = NAV_LABELS[0]
 
     if "jump_player_name" not in st.session_state:
         st.session_state["jump_player_name"] = None
@@ -65,60 +67,12 @@ def main() -> None:
         and bundle.integrity_status.get("bowler_frozen_match", False)
     )
 
-    # Sidebar shell: Branding, Global Player Jump, 10 Routes, Freshness & Provenance
+    # Redesigned Luxury Editorial Sidebar (User Requirements v4.1)
     with st.sidebar:
         render_sidebar_brand()
-
-        # Global Search / Quick Jump across all 256 qualified profiles
-        bat_names = [f"{n} (Bat)" for n in bundle.bat_df["player_name"].tolist()] if not bundle.bat_df.empty else []
-        bowl_names = [f"{n} (Bowl)" for n in bundle.bowl_df["player_name"].tolist()] if not bundle.bowl_df.empty else []
-        jump_opts = ["Select player to inspect…"] + bat_names + bowl_names
-        quick_pick = st.selectbox("Quick Player Lookup", jump_opts, index=0, key="global_quick_pick")
-        if quick_pick != "Select player to inspect…":
-            is_bat_pick = quick_pick.endswith(" (Bat)")
-            disc_val = "Batting" if is_bat_pick else "Bowling"
-            pname_val = quick_pick[:-6] if is_bat_pick else quick_pick[:-7]
-            st.session_state["jump_disc"] = disc_val
-            st.session_state["jump_player_name"] = pname_val
-            if st.button("Open Player Profile", width="stretch", key="global_jump_btn"):
-                st.session_state["active_page"] = "Player Intelligence"
-                st.session_state["nav_radio"] = "Player Intelligence"
-                st.session_state["pi_disc"] = disc_val
-                st.session_state[f"pi_sel_{disc_val}"] = pname_val
-                try:
-                    st.query_params["page"] = "Player Intelligence"
-                except Exception:
-                    pass
-                st.rerun()
-
-        st.markdown("<div style='height:4px;'></div>", unsafe_allow_html=True)
-        current_idx = NAV_LABELS.index(st.session_state["active_page"]) if st.session_state["active_page"] in NAV_LABELS else 0
-        chosen_page = st.radio(
-            "Navigation",
-            NAV_LABELS,
-            index=current_idx,
-            key="nav_radio",
-        )
-        if chosen_page != st.session_state["active_page"]:
-            st.session_state["active_page"] = chosen_page
-            try:
-                st.query_params["page"] = chosen_page
-            except Exception:
-                pass
-
-        st.divider()
-        meta = NAV_META.get(chosen_page, {})
-        st.caption(f"View: {meta.get('subtitle', '')}")
-        st.markdown(
-            f"<div style='font-size:0.78rem;color:#77675D;line-height:1.55;'>"
-            f"<b>Version:</b> {PRODUCT_NAME} {PRODUCT_VERSION}<br/>"
-            f"<b>Data Coverage:</b> 200,999 raw balls (867 matches)<br/>"
-            f"<b>Snapshot Date:</b> {SNAPSHOT_ANCHOR_DATE}<br/>"
-            f"<b>Retention Filing:</b> {RETENTION_DEADLINE_DATE}<br/>"
-            f"<b>Security:</b> Read-only frozen Model A CSVs"
-            f"</div>",
-            unsafe_allow_html=True,
-        )
+        render_sidebar_lookup(bundle)
+        render_sidebar_navigation(active_page=st.session_state["active_page"])
+        render_sidebar_status(frozen_ok=frozen_ok)
 
     active_page = st.session_state["active_page"]
     render_top_bar(page_label=active_page, frozen_ok=frozen_ok, snapshot_date=SNAPSHOT_ANCHOR_DATE)

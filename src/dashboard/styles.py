@@ -127,101 +127,310 @@ html, body, [class*="stAppViewContainer"], .stApp {
     max-width: 1440px;
 }
 
-/* ---------- Sidebar ---------- */
+/* ---------- Sidebar Dimensions & Shell (270–290px desktop) ---------- */
 section[data-testid="stSidebar"] {
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 38%),
-        var(--bg-sidebar) !important;
-    border-right: 1px solid var(--border-card);
-    box-shadow: 1px 0 0 rgba(255, 255, 255, 0.7) inset, 6px 0 24px rgba(40, 35, 33, 0.025);
+    width: 280px !important;
+    min-width: 270px !important;
+    max-width: 290px !important;
+    background: #F1E9DD !important;
+    border-right: 1px solid var(--border-card) !important;
+    box-shadow: 1px 0 0 rgba(255, 255, 255, 0.7) inset, 4px 0 16px rgba(40, 35, 33, 0.03) !important;
 }
-section[data-testid="stSidebar"] hr {
-    border-color: var(--border-subtle) !important;
-}
-section[data-testid="stSidebar"] label[data-testid="stWidgetLabel"] p,
-section[data-testid="stSidebar"] div[data-testid="stWidgetLabel"] p {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
+section[data-testid="stSidebar"] > div:first-child {
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.5rem !important;
+    padding-left: 0.95rem !important;
+    padding-right: 0.95rem !important;
+    width: 280px !important;
 }
 
-.piq-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 6px 2px 16px 2px;
-    margin-bottom: 14px;
-    border-bottom: 1px solid var(--border-card);
+/* Hide default st.radio widgets in sidebar */
+section[data-testid="stSidebar"] div[data-testid="stRadio"] {
+    display: none !important;
+}
+
+/* ---------- Brand Header (Section 2) ---------- */
+.piq-sb-brand {
+    padding-bottom: 10px;
+    margin-bottom: 12px;
     position: relative;
 }
-.piq-brand::after {
+.piq-sb-brand-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.piq-sb-emblem {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.piq-sb-brand-text {
+    display: flex;
+    flex-direction: column;
+}
+.piq-sb-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #282321;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+}
+.piq-sb-sub {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #77675D;
+    margin-top: 3px;
+}
+.piq-sb-brand-divider {
+    height: 1px;
+    background: var(--border-card);
+    margin-top: 12px;
+    position: relative;
+}
+.piq-sb-brand-divider::after {
     content: "";
     position: absolute;
     left: 0;
-    bottom: -1px;
-    width: 56px;
+    top: -1px;
+    width: 44px;
     height: 2px;
     background: linear-gradient(90deg, var(--accent-terracotta), var(--accent-gold));
     border-radius: 2px;
 }
-.piq-brand-name {
-    font-family: var(--font-serif);
+
+/* ---------- Quick Player Lookup (Section 3) ---------- */
+.piq-sb-section-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.65rem;
     font-weight: 700;
-    font-size: 1.2rem;
-    color: #282321;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-}
-.piq-brand-sub {
-    margin-top: 3px;
-    font-size: 0.66rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: #77675D;
+    margin-bottom: 6px;
+    margin-left: 2px;
+}
+section[data-testid="stSidebar"] div[data-baseweb="select"] > div {
+    min-height: 36px !important;
+    height: 36px !important;
+    font-size: 0.84rem !important;
+    border-radius: 8px !important;
+    background: #FFFFFF !important;
+    border: 1px solid var(--border-card) !important;
+    box-shadow: 0 1px 2px rgba(40, 35, 33, 0.04) !important;
+}
+section[data-testid="stSidebar"] div.stButton > button {
+    min-height: 34px !important;
+    height: 34px !important;
+    padding: 0 12px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    margin-top: 4px !important;
+    background: #FFFFFF !important;
+    border: 1px solid var(--border-card) !important;
+    color: #282321 !important;
+    box-shadow: 0 1px 2px rgba(40, 35, 33, 0.04) !important;
+}
+section[data-testid="stSidebar"] div.stButton > button:hover {
+    background: var(--accent-terracotta) !important;
+    border-color: var(--accent-terracotta) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(189, 101, 72, 0.22) !important;
 }
 
-/* Navigation: radio circles hidden, items become editorial pills */
-section[data-testid="stSidebar"] div[data-testid="stRadio"] > div {
-    gap: 3px;
+/* ---------- Navigation Structure & Custom Items (Sections 4 & 5) ---------- */
+.piq-sb-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 12px;
+    margin-bottom: 16px;
 }
-section[data-testid="stSidebar"] div[data-testid="stRadio"] label > div:first-child:not([data-testid="stMarkdownContainer"]) {
-    display: none !important;
+.piq-sb-nav-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2px;
 }
-section[data-testid="stSidebar"] div[data-testid="stRadio"] label {
-    width: 100%;
-    border-radius: 10px;
-    padding: 9px 14px;
+.piq-sb-group-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8C7C72;
+    padding: 8px 6px 4px 6px;
+    user-select: none;
+}
+.piq-sb-group-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.piq-sb-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 11px;
+    border-radius: 8px;
+    text-decoration: none !important;
+    color: #282321 !important;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.3;
     border: 1px solid transparent;
     border-left: 3px solid transparent;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 500;
+    transition: all 160ms var(--ease);
     cursor: pointer;
-    transition: background 160ms var(--ease), border-color 160ms var(--ease),
-                color 160ms var(--ease), transform 160ms var(--ease), box-shadow 160ms var(--ease);
+    background: transparent;
 }
-section[data-testid="stSidebar"] div[data-testid="stRadio"] label p {
-    font-size: 0.9rem;
-}
-section[data-testid="stSidebar"] div[data-testid="stRadio"] label:hover {
-    background: rgba(234, 225, 213, 0.75);
-    color: var(--text-primary);
+.piq-sb-nav-item:hover {
+    background: rgba(234, 225, 213, 0.75) !important;
+    color: #282321 !important;
     transform: translateX(2px);
+    border-color: rgba(216, 203, 190, 0.5);
+    border-left-color: var(--accent-terracotta);
 }
-section[data-testid="stSidebar"] div[data-testid="stRadio"] label[data-checked="true"],
-section[data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked) {
-    background: linear-gradient(90deg, #FFFFFF 0%, #FFFCF8 100%) !important;
-    border-color: var(--border-card) !important;
+.piq-sb-nav-item.is-active {
+    background: linear-gradient(90deg, #FFFFFF 0%, #FAF6F0 100%) !important;
+    border: 1px solid #D8CBBE !important;
     border-left: 3px solid var(--accent-terracotta) !important;
-    box-shadow: var(--shadow-sm);
-    color: var(--text-primary) !important;
+    color: #282321 !important;
     font-weight: 600 !important;
+    box-shadow: 0 1px 3px rgba(40, 35, 33, 0.05);
 }
-section[data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked) p {
-    font-weight: 600 !important;
+.piq-sb-nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+}
+.piq-sb-nav-item.is-active .piq-sb-nav-icon svg {
+    stroke: var(--accent-terracotta) !important;
+}
+.piq-sb-nav-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---------- Bottom Status Area (Section 7) ---------- */
+.piq-sb-status {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-card);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+.piq-sb-status-divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin-bottom: 8px;
+}
+.piq-sb-status-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+}
+.piq-sb-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.piq-sb-dot.is-valid {
+    background: #5B7B5A;
+    box-shadow: 0 0 0 3px rgba(91, 123, 90, 0.18);
+}
+.piq-sb-dot.is-invalid {
+    background: #B84A39;
+    box-shadow: 0 0 0 3px rgba(184, 74, 57, 0.18);
+}
+.piq-sb-status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid var(--border-card);
+    border-radius: 8px;
+    padding: 7px 9px;
+    margin-bottom: 8px;
+}
+.piq-sb-status-cell {
+    display: flex;
+    flex-direction: column;
+}
+.piq-sb-status-k {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8C7C72;
+}
+.piq-sb-status-v {
+    font-family: var(--font-mono);
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 1px;
+}
+.piq-sb-status-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.68rem;
+    color: #8C7C72;
+    padding: 2px 2px;
+}
+
+/* ---------- Collapsible Toggle & Responsive Media Queries (Sections 8 & 9) ---------- */
+button[data-testid="stSidebarCollapseButton"],
+[data-testid="stSidebarCollapseButton"] button {
+    color: var(--text-secondary) !important;
+    background: #FAF6F0 !important;
+    border: 1px solid var(--border-card) !important;
+    border-radius: 8px !important;
+    transition: all 160ms var(--ease) !important;
+}
+button[data-testid="stSidebarCollapseButton"]:hover,
+[data-testid="stSidebarCollapseButton"] button:hover {
+    color: var(--accent-terracotta) !important;
+    background: #FFFFFF !important;
+    border-color: var(--accent-terracotta) !important;
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+    section[data-testid="stSidebar"] {
+        width: 260px !important;
+        min-width: 250px !important;
+        max-width: 270px !important;
+    }
+    section[data-testid="stSidebar"] > div:first-child {
+        width: 260px !important;
+        padding-left: 0.85rem !important;
+        padding-right: 0.85rem !important;
+    }
+}
+
+@media (max-width: 767px) {
+    section[data-testid="stSidebar"] {
+        width: 280px !important;
+        max-width: 85vw !important;
+        box-shadow: 0 0 24px rgba(40, 35, 33, 0.35) !important;
+    }
+    section[data-testid="stSidebar"] > div:first-child {
+        width: 100% !important;
+    }
 }
 
 /* ---------- Selection, scrollbars, focus ---------- */

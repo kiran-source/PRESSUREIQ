@@ -6,11 +6,13 @@ Warm Ivory (#F8F4EC) + Soft Cream (#F1E9DD) + Terracotta (#BD6548) + Deep Ink (#
 from __future__ import annotations
 
 import html
-from typing import Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence
+import urllib.parse
 import streamlit as st
 
 from src.dashboard.design_tokens import (
     FONTS,
+    NAV_GROUPS,
     PALETTE,
     PRODUCT_NAME,
     PRODUCT_TAGLINE,
@@ -21,16 +23,26 @@ from src.dashboard.design_tokens import (
 )
 
 _SVG_PATHS: Dict[str, str] = {
-    "overview": '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
+    # Lucide icons mapped to v4.1 navigation specification
+    "layout-dashboard": '<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',
     "trophy": '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
-    "user": '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
-    "compare": '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
-    "activity": '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
-    "sparkles": '<path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/>',
-    "shield": '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    "trending-up": '<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+    "user-round-search": '<circle cx="10" cy="8" r="5"/><path d="M2 21a8 8 0 0 1 10.434-7.62"/><circle cx="18" cy="18" r="3"/><path d="m22 22-1.9-1.9"/>',
+    "users": '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    "chart-no-axes-combined": '<path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/>',
+    "shield": '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
+    "activity": '<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.48 12H2"/>',
+    "flask-conical": '<path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/>',
+    "database": '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>',
+    "search": '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+
+    # Preserved backward-compatible icon aliases
+    "overview": '<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',
+    "user": '<circle cx="10" cy="8" r="5"/><path d="M2 21a8 8 0 0 1 10.434-7.62"/><circle cx="18" cy="18" r="3"/><path d="m22 22-1.9-1.9"/>',
+    "compare": '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    "sparkles": '<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
     "briefcase": '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
-    "book": '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
-    "database": '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
+    "book": '<path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/>',
     "check": '<polyline points="20 6 9 17 4 12"/>',
     "alert": '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
 }
@@ -271,11 +283,121 @@ def render_footer(batter_sha: str, bowler_sha: str) -> None:
 
 
 def render_sidebar_brand() -> None:
-    """Render crisp sidebar masthead cleanly above navigation radio."""
+    """Render refined compact editorial sidebar brand header (User Requirements Section 2)."""
     st.sidebar.markdown(
-        f'<div class="piq-brand">'
-        f'{render_brand_emblem()}'
-        f'<div><div class="piq-brand-name">{PRODUCT_NAME}</div>'
-        f'<div class="piq-brand-sub">Cricket Telemetry &amp; Scouting</div></div></div>',
+        f"""
+        <div class="piq-sb-brand">
+            <div class="piq-sb-brand-header">
+                <div class="piq-sb-emblem">
+                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="15" cy="15" r="13.5" fill="#FAF6F0" stroke="#BD6548" stroke-width="1.5"/>
+                        <path d="M10.5 5.5C13.5 9 13.5 21 10.5 24.5" stroke="#BD6548" stroke-width="1.2" stroke-linecap="round"/>
+                        <path d="M19.5 5.5C16.5 9 16.5 21 19.5 24.5" stroke="#BD6548" stroke-width="1.2" stroke-linecap="round"/>
+                        <circle cx="15" cy="15" r="1.6" fill="#C5A46D"/>
+                    </svg>
+                </div>
+                <div class="piq-sb-brand-text">
+                    <div class="piq-sb-title">{PRODUCT_NAME}</div>
+                    <div class="piq-sb-sub">CRICKET INTELLIGENCE</div>
+                </div>
+            </div>
+            <div class="piq-sb-brand-divider"></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_sidebar_lookup(bundle: Any) -> None:
+    """Render compact polished player search & profile launcher in sidebar (User Requirements Section 3)."""
+    st.sidebar.markdown(
+        f"""
+        <div class="piq-sb-section-head">
+            {svg_icon("search", 13, "#77675D")}
+            <span>PLAYER LOOKUP</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    bat_names = [f"{n} (Bat)" for n in bundle.bat_df["player_name"].tolist()] if not bundle.bat_df.empty else []
+    bowl_names = [f"{n} (Bowl)" for n in bundle.bowl_df["player_name"].tolist()] if not bundle.bowl_df.empty else []
+    jump_opts = ["Select player to inspect…"] + bat_names + bowl_names
+
+    quick_pick = st.sidebar.selectbox(
+        "Select Player",
+        jump_opts,
+        index=0,
+        key="global_quick_pick",
+        label_visibility="collapsed",
+    )
+    if quick_pick != "Select player to inspect…":
+        is_bat_pick = quick_pick.endswith(" (Bat)")
+        disc_val = "Batting" if is_bat_pick else "Bowling"
+        pname_val = quick_pick[:-6] if is_bat_pick else quick_pick[:-7]
+        st.session_state["jump_disc"] = disc_val
+        st.session_state["jump_player_name"] = pname_val
+        if st.sidebar.button("Open Player Profile →", use_container_width=True, key="global_jump_btn"):
+            st.session_state["active_page"] = "Player Intelligence"
+            st.session_state["pi_disc"] = disc_val
+            st.session_state[f"pi_sel_{disc_val}"] = pname_val
+            try:
+                st.query_params["page"] = "Player Intelligence"
+            except Exception:
+                pass
+            st.rerun()
+
+
+def render_sidebar_navigation(active_page: str) -> None:
+    """Render grouped luxury editorial navigation links (User Requirements Sections 4 & 5)."""
+    html_parts = ['<nav class="piq-sb-nav" aria-label="Sidebar Navigation">']
+    for grp in NAV_GROUPS:
+        html_parts.append('<div class="piq-sb-nav-group">')
+        html_parts.append(f'<div class="piq-sb-group-label">{html.escape(grp["group"])}</div>')
+        html_parts.append('<div class="piq-sb-group-items">')
+        for item in grp["items"]:
+            is_active = (item["label"] == active_page)
+            active_cls = " is-active" if is_active else ""
+            icon_color = "#BD6548" if is_active else "#77675D"
+            icon_svg = svg_icon(item["icon"], 16, icon_color)
+            encoded_label = urllib.parse.quote_plus(item["label"])
+            html_parts.append(
+                f'<a href="?page={encoded_label}" target="_self" class="piq-sb-nav-item{active_cls}" title="{html.escape(item.get("subtitle", item["label"]))}">'
+                f'<span class="piq-sb-nav-icon">{icon_svg}</span>'
+                f'<span class="piq-sb-nav-text">{html.escape(item["label"])}</span>'
+                f'</a>'
+            )
+        html_parts.append('</div></div>')
+    html_parts.append('</nav>')
+    st.sidebar.markdown("".join(html_parts), unsafe_allow_html=True)
+
+
+def render_sidebar_status(frozen_ok: bool) -> None:
+    """Render restrained bottom status area in sidebar (User Requirements Section 7)."""
+    integrity_dot = (
+        '<span class="piq-sb-dot is-valid"></span><span style="color:#2B472A;font-weight:600;">Model A Verified (SHA-256)</span>'
+        if frozen_ok
+        else '<span class="piq-sb-dot is-invalid"></span><span style="color:#B84A39;font-weight:600;">Integrity Mismatch</span>'
+    )
+    st.sidebar.markdown(
+        f"""
+        <div class="piq-sb-status">
+            <div class="piq-sb-status-divider"></div>
+            <div class="piq-sb-status-row">{integrity_dot}</div>
+            <div class="piq-sb-status-grid">
+                <div class="piq-sb-status-cell">
+                    <span class="piq-sb-status-k">SNAPSHOT</span>
+                    <span class="piq-sb-status-v">{SNAPSHOT_ANCHOR_DATE}</span>
+                </div>
+                <div class="piq-sb-status-cell">
+                    <span class="piq-sb-status-k">RETENTION FILING</span>
+                    <span class="piq-sb-status-v">{RETENTION_DEADLINE_DATE}</span>
+                </div>
+            </div>
+            <div class="piq-sb-status-footer">
+                <span>{PRODUCT_NAME} {PRODUCT_VERSION}</span>
+                <span>200,999 Balls · 867 Matches</span>
+            </div>
+        </div>
+        """,
         unsafe_allow_html=True,
     )

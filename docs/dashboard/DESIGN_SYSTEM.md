@@ -65,7 +65,13 @@ Inspired directly by contemporary luxury editorial print publications (Kinfolk, 
 - **Canvas Container:** Maximum width `1400px` centered with generous breathing room (`padding: 1.5rem 2rem` on desktop).
 - **Component Radius:** Refined `8px–12px` for cards, `6px` for buttons, `4px` for status pills.
 - **Card Styling (`.piq-card`, `.piq-kpi`):** Crisp `#FFFFFF` surface with `1px solid #D8CBBE` border, subtle `0 2px 8px rgba(40,35,33,0.04)` elevation shadow, zero harsh drop shadows.
-- **Navigation Sidebar:** Soft cream `#F1E9DD` with active radio option styled as a warm pill with terracotta border `#BD6548` and soft ivory fill `#FAF6F0`.
+- **Navigation Sidebar (v4.1 Redesign):** Fixed `270–290px` width desktop sidebar on soft cream `#F1E9DD` with custom vector brand emblem, compact `PLAYER LOOKUP` with search icon and collapsed selectbox, and 4 editorial groups:
+  - `DISCOVER`: Overview, Pressure Leaderboards, Emerging Talent
+  - `PLAYER ANALYTICS`: Player Intelligence, Player Comparison, Pressure Analytics
+  - `FRANCHISE INTELLIGENCE`: Rajasthan Royals Intelligence, IPL 2027 Market Intelligence
+  - `RESEARCH`: Methodology & Validation, Data Sources & Provenance
+  - **Active State:** Terracotta left indicator (`border-left: 3px solid #BD6548`), gradient ivory surface (`#FFFFFF` to `#FAF6F0`), terracotta Lucide line icon, and dark emphasized label.
+  - **Bottom Status Area:** Restrained divider, live Model A verification dot (`#5B7B5A`), competition snapshot (`2026-11-11`), retention filing deadline (`2026-11-17`), and version telemetry (`PRESSUREIQ v4.1`).
 - **Breakpoints Tested:**
   - **Desktop (`>= 1280px`):** Side-by-side hero layout with featured player cards, 4-column KPI grids, side-by-side Plotly charts.
   - **Tablet (`768px`):** 2-column KPI grid, stacked chart panels, zero overflow.

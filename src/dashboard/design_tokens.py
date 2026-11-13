@@ -9,7 +9,7 @@ from __future__ import annotations
 PRODUCT_NAME = "PRESSUREIQ"
 PRODUCT_TAGLINE = "Beyond Performance. Measuring Composure Under Pressure."
 PRODUCT_SUBTITLE = "An advanced cricket intelligence platform identifying players who deliver when the game is on the line."
-PRODUCT_VERSION = "v4.0 Editorial"
+PRODUCT_VERSION = "v4.1 Editorial"
 COMPETITION_TITLE = "Rajasthan Royals SupeRR Selector Season 2"
 SNAPSHOT_ANCHOR_DATE = "2026-11-11"
 RETENTION_DEADLINE_DATE = "2026-11-17"
@@ -78,20 +78,46 @@ PLOTLY_SERIES = [
 ]
 
 NAV_ITEMS = [
-    {"id": "Overview", "label": "Overview", "icon": "overview", "subtitle": "Executive intelligence & Model A summary"},
-    {"id": "Pressure Leaderboards", "label": "Pressure Leaderboards", "icon": "trophy", "subtitle": "Frozen Batters (109) & Bowlers (147) cohorts"},
-    {"id": "Player Intelligence", "label": "Player Intelligence", "icon": "user", "subtitle": "Individual pressure profile & match evidence"},
-    {"id": "Player Comparison", "label": "Player Comparison", "icon": "compare", "subtitle": "Head-to-head multi-player telemetry comparator"},
-    {"id": "Pressure Analytics", "label": "Pressure Analytics", "icon": "activity", "subtitle": "BPI, BoPI, PAVA & expected-outcome physics"},
-    {"id": "Emerging Talent", "label": "Emerging Talent", "icon": "sparkles", "subtitle": "Opportunity-aware uncapped & prospect scouting"},
-    {"id": "Rajasthan Royals Intelligence", "label": "Rajasthan Royals Intelligence", "icon": "shield", "subtitle": "SMS Jaipur tactical fit vs verified availability"},
-    {"id": "IPL 2027 Market Intelligence", "label": "IPL 2027 Market Intelligence", "icon": "briefcase", "subtitle": "All 10 franchises, retentions, trades & sources"},
-    {"id": "Methodology & Validation", "label": "Methodology & Validation", "icon": "book", "subtitle": "Formulas, LightGBM calibration & bootstrap audit"},
-    {"id": "Data Sources & Provenance", "label": "Data Sources & Provenance", "icon": "database", "subtitle": "Lineage, checksums, missingness & change log"},
+    # DISCOVER Group
+    {"id": "Overview", "label": "Overview", "icon": "layout-dashboard", "group": "DISCOVER", "subtitle": "Executive intelligence & Model A summary"},
+    {"id": "Pressure Leaderboards", "label": "Pressure Leaderboards", "icon": "trophy", "group": "DISCOVER", "subtitle": "Frozen Batters (109) & Bowlers (147) cohorts"},
+    {"id": "Emerging Talent", "label": "Emerging Talent", "icon": "trending-up", "group": "DISCOVER", "subtitle": "Opportunity-aware uncapped & prospect scouting"},
+
+    # PLAYER ANALYTICS Group
+    {"id": "Player Intelligence", "label": "Player Intelligence", "icon": "user-round-search", "group": "PLAYER ANALYTICS", "subtitle": "Individual pressure profile & match evidence"},
+    {"id": "Player Comparison", "label": "Player Comparison", "icon": "users", "group": "PLAYER ANALYTICS", "subtitle": "Head-to-head multi-player telemetry comparator"},
+    {"id": "Pressure Analytics", "label": "Pressure Analytics", "icon": "chart-no-axes-combined", "group": "PLAYER ANALYTICS", "subtitle": "BPI, BoPI, PAVA & expected-outcome physics"},
+
+    # FRANCHISE INTELLIGENCE Group
+    {"id": "Rajasthan Royals Intelligence", "label": "Rajasthan Royals Intelligence", "icon": "shield", "group": "FRANCHISE INTELLIGENCE", "subtitle": "SMS Jaipur tactical fit vs verified availability"},
+    {"id": "IPL 2027 Market Intelligence", "label": "IPL 2027 Market Intelligence", "icon": "activity", "group": "FRANCHISE INTELLIGENCE", "subtitle": "All 10 franchises, retentions, trades & sources"},
+
+    # RESEARCH Group
+    {"id": "Methodology & Validation", "label": "Methodology & Validation", "icon": "flask-conical", "group": "RESEARCH", "subtitle": "Formulas, LightGBM calibration & bootstrap audit"},
+    {"id": "Data Sources & Provenance", "label": "Data Sources & Provenance", "icon": "database", "group": "RESEARCH", "subtitle": "Lineage, checksums, missingness & change log"},
 ]
 
 NAV_LABELS = [item["label"] for item in NAV_ITEMS]
 NAV_META = {item["label"]: item for item in NAV_ITEMS}
+
+NAV_GROUPS = [
+    {
+        "group": "DISCOVER",
+        "items": [item for item in NAV_ITEMS if item["group"] == "DISCOVER"],
+    },
+    {
+        "group": "PLAYER ANALYTICS",
+        "items": [item for item in NAV_ITEMS if item["group"] == "PLAYER ANALYTICS"],
+    },
+    {
+        "group": "FRANCHISE INTELLIGENCE",
+        "items": [item for item in NAV_ITEMS if item["group"] == "FRANCHISE INTELLIGENCE"],
+    },
+    {
+        "group": "RESEARCH",
+        "items": [item for item in NAV_ITEMS if item["group"] == "RESEARCH"],
+    },
+]
 
 IPL_FRANCHISES = [
     ("RR", "Rajasthan Royals", "#BD6548"),
