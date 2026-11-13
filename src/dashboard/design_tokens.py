@@ -79,22 +79,22 @@ PLOTLY_SERIES = [
 
 NAV_ITEMS = [
     # DISCOVER Group
-    {"id": "Overview", "label": "Overview", "icon": "layout-dashboard", "group": "DISCOVER", "subtitle": "Executive intelligence & Model A summary"},
-    {"id": "Pressure Leaderboards", "label": "Pressure Leaderboards", "icon": "trophy", "group": "DISCOVER", "subtitle": "Frozen Batters (109) & Bowlers (147) cohorts"},
-    {"id": "Emerging Talent", "label": "Emerging Talent", "icon": "trending-up", "group": "DISCOVER", "subtitle": "Opportunity-aware uncapped & prospect scouting"},
+    {"id": "Overview", "label": "Overview", "icon": "layout-dashboard", "mat_icon": ":material/dashboard:", "group": "DISCOVER", "subtitle": "Executive intelligence & Model A summary"},
+    {"id": "Pressure Leaderboards", "label": "Pressure Leaderboards", "icon": "trophy", "mat_icon": ":material/emoji_events:", "group": "DISCOVER", "subtitle": "Frozen Batters (109) & Bowlers (147) cohorts"},
+    {"id": "Emerging Talent", "label": "Emerging Talent", "icon": "trending-up", "mat_icon": ":material/trending_up:", "group": "DISCOVER", "subtitle": "Opportunity-aware uncapped & prospect scouting"},
 
     # PLAYER ANALYTICS Group
-    {"id": "Player Intelligence", "label": "Player Intelligence", "icon": "user-round-search", "group": "PLAYER ANALYTICS", "subtitle": "Individual pressure profile & match evidence"},
-    {"id": "Player Comparison", "label": "Player Comparison", "icon": "users", "group": "PLAYER ANALYTICS", "subtitle": "Head-to-head multi-player telemetry comparator"},
-    {"id": "Pressure Analytics", "label": "Pressure Analytics", "icon": "chart-no-axes-combined", "group": "PLAYER ANALYTICS", "subtitle": "BPI, BoPI, PAVA & expected-outcome physics"},
+    {"id": "Player Intelligence", "label": "Player Intelligence", "icon": "user-round-search", "mat_icon": ":material/person_search:", "group": "PLAYER ANALYTICS", "subtitle": "Individual pressure profile & match evidence"},
+    {"id": "Player Comparison", "label": "Player Comparison", "icon": "users", "mat_icon": ":material/group:", "group": "PLAYER ANALYTICS", "subtitle": "Head-to-head multi-player telemetry comparator"},
+    {"id": "Pressure Analytics", "label": "Pressure Analytics", "icon": "chart-no-axes-combined", "mat_icon": ":material/insights:", "group": "PLAYER ANALYTICS", "subtitle": "BPI, BoPI, PAVA & expected-outcome physics"},
 
     # FRANCHISE INTELLIGENCE Group
-    {"id": "Rajasthan Royals Intelligence", "label": "Rajasthan Royals Intelligence", "icon": "shield", "group": "FRANCHISE INTELLIGENCE", "subtitle": "SMS Jaipur tactical fit vs verified availability"},
-    {"id": "IPL 2027 Market Intelligence", "label": "IPL 2027 Market Intelligence", "icon": "activity", "group": "FRANCHISE INTELLIGENCE", "subtitle": "All 10 franchises, retentions, trades & sources"},
+    {"id": "Rajasthan Royals Intelligence", "label": "Rajasthan Royals Intelligence", "icon": "shield", "mat_icon": ":material/shield:", "group": "FRANCHISE INTELLIGENCE", "subtitle": "SMS Jaipur tactical fit vs verified availability"},
+    {"id": "IPL 2027 Market Intelligence", "label": "IPL 2027 Market Intelligence", "icon": "activity", "mat_icon": ":material/storefront:", "group": "FRANCHISE INTELLIGENCE", "subtitle": "All 10 franchises, retentions, trades & sources"},
 
     # RESEARCH Group
-    {"id": "Methodology & Validation", "label": "Methodology & Validation", "icon": "flask-conical", "group": "RESEARCH", "subtitle": "Formulas, LightGBM calibration & bootstrap audit"},
-    {"id": "Data Sources & Provenance", "label": "Data Sources & Provenance", "icon": "database", "group": "RESEARCH", "subtitle": "Lineage, checksums, missingness & change log"},
+    {"id": "Methodology & Validation", "label": "Methodology & Validation", "icon": "flask-conical", "mat_icon": ":material/science:", "group": "RESEARCH", "subtitle": "Formulas, LightGBM calibration & bootstrap audit"},
+    {"id": "Data Sources & Provenance", "label": "Data Sources & Provenance", "icon": "database", "mat_icon": ":material/database:", "group": "RESEARCH", "subtitle": "Lineage, checksums, missingness & change log"},
 ]
 
 NAV_LABELS = [item["label"] for item in NAV_ITEMS]

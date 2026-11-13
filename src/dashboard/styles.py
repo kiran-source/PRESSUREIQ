@@ -129,14 +129,16 @@ html, body, [class*="stAppViewContainer"], .stApp {
 
 /* ---------- Sidebar Dimensions & Shell (270–290px desktop) ---------- */
 section[data-testid="stSidebar"] {
-    width: 280px !important;
-    min-width: 270px !important;
-    max-width: 290px !important;
     background: #F1E9DD !important;
     border-right: 1px solid var(--border-card) !important;
     box-shadow: 1px 0 0 rgba(255, 255, 255, 0.7) inset, 4px 0 16px rgba(40, 35, 33, 0.03) !important;
 }
-section[data-testid="stSidebar"] > div:first-child {
+section[data-testid="stSidebar"][aria-expanded="true"] {
+    width: 280px !important;
+    min-width: 270px !important;
+    max-width: 290px !important;
+}
+section[data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
     padding-top: 1.2rem !important;
     padding-bottom: 1.5rem !important;
     padding-left: 0.95rem !important;
@@ -225,38 +227,13 @@ section[data-testid="stSidebar"] div[data-baseweb="select"] > div {
     border: 1px solid var(--border-card) !important;
     box-shadow: 0 1px 2px rgba(40, 35, 33, 0.04) !important;
 }
-section[data-testid="stSidebar"] div.stButton > button {
-    min-height: 34px !important;
-    height: 34px !important;
-    padding: 0 12px !important;
-    font-size: 0.8rem !important;
-    font-weight: 600 !important;
-    border-radius: 8px !important;
-    margin-top: 4px !important;
-    background: #FFFFFF !important;
-    border: 1px solid var(--border-card) !important;
-    color: #282321 !important;
-    box-shadow: 0 1px 2px rgba(40, 35, 33, 0.04) !important;
-}
-section[data-testid="stSidebar"] div.stButton > button:hover {
-    background: var(--accent-terracotta) !important;
-    border-color: var(--accent-terracotta) !important;
-    color: #FFFFFF !important;
-    box-shadow: 0 4px 12px rgba(189, 101, 72, 0.22) !important;
-}
 
 /* ---------- Navigation Structure & Custom Items (Sections 4 & 5) ---------- */
 .piq-sb-nav {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    margin-top: 12px;
-    margin-bottom: 16px;
-}
-.piq-sb-nav-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 2px;
+    margin-top: 10px;
+    margin-bottom: 14px;
 }
 .piq-sb-group-label {
     font-size: 0.62rem;
@@ -264,62 +241,96 @@ section[data-testid="stSidebar"] div.stButton > button:hover {
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: #8C7C72;
-    padding: 8px 6px 4px 6px;
+    padding: 10px 6px 4px 6px;
     user-select: none;
 }
-.piq-sb-group-items {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-.piq-sb-nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 7px 11px;
-    border-radius: 8px;
-    text-decoration: none !important;
+
+/* Sidebar navigation buttons (replaces default button look with editorial pills) */
+section[data-testid="stSidebar"] div.stButton > button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    gap: 10px !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    padding: 0 10px !important;
+    border-radius: 8px !important;
+    font-size: 0.84rem !important;
+    font-weight: 500 !important;
+    line-height: 1.3 !important;
+    border: 1px solid transparent !important;
+    border-left: 3px solid transparent !important;
+    background: transparent !important;
     color: #282321 !important;
-    font-size: 0.85rem;
-    font-weight: 500;
-    line-height: 1.3;
-    border: 1px solid transparent;
-    border-left: 3px solid transparent;
-    transition: all 160ms var(--ease);
-    cursor: pointer;
-    background: transparent;
+    box-shadow: none !important;
+    transition: all 160ms var(--ease) !important;
+    width: 100% !important;
+    margin-bottom: 2px !important;
 }
-.piq-sb-nav-item:hover {
+section[data-testid="stSidebar"] div.stButton > button p {
+    font-size: 0.84rem !important;
+    color: #282321 !important;
+    margin: 0 !important;
+}
+
+/* Inactive button hover */
+section[data-testid="stSidebar"] div.stButton > button:hover {
     background: rgba(234, 225, 213, 0.75) !important;
+    border-color: rgba(216, 203, 190, 0.5) !important;
+    border-left-color: var(--accent-terracotta) !important;
     color: #282321 !important;
-    transform: translateX(2px);
-    border-color: rgba(216, 203, 190, 0.5);
-    border-left-color: var(--accent-terracotta);
+    transform: translateX(2px) !important;
+    box-shadow: none !important;
 }
-.piq-sb-nav-item.is-active {
+
+/* Active primary navigation button */
+section[data-testid="stSidebar"] div.stButton > button[kind="primary"] {
     background: linear-gradient(90deg, #FFFFFF 0%, #FAF6F0 100%) !important;
     border: 1px solid #D8CBBE !important;
     border-left: 3px solid var(--accent-terracotta) !important;
     color: #282321 !important;
     font-weight: 600 !important;
-    box-shadow: 0 1px 3px rgba(40, 35, 33, 0.05);
+    box-shadow: 0 1px 3px rgba(40, 35, 33, 0.05) !important;
+    transform: none !important;
 }
-.piq-sb-nav-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
+section[data-testid="stSidebar"] div.stButton > button[kind="primary"] p {
+    font-weight: 600 !important;
+    color: #282321 !important;
 }
-.piq-sb-nav-item.is-active .piq-sb-nav-icon svg {
-    stroke: var(--accent-terracotta) !important;
+
+/* Material symbol icons inside sidebar buttons */
+section[data-testid="stSidebar"] div.stButton > button span[data-testid="stIconMaterial"] {
+    font-size: 17px !important;
+    color: #77675D !important;
+    transition: color 140ms var(--ease) !important;
 }
-.piq-sb-nav-text {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+section[data-testid="stSidebar"] div.stButton > button[kind="primary"] span[data-testid="stIconMaterial"] {
+    color: var(--accent-terracotta) !important;
+}
+
+/* Distinct styling for Open Player Profile launcher button */
+section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] > div.stButton:has(button[key="global_jump_btn"]) > button,
+section[data-testid="stSidebar"] div.stButton > button:has(p:contains("Open Player Profile")) {
+    background: #BD6548 !important;
+    border: 1px solid #BD6548 !important;
+    border-left: 1px solid #BD6548 !important;
+    color: #FFFFFF !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    margin-top: 4px !important;
+    box-shadow: 0 2px 6px rgba(189, 101, 72, 0.22) !important;
+}
+section[data-testid="stSidebar"] div.stButton > button:has(p:contains("Open Player Profile")) p {
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+}
+section[data-testid="stSidebar"] div.stButton > button:has(p:contains("Open Player Profile")):hover {
+    background: #A94F36 !important;
+    border-color: #A94F36 !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px) !important;
 }
 
 /* ---------- Bottom Status Area (Section 7) ---------- */
@@ -410,12 +421,12 @@ button[data-testid="stSidebarCollapseButton"]:hover,
 }
 
 @media (max-width: 1024px) and (min-width: 768px) {
-    section[data-testid="stSidebar"] {
+    section[data-testid="stSidebar"][aria-expanded="true"] {
         width: 260px !important;
         min-width: 250px !important;
         max-width: 270px !important;
     }
-    section[data-testid="stSidebar"] > div:first-child {
+    section[data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
         width: 260px !important;
         padding-left: 0.85rem !important;
         padding-right: 0.85rem !important;
@@ -423,12 +434,12 @@ button[data-testid="stSidebarCollapseButton"]:hover,
 }
 
 @media (max-width: 767px) {
-    section[data-testid="stSidebar"] {
+    section[data-testid="stSidebar"][aria-expanded="true"] {
         width: 280px !important;
         max-width: 85vw !important;
         box-shadow: 0 0 24px rgba(40, 35, 33, 0.35) !important;
     }
-    section[data-testid="stSidebar"] > div:first-child {
+    section[data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
         width: 100% !important;
     }
 }

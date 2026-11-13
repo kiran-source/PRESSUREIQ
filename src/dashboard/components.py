@@ -347,28 +347,36 @@ def render_sidebar_lookup(bundle: Any) -> None:
             st.rerun()
 
 
+def _on_nav_item_click(target_page: str) -> None:
+    """Callback to switch page within existing Streamlit session, preserving state (CodeRabbit Pass 9)."""
+    st.session_state["active_page"] = target_page
+    try:
+        st.query_params["page"] = target_page
+    except Exception:
+        pass
+
+
 def render_sidebar_navigation(active_page: str) -> None:
-    """Render grouped luxury editorial navigation links (User Requirements Sections 4 & 5)."""
-    html_parts = ['<nav class="piq-sb-nav" aria-label="Sidebar Navigation">']
+    """Render grouped luxury editorial navigation buttons preserving Streamlit session state (User Requirements Sections 4 & 5)."""
+    st.sidebar.markdown('<div class="piq-sb-nav" role="navigation" aria-label="Sidebar Navigation">', unsafe_allow_html=True)
     for grp in NAV_GROUPS:
-        html_parts.append('<div class="piq-sb-nav-group">')
-        html_parts.append(f'<div class="piq-sb-group-label">{html.escape(grp["group"])}</div>')
-        html_parts.append('<div class="piq-sb-group-items">')
+        st.sidebar.markdown(f'<div class="piq-sb-group-label">{html.escape(grp["group"])}</div>', unsafe_allow_html=True)
         for item in grp["items"]:
             is_active = (item["label"] == active_page)
-            active_cls = " is-active" if is_active else ""
-            icon_color = "#BD6548" if is_active else "#77675D"
-            icon_svg = svg_icon(item["icon"], 16, icon_color)
-            encoded_label = urllib.parse.quote_plus(item["label"])
-            html_parts.append(
-                f'<a href="?page={encoded_label}" target="_self" class="piq-sb-nav-item{active_cls}" title="{html.escape(item.get("subtitle", item["label"]))}">'
-                f'<span class="piq-sb-nav-icon">{icon_svg}</span>'
-                f'<span class="piq-sb-nav-text">{html.escape(item["label"])}</span>'
-                f'</a>'
+            btn_type = "primary" if is_active else "secondary"
+            btn_key = f"sb_nav_btn_{item['id']}"
+            mat_icon = item.get("mat_icon")
+            st.sidebar.button(
+                item["label"],
+                key=btn_key,
+                icon=mat_icon,
+                type=btn_type,
+                use_container_width=True,
+                help=item.get("subtitle", item["label"]),
+                on_click=_on_nav_item_click,
+                args=(item["label"],),
             )
-        html_parts.append('</div></div>')
-    html_parts.append('</nav>')
-    st.sidebar.markdown("".join(html_parts), unsafe_allow_html=True)
+    st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
 
 def render_sidebar_status(frozen_ok: bool) -> None:
