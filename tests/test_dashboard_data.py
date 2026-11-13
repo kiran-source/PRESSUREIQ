@@ -335,5 +335,13 @@ def test_coderabbit_findings_remediation():
     from src.dashboard.components import render_editorial_hero
     render_editorial_hero(None, None, None, None, None, None)
 
+    # 5. Benchmark rows PyArrow serialization (no mixed numeric/string type failure)
+    import pyarrow as pa
+    bm_df = build_benchmark_rows(bundle.benchmark)
+    if not bm_df.empty:
+        tbl = pa.Table.from_pandas(bm_df)
+        assert len(tbl) == len(bm_df)
+
+
 
 

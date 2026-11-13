@@ -265,11 +265,19 @@ def build_benchmark_rows(bm: Dict[str, Any]) -> pd.DataFrame:
     """Shape MODEL_BENCHMARK_REPORT.json into structured DataFrame rows."""
     if not bm:
         return pd.DataFrame()
+
+    def _fmt(v: Any) -> str:
+        if v is None:
+            return "N/A"
+        if isinstance(v, (int, float)):
+            return f"{float(v):.4f}"
+        return str(v)
+
     rows = [
         {
             "Model Target": "Batting Expected Runs (RMSE)",
-            "Val 2025": bm.get("batting_expected_runs", {}).get("validation_2025", {}).get("LightGBM", {}).get("RMSE"),
-            "Test 2026": bm.get("batting_expected_runs", {}).get("untouched_test_2026", {}).get("LightGBM", {}).get("RMSE"),
+            "Val 2025": _fmt(bm.get("batting_expected_runs", {}).get("validation_2025", {}).get("LightGBM", {}).get("RMSE")),
+            "Test 2026": _fmt(bm.get("batting_expected_runs", {}).get("untouched_test_2026", {}).get("LightGBM", {}).get("RMSE")),
         },
         {
             "Model Target": "Batting Dismissal Prob (Brier / ECE)",
@@ -278,8 +286,8 @@ def build_benchmark_rows(bm: Dict[str, Any]) -> pd.DataFrame:
         },
         {
             "Model Target": "Bowling Expected Runs (RMSE)",
-            "Val 2025": bm.get("bowling_expected_runs", {}).get("validation_2025", {}).get("LightGBM_RMSE"),
-            "Test 2026": bm.get("bowling_expected_runs", {}).get("untouched_test_2026", {}).get("LightGBM_RMSE"),
+            "Val 2025": _fmt(bm.get("bowling_expected_runs", {}).get("validation_2025", {}).get("LightGBM_RMSE")),
+            "Test 2026": _fmt(bm.get("bowling_expected_runs", {}).get("untouched_test_2026", {}).get("LightGBM_RMSE")),
         },
         {
             "Model Target": "Bowling Wicket Prob (Brier / ECE)",
@@ -287,7 +295,10 @@ def build_benchmark_rows(bm: Dict[str, Any]) -> pd.DataFrame:
             "Test 2026": f"{bm.get('bowling_wicket_prob', {}).get('untouched_test_2026', {}).get('Brier_Score')} / {bm.get('bowling_wicket_prob', {}).get('untouched_test_2026', {}).get('ECE')}",
         },
     ]
-    return pd.DataFrame(rows)
+    df = pd.DataFrame(rows)
+    df["Val 2025"] = df["Val 2025"].astype(str)
+    df["Test 2026"] = df["Test 2026"].astype(str)
+    return df
 
 
 def build_ablation_rows(val_json: Dict[str, Any]) -> pd.DataFrame:
