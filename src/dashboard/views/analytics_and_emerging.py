@@ -44,7 +44,7 @@ def render_pressure_analytics(bundle: DashboardDataBundle) -> None:
     render_callout(
         "<b>Association vs. Causality Guardrail:</b> Visualized trends show <b>observed empirical associations</b> between pre-delivery state difficulty "
         "(BPI / BoPI) and marginal value added (PAVA) across 200,961 deliveries. Positive slopes summarize contextual co-variation and do not establish psychological causation.",
-        accent=PALETTE["warning"],
+        accent=PALETTE["accent_terracotta"],
     )
 
     ps = bundle.pressure_summary or {}
@@ -57,10 +57,10 @@ def render_pressure_analytics(bundle: DashboardDataBundle) -> None:
 
     render_kpi_grid(
         [
-            {"label": "Operational HP Cutoff", "value": "P >= 50.0", "sub": "Partitions near empirical median delivery difficulty", "accent": PALETTE["accent_violet"], "icon": "activity"},
-            {"label": "Qualified Cohort HP Balls", "value": f"{total_b_hp + total_w_hp:,}", "sub": f"Batters: {total_b_hp:,} | Bowlers: {total_w_hp:,} deliveries", "accent": PALETTE["accent_blue"], "icon": "database"},
+            {"label": "Operational HP Cutoff", "value": "P >= 50.0", "sub": "Partitions near empirical median delivery difficulty", "accent": PALETTE["accent_terracotta"], "icon": "activity"},
+            {"label": "Qualified Cohort HP Balls", "value": f"{total_b_hp + total_w_hp:,}", "sub": f"Batters: {total_b_hp:,} | Bowlers: {total_w_hp:,} deliveries", "accent": PALETTE["accent_gold"], "icon": "database"},
             {"label": "EB Shrinkage Constant", "value": "K = 45.0 Balls", "sub": "Regularizes small samples to neutral replacement prior (0.0)", "accent": PALETTE["positive"], "icon": "book"},
-            {"label": "Bootstrap Uncertainty", "value": "2,000 Resamples", "sub": "Match-clustered resampling preserving intra-match correlation", "accent": PALETTE["warning"], "icon": "compare"},
+            {"label": "Bootstrap Uncertainty", "value": "2,000 Resamples", "sub": "Match-clustered resampling preserving intra-match correlation", "accent": PALETTE["accent_burnt_orange"], "icon": "compare"},
         ]
     )
 
@@ -117,7 +117,7 @@ def render_emerging_talent(bundle: DashboardDataBundle) -> None:
         "<b>Proven Reliability vs Developmental Potential:</b> Players with fewer than <b>400 career balls</b>, <b>30 HP balls</b>, or <b>20 matches</b> "
         "fail Model A eligibility cutoffs and are isolated here. <b>Small-sample surges are never promoted into frozen Top-10 Model A rankings</b> "
         "or labeled guaranteed future stars.",
-        accent=PALETTE["warning"],
+        accent=PALETTE["accent_terracotta"],
     )
 
     em_df = enrich_emerging_watchlist(bundle.emerging_df, bundle.market_current)
@@ -131,10 +131,10 @@ def render_emerging_talent(bundle: DashboardDataBundle) -> None:
 
     render_kpi_grid(
         [
-            {"label": "Watchlist Profiles", "value": f"{len(em_df)} Players", "sub": f"Tier A: {tier_a_n} | Tier B: {tier_b_n} | Tier C: {tier_c_n}", "accent": PALETTE["accent_violet"], "icon": "sparkles"},
+            {"label": "Watchlist Profiles", "value": f"{len(em_df)} Players", "sub": f"Tier A: {tier_a_n} | Tier B: {tier_b_n} | Tier C: {tier_c_n}", "accent": PALETTE["accent_terracotta"], "icon": "sparkles"},
             {"label": "Tier A Qualified Leader", "value": "Naman Dhir (#6)", "sub": "Score 93.30 | 589 balls, 184 HP (exceeds all cutoffs)", "accent": PALETTE["positive"], "icon": "trophy"},
-            {"label": "Tier B Top Near-Miss", "value": "Prince Yadav (#11)", "sub": "Score 88.87 | 709 legal balls, 297 HP (0.29 pts off Top 10)", "accent": PALETTE["accent_blue"], "icon": "user"},
-            {"label": "Tier C Exposure Guardrail", "value": "Vaibhav (7 HP) | Vignesh (72b)", "sub": "Excluded cleanly due to <30 HP or <400 legal ball thresholds", "accent": PALETTE["warning"], "icon": "alert"},
+            {"label": "Tier B Top Near-Miss", "value": "Prince Yadav (#11)", "sub": "Score 88.87 | 709 legal balls, 297 HP (0.29 pts off Top 10)", "accent": PALETTE["accent_gold"], "icon": "user"},
+            {"label": "Tier C Exposure Guardrail", "value": "Vaibhav (7 HP) | Vignesh (72b)", "sub": "Excluded cleanly due to <30 HP or <400 legal ball thresholds", "accent": PALETTE["accent_burnt_orange"], "icon": "alert"},
         ]
     )
 
@@ -156,7 +156,7 @@ def render_emerging_talent(bundle: DashboardDataBundle) -> None:
         f"<b>Role &amp; Squad Context:</b> {p_row['role']} | {p_row['franchise']} | <b>Market Audit:</b> {p_row['audited_market_status']}<br/>"
         f"<b>Tactical Assessment:</b> {p_row['tactical_assessment']}<br/>"
         f"<b>RR Actionable Note:</b> {p_row['recommendation_for_rr']}",
-        accent=PALETTE["accent_violet"],
+        accent=PALETTE["accent_terracotta"],
     )
 
     render_section_header("Dataset-Wide Below-Cutoff Prospects (Live DuckDB Screen)", "Players with >= 30 deliveries below official 400-ball / 30-HP / 20-match gates", icon="database")

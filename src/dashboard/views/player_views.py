@@ -128,14 +128,14 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
                 "label": f"Frozen Model A Rank ({disc})",
                 "value": f"#{int(row['rank'])} of {len(base_df)}",
                 "sub": f"Player ID {pid} | {role_val} | Cohort Team: {mkt_team}",
-                "accent": PALETTE["accent_blue"],
+                "accent": PALETTE["accent_terracotta"],
                 "icon": "trophy",
             },
             {
                 "label": "Reliability Score & 95% CI",
                 "value": f"{row['reliability_score']:.2f}",
                 "sub": f"95% Boot CI: {row.get('score_ci_95', 'N/A')} | Top-10 Prob: {_safe_float(row.get('top10_inclusion_prob'))*100:.2f}%",
-                "accent": PALETTE["accent_violet"],
+                "accent": PALETTE["accent_gold"],
                 "icon": "activity",
             },
             {
@@ -149,7 +149,7 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
                 "label": "Shrunk HP PAVA & PRC Class",
                 "value": f"{_safe_float(row.get('shrunk_hp_pava_per_ball')):+.3f} / ball",
                 "sub": f"PRC: {row.get('prc_archetype', 'N/A')} (slope {_safe_float(row.get('prc_slope')):+.3f}) | Market: {mkt_status}",
-                "accent": PALETTE["warning"],
+                "accent": PALETTE["accent_burnt_orange"],
                 "icon": "user",
             },
         ]
@@ -168,7 +168,7 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
             f"Wickets: <b>{int(row['total_wickets'])}</b> | Career Econ: <b>{row['career_economy']:.2f}</b> | "
             f"Raw HP PAVA: <b>{row['raw_hp_pava_per_ball']:+.3f}</b> | Retention Delta: <b>{row['retention_delta']:+.3f}</b>"
         )
-    render_callout(perf_txt, accent=PALETTE["accent_blue"])
+    render_callout(perf_txt, accent=PALETTE["accent_terracotta"])
 
     player_delivs = _cached_player_delivs(pid, is_batting=is_batting)
     player_matches = _cached_player_matches(pid, is_batting=is_batting)
@@ -233,7 +233,7 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
         f"• <b>Strength:</b> Shrunk HP PAVA of <b>{_safe_float(row.get('shrunk_hp_pava_per_ball')):+.3f}</b> runs/ball and retention delta "
         f"<b>{_safe_float(row.get('retention_delta')):+.3f}</b> vs low-pressure baseline.<br/>"
         + "<br/>".join(f"• <b>Limitation / Governance Note:</b> {note}" for note in lim_notes),
-        accent=PALETTE["accent_violet"],
+        accent=PALETTE["accent_terracotta"],
     )
 
     render_section_header("Match-Level PAVA Contributions", "Sorted chronologically from most recent match (DuckDB predicate query)", icon="database")
@@ -249,7 +249,7 @@ def render_player_comparison(bundle: DashboardDataBundle) -> None:
     render_callout(
         "<b>Methodological Integrity Rule:</b> Comparisons are strictly constrained within the <b>same discipline</b> (Batters vs Batters OR Bowlers vs Bowlers) "
         "using matched scales, so incompatible batting vs bowling rates are never artificially forced onto one axis.",
-        accent=PALETTE["accent_blue"],
+        accent=PALETTE["accent_terracotta"],
     )
 
     c_d, c_sel = st.columns([0.85, 2.15])
@@ -337,6 +337,6 @@ def render_player_comparison(bundle: DashboardDataBundle) -> None:
             f"95% CI width: <b>{ci_w:.1f} pts</b> | Top-10 Prob: <b>{_safe_float(r.get('top10_inclusion_prob'))*100:.1f}%</b> | "
             f"Exposure: <b>{int(r['hp_balls'])} HP balls</b> (Kish ESS <b>{_safe_float(r.get('kish_match_ess')):.1f}</b> across {int(r['matches'])} matches) | "
             f"Shrunk PAVA <b>{_safe_float(r.get('shrunk_hp_pava_per_ball')):+.3f}</b>, PRC class <i>{r.get('prc_archetype')}</i>.",
-            accent=PALETTE["accent_violet"] if ci_w <= 35 else PALETTE["warning"],
+            accent=PALETTE["accent_terracotta"] if ci_w <= 35 else PALETTE["accent_gold"],
         )
 

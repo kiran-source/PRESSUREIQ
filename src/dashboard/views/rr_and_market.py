@@ -41,14 +41,14 @@ def render_rr_intelligence(bundle: DashboardDataBundle) -> None:
         f"<b>Performance Fit vs Confirmed Auction Availability:</b> Statistical role fit (<code>rr_priority_score</code>) ranks cricket "
         f"utility at Sawai Mansingh Stadium (Jaipur). It does <b>NOT</b> grant open-auction availability: ahead of the <b>17 November 2026</b> "
         f"IPL retention deadline, <b>{confirmed_rel_cnt} external watchlist {rel_noun} confirmed released</b>.",
-        accent=PALETTE["accent_violet"],
+        accent=PALETTE["accent_terracotta"],
     )
 
     render_kpi_grid(
         [
-            {"label": "RR 2026 Qualified Core", "value": f"{len(rr_core)} Profiles", "sub": "Model A qualified profiles verified on RR 2026 roster", "accent": PALETTE["accent_violet"], "icon": "shield"},
-            {"label": "RR Core Mean Reliability", "value": f"{avg_core_score:.2f}" if avg_core_score > 0 else "N/A", "sub": "Led by Jofra Archer (#16 Bowler), Dhruv Jurel (#22), Riyan Parag (#28)", "accent": PALETTE["accent_blue"], "icon": "trophy"},
-            {"label": "SMS Jaipur Strategic Needs", "value": "3 Priority Gaps", "sub": "#7 Seam Power Finisher | Middle-Overs Squeeze | Death Seam Depth", "accent": PALETTE["warning"], "icon": "activity"},
+            {"label": "RR 2026 Qualified Core", "value": f"{len(rr_core)} Profiles", "sub": "Model A qualified profiles verified on RR 2026 roster", "accent": PALETTE["accent_terracotta"], "icon": "shield"},
+            {"label": "RR Core Mean Reliability", "value": f"{avg_core_score:.2f}" if avg_core_score > 0 else "N/A", "sub": "Led by Jofra Archer (#16 Bowler), Dhruv Jurel (#22), Riyan Parag (#28)", "accent": PALETTE["accent_gold"], "icon": "trophy"},
+            {"label": "SMS Jaipur Strategic Needs", "value": "3 Priority Gaps", "sub": "#7 Seam Power Finisher | Middle-Overs Squeeze | Death Seam Depth", "accent": PALETTE["accent_burnt_orange"], "icon": "activity"},
             {"label": "Confirmed Auction Releases", "value": f"{confirmed_rel_cnt} Targets", "sub": "Pre-Nov 17 ledger awaits official franchise filing before bidding", "accent": PALETTE["positive"], "icon": "briefcase"},
         ]
     )
@@ -84,7 +84,7 @@ def render_rr_intelligence(bundle: DashboardDataBundle) -> None:
             "• <b>#7 Power Finisher Fit:</b> Contingency screen if rival finishers are released (e.g., Romario Shepherd RCB 2026 Pending Nov 17).<br/>"
             "• <b>Middle-Overs Finger Spin ('Jaipur Squeeze'):</b> Liam Dawson (#1 Bowler) &amp; Harpreet Brar (PBKS 2026 Pending Nov 17) benchmark flat-trajectory grip.<br/>"
             "• <b>Domestic Death Seam Depth:</b> Complement Sandeep Sharma with emerging pace watchlists (Prince Yadav #11 LSG 2026, Rasikh Salam #20).",
-            accent=PALETTE["warning"],
+            accent=PALETTE["accent_burnt_orange"],
         )
 
     render_section_header("Statistical Role-Fit Watchlist vs Verified Market Availability", "Filtered candidate ranking strictly separated from open-auction assumptions", icon="briefcase")
@@ -142,12 +142,12 @@ def render_market_intelligence(bundle: DashboardDataBundle) -> None:
         "<b>Pre-Retention Market Safeguards (Snapshot Anchored 11 November 2026):</b><br/>"
         "• Official IPL 2027 retention submissions occur on <b>17 November 2026</b>; a 2026 contract does not confirm 2027 retention, and omission from an announcement never implies release.<br/>"
         "• Rumours are never promoted to confirmed transfers, and market activity <b>never modifies frozen Model A statistical scores</b>.",
-        accent=PALETTE["warning"],
+        accent=PALETTE["accent_terracotta"],
     )
 
     counts = summarize_market_counts(bundle.market_current)
     badges = "".join(
-        f"{status_badge_html(st_name)} <span class='piq-mono' style='margin-right:10px;color:#F8FAFC;font-weight:700;'>{counts.get(st_name, 0)}</span>"
+        f"{status_badge_html(st_name)} <span class='piq-mono' style='margin-right:12px;color:#282321;font-weight:700;'>{counts.get(st_name, 0)}</span>"
         for st_name in STRICT_MARKET_STATUSES
     )
     st.markdown(f"<div style='margin:6px 0 14px 0;line-height:2.1;'>{badges}</div>", unsafe_allow_html=True)

@@ -1,4 +1,7 @@
-"""Reusable accessible UI components & inline SVG icon primitives for PRESSUREIQ v3."""
+"""Reusable accessible UI components & inline SVG icon primitives for PRESSUREIQ v4 Editorial.
+
+Warm Ivory (#F8F4EC) + Soft Cream (#F1E9DD) + Terracotta (#BD6548) + Deep Ink (#282321)
+"""
 
 from __future__ import annotations
 
@@ -7,6 +10,7 @@ from typing import Dict, List, Optional, Sequence
 import streamlit as st
 
 from src.dashboard.design_tokens import (
+    FONTS,
     PALETTE,
     PRODUCT_NAME,
     PRODUCT_TAGLINE,
@@ -17,7 +21,7 @@ from src.dashboard.design_tokens import (
 )
 
 _SVG_PATHS: Dict[str, str] = {
-    "overview": '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>',
+    "overview": '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
     "trophy": '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
     "user": '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
     "compare": '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
@@ -37,25 +41,27 @@ def svg_icon(name: str, size: int = 16, color: str = "currentColor") -> str:
     path = _SVG_PATHS.get(name, _SVG_PATHS["activity"])
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 24 24" '
-        f'fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+        f'fill="none" stroke="{color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" '
         f'aria-hidden="true" style="flex-shrink:0;vertical-align:middle;">{path}</svg>'
     )
 
 
 def render_brand_emblem() -> str:
-    """Author inline vector telemetry emblem for sidebar & hero masthead."""
+    """Author inline vector cricket telemetry emblem in warm terracotta & cream."""
     return (
-        '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">'
-        '<rect x="1.5" y="1.5" width="29" height="29" rx="8" fill="#17223B" stroke="#8B5CF6" stroke-opacity="0.65" stroke-width="1.5"/>'
-        '<path d="M7 20L12.5 13L17 16.5L24.5 9" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'
-        '<circle cx="24.5" cy="9" r="2.2" fill="#14B8A6"/>'
-        '<path d="M7 24H25" stroke="#475569" stroke-width="1.3" stroke-linecap="round"/>'
+        '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">'
+        '<rect x="1.5" y="1.5" width="31" height="31" rx="8" fill="#F1E9DD" stroke="#BD6548" stroke-width="1.5"/>'
+        # Minimalist cricket ball curve & seam
+        '<circle cx="17" cy="17" r="9.5" fill="#FFFFFF" stroke="#BD6548" stroke-width="1.4"/>'
+        '<path d="M12 12C14 14.5 14 19.5 12 22" stroke="#BD6548" stroke-width="1.2" stroke-linecap="round"/>'
+        '<path d="M22 12C20 14.5 20 19.5 22 22" stroke="#BD6548" stroke-width="1.2" stroke-linecap="round"/>'
+        '<circle cx="21" cy="10" r="1.8" fill="#C5A46D"/>'
         '</svg>'
     )
 
 
 def status_badge_html(status: str) -> str:
-    """Build accessible badge pill with distinct fill, border, text color, and label."""
+    """Build accessible editorial badge pill with distinct fill, border, text color."""
     label = str(status or "Pending Verification").strip()
     bg, border, txt = STATUS_TONES.get(label, STATUS_TONES["Pending Verification"])
     return (
@@ -69,56 +75,91 @@ def render_top_bar(
     frozen_ok: bool,
     snapshot_date: str = SNAPSHOT_ANCHOR_DATE,
 ) -> None:
-    """Render sticky context bar with breadcrumb, integrity signal, and market snapshot date."""
+    """Render refined top navigation bar with breadcrumb, integrity indicator, and anchor date."""
     integrity_badge = (
-        f'<span class="piq-badge" style="background:rgba(20,184,166,0.16);border:1px solid rgba(45,212,191,0.45);color:#5EEAD4;">'
-        f'{svg_icon("check", 12, "#5EEAD4")} Model A Verified (SHA-256)</span>'
+        f'<span class="piq-badge" style="background:rgba(132,146,122,0.22);border:1px solid #84927A;color:#E8F0E4;">'
+        f'{svg_icon("check", 12, "#E8F0E4")} Model A Verified (SHA-256)</span>'
         if frozen_ok
-        else f'<span class="piq-badge" style="background:rgba(244,63,94,0.18);border:1px solid rgba(251,113,133,0.5);color:#FDA4AF;">'
-        f'{svg_icon("alert", 12, "#FDA4AF")} Integrity Mismatch</span>'
+        else f'<span class="piq-badge" style="background:rgba(184,74,57,0.25);border:1px solid #B84A39;color:#FCEAE8;">'
+        f'{svg_icon("alert", 12, "#FCEAE8")} Integrity Mismatch</span>'
     )
     snap_badge = (
-        f'<span class="piq-badge" style="background:rgba(59,130,246,0.14);border:1px solid rgba(96,165,250,0.35);color:#93C5FD;">'
+        f'<span class="piq-badge" style="background:rgba(197,164,109,0.22);border:1px solid #C5A46D;color:#F9F4EB;">'
         f'Snapshot: {html.escape(snapshot_date)}</span>'
     )
     deadline_badge = (
-        f'<span class="piq-badge" style="background:rgba(245,158,11,0.14);border:1px solid rgba(251,191,36,0.38);color:#FDE68A;">'
-        f'IPL Retention Filing: {RETENTION_DEADLINE_DATE}</span>'
+        f'<span class="piq-badge" style="background:rgba(216,203,190,0.20);border:1px solid #D8CBBE;color:#F1E9DD;">'
+        f'BCCI Retention Filing: {RETENTION_DEADLINE_DATE}</span>'
     )
     st.markdown(
         f'<div class="piq-topbar" role="banner">'
         f'<div class="piq-crumb"><span class="piq-crumb-muted">{PRODUCT_NAME}</span>'
-        f'<span class="piq-crumb-muted">/</span><span>{html.escape(page_label)}</span></div>'
+        f'<span class="piq-crumb-muted">/</span><span style="color:#FFFFFF;font-weight:600;">{html.escape(page_label)}</span></div>'
         f'<div class="piq-meta-strip">{integrity_badge}{snap_badge}{deadline_badge}</div>'
         f'</div>',
         unsafe_allow_html=True,
     )
 
 
-def render_hero_banner(title: str, tagline: str, description: str, pills: Optional[Sequence[str]] = None) -> None:
-    """Render clean hero surface matching DESIGN_SYSTEM.md."""
-    pill_html = "".join(status_badge_html(p) for p in (pills or []))
-    st.markdown(
-        f'<section class="piq-hero" aria-label="Dashboard Overview">'
-        f'<div class="piq-hero-top">'
-        f'<div style="display:flex;align-items:flex-start;gap:14px;">'
-        f'<div style="padding-top:3px;">{render_brand_emblem()}</div>'
-        f'<div>'
-        f'<h1 class="piq-hero-title">{html.escape(title)}</h1>'
-        f'<p class="piq-hero-tagline">{html.escape(tagline)}</p>'
-        f'<p class="piq-hero-desc">{html.escape(description)}</p>'
-        f'</div></div>'
-        f'<div style="display:flex;flex-wrap:wrap;gap:6px;">{pill_html}</div>'
-        f'</div></section>',
-        unsafe_allow_html=True,
+def render_editorial_hero(
+    featured_bat_name: str = "Ruturaj Gaikwad",
+    featured_bat_score: float = 97.71,
+    featured_bat_ci: str = "[76.3, 99.1]",
+    featured_bowl_name: str = "Liam Dawson",
+    featured_bowl_score: float = 95.39,
+    featured_bowl_ci: str = "[74.2, 98.1]",
+) -> None:
+    """Render the master Kinfolk-inspired editorial hero section (User Requirements Section 4)."""
+    hero_html = (
+        f'<section class="piq-hero" aria-label="PRESSUREIQ Editorial Overview">'
+        f'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;">'
+        f'<div style="flex:1 1 540px;min-width:280px;">'
+        f'<div class="piq-hero-eyebrow">{render_brand_emblem()}<span>{PRODUCT_NAME} · CRICKET INTELLIGENCE PUBLICATION</span></div>'
+        f'<h1 class="piq-hero-title">Beyond Performance.</h1>'
+        f'<div class="piq-hero-tagline">Measuring composure under pressure.</div>'
+        f'<p class="piq-hero-desc">An advanced cricket intelligence platform identifying players who deliver when the game is on the line. Engineered for Rajasthan Royals SupeRR Selector Season 2, PRESSUREIQ isolates true high-leverage composure from low-stakes run accumulation across 200,999 ball-by-ball deliveries.</p>'
+        f'<div class="piq-hero-stats">'
+        f'<span class="piq-tape-tag">200,999 Balls</span>'
+        f'<span class="piq-tape-tag">867 Played Matches</span>'
+        f'<span class="piq-tape-tag">N=2,000 Bootstrap</span>'
+        f'<span class="piq-tape-tag" style="background:#BD6548;color:#FFFFFF;">Frozen Model A</span>'
+        f'</div>'
+        f'</div>'
+        f'<div style="flex:0 1 420px;min-width:270px;display:flex;flex-direction:column;gap:12px;">'
+        f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #BD6548;border-radius:10px;padding:12px 16px;">'
+        f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+        f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BATTER</span>'
+        f'<span class="piq-badge" style="background:#FAF0EB;border:1px solid #BD6548;color:#BD6548;font-weight:700;">Top Order</span>'
+        f'</div>'
+        f'<div style="font-family:\'Playfair Display\',serif;font-size:1.35rem;font-weight:600;color:#282321;">{html.escape(featured_bat_name)}</div>'
+        f'<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">'
+        f'<span style="font-family:\'Playfair Display\',serif;font-size:1.45rem;font-weight:700;color:#BD6548;">{featured_bat_score:.2f}</span>'
+        f'<span style="font-size:0.78rem;color:#77675D;">Reliability Score · 95% CI {html.escape(featured_bat_ci)}</span>'
+        f'</div>'
+        f'</div>'
+        f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #C5A46D;border-radius:10px;padding:12px 16px;">'
+        f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+        f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BOWLER</span>'
+        f'<span class="piq-badge" style="background:#FAF6ED;border:1px solid #C5A46D;color:#75460E;font-weight:700;">Slow Orthodox</span>'
+        f'</div>'
+        f'<div style="font-family:\'Playfair Display\',serif;font-size:1.35rem;font-weight:600;color:#282321;">{html.escape(featured_bowl_name)}</div>'
+        f'<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">'
+        f'<span style="font-family:\'Playfair Display\',serif;font-size:1.45rem;font-weight:700;color:#75460E;">{featured_bowl_score:.2f}</span>'
+        f'<span style="font-size:0.78rem;color:#77675D;">Reliability Score · 95% CI {html.escape(featured_bowl_ci)}</span>'
+        f'</div>'
+        f'</div>'
+        f'</div>'
+        f'</div>'
+        f'</section>'
     )
+    st.markdown(hero_html, unsafe_allow_html=True)
 
 
 def render_kpi_grid(cards: List[Dict[str, str]]) -> None:
-    """Render responsive CSS Grid of KPI cards (4-column desktop -> 2 tablet -> 1 mobile)."""
+    """Render responsive CSS Grid of editorial KPI cards."""
     items = []
     for c in cards:
-        accent = c.get("accent", PALETTE["accent_violet"])
+        accent = c.get("accent", PALETTE["accent_terracotta"])
         icon = svg_icon(c.get("icon", "activity"), 15, accent)
         items.append(
             f'<div class="piq-kpi" style="--kpi-accent:{accent};">'
@@ -131,18 +172,18 @@ def render_kpi_grid(cards: List[Dict[str, str]]) -> None:
 
 
 def render_section_header(title: str, subtitle: str = "", icon: str = "activity") -> None:
-    """Render structured section header with clear vertical hierarchy."""
+    """Render editorial section header with Playfair Display serif styling."""
     sub_html = f'<p class="piq-sec-sub">{html.escape(subtitle)}</p>' if subtitle else ""
     st.markdown(
         f'<div class="piq-sec-head">'
-        f'<h2 class="piq-sec-title">{svg_icon(icon, 17, PALETTE["accent_violet_soft"])}<span>{html.escape(title)}</span></h2>'
+        f'<h2 class="piq-sec-title">{svg_icon(icon, 18, PALETTE["accent_terracotta"])}<span>{html.escape(title)}</span></h2>'
         f'{sub_html}</div>',
         unsafe_allow_html=True,
     )
 
 
-def render_callout(body_html: str, accent: str = PALETTE["accent_blue"]) -> None:
-    """Render informative callout notice panel."""
+def render_callout(body_html: str, accent: str = PALETTE["accent_terracotta"]) -> None:
+    """Render warm cream callout panel with terracotta accent."""
     st.markdown(
         f'<div class="piq-callout" style="--callout-accent:{accent};">{body_html}</div>',
         unsafe_allow_html=True,
@@ -150,22 +191,22 @@ def render_callout(body_html: str, accent: str = PALETTE["accent_blue"]) -> None
 
 
 def render_empty_state(heading: str, guidance: str) -> None:
-    """Render helpful empty state instead of blank containers."""
+    """Render elegant editorial empty state."""
     st.markdown(
         f'<div class="piq-empty">'
-        f'<div style="font-weight:600;font-size:1rem;color:#F8FAFC;margin-bottom:6px;">{html.escape(heading)}</div>'
-        f'<div style="font-size:0.86rem;color:#94A3B8;">{html.escape(guidance)}</div>'
+        f'<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;font-weight:600;color:#282321;margin-bottom:6px;">{html.escape(heading)}</div>'
+        f'<div style="font-size:0.88rem;color:#77675D;">{html.escape(guidance)}</div>'
         f'</div>',
         unsafe_allow_html=True,
     )
 
 
 def render_footer(batter_sha: str, bowler_sha: str) -> None:
-    """Render compact footer with version and immutable Model A checksum provenance."""
+    """Render warm editorial footer with version and immutable Model A checksum provenance."""
     st.markdown(
         f'<footer class="piq-footer">'
-        f'<span>{PRODUCT_NAME} {PRODUCT_VERSION} — {PRODUCT_TAGLINE}</span>'
-        f'<span class="piq-mono">Frozen Model A SHA-256: Bat {html.escape(batter_sha[:12])}… | Bowl {html.escape(bowler_sha[:12])}… | Zero Raw CSV Exposure</span>'
+        f'<span><b>{PRODUCT_NAME}</b> {PRODUCT_VERSION} — <i>{PRODUCT_TAGLINE}</i></span>'
+        f'<span class="piq-mono" style="font-size:0.75rem;">Model A SHA-256: Bat {html.escape(batter_sha[:12])}… | Bowl {html.escape(bowler_sha[:12])}…</span>'
         f'</footer>',
         unsafe_allow_html=True,
     )
@@ -174,10 +215,9 @@ def render_footer(batter_sha: str, bowler_sha: str) -> None:
 def render_sidebar_brand() -> None:
     """Render crisp sidebar masthead cleanly above navigation radio."""
     st.sidebar.markdown(
-        f'<div style="display:flex;align-items:center;gap:10px;padding:4px 2px 12px 2px;border-bottom:1px solid rgba(148,163,184,0.16);margin-bottom:10px;">'
+        f'<div style="display:flex;align-items:center;gap:12px;padding:6px 2px 14px 2px;border-bottom:1px solid #D8CBBE;margin-bottom:12px;">'
         f'{render_brand_emblem()}'
-        f'<div><div style="font-weight:700;font-size:1.05rem;color:#F8FAFC;letter-spacing:-0.01em;">{PRODUCT_NAME}</div>'
-        f'<div style="font-size:0.74rem;color:#94A3B8;">Cricket Telemetry &amp; Scouting</div></div></div>',
+        f'<div><div style="font-family:\'Playfair Display\',serif;font-weight:700;font-size:1.15rem;color:#282321;letter-spacing:-0.01em;">{PRODUCT_NAME}</div>'
+        f'<div style="font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#77675D;">Cricket Telemetry &amp; Scouting</div></div></div>',
         unsafe_allow_html=True,
     )
-

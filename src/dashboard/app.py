@@ -95,7 +95,7 @@ def main() -> None:
         meta = NAV_META.get(chosen_page, {})
         st.caption(f"View: {meta.get('subtitle', '')}")
         st.markdown(
-            f"<div style='font-size:0.78rem;color:#94A3B8;line-height:1.55;'>"
+            f"<div style='font-size:0.78rem;color:#77675D;line-height:1.55;'>"
             f"<b>Version:</b> {PRODUCT_NAME} {PRODUCT_VERSION}<br/>"
             f"<b>Data Coverage:</b> 200,999 raw balls (867 matches)<br/>"
             f"<b>Snapshot Date:</b> {SNAPSHOT_ANCHOR_DATE}<br/>"

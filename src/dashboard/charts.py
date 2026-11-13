@@ -1,8 +1,12 @@
-"""Dark telemetry Plotly visualization builders for PRESSUREIQ v3."""
+"""Warm editorial Plotly visualization builders for PRESSUREIQ v4.
+
+Aesthetics: Contemporary Luxury Magazine (Kinfolk & Monocle style)
+Warm Ivory (#F8F4EC) + Soft Cream (#F1E9DD) + Terracotta (#BD6548) + Muted Gold (#C5A46D) + Sage (#84927A)
+"""
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence
 
 import numpy as np
 import pandas as pd
@@ -10,59 +14,68 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from src.dashboard.analytics import compute_eb_shrinkage_curve, compute_player_five_pillars
-from src.dashboard.design_tokens import PALETTE, PLOTLY_SERIES
+from src.dashboard.design_tokens import FONTS, PALETTE, PLOTLY_SERIES
 
-# Preserved exported constants for backwards compatibility with unit tests
-RR_BLUE = PALETTE["accent_blue"]
-RR_PINK = PALETTE["accent_violet"]
-INK_DARK = PALETTE["text_primary"]
-SLATE_MUTED = PALETTE["text_muted"]
-EMERALD = PALETTE["positive"]
-AMBER = PALETTE["warning"]
-CRIMSON = PALETTE["danger"]
-CYAN = PALETTE["accent_cyan"]
+# Preserved exported constants for backwards compatibility with tests & views
+RR_BLUE = PALETTE["accent_terracotta"]       # Terracotta (#BD6548)
+RR_PINK = PALETTE["accent_gold"]             # Muted Gold (#C5A46D)
+INK_DARK = PALETTE["text_primary"]           # Deep Ink (#282321)
+SLATE_MUTED = PALETTE["text_secondary"]      # Muted Brown (#77675D)
+EMERALD = PALETTE["positive"]                # Sage Green (#5B7B5A)
+AMBER = PALETTE["warning"]                   # Amber Gold (#C58B38)
+CRIMSON = PALETTE["danger"]                  # Clay Red (#B84A39)
+CYAN = PALETTE["accent_sage"]                # Olive Sage (#84927A)
 
 ARCHETYPE_COLORS = {
     "Clutch Climber": EMERALD,
     "Ice Cold Anchor": RR_BLUE,
     "Gradual Decliner": AMBER,
     "Pressure Fragile": CRIMSON,
-    "Unclassified (Insufficient Evidence)": SLATE_MUTED,
+    "Unclassified (Insufficient Evidence)": PALETTE["text_muted"],
 }
 
 
 def _apply_base_layout(fig: go.Figure, title: str, height: int = 400) -> go.Figure:
+    """Apply consistent warm editorial styling across all Plotly charts."""
     fig.update_layout(
-        title=dict(text=title, font=dict(size=15, color=PALETTE["text_primary"], family="Plus Jakarta Sans, Inter, sans-serif"), x=0.01),
-        template="plotly_dark",
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor=PALETTE["bg_surface"],
-        height=height,
-        margin=dict(l=52, r=24, t=54, b=48),
-        font=dict(family="Plus Jakarta Sans, Inter, Segoe UI, sans-serif", size=12, color=PALETTE["text_secondary"]),
-        hoverlabel=dict(
-            bgcolor="#0B1120",
-            bordercolor="#475569",
-            font=dict(size=12, color="#F8FAFC", family="JetBrains Mono, monospace"),
+        title=dict(
+            text=title,
+            font=dict(size=14, color=PALETTE["text_primary"], family="Playfair Display, serif"),
+            x=0.01,
         ),
-        legend=dict(font=dict(color=PALETTE["text_secondary"], size=11), bgcolor="rgba(0,0,0,0)"),
+        template="plotly_white",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="#FFFFFF",
+        height=height,
+        margin=dict(l=54, r=24, t=54, b=50),
+        font=dict(family="Inter, -apple-system, sans-serif", size=11.5, color=PALETTE["text_secondary"]),
+        hoverlabel=dict(
+            bgcolor="#FAF6F0",
+            bordercolor="#D8CBBE",
+            font=dict(size=11.5, color="#282321", family="JetBrains Mono, monospace"),
+        ),
+        legend=dict(
+            font=dict(color=PALETTE["text_secondary"], size=10.5),
+            bgcolor="rgba(0,0,0,0)",
+        ),
     )
     fig.update_xaxes(
-        gridcolor=PALETTE["plot_grid"],
-        zerolinecolor="rgba(148, 163, 184, 0.24)",
-        tickfont=dict(color=PALETTE["text_secondary"], size=11),
-        title_font=dict(color=PALETTE["text_secondary"], size=12),
+        gridcolor="#EAE1D5",
+        zerolinecolor="#D8CBBE",
+        tickfont=dict(color=PALETTE["text_secondary"], size=10.5),
+        title_font=dict(color=PALETTE["text_primary"], size=11.5, family="Inter, sans-serif"),
     )
     fig.update_yaxes(
-        gridcolor=PALETTE["plot_grid"],
-        zerolinecolor="rgba(148, 163, 184, 0.24)",
-        tickfont=dict(color=PALETTE["text_secondary"], size=11),
-        title_font=dict(color=PALETTE["text_secondary"], size=12),
+        gridcolor="#EAE1D5",
+        zerolinecolor="#D8CBBE",
+        tickfont=dict(color=PALETTE["text_secondary"], size=10.5),
+        title_font=dict(color=PALETTE["text_primary"], size=11.5, family="Inter, sans-serif"),
     )
     return fig
 
 
 def fig_top10_ci_bar(df: pd.DataFrame, title: str, accent_color: str = RR_BLUE) -> go.Figure:
+    """Top 10 players bar chart with 95% bootstrap error bars in warm editorial styling."""
     if df.empty or "rank" not in df.columns:
         return go.Figure()
     top10 = df.sort_values("rank", ascending=True).head(10).copy()
@@ -86,11 +99,14 @@ def fig_top10_ci_bar(df: pd.DataFrame, title: str, accent_color: str = RR_BLUE) 
                 symmetric=False,
                 array=(ci_hi - scores).clip(lower=0.0),
                 arrayminus=(scores - ci_lo).clip(lower=0.0),
-                color="#E2E8F0",
-                thickness=1.4,
+                color="#77675D",
+                thickness=1.5,
                 width=4,
             ),
-            marker=dict(color=accent_color, line=dict(color="rgba(248,250,252,0.18)", width=1)),
+            marker=dict(
+                color=accent_color,
+                line=dict(color="#D8CBBE", width=1),
+            ),
             customdata=np.stack([top10["rank"], hp_vals, top10_p, arch], axis=-1),
             name="Score & 95% CI",
             showlegend=False,
@@ -109,7 +125,7 @@ def fig_top10_ci_bar(df: pd.DataFrame, title: str, accent_color: str = RR_BLUE) 
             y=ci_hi + 2.8,
             mode="text",
             text=scores.round(1).astype(str),
-            textfont=dict(size=10, color="#E2E8F0", family="JetBrains Mono, monospace"),
+            textfont=dict(size=10.5, color="#282321", family="JetBrains Mono, monospace"),
             showlegend=False,
             hoverinfo="skip",
         )
@@ -122,6 +138,7 @@ def fig_top10_ci_bar(df: pd.DataFrame, title: str, accent_color: str = RR_BLUE) 
 
 
 def fig_score_distribution(df: pd.DataFrame, title: str, accent_color: str = RR_BLUE) -> go.Figure:
+    """Plot league-wide reliability score distribution."""
     if df.empty or "reliability_score" not in df.columns:
         return go.Figure()
     work = df.dropna(subset=["reliability_score"]).copy()
@@ -133,7 +150,7 @@ def fig_score_distribution(df: pd.DataFrame, title: str, accent_color: str = RR_
         nbins=22,
         color="prc_archetype" if "prc_archetype" in work.columns else None,
         color_discrete_map=ARCHETYPE_COLORS,
-        opacity=0.88,
+        opacity=0.85,
         labels={"reliability_score": "Reliability Score (0–100)", "prc_archetype": "PRC Class"},
     )
     med_val = float(work["reliability_score"].median())
@@ -142,10 +159,10 @@ def fig_score_distribution(df: pd.DataFrame, title: str, accent_color: str = RR_
         fig.add_vline(
             x=med_val,
             line_dash="dash",
-            line_color="#E2E8F0",
+            line_color="#77675D",
             annotation_text=f"Median: {med_val:.1f}",
             annotation_position="top left",
-            annotation_font=dict(color="#F8FAFC", size=11),
+            annotation_font=dict(color="#282321", size=11),
         )
     fig.update_yaxes(title="Players Count")
     fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=-0.28, xanchor="center", x=0.5))
@@ -153,6 +170,7 @@ def fig_score_distribution(df: pd.DataFrame, title: str, accent_color: str = RR_
 
 
 def fig_sample_vs_score(df: pd.DataFrame, is_batting: bool = True) -> go.Figure:
+    """Scatter plot of sample exposure vs reliability score."""
     if df.empty or "hp_balls" not in df.columns or "reliability_score" not in df.columns:
         return go.Figure()
     work = df.dropna(subset=["hp_balls", "reliability_score"]).copy()
@@ -194,6 +212,7 @@ def fig_sample_vs_score(df: pd.DataFrame, is_batting: bool = True) -> go.Figure:
 
 
 def fig_rank_uncertainty_intervals(df: pd.DataFrame, top_n: int = 15, title: str = "Bootstrap Rank Uncertainty") -> go.Figure:
+    """Plot 2,000-bootstrap rank uncertainty intervals."""
     if df.empty or "rank" not in df.columns:
         return go.Figure()
     sub = df.sort_values("rank", ascending=True).head(top_n).copy().iloc[::-1]
@@ -212,7 +231,7 @@ def fig_rank_uncertainty_intervals(df: pd.DataFrame, top_n: int = 15, title: str
                 x=[lo, hi],
                 y=[name, name],
                 mode="lines",
-                line=dict(color="rgba(148, 163, 184, 0.36)", width=6),
+                line=dict(color="#D8CBBE", width=6),
                 showlegend=False,
                 hoverinfo="skip",
             )
@@ -223,7 +242,7 @@ def fig_rank_uncertainty_intervals(df: pd.DataFrame, top_n: int = 15, title: str
             y=sub["player_name"],
             mode="markers",
             name="Frozen Model A Rank",
-            marker=dict(color=RR_BLUE, size=10, symbol="diamond", line=dict(color="#F8FAFC", width=1)),
+            marker=dict(color=RR_BLUE, size=10, symbol="diamond", line=dict(color="#282321", width=1)),
         )
     )
     fig.add_trace(
@@ -232,7 +251,7 @@ def fig_rank_uncertainty_intervals(df: pd.DataFrame, top_n: int = 15, title: str
             y=sub["player_name"],
             mode="markers",
             name="Bootstrap Median Rank (N=2,000)",
-            marker=dict(color=RR_PINK, size=9, symbol="circle", line=dict(color="#F8FAFC", width=1)),
+            marker=dict(color=RR_PINK, size=9, symbol="circle", line=dict(color="#282321", width=1)),
         )
     )
     max_x = max(15, int(ci_hi.max()) + 8) if np.isfinite(ci_hi.max()) else 155
@@ -244,6 +263,7 @@ def fig_rank_uncertainty_intervals(df: pd.DataFrame, top_n: int = 15, title: str
 
 
 def fig_pressure_response_curve(player_delivs: pd.DataFrame, player_name: str, is_batting: bool = True) -> go.Figure:
+    """Render player empirical pressure response bar breakdown across leverage tiers."""
     if player_delivs.empty:
         return go.Figure()
     ball_col = "is_batter_ball" if is_batting else "is_legal_ball"
@@ -268,30 +288,32 @@ def fig_pressure_response_curve(player_delivs: pd.DataFrame, player_name: str, i
         for v, n in zip(tier_df["mean_raw"], tier_df["n_balls"])
     ]
 
+    tier_palette = ["#D8CBBE", "#C5A46D", "#BD6548", "#5B7B5A"]
     fig = go.Figure()
     fig.add_trace(
         go.Bar(
             x=tier_df["tier"].astype(str),
             y=y_vals,
-            marker_color=[SLATE_MUTED, RR_BLUE, RR_PINK, EMERALD],
+            marker_color=tier_palette,
             text=bar_text,
             textposition="outside",
-            textfont=dict(color="#E2E8F0", size=11, family="JetBrains Mono, monospace"),
+            textfont=dict(color="#282321", size=10.5, family="JetBrains Mono, monospace"),
             name="Tier Mean Raw PAVA/ball",
         )
     )
     index_name = "BPI" if is_batting else "BoPI"
     fig = _apply_base_layout(fig, f"Pressure Response Profile — {player_name}", height=405)
-    fig.add_hline(y=0.0, line_dash="dash", line_color="rgba(148,163,184,0.45)")
+    fig.add_hline(y=0.0, line_dash="dash", line_color="#D8CBBE")
     max_y = max(y_vals) if y_vals else 0.1
     min_y = min(y_vals) if y_vals else 0.0
-    fig.update_yaxes(title="Mean Raw PAVA (Runs / Ball)", range=[min(0.0, min_y) - 0.06, max(0.15, max_y * 1.22)])
+    fig.update_yaxes(title="Mean Raw PAVA (Runs / Ball)", range=[min(0.0, min_y) - 0.06, max(0.15, max_y * 1.25)])
     fig.update_xaxes(title=f"{index_name} Pressure Tier")
     fig.update_layout(margin=dict(l=64, r=28, t=60, b=52))
     return fig
 
 
 def fig_phase_performance(phase_df: pd.DataFrame, player_name: str, is_batting: bool = True) -> go.Figure:
+    """Render phase-wise value added bar breakdown."""
     if phase_df.empty or "Raw PAVA / Ball" not in phase_df.columns:
         return go.Figure()
     fig = go.Figure()
@@ -303,17 +325,18 @@ def fig_phase_performance(phase_df: pd.DataFrame, player_name: str, is_batting: 
             marker_color=RR_BLUE if is_batting else RR_PINK,
             text=phase_df["Raw PAVA / Ball"].apply(lambda v: f"{v:+.3f}"),
             textposition="outside",
-            textfont=dict(color="#E2E8F0", size=11, family="JetBrains Mono, monospace"),
+            textfont=dict(color="#282321", size=10.5, family="JetBrains Mono, monospace"),
         )
     )
     fig = _apply_base_layout(fig, f"Phase-Wise Value Added — {player_name}", height=370)
-    fig.add_hline(y=0.0, line_dash="dash", line_color="rgba(148,163,184,0.45)")
+    fig.add_hline(y=0.0, line_dash="dash", line_color="#D8CBBE")
     fig.update_yaxes(title="Mean Raw PAVA (Runs/Ball)")
     fig.update_xaxes(title="Innings Phase")
     return fig
 
 
 def fig_five_pillar_radar(player_row: pd.Series, peer_means: Dict[str, float], player_name: str, role_label: str) -> go.Figure:
+    """5-Pillar Spider Radar with warm cream polar background and terracotta polygon."""
     if player_row.empty:
         return go.Figure()
     pillars = compute_player_five_pillars(player_row)
@@ -327,9 +350,9 @@ def fig_five_pillar_radar(player_row: pd.Series, peer_means: Dict[str, float], p
             r=vals + [vals[0]],
             theta=cats + [cats[0]],
             fill="toself",
-            fillcolor="rgba(59, 130, 246, 0.25)",
+            fillcolor="rgba(189, 101, 72, 0.22)",
             name=player_name,
-            line=dict(color=RR_BLUE, width=2.5),
+            line=dict(color=RR_BLUE, width=2.4),
         )
     )
     fig.add_trace(
@@ -337,25 +360,26 @@ def fig_five_pillar_radar(player_row: pd.Series, peer_means: Dict[str, float], p
             r=peer_vals + [peer_vals[0]],
             theta=cats + [cats[0]],
             fill="toself",
-            fillcolor="rgba(139, 92, 246, 0.16)",
+            fillcolor="rgba(197, 164, 109, 0.16)",
             name=f"{role_label} Peer Mean",
             line=dict(color=RR_PINK, width=2, dash="dash"),
         )
     )
-    res = _apply_base_layout(fig, f"Five-Pillar Decomposition vs {role_label} Peers", height=415)
+    res = _apply_base_layout(fig, f"Five-Pillar Profile vs {role_label} Peers (0–100 Scaled)", height=415)
     res.update_layout(
         polar=dict(
-            bgcolor=PALETTE["bg_surface"],
-            radialaxis=dict(visible=True, range=[0, 100], gridcolor=PALETTE["plot_grid"], tickfont=dict(color=SLATE_MUTED, size=10)),
-            angularaxis=dict(gridcolor=PALETTE["plot_grid"], tickfont=dict(color="#E2E8F0", size=11)),
+            bgcolor="#FAF6F0",
+            radialaxis=dict(visible=True, range=[0, 100], gridcolor="#EAE1D5", tickfont=dict(color="#77675D", size=9.5)),
+            angularaxis=dict(gridcolor="#EAE1D5", tickfont=dict(color="#282321", size=10.5, family="Inter, sans-serif")),
         ),
-        margin=dict(l=95, r=95, t=68, b=56),
-        legend=dict(orientation="h", yanchor="bottom", y=-0.20, xanchor="center", x=0.5),
+        margin=dict(l=90, r=90, t=64, b=54),
+        legend=dict(orientation="h", yanchor="bottom", y=-0.22, xanchor="center", x=0.5),
     )
     return res
 
 
 def fig_batter_vs_bowler_comparison(bat_df: pd.DataFrame, bowl_df: pd.DataFrame) -> go.Figure:
+    """Compare score distributions between qualified Batters and Bowlers."""
     if bat_df.empty or bowl_df.empty:
         return go.Figure()
     bat_lbl = f"Batters ({len(bat_df)})"
@@ -380,6 +404,7 @@ def fig_batter_vs_bowler_comparison(bat_df: pd.DataFrame, bowl_df: pd.DataFrame)
 
 
 def fig_rr_role_depth(role_depth_df: pd.DataFrame) -> go.Figure:
+    """Visualize Rajasthan Royals squad core depth by role."""
     if role_depth_df.empty:
         return go.Figure()
     fig = px.bar(
@@ -391,12 +416,12 @@ def fig_rr_role_depth(role_depth_df: pd.DataFrame) -> go.Figure:
         color_discrete_map={"Batter": RR_BLUE, "Bowler": RR_PINK},
         labels={"role": "Squad Role", "Players": "Qualified Core Players", "discipline": "Discipline"},
     )
-    fig.update_traces(texttemplate="Avg %{text:.1f}", textposition="outside", textfont=dict(color="#E2E8F0", size=11))
-    return _apply_base_layout(fig, "Rajasthan Royals 2026 Qualified Core Depth by Role (Model A Baseline)", height=390)
+    fig.update_traces(texttemplate="Avg %{text:.1f}", textposition="outside", textfont=dict(color="#282321", size=10.5))
+    return _apply_base_layout(fig, "Rajasthan Royals 2026 Qualified Core Depth by Role", height=390)
 
 
 def fig_player_expected_vs_observed(player_delivs: pd.DataFrame, player_name: str, is_batting: bool = True) -> go.Figure:
-    """Compare LightGBM pre-ball expected runs vs actual runs across pressure tiers for a player."""
+    """Compare LightGBM pre-ball expected runs vs actual runs across pressure tiers."""
     if player_delivs.empty:
         return go.Figure()
     ball_col = "is_batter_ball" if is_batting else "is_legal_ball"
@@ -413,7 +438,7 @@ def fig_player_expected_vs_observed(player_delivs: pd.DataFrame, player_name: st
     agg = sub.groupby("tier", observed=False).agg(obs=(obs_col, "mean"), exp=(exp_col, "mean"), n=(obs_col, "count")).reset_index()
 
     fig = go.Figure()
-    fig.add_trace(go.Bar(x=agg["tier"].astype(str), y=agg["exp"], name="Expected Runs / Ball (LightGBM)", marker_color="rgba(148,163,184,0.45)"))
+    fig.add_trace(go.Bar(x=agg["tier"].astype(str), y=agg["exp"], name="Expected Runs / Ball (LightGBM)", marker_color="#D8CBBE"))
     fig.add_trace(go.Bar(x=agg["tier"].astype(str), y=agg["obs"], name="Observed Runs / Ball", marker_color=EMERALD if is_batting else RR_PINK))
     fig = _apply_base_layout(fig, f"Expected vs Observed Runs / Ball — {player_name}", height=370)
     fig.update_layout(barmode="group", legend=dict(orientation="h", yanchor="bottom", y=-0.24, xanchor="center", x=0.5))
@@ -432,7 +457,7 @@ def build_player_color_map(player_names: Any) -> Dict[str, str]:
 
 
 def fig_multi_player_radar(selected_df: pd.DataFrame, color_map: Optional[Dict[str, str]] = None) -> go.Figure:
-    """Overlaid 5-pillar comparative radar for 2–4 comparable players within the same discipline."""
+    """Overlaid 5-pillar comparative radar for 2–4 comparable players."""
     if selected_df.empty:
         return go.Figure()
     cmap = color_map or build_player_color_map(selected_df["player_name"].tolist())
@@ -448,17 +473,17 @@ def fig_multi_player_radar(selected_df: pd.DataFrame, color_map: Optional[Dict[s
                 r=vals + [vals[0]],
                 theta=cats + [cats[0]],
                 fill="toself",
-                opacity=0.65,
+                opacity=0.45,
                 name=pname,
-                line=dict(color=col, width=2.4),
+                line=dict(color=col, width=2.2),
             )
         )
     fig = _apply_base_layout(fig, "Comparable Five-Pillar Profile Overlay (0–100 Scaled)", height=430)
     fig.update_layout(
         polar=dict(
-            bgcolor=PALETTE["bg_surface"],
-            radialaxis=dict(visible=True, range=[0, 100], gridcolor=PALETTE["plot_grid"], tickfont=dict(color=SLATE_MUTED, size=10)),
-            angularaxis=dict(gridcolor=PALETTE["plot_grid"], tickfont=dict(color="#E2E8F0", size=11)),
+            bgcolor="#FAF6F0",
+            radialaxis=dict(visible=True, range=[0, 100], gridcolor="#EAE1D5", tickfont=dict(color="#77675D", size=9.5)),
+            angularaxis=dict(gridcolor="#EAE1D5", tickfont=dict(color="#282321", size=10.5, family="Inter, sans-serif")),
         ),
         legend=dict(orientation="h", yanchor="bottom", y=-0.22, xanchor="center", x=0.5),
     )
@@ -466,10 +491,9 @@ def fig_multi_player_radar(selected_df: pd.DataFrame, color_map: Optional[Dict[s
 
 
 def fig_multi_player_ci_bars(selected_df: pd.DataFrame, color_map: Optional[Dict[str, str]] = None) -> go.Figure:
-    """Compare Reliability Score and 95% Bootstrap CIs across 2–4 selected players."""
+    """Compare Reliability Score and 95% Bootstrap CIs across selected players."""
     if selected_df.empty:
         return go.Figure()
-    # Assign colors from selection order BEFORE sorting so player colors stay identical across charts
     cmap = color_map or build_player_color_map(selected_df["player_name"].tolist())
     sub = selected_df.sort_values("reliability_score", ascending=False).copy()
     scores = pd.to_numeric(sub["reliability_score"], errors="coerce").fillna(0.0)
@@ -480,7 +504,7 @@ def fig_multi_player_ci_bars(selected_df: pd.DataFrame, color_map: Optional[Dict
         go.Bar(
             x=sub["player_name"],
             y=scores,
-            error_y=dict(type="data", symmetric=False, array=(hi - scores).clip(lower=0), arrayminus=(scores - lo).clip(lower=0), color="#F8FAFC", thickness=1.5),
+            error_y=dict(type="data", symmetric=False, array=(hi - scores).clip(lower=0), arrayminus=(scores - lo).clip(lower=0), color="#77675D", thickness=1.5),
             marker_color=bar_colors,
             showlegend=False,
         )
@@ -491,7 +515,7 @@ def fig_multi_player_ci_bars(selected_df: pd.DataFrame, color_map: Optional[Dict
             y=hi + 3.0,
             mode="text",
             text=scores.apply(lambda v: f"{v:.2f}"),
-            textfont=dict(color="#F8FAFC", size=11, family="JetBrains Mono, monospace"),
+            textfont=dict(color="#282321", size=10.5, family="JetBrains Mono, monospace"),
             showlegend=False,
             hoverinfo="skip",
         )
@@ -506,7 +530,7 @@ def fig_multi_player_prc_overlay(
     is_batting: bool = True,
     color_map: Optional[Dict[str, str]] = None,
 ) -> go.Figure:
-    """Overlay tier-wise Mean Raw PAVA curves for 2–4 selected players."""
+    """Overlay tier-wise Mean Raw PAVA curves for comparable players."""
     if not deliv_map:
         return go.Figure()
     cmap = color_map or build_player_color_map(deliv_map.keys())
@@ -534,13 +558,13 @@ def fig_multi_player_prc_overlay(
                 mode="lines+markers",
                 name=pname,
                 customdata=agg["n"],
-                line=dict(color=col, width=2.5, dash=dash_styles[idx % len(dash_styles)]),
+                line=dict(color=col, width=2.4, dash=dash_styles[idx % len(dash_styles)]),
                 marker=dict(size=8, symbol=symbols[idx % len(symbols)]),
                 hovertemplate=f"<b>{pname}</b><br>%{{x}}: %{{y:+.3f}} PAVA/ball (n=%{{customdata}})<extra></extra>",
             )
         )
     fig = _apply_base_layout(fig, "Pressure-Response Trajectory Overlay by Leverage Band", height=390)
-    fig.add_hline(y=0.0, line_dash="dot", line_color="rgba(148,163,184,0.4)")
+    fig.add_hline(y=0.0, line_dash="dot", line_color="#D8CBBE")
     fig.update_yaxes(title="Mean Raw PAVA (Runs / Ball)")
     fig.update_xaxes(title="Pressure Index Band")
     fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=-0.24, xanchor="center", x=0.5))
@@ -566,7 +590,7 @@ def fig_expected_vs_observed_tiers(tiers_df: pd.DataFrame) -> go.Figure:
     if tiers_df.empty:
         return go.Figure()
     fig = go.Figure()
-    fig.add_trace(go.Bar(x=tiers_df["pressure_tier"], y=tiers_df["exp_bat_runs"], name="Expected Runs / Ball (LightGBM)", marker_color="rgba(148,163,184,0.45)"))
+    fig.add_trace(go.Bar(x=tiers_df["pressure_tier"], y=tiers_df["exp_bat_runs"], name="Expected Runs / Ball (LightGBM)", marker_color="#D8CBBE"))
     fig.add_trace(go.Bar(x=tiers_df["pressure_tier"], y=tiers_df["obs_bat_runs"], name="Observed Runs / Ball", marker_color=EMERALD))
     fig = _apply_base_layout(fig, "Expected vs Observed Batting Scoring Rate by BPI Pressure Tier", height=380)
     fig.update_layout(barmode="group", legend=dict(orientation="h", yanchor="bottom", y=-0.24, xanchor="center", x=0.5))
@@ -584,12 +608,12 @@ def fig_shrinkage_curve(k_shrink: float = 45.0) -> go.Figure:
             y=curve_df["shrinkage_weight"] * 100.0,
             mode="lines+markers",
             name="Empirical Data Weight w = n / (n + 45)",
-            line=dict(color=CYAN, width=2.5),
-            marker=dict(size=7),
+            line=dict(color=RR_BLUE, width=2.4),
+            marker=dict(size=6),
         )
     )
     fig = _apply_base_layout(fig, f"Empirical Bayes Shrinkage Weight Curve (K = {int(k_shrink)} Pseudo-Deliveries)", height=360)
-    fig.add_vline(x=k_shrink, line_dash="dash", line_color=AMBER, annotation_text="50% Weight at n = 45 HP", annotation_font=dict(color="#FDE68A"))
+    fig.add_vline(x=k_shrink, line_dash="dash", line_color=AMBER, annotation_text="50% Weight at n = 45 HP", annotation_font=dict(color="#282321"))
     fig.update_xaxes(title="High-Pressure Deliveries (n_HP)")
     fig.update_yaxes(title="Empirical Weight Retained (%)", range=[0, 102])
     return fig
@@ -613,10 +637,10 @@ def fig_emerging_opportunity_matrix(em_df: pd.DataFrame) -> go.Figure:
         color_discrete_map={"Tier A": EMERALD, "Tier B": RR_BLUE, "Tier C": AMBER},
         labels={"total_balls_dataset": "Total Dataset Balls", "hp_balls_dataset": "High-Pressure Balls (P >= 50)", "short_tier": "Evaluation Tier"},
     )
-    fig.update_traces(textposition="top center", marker=dict(size=12, line=dict(color="#F8FAFC", width=1)), textfont=dict(color="#E2E8F0", size=10))
+    fig.update_traces(textposition="top center", marker=dict(size=11, line=dict(color="#282321", width=1)), textfont=dict(color="#282321", size=10))
     fig = _apply_base_layout(fig, "Emerging Talent: Total Opportunity vs High-Pressure Eligibility Cutoffs", height=420)
-    fig.add_hline(y=30, line_dash="dash", line_color=CRIMSON, annotation_text="Min 30 HP Cutoff", annotation_font=dict(color="#FDA4AF"))
-    fig.add_vline(x=400, line_dash="dash", line_color=AMBER, annotation_text="Min 400 Total Balls Cutoff", annotation_font=dict(color="#FDE68A"))
+    fig.add_hline(y=30, line_dash="dash", line_color=CRIMSON, annotation_text="Min 30 HP Cutoff", annotation_font=dict(color="#6D1F13"))
+    fig.add_vline(x=400, line_dash="dash", line_color=AMBER, annotation_text="Min 400 Total Balls Cutoff", annotation_font=dict(color="#75460E"))
     return fig
 
 
@@ -626,8 +650,8 @@ def fig_market_team_matrix(teams_df: pd.DataFrame) -> go.Figure:
         return go.Figure()
     fig = go.Figure()
     fig.add_trace(go.Bar(x=teams_df["Code"], y=teams_df["IPL 2026 Dataset Roster"], name="IPL 2026 Dataset Roster", marker_color=RR_BLUE))
-    fig.add_trace(go.Bar(x=teams_df["Code"], y=teams_df["Pending Verification"], name="Pending 2027 Verification", marker_color=AMBER))
-    fig.add_trace(go.Bar(x=teams_df["Code"], y=teams_df["Confirmed Trades In"], name="Confirmed Trades In", marker_color=RR_PINK))
+    fig.add_trace(go.Bar(x=teams_df["Code"], y=teams_df["Pending Verification"], name="Pending 2027 Verification", marker_color=RR_PINK))
+    fig.add_trace(go.Bar(x=teams_df["Code"], y=teams_df["Confirmed Trades In"], name="Confirmed Trades In", marker_color=EMERALD))
     fig = _apply_base_layout(fig, "All 10 IPL Franchises — 2026 Roster Depth vs Audited 2027 Status", height=370)
     fig.update_layout(barmode="group", legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5))
     fig.update_yaxes(title="Players Count")

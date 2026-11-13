@@ -30,10 +30,10 @@ def render_methodology(bundle: DashboardDataBundle) -> None:
 
     render_kpi_grid(
         [
-            {"label": "Frozen BPI Formula", "value": "0.42·R + 0.30·W + 0.18·C + 0.10·L", "sub": "0.00 max diff across 200,961 frozen deliveries", "accent": PALETTE["accent_blue"], "icon": "book"},
-            {"label": "Frozen BoPI Formula", "value": "0.38·D + 0.26·W + 0.24·C + 0.12·L", "sub": "0.00 max diff across 200,961 frozen deliveries", "accent": PALETTE["accent_violet"], "icon": "book"},
+            {"label": "Frozen BPI Formula", "value": "0.42·R + 0.30·W + 0.18·C + 0.10·L", "sub": "0.00 max diff across 200,961 frozen deliveries", "accent": PALETTE["accent_terracotta"], "icon": "book"},
+            {"label": "Frozen BoPI Formula", "value": "0.38·D + 0.26·W + 0.24·C + 0.12·L", "sub": "0.00 max diff across 200,961 frozen deliveries", "accent": PALETTE["accent_gold"], "icon": "book"},
             {"label": "Empirical Bayes Shrinkage", "value": "K = 45.0 Balls", "sub": "PAVA_shrunk = [n/(n+45)]*raw_hp + [45/(n+45)]*0.0", "accent": PALETTE["positive"], "icon": "activity"},
-            {"label": "Composite Score Scale", "value": "Phi(Z) * 100", "sub": "5-pillar norm-referenced CDF score (NOT win probability)", "accent": PALETTE["warning"], "icon": "compare"},
+            {"label": "Composite Score Scale", "value": "Phi(Z) * 100", "sub": "5-pillar norm-referenced CDF score (NOT win probability)", "accent": PALETTE["accent_burnt_orange"], "icon": "compare"},
         ]
     )
 
@@ -46,7 +46,7 @@ def render_methodology(bundle: DashboardDataBundle) -> None:
             "• <b>Effective Rate Demand:</b> Inn2 <code>sigmoid((clip(RRR,2,24)-8.5)/2.2)*100</code>; Inn1 <code>sigmoid(-runs_above_par/14)*100</code>, scaled by <code>0.5 + 0.5*r</code>.<br/>"
             "• <b>Resource Scarcity:</b> <code>(clip(wickets_lost/9, 0, 1)^1.2) * 100</code> | <b>Climax:</b> <code>(r^1.3)*100</code>.<br/>"
             "• <b>Leverage Bonus:</b> <code>B_ko = 12.0</code> (knockout); <code>B_lev = 15.0</code> (tight chase finale).",
-            accent=PALETTE["accent_blue"],
+            accent=PALETTE["accent_terracotta"],
         )
     with c2:
         st.latex(r"\text{BoPI}_t = \operatorname{clip}\left(0.38\,C_{\text{defend}} + 0.26\,C_{\text{res\_opp}} + 0.24\,C_{\text{climax}} + 0.12\,(B_{\text{ko}} + B_{\text{tight}}),\,0,\,100\right)")
@@ -55,7 +55,7 @@ def render_methodology(bundle: DashboardDataBundle) -> None:
             "• <b>Target Defense:</b> Inn2 <code>sigmoid((10.5-clip(RRR,2,24))/2.2)*100</code>; Inn1 <code>sigmoid(runs_above_par/14)*100</code>.<br/>"
             "• <b>PAVA (Bat):</b> <code>(R_act - E[R]) + V_W(phase)*(P(out) - W_act) + 0.50*(I_bnd - P(bnd))</code>.<br/>"
             "• <b>Phase Wicket Weights V_W:</b> Powerplay <code>5.20</code>, Middle <code>4.50</code>, Death <code>3.60</code> runs.",
-            accent=PALETTE["accent_violet"],
+            accent=PALETTE["accent_gold"],
         )
 
     render_section_header("2. Frozen Legacy 120-Ball Model A vs. Dynamic `max_innings_balls` Refinement", "Strict architectural separation protecting immutable rankings", icon="shield")
@@ -104,7 +104,7 @@ def render_methodology(bundle: DashboardDataBundle) -> None:
         "• <b>Small-Sample Bootstrap Variance:</b> Qualifiers with 35–83 HP balls or 22–29 matches exhibit wider 95% CIs and higher mean ranks when match resampling omits leverage appearances below the 30-HP threshold.<br/>"
         "• <b>PRC Descriptive Slope Boundary:</b> OLS PRC slopes (`Clutch Climber`, `Ice Cold Anchor`, `Pressure Fragile`) classify statistical delivery trajectories across leverage bands — not psychological traits.<br/>"
         "• <b>Score Scale Clarification:</b> Composite `0–100` Reliability Score (`Phi(Z_composite)*100`) is a norm-referenced percentile score, NOT a probability of match success.",
-        accent=PALETTE["warning"],
+        accent=PALETTE["accent_terracotta"],
     )
 
 
@@ -119,10 +119,10 @@ def render_provenance(bundle: DashboardDataBundle) -> None:
 
     render_kpi_grid(
         [
-            {"label": "Dashboard Version", "value": PRODUCT_VERSION, "sub": "Read-only presentation shell over frozen Model A artifacts", "accent": PALETTE["accent_violet"], "icon": "shield"},
+            {"label": "Dashboard Version", "value": PRODUCT_VERSION, "sub": "Read-only presentation shell over frozen Model A artifacts", "accent": PALETTE["accent_terracotta"], "icon": "shield"},
             {"label": "Frozen Batters SHA-256", "value": "VERIFIED" if bat_ok else "MISMATCH", "sub": str(integrity.get("batter_csv_sha256", ""))[:22] + "…", "accent": PALETTE["positive"] if bat_ok else PALETTE["danger"], "icon": "check" if bat_ok else "alert"},
             {"label": "Frozen Bowlers SHA-256", "value": "VERIFIED" if bowl_ok else "MISMATCH", "sub": str(integrity.get("bowler_csv_sha256", ""))[:22] + "…", "accent": PALETTE["positive"] if bowl_ok else PALETTE["danger"], "icon": "check" if bowl_ok else "alert"},
-            {"label": "Market Snapshot Anchor", "value": SNAPSHOT_ANCHOR_DATE, "sub": f"Next official BCCI filing: {RETENTION_DEADLINE_DATE}", "accent": PALETTE["accent_blue"], "icon": "database"},
+            {"label": "Market Snapshot Anchor", "value": SNAPSHOT_ANCHOR_DATE, "sub": f"Next official BCCI filing: {RETENTION_DEADLINE_DATE}", "accent": PALETTE["accent_gold"], "icon": "database"},
         ]
     )
 
