@@ -234,6 +234,17 @@ def render_callout(body_html: str, accent: str = PALETTE["accent_terracotta"]) -
     )
 
 
+def render_chart_caption(caption_text: str) -> None:
+    """Render refined editorial analytical interpretation below Plotly visualizations."""
+    st.markdown(
+        f'<div class="piq-chart-caption">'
+        f'{svg_icon("activity", 13, PALETTE["accent_terracotta"])}'
+        f'<span><b>Analytical Takeaway:</b> {caption_text}</span>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
+
 def render_empty_state(heading: str, guidance: str) -> None:
     """Render elegant editorial empty state."""
     st.markdown(

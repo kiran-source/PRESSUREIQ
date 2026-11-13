@@ -16,6 +16,7 @@ from src.dashboard.analytics import (
 from src.dashboard.charts import fig_market_team_matrix, fig_rr_role_depth
 from src.dashboard.components import (
     render_callout,
+    render_chart_caption,
     render_empty_state,
     render_kpi_grid,
     render_section_header,
@@ -65,6 +66,7 @@ def render_rr_intelligence(bundle: DashboardDataBundle) -> None:
     with c2:
         if not role_depth.empty:
             st.plotly_chart(fig_rr_role_depth(role_depth), width="stretch")
+            render_chart_caption("Rajasthan Royals qualified squad core depth mapped against Sawai Mansingh Stadium tactical priorities: large square boundaries, middle-overs finger spin squeeze, and death seam reliability.")
 
     # Batting vs Bowling Depth + Strengths & Weaknesses
     s1, s2 = st.columns(2)
@@ -170,6 +172,7 @@ def render_market_intelligence(bundle: DashboardDataBundle) -> None:
         )
         if not teams_df.empty:
             st.plotly_chart(fig_market_team_matrix(teams_df), width="stretch")
+            render_chart_caption("All 10 IPL franchises: IPL 2026 dataset roster depth compared against audited 2027 pending verifications and confirmed Nov 5 trade counterparties.")
             st.dataframe(teams_df, width="stretch", hide_index=True)
 
             render_section_header("Inspect Franchise Squad & Verified Transitions", "Select any IPL franchise to inspect dataset roster & 2027 ledger records", icon="briefcase")

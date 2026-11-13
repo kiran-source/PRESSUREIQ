@@ -21,6 +21,7 @@ from src.dashboard.charts import (
 )
 from src.dashboard.components import (
     render_callout,
+    render_chart_caption,
     render_empty_state,
     render_kpi_grid,
     render_section_header,
@@ -68,23 +69,29 @@ def render_pressure_analytics(bundle: DashboardDataBundle) -> None:
     with c1:
         if not hist_df.empty:
             st.plotly_chart(fig_bpi_bopi_distribution(hist_df), width="stretch")
+            render_chart_caption("Continuous pressure distribution across 200,961 deliveries. Median delivery falls near 48.2, supporting the P >= 50.0 high-pressure boundary.")
         else:
             render_empty_state("BPI/BoPI histogram unavailable", "Parquet pressure summary could not be computed.")
     with c2:
         if not tiers_df.empty:
             st.plotly_chart(fig_expected_vs_observed_tiers(tiers_df), width="stretch")
+            render_chart_caption("LightGBM baseline calibration across pressure tiers, showing progressive run suppression as match leverage escalates.")
 
     c3, c4 = st.columns(2)
     with c3:
         st.plotly_chart(fig_score_distribution(bundle.bat_df, "Batter Reliability Score Distribution (Qualified Cohort)", RR_BLUE), width="stretch")
+        render_chart_caption("Distribution of 109 qualified batters. Median reliability score is 60.4; elite scores (>85) represent the upper decile.")
     with c4:
         st.plotly_chart(fig_score_distribution(bundle.bowl_df, "Bowler Reliability Score Distribution (Qualified Cohort)", RR_PINK), width="stretch")
+        render_chart_caption("Distribution of 147 qualified bowlers. Median reliability score is 61.2; right-skewed tail reflects extreme death-overs run suppression.")
 
     c5, c6 = st.columns(2)
     with c5:
         st.plotly_chart(fig_shrinkage_curve(k_shrink=45.0), width="stretch")
+        render_chart_caption("Empirical Bayes shrinkage progression: w = n / (n + 45). Small-sample outliers are regularized smoothly toward the neutral prior.")
     with c6:
         st.plotly_chart(fig_sample_vs_score(bundle.bowl_df, is_batting=False), width="stretch")
+        render_chart_caption("Bowler sample exposure vs final reliability score. K=45 threshold marks 50% sample credibility.")
 
     if not tiers_df.empty:
         render_section_header("Observed vs LightGBM Expected Outcomes by Pressure Tier", "Calibrated baseline check across Low, Medium, High, and Extreme pressure", icon="activity")
@@ -139,6 +146,7 @@ def render_emerging_talent(bundle: DashboardDataBundle) -> None:
     )
 
     st.plotly_chart(fig_emerging_opportunity_matrix(em_df), width="stretch")
+    render_chart_caption("Watchlist distribution across career exposure (X-axis) and high-pressure opportunities (Y-axis). Dashed cutoffs (30 HP, 400 total balls) enforce Model A qualification boundaries.")
 
     tier_opts = sorted(em_df["category"].dropna().unique().tolist())
     sel_tiers = st.multiselect("Filter by Evaluation Tier", tier_opts, default=tier_opts, key="em_tier_filter")

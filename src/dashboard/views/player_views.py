@@ -28,6 +28,7 @@ from src.dashboard.charts import (
 )
 from src.dashboard.components import (
     render_callout,
+    render_chart_caption,
     render_empty_state,
     render_kpi_grid,
     render_section_header,
@@ -179,9 +180,11 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
     c1, c2 = st.columns(2)
     with c1:
         st.plotly_chart(fig_five_pillar_radar(row, peer_means, sel_player, role_val), width="stretch")
+        render_chart_caption(f"Five-pillar composure profile for {sel_player} benchmarked against {role_val} positional peers across 2022–2026.")
     with c2:
         if not player_delivs.empty:
             st.plotly_chart(fig_pressure_response_curve(player_delivs, sel_player, is_batting=is_batting), width="stretch")
+            render_chart_caption("Mean delivery PAVA across leverage tiers. Positive surplus in High [65–85) and Extreme (>=85) bands indicates clutch amplification.")
         else:
             render_empty_state("Delivery-level trace unavailable", "Parquet telemetry not loaded for this environment.")
 
@@ -189,11 +192,13 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
     with c3:
         if not phase_df.empty:
             st.plotly_chart(fig_phase_performance(phase_df, sel_player, is_batting=is_batting), width="stretch")
+            render_chart_caption("Empirical PAVA/ball partitioned across Powerplay (overs 1–6), Middle (7–15), and Death (16–20) phases.")
         else:
             render_empty_state("Phase breakdown unavailable", "No phase deliveries found.")
     with c4:
         if not player_delivs.empty:
             st.plotly_chart(fig_player_expected_vs_observed(player_delivs, sel_player, is_batting=is_batting), width="stretch")
+            render_chart_caption("LightGBM state-conditioned expected scoring benchmark compared directly against actual player outcome rates.")
 
     # Pressure Index Distribution for the selected player
     if not player_delivs.empty:
@@ -211,6 +216,7 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
             fig_pdist = _apply_base_layout(fig_pdist, f"{'BPI' if is_batting else 'BoPI'} Delivery Exposure Histogram — {sel_player}", height=340)
             fig_pdist.add_vline(x=50.0, line_dash="dash", line_color=PALETTE["warning"], annotation_text="Operational HP Threshold (50.0)")
             st.plotly_chart(fig_pdist, width="stretch")
+            render_chart_caption(f"Continuous delivery-level leverage distribution for {sel_player}. Dotted marker at 50.0 defines the high-pressure opportunity boundary.")
 
     if not phase_df.empty:
         render_section_header("Phase-Wise Summary & Sample Strengths / Limitations", "Exact empirical counts across Powerplay, Middle, and Death overs", icon="activity")
@@ -293,8 +299,10 @@ def render_player_comparison(bundle: DashboardDataBundle) -> None:
     c1, c2 = st.columns(2)
     with c1:
         st.plotly_chart(fig_multi_player_radar(sel_df, color_map=color_map), width="stretch")
+        render_chart_caption("Comparative five-pillar radar illustrating relative balance across execution surplus, retention stability, consistency, and adaptability.")
     with c2:
         st.plotly_chart(fig_multi_player_ci_bars(sel_df, color_map=color_map), width="stretch")
+        render_chart_caption("Reliability Scores with 95% bootstrap confidence intervals. Overlapping error intervals indicate indistinguishable statistical difference.")
 
     # Fetch delivery telemetry for overlaid PRC + phase comparisons
     deliv_map = {}
@@ -312,6 +320,7 @@ def render_player_comparison(bundle: DashboardDataBundle) -> None:
     c3, c4 = st.columns(2)
     with c3:
         st.plotly_chart(fig_multi_player_prc_overlay(deliv_map, is_batting=is_batting, color_map=color_map), width="stretch")
+        render_chart_caption("Trajectory slopes across rising leverage bands. Rising profiles isolate candidates who elevate performance when stakes escalate.")
     with c4:
         if phase_rows:
             comb_phase = pd.concat(phase_rows, ignore_index=True)
@@ -328,6 +337,7 @@ def render_player_comparison(bundle: DashboardDataBundle) -> None:
             fig_ph = _apply_base_layout(fig_ph, "Phase-Wise Mean Raw PAVA Comparison (Labels = Balls)", height=390)
             fig_ph.add_hline(y=0.0, line_dash="dot", line_color="rgba(148,163,184,0.4)")
             st.plotly_chart(fig_ph, width="stretch")
+            render_chart_caption("Phase-wise value added across Powerplay, Middle, and Death overs (bar numbers indicate total balls faced/bowled).")
 
     render_section_header("Statistical Strengths, Sample Trade-offs & Limitations", "Interpreting score margins alongside sample volume", icon="book")
     for _, r in sel_df.iterrows():

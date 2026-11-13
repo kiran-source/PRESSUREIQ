@@ -365,6 +365,22 @@ input[type="text"] {{
     margin: 14px 0;
 }}
 
+.piq-chart-caption {{
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin-top: -6px;
+    margin-bottom: 18px;
+    padding: 6px 12px;
+    background: #FAF6F0;
+    border: 1px solid var(--border-subtle);
+    border-left: 2px solid var(--accent-terracotta);
+    border-radius: 6px;
+}}
+
 /* Refined Editorial Badges & Status Pills */
 .piq-badge {{
     display: inline-flex;

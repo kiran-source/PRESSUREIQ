@@ -9,6 +9,7 @@ from src.dashboard.analytics import build_ablation_rows, build_benchmark_rows
 from src.dashboard.charts import fig_shrinkage_curve
 from src.dashboard.components import (
     render_callout,
+    render_chart_caption,
     render_empty_state,
     render_kpi_grid,
     render_section_header,
@@ -97,6 +98,7 @@ def render_methodology(bundle: DashboardDataBundle) -> None:
             render_empty_state("Validation ablation JSON unavailable", "Check `docs/VALIDATION_REPORT.json`.")
 
     st.plotly_chart(fig_shrinkage_curve(k_shrink=45.0), width="stretch")
+    render_chart_caption("Empirical Bayes shrinkage progression curve (K=45.0 pseudo-deliveries). At n = 45 HP balls, the estimator assigns equal 50% weight to player empirical data and the neutral prior.")
 
     render_section_header("4. Methodological Exclusions, Small-Sample Sensitivity & Limitations", "Complete research transparency", icon="alert")
     render_callout(

@@ -1,0 +1,319 @@
+{
+  "viewports": {
+    "desktop_1440": {
+      "pages": {
+        "01_overview": {
+          "nav_label": "Overview",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\01_overview_desktop_1440.png"
+        },
+        "02_leaderboards": {
+          "nav_label": "Pressure Leaderboards",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\02_leaderboards_desktop_1440.png"
+        },
+        "03_player_intelligence": {
+          "nav_label": "Player Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\03_player_intelligence_desktop_1440.png"
+        },
+        "04_player_comparison": {
+          "nav_label": "Player Comparison",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\04_player_comparison_desktop_1440.png"
+        },
+        "05_pressure_analytics": {
+          "nav_label": "Pressure Analytics",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\05_pressure_analytics_desktop_1440.png"
+        },
+        "06_emerging_talent": {
+          "nav_label": "Emerging Talent",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\06_emerging_talent_desktop_1440.png"
+        },
+        "07_rr_intelligence": {
+          "nav_label": "Rajasthan Royals Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\07_rr_intelligence_desktop_1440.png"
+        },
+        "08_market_intelligence": {
+          "nav_label": "IPL 2027 Market Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\08_market_intelligence_desktop_1440.png"
+        },
+        "09_methodology": {
+          "nav_label": "Methodology & Validation",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\09_methodology_desktop_1440.png"
+        },
+        "10_provenance": {
+          "nav_label": "Data Sources & Provenance",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\10_provenance_desktop_1440.png"
+        }
+      },
+      "overflow": false,
+      "exceptions_total": 0
+    },
+    "laptop_1366": {
+      "pages": {
+        "01_overview": {
+          "nav_label": "Overview",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\01_overview_laptop_1366.png"
+        },
+        "02_leaderboards": {
+          "nav_label": "Pressure Leaderboards",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\02_leaderboards_laptop_1366.png"
+        },
+        "03_player_intelligence": {
+          "nav_label": "Player Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\03_player_intelligence_laptop_1366.png"
+        },
+        "04_player_comparison": {
+          "nav_label": "Player Comparison",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\04_player_comparison_laptop_1366.png"
+        },
+        "05_pressure_analytics": {
+          "nav_label": "Pressure Analytics",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\05_pressure_analytics_laptop_1366.png"
+        },
+        "06_emerging_talent": {
+          "nav_label": "Emerging Talent",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\06_emerging_talent_laptop_1366.png"
+        },
+        "07_rr_intelligence": {
+          "nav_label": "Rajasthan Royals Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\07_rr_intelligence_laptop_1366.png"
+        },
+        "08_market_intelligence": {
+          "nav_label": "IPL 2027 Market Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\08_market_intelligence_laptop_1366.png"
+        },
+        "09_methodology": {
+          "nav_label": "Methodology & Validation",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\09_methodology_laptop_1366.png"
+        },
+        "10_provenance": {
+          "nav_label": "Data Sources & Provenance",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\10_provenance_laptop_1366.png"
+        }
+      },
+      "overflow": false,
+      "exceptions_total": 0
+    },
+    "tablet_768": {
+      "pages": {
+        "01_overview": {
+          "nav_label": "Overview",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\01_overview_tablet_768.png"
+        },
+        "02_leaderboards": {
+          "nav_label": "Pressure Leaderboards",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\02_leaderboards_tablet_768.png"
+        },
+        "03_player_intelligence": {
+          "nav_label": "Player Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\03_player_intelligence_tablet_768.png"
+        },
+        "04_player_comparison": {
+          "nav_label": "Player Comparison",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\04_player_comparison_tablet_768.png"
+        },
+        "05_pressure_analytics": {
+          "nav_label": "Pressure Analytics",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\05_pressure_analytics_tablet_768.png"
+        },
+        "06_emerging_talent": {
+          "nav_label": "Emerging Talent",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\06_emerging_talent_tablet_768.png"
+        },
+        "07_rr_intelligence": {
+          "nav_label": "Rajasthan Royals Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\07_rr_intelligence_tablet_768.png"
+        },
+        "08_market_intelligence": {
+          "nav_label": "IPL 2027 Market Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\08_market_intelligence_tablet_768.png"
+        },
+        "09_methodology": {
+          "nav_label": "Methodology & Validation",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\09_methodology_tablet_768.png"
+        },
+        "10_provenance": {
+          "nav_label": "Data Sources & Provenance",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\10_provenance_tablet_768.png"
+        }
+      },
+      "overflow": false,
+      "exceptions_total": 0
+    },
+    "mobile_375": {
+      "pages": {
+        "01_overview": {
+          "nav_label": "Overview",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\01_overview_mobile_375.png"
+        },
+        "02_leaderboards": {
+          "nav_label": "Pressure Leaderboards",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\02_leaderboards_mobile_375.png"
+        },
+        "03_player_intelligence": {
+          "nav_label": "Player Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\03_player_intelligence_mobile_375.png"
+        },
+        "04_player_comparison": {
+          "nav_label": "Player Comparison",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\04_player_comparison_mobile_375.png"
+        },
+        "05_pressure_analytics": {
+          "nav_label": "Pressure Analytics",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\05_pressure_analytics_mobile_375.png"
+        },
+        "06_emerging_talent": {
+          "nav_label": "Emerging Talent",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\06_emerging_talent_mobile_375.png"
+        },
+        "07_rr_intelligence": {
+          "nav_label": "Rajasthan Royals Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\07_rr_intelligence_mobile_375.png"
+        },
+        "08_market_intelligence": {
+          "nav_label": "IPL 2027 Market Intelligence",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\08_market_intelligence_mobile_375.png"
+        },
+        "09_methodology": {
+          "nav_label": "Methodology & Validation",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\09_methodology_mobile_375.png"
+        },
+        "10_provenance": {
+          "nav_label": "Data Sources & Provenance",
+          "anchor_found": true,
+          "exceptions": 0,
+          "overflow_x": false,
+          "screenshot": "docs\\dashboard\\screenshots\\audit\\10_provenance_mobile_375.png"
+        }
+      },
+      "overflow": false,
+      "exceptions_total": 0
+    }
+  },
+  "interactions": {
+    "leaderboard_bowler_tab": true,
+    "global_player_jump": true,
+    "player_comparison_defaults": true,
+    "rr_squad_visible": true,
+    "market_franchises_visible": true
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "zero_mutation": true,
+  "timestamp": "2026-11-13T11:16:42Z"
+}

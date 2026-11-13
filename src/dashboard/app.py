@@ -32,7 +32,7 @@ st.set_page_config(
     page_title="PRESSUREIQ — Cricket Pressure Intelligence",
     page_icon=None,
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 
@@ -43,7 +43,12 @@ def _cached_bundle() -> DashboardDataBundle:
 
 def _init_session_state() -> None:
     if "active_page" not in st.session_state:
-        st.session_state["active_page"] = NAV_LABELS[0]
+        qp = st.query_params.get("page")
+        if qp and qp in NAV_LABELS:
+            st.session_state["active_page"] = qp
+        else:
+            st.session_state["active_page"] = NAV_LABELS[0]
+
     if "jump_player_name" not in st.session_state:
         st.session_state["jump_player_name"] = None
     if "jump_disc" not in st.session_state:
@@ -70,14 +75,20 @@ def main() -> None:
         jump_opts = ["Select player to inspect…"] + bat_names + bowl_names
         quick_pick = st.selectbox("Quick Player Lookup", jump_opts, index=0, key="global_quick_pick")
         if quick_pick != "Select player to inspect…":
-            if quick_pick.endswith(" (Bat)"):
-                st.session_state["jump_disc"] = "Batting"
-                st.session_state["jump_player_name"] = quick_pick[:-6]
-            else:
-                st.session_state["jump_disc"] = "Bowling"
-                st.session_state["jump_player_name"] = quick_pick[:-7]
+            is_bat_pick = quick_pick.endswith(" (Bat)")
+            disc_val = "Batting" if is_bat_pick else "Bowling"
+            pname_val = quick_pick[:-6] if is_bat_pick else quick_pick[:-7]
+            st.session_state["jump_disc"] = disc_val
+            st.session_state["jump_player_name"] = pname_val
             if st.button("Open Player Profile", width="stretch", key="global_jump_btn"):
                 st.session_state["active_page"] = "Player Intelligence"
+                st.session_state["nav_radio"] = "Player Intelligence"
+                st.session_state["pi_disc"] = disc_val
+                st.session_state[f"pi_sel_{disc_val}"] = pname_val
+                try:
+                    st.query_params["page"] = "Player Intelligence"
+                except Exception:
+                    pass
                 st.rerun()
 
         st.markdown("<div style='height:4px;'></div>", unsafe_allow_html=True)
@@ -90,6 +101,10 @@ def main() -> None:
         )
         if chosen_page != st.session_state["active_page"]:
             st.session_state["active_page"] = chosen_page
+            try:
+                st.query_params["page"] = chosen_page
+            except Exception:
+                pass
 
         st.divider()
         meta = NAV_META.get(chosen_page, {})

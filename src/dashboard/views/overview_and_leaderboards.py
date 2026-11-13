@@ -24,6 +24,7 @@ from src.dashboard.charts import (
 )
 from src.dashboard.components import (
     render_callout,
+    render_chart_caption,
     render_editorial_hero,
     render_empty_state,
     render_kpi_grid,
@@ -188,8 +189,10 @@ def render_overview(bundle: DashboardDataBundle) -> None:
     ch1, ch2 = st.columns(2)
     with ch1:
         st.plotly_chart(fig_top10_ci_bar(bundle.bat_df, "Top 10 Batters — Score & 95% Bootstrap CI", RR_BLUE), width="stretch")
+        render_chart_caption("Ruturaj Gaikwad (#1, 97.71) leads batters via elite high-leverage surplus (+0.367 runs/ball). Error bars reflect 95% bootstrap intervals from N=2,000 match-clustered resamples.")
     with ch2:
         st.plotly_chart(fig_top10_ci_bar(bundle.bowl_df, "Top 10 Bowlers — Score & 95% Bootstrap CI", RR_PINK), width="stretch")
+        render_chart_caption("Liam Dawson (#1, 95.39) and Haris Rauf (#2, 94.75) anchor bowling composure through dot-ball pressure induction and late-overs wicket value added above expectation.")
 
     render_section_header("Key Analytical Findings & Research Limitations", "Core empirical discoveries and methodological guardrails", icon="book")
     f1, f2, f3 = st.columns(3)
@@ -213,6 +216,7 @@ def render_overview(bundle: DashboardDataBundle) -> None:
         )
 
     st.plotly_chart(fig_batter_vs_bowler_comparison(bundle.bat_df, bundle.bowl_df), width="stretch")
+    render_chart_caption("Standardized Reliability Score distribution across 109 qualified batters and 147 qualified bowlers. Elite composure (>80) represents the upper 8% of the tournament population, while both cohorts center near the replacement baseline (~60.8).")
 
 
 def _render_single_discipline_leaderboard(bundle: DashboardDataBundle, is_batting: bool) -> None:
@@ -312,8 +316,10 @@ def _render_single_discipline_leaderboard(bundle: DashboardDataBundle, is_battin
     c1, c2 = st.columns(2)
     with c1:
         st.plotly_chart(fig_top10_ci_bar(display_df, f"Filtered Top {min(10, len(display_df))} {disc_name} — Score & 95% CI", accent), width="stretch")
+        render_chart_caption(f"Top {disc_name.lower()} scored on 5-pillar composite norm CDF with 95% match-clustered bootstrap intervals.")
     with c2:
         st.plotly_chart(fig_rank_uncertainty_intervals(display_df, top_n=min(12, len(display_df)), title=f"Rank Uncertainty (Model A vs 2,000-Bootstrap)"), width="stretch")
+        render_chart_caption("Horizontal bars indicate 95% bootstrap rank intervals across N=2,000 resamples. Diamond marker denotes frozen Model A rank; circle denotes median bootstrap position.")
 
     render_section_header(f"Verified {disc_name} Telemetry Table", "Read-only view of frozen Model A metrics + bootstrap uncertainty", icon="trophy")
     base_cols = [
@@ -394,6 +400,7 @@ def _render_single_discipline_leaderboard(bundle: DashboardDataBundle, is_battin
         st.plotly_chart(fig_five_pillar_radar(p_row, peer_means, sel_name, str(p_row.get(role_col, disc_name))), width="stretch")
 
     st.plotly_chart(fig_sample_vs_score(filtered, is_batting=is_batting), width="stretch")
+    render_chart_caption("High-pressure opportunity exposure (P >= 50.0 balls) vs Reliability Score. Markers are sized by matches played; vertical dotted line denotes the Empirical Bayes K=45 threshold where sample data achieves 50% shrinkage weight.")
 
 
 def render_leaderboards(bundle: DashboardDataBundle) -> None:
