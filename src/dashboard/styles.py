@@ -309,9 +309,8 @@ section[data-testid="stSidebar"] div.stButton > button[kind="primary"] span[data
     color: var(--accent-terracotta) !important;
 }
 
-/* Distinct styling for Open Player Profile launcher button */
-section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] > div.stButton:has(button[key="global_jump_btn"]) > button,
-section[data-testid="stSidebar"] div.stButton > button:has(p:contains("Open Player Profile")) {
+/* Distinct styling for Open Player Profile launcher button (CodeRabbit Pass 10) */
+section[data-testid="stSidebar"] div.st-key-global_jump_btn button {
     background: #BD6548 !important;
     border: 1px solid #BD6548 !important;
     border-left: 1px solid #BD6548 !important;
@@ -322,11 +321,11 @@ section[data-testid="stSidebar"] div.stButton > button:has(p:contains("Open Play
     margin-top: 4px !important;
     box-shadow: 0 2px 6px rgba(189, 101, 72, 0.22) !important;
 }
-section[data-testid="stSidebar"] div.stButton > button:has(p:contains("Open Player Profile")) p {
+section[data-testid="stSidebar"] div.st-key-global_jump_btn button p {
     color: #FFFFFF !important;
     font-weight: 600 !important;
 }
-section[data-testid="stSidebar"] div.stButton > button:has(p:contains("Open Player Profile")):hover {
+section[data-testid="stSidebar"] div.st-key-global_jump_btn button:hover {
     background: #A94F36 !important;
     border-color: #A94F36 !important;
     color: #FFFFFF !important;
