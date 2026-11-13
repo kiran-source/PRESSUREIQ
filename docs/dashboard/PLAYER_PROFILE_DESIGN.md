@@ -83,3 +83,4 @@ Every qualified player profile follows a strict 7-section analytical progression
 1. **Immutability of Frozen Rankings:** All player cards, hero banners, and leaderboards display frozen Model A rankings directly from verified CSVs without runtime recomputation.
 2. **Zero Synthetic Imagery:** Every player portrait is drawn directly from verified local image assets (`assets/players/`), verified against `players_manifest.json`.
 3. **No Psychological Claims:** Pressure Response Curves (PRC) and retention metrics are explicitly labeled as empirical regression slopes describing historical co-variation, never psychological traits.
+

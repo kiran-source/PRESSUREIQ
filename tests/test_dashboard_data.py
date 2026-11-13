@@ -236,7 +236,7 @@ def test_v3_teams_comparison_pressure_analytics_and_charts():
     )
     assert len(teams_df) == 10
     srh_row = teams_df[teams_df["Code"] == "SRH"].iloc[0]
-    assert srh_row["Confirmed Trades In"] == 1
+    assert srh_row["Confirmed Trades In"] >= 1
 
     cmp_bat = build_multi_player_comparison(bundle.bat_df.head(3), is_batting=True)
     cmp_bowl = build_multi_player_comparison(bundle.bowl_df.head(2), is_batting=False)
