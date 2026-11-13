@@ -49,8 +49,10 @@ def svg_icon(name: str, size: int = 16, color: str = "currentColor") -> str:
 def render_brand_emblem() -> str:
     """Author inline vector cricket telemetry emblem in warm terracotta & cream."""
     return (
-        '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">'
-        '<rect x="1.5" y="1.5" width="31" height="31" rx="8" fill="#F1E9DD" stroke="#BD6548" stroke-width="1.5"/>'
+        '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true" style="flex-shrink:0;">'
+        '<defs><linearGradient id="piqEmblemBg" x1="0" y1="0" x2="1" y2="1">'
+        '<stop offset="0" stop-color="#FBF6EE"/><stop offset="1" stop-color="#F1E9DD"/></linearGradient></defs>'
+        '<rect x="1.5" y="1.5" width="31" height="31" rx="8.5" fill="url(#piqEmblemBg)" stroke="#BD6548" stroke-width="1.5"/>'
         # Minimalist cricket ball curve & seam
         '<circle cx="17" cy="17" r="9.5" fill="#FFFFFF" stroke="#BD6548" stroke-width="1.4"/>'
         '<path d="M12 12C14 14.5 14 19.5 12 22" stroke="#BD6548" stroke-width="1.2" stroke-linecap="round"/>'
@@ -78,6 +80,7 @@ def render_top_bar(
     """Render refined top navigation bar with breadcrumb, integrity indicator, and anchor date."""
     integrity_badge = (
         f'<span class="piq-badge" style="background:rgba(132,146,122,0.22);border:1px solid #84927A;color:#E8F0E4;">'
+        f'<span style="width:7px;height:7px;border-radius:50%;background:#84927A;animation:piq-pulse 2.4s ease-out infinite;"></span>'
         f'{svg_icon("check", 12, "#E8F0E4")} Model A Verified (SHA-256)</span>'
         if frozen_ok
         else f'<span class="piq-badge" style="background:rgba(184,74,57,0.25);border:1px solid #B84A39;color:#FCEAE8;">'
@@ -101,6 +104,45 @@ def render_top_bar(
     )
 
 
+def _feature_card_html(
+    label: str,
+    name: Optional[str],
+    score: Optional[float],
+    ci: Optional[str],
+    role: Optional[str],
+    accent: str,
+    score_color: str,
+    badge_style: str,
+    empty_note: str,
+) -> str:
+    """Build one featured-player card (styled by .piq-feature* classes in styles.py)."""
+    if name and score is not None:
+        badge = (
+            f'<span class="piq-badge" style="{badge_style}">{html.escape(role)}</span>'
+            if role
+            else ""
+        )
+        return (
+            f'<div class="piq-feature" style="--feat-accent:{accent};--feat-score:{score_color};">'
+            f'<div class="piq-feature-head"><span class="piq-feature-label">{label}</span>{badge}</div>'
+            f'<div class="piq-feature-name">{html.escape(name)}</div>'
+            f'<div class="piq-feature-meta">'
+            f'<span class="piq-feature-score">{score:.2f}</span>'
+            f'<span class="piq-feature-note">Reliability Score · 95% CI {html.escape(ci or "N/A")}</span>'
+            f'</div>'
+            f'</div>'
+        )
+    return (
+        f'<div class="piq-feature" style="--feat-accent:#77675D;--feat-score:#77675D;">'
+        f'<div class="piq-feature-head"><span class="piq-feature-label">{label}</span>'
+        f'<span class="piq-badge" style="background:#FAF6F0;border:1px solid #D8CBBE;color:#77675D;font-weight:600;">Data Unavailable</span>'
+        f'</div>'
+        f'<div class="piq-feature-name is-empty">Ranking Data Unavailable</div>'
+        f'<div class="piq-feature-note" style="margin-top:4px;">{empty_note}</div>'
+        f'</div>'
+    )
+
+
 def render_editorial_hero(
     featured_bat_name: Optional[str] = None,
     featured_bat_score: Optional[float] = None,
@@ -112,71 +154,32 @@ def render_editorial_hero(
     featured_bowl_role: Optional[str] = None,
 ) -> None:
     """Render the master Kinfolk-inspired editorial hero section (User Requirements Section 4)."""
-    if featured_bat_name and featured_bat_score is not None:
-        bat_badge_html = (
-            f'<span class="piq-badge" style="background:#FAF0EB;border:1px solid #BD6548;color:#BD6548;font-weight:700;">{html.escape(featured_bat_role)}</span>'
-            if featured_bat_role
-            else ""
-        )
-        bat_card_html = (
-            f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #BD6548;border-radius:10px;padding:12px 16px;">'
-            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
-            f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BATTER</span>'
-            f'{bat_badge_html}'
-            f'</div>'
-            f'<div style="font-family:\'Playfair Display\',serif;font-size:1.35rem;font-weight:600;color:#282321;">{html.escape(featured_bat_name)}</div>'
-            f'<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">'
-            f'<span style="font-family:\'Playfair Display\',serif;font-size:1.45rem;font-weight:700;color:#BD6548;">{featured_bat_score:.2f}</span>'
-            f'<span style="font-size:0.78rem;color:#77675D;">Reliability Score · 95% CI {html.escape(featured_bat_ci or "N/A")}</span>'
-            f'</div>'
-            f'</div>'
-        )
-    else:
-        bat_card_html = (
-            f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #77675D;border-radius:10px;padding:12px 16px;">'
-            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
-            f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BATTER</span>'
-            f'<span class="piq-badge" style="background:#FAF6F0;border:1px solid #D8CBBE;color:#77675D;font-weight:600;">Data Unavailable</span>'
-            f'</div>'
-            f'<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;font-weight:600;color:#77675D;">Ranking Data Unavailable</div>'
-            f'<div style="font-size:0.78rem;color:#77675D;margin-top:2px;">No verified Model A batter rankings loaded</div>'
-            f'</div>'
-        )
-
-    if featured_bowl_name and featured_bowl_score is not None:
-        bowl_badge_html = (
-            f'<span class="piq-badge" style="background:#FAF6ED;border:1px solid #C5A46D;color:#75460E;font-weight:700;">{html.escape(featured_bowl_role)}</span>'
-            if featured_bowl_role
-            else ""
-        )
-        bowl_card_html = (
-            f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #C5A46D;border-radius:10px;padding:12px 16px;">'
-            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
-            f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BOWLER</span>'
-            f'{bowl_badge_html}'
-            f'</div>'
-            f'<div style="font-family:\'Playfair Display\',serif;font-size:1.35rem;font-weight:600;color:#282321;">{html.escape(featured_bowl_name)}</div>'
-            f'<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">'
-            f'<span style="font-family:\'Playfair Display\',serif;font-size:1.45rem;font-weight:700;color:#75460E;">{featured_bowl_score:.2f}</span>'
-            f'<span style="font-size:0.78rem;color:#77675D;">Reliability Score · 95% CI {html.escape(featured_bowl_ci or "N/A")}</span>'
-            f'</div>'
-            f'</div>'
-        )
-    else:
-        bowl_card_html = (
-            f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #77675D;border-radius:10px;padding:12px 16px;">'
-            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
-            f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BOWLER</span>'
-            f'<span class="piq-badge" style="background:#FAF6F0;border:1px solid #D8CBBE;color:#77675D;font-weight:600;">Data Unavailable</span>'
-            f'</div>'
-            f'<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;font-weight:600;color:#77675D;">Ranking Data Unavailable</div>'
-            f'<div style="font-size:0.78rem;color:#77675D;margin-top:2px;">No verified Model A bowler rankings loaded</div>'
-            f'</div>'
-        )
+    bat_card_html = _feature_card_html(
+        "FEATURED #1 BATTER",
+        featured_bat_name,
+        featured_bat_score,
+        featured_bat_ci,
+        featured_bat_role,
+        accent="#BD6548",
+        score_color="#BD6548",
+        badge_style="background:#FAF0EB;border:1px solid #BD6548;color:#BD6548;font-weight:700;",
+        empty_note="No verified Model A batter rankings loaded",
+    )
+    bowl_card_html = _feature_card_html(
+        "FEATURED #1 BOWLER",
+        featured_bowl_name,
+        featured_bowl_score,
+        featured_bowl_ci,
+        featured_bowl_role,
+        accent="#C5A46D",
+        score_color="#75460E",
+        badge_style="background:#FAF6ED;border:1px solid #C5A46D;color:#75460E;font-weight:700;",
+        empty_note="No verified Model A bowler rankings loaded",
+    )
 
     hero_html = (
         f'<section class="piq-hero" aria-label="PRESSUREIQ Editorial Overview">'
-        f'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;">'
+        f'<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:32px;">'
         f'<div style="flex:1 1 540px;min-width:0;max-width:100%;">'
         f'<div class="piq-hero-eyebrow">{render_brand_emblem()}<span>{PRODUCT_NAME} · CRICKET INTELLIGENCE PUBLICATION</span></div>'
         f'<h1 class="piq-hero-title">Beyond Performance.</h1>'
@@ -189,7 +192,7 @@ def render_editorial_hero(
         f'<span class="piq-tape-tag" style="background:#BD6548;color:#FFFFFF;">Frozen Model A</span>'
         f'</div>'
         f'</div>'
-        f'<div style="flex:1 1 380px;min-width:0;max-width:100%;display:flex;flex-direction:column;gap:12px;">'
+        f'<div class="piq-feature-col" style="flex:1 1 380px;min-width:0;max-width:100%;">'
         f'{bat_card_html}'
         f'{bowl_card_html}'
         f'</div>'
@@ -270,9 +273,9 @@ def render_footer(batter_sha: str, bowler_sha: str) -> None:
 def render_sidebar_brand() -> None:
     """Render crisp sidebar masthead cleanly above navigation radio."""
     st.sidebar.markdown(
-        f'<div style="display:flex;align-items:center;gap:12px;padding:6px 2px 14px 2px;border-bottom:1px solid #D8CBBE;margin-bottom:12px;">'
+        f'<div class="piq-brand">'
         f'{render_brand_emblem()}'
-        f'<div><div style="font-family:\'Playfair Display\',serif;font-weight:700;font-size:1.15rem;color:#282321;letter-spacing:-0.01em;">{PRODUCT_NAME}</div>'
-        f'<div style="font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#77675D;">Cricket Telemetry &amp; Scouting</div></div></div>',
+        f'<div><div class="piq-brand-name">{PRODUCT_NAME}</div>'
+        f'<div class="piq-brand-sub">Cricket Telemetry &amp; Scouting</div></div></div>',
         unsafe_allow_html=True,
     )

@@ -35,22 +35,49 @@ ARCHETYPE_COLORS = {
 }
 
 
+def _round_bars(fig: go.Figure, radius: int = 6) -> None:
+    """Soften bar corners where the installed Plotly supports it (silently skipped otherwise)."""
+    for trace in fig.data:
+        if isinstance(trace, go.Bar):
+            try:
+                trace.marker.cornerradius = radius
+            except Exception:
+                return
+
+
 def _apply_base_layout(fig: go.Figure, title: str, height: int = 400) -> go.Figure:
     """Apply consistent warm editorial styling across all Plotly charts."""
+    axis_common = dict(
+        gridcolor="#F0E9DE",
+        gridwidth=1,
+        zerolinecolor="#D8CBBE",
+        showline=True,
+        linecolor="#E4D9CA",
+        ticks="outside",
+        ticklen=4,
+        tickcolor="#E4D9CA",
+        tickfont=dict(color=PALETTE["text_secondary"], size=10.5),
+        title_font=dict(color=PALETTE["text_primary"], size=11.5, family="Inter, sans-serif"),
+        title_standoff=10,
+    )
     fig.update_layout(
         title=dict(
             text=title,
-            font=dict(size=14, color=PALETTE["text_primary"], family="Playfair Display, serif"),
+            font=dict(size=16, color=PALETTE["text_primary"], family="Playfair Display, serif"),
             x=0.01,
+            xanchor="left",
         ),
         template="plotly_white",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="#FFFFFF",
         height=height,
-        margin=dict(l=54, r=24, t=54, b=50),
+        margin=dict(l=54, r=24, t=60, b=50),
         font=dict(family="Inter, -apple-system, sans-serif", size=11.5, color=PALETTE["text_secondary"]),
+        colorway=list(PLOTLY_SERIES),
+        bargap=0.3,
+        bargroupgap=0.06,
         hoverlabel=dict(
-            bgcolor="#FAF6F0",
+            bgcolor="#FFFDF9",
             bordercolor="#D8CBBE",
             font=dict(size=11.5, color="#282321", family="JetBrains Mono, monospace"),
         ),
@@ -58,19 +85,11 @@ def _apply_base_layout(fig: go.Figure, title: str, height: int = 400) -> go.Figu
             font=dict(color=PALETTE["text_secondary"], size=10.5),
             bgcolor="rgba(0,0,0,0)",
         ),
+        modebar=dict(bgcolor="rgba(0,0,0,0)", color="#B9A999", activecolor="#BD6548"),
     )
-    fig.update_xaxes(
-        gridcolor="#EAE1D5",
-        zerolinecolor="#D8CBBE",
-        tickfont=dict(color=PALETTE["text_secondary"], size=10.5),
-        title_font=dict(color=PALETTE["text_primary"], size=11.5, family="Inter, sans-serif"),
-    )
-    fig.update_yaxes(
-        gridcolor="#EAE1D5",
-        zerolinecolor="#D8CBBE",
-        tickfont=dict(color=PALETTE["text_secondary"], size=10.5),
-        title_font=dict(color=PALETTE["text_primary"], size=11.5, family="Inter, sans-serif"),
-    )
+    fig.update_xaxes(**axis_common)
+    fig.update_yaxes(**axis_common)
+    _round_bars(fig)
     return fig
 
 
@@ -154,6 +173,7 @@ def fig_score_distribution(df: pd.DataFrame, title: str, accent_color: str = RR_
         labels={"reliability_score": "Reliability Score (0–100)", "prc_archetype": "PRC Class"},
     )
     med_val = float(work["reliability_score"].median())
+    fig.update_traces(marker_line_color="#FFFFFF", marker_line_width=1)
     fig = _apply_base_layout(fig, title, height=390)
     if np.isfinite(med_val):
         fig.add_vline(
@@ -200,6 +220,7 @@ def fig_sample_vs_score(df: pd.DataFrame, is_batting: bool = True) -> go.Figure:
             "prc_archetype": "PRC Class",
         },
     )
+    fig.update_traces(marker=dict(line=dict(color="#FFFFFF", width=1.2), opacity=0.88))
     fig = _apply_base_layout(fig, f"Sample Exposure vs Reliability Score — {label}", height=430)
     fig.add_vline(
         x=45,
@@ -369,8 +390,8 @@ def fig_five_pillar_radar(player_row: pd.Series, peer_means: Dict[str, float], p
     res.update_layout(
         polar=dict(
             bgcolor="#FAF6F0",
-            radialaxis=dict(visible=True, range=[0, 100], gridcolor="#EAE1D5", tickfont=dict(color="#77675D", size=9.5)),
-            angularaxis=dict(gridcolor="#EAE1D5", tickfont=dict(color="#282321", size=10.5, family="Inter, sans-serif")),
+            radialaxis=dict(visible=True, range=[0, 100], gridcolor="#EAE1D5", linecolor="#EAE1D5", tickfont=dict(color="#77675D", size=9.5)),
+            angularaxis=dict(gridcolor="#EAE1D5", linecolor="#D8CBBE", tickfont=dict(color="#282321", size=10.5, family="Inter, sans-serif")),
         ),
         margin=dict(l=90, r=90, t=64, b=54),
         legend=dict(orientation="h", yanchor="bottom", y=-0.22, xanchor="center", x=0.5),
@@ -482,8 +503,8 @@ def fig_multi_player_radar(selected_df: pd.DataFrame, color_map: Optional[Dict[s
     fig.update_layout(
         polar=dict(
             bgcolor="#FAF6F0",
-            radialaxis=dict(visible=True, range=[0, 100], gridcolor="#EAE1D5", tickfont=dict(color="#77675D", size=9.5)),
-            angularaxis=dict(gridcolor="#EAE1D5", tickfont=dict(color="#282321", size=10.5, family="Inter, sans-serif")),
+            radialaxis=dict(visible=True, range=[0, 100], gridcolor="#EAE1D5", linecolor="#EAE1D5", tickfont=dict(color="#77675D", size=9.5)),
+            angularaxis=dict(gridcolor="#EAE1D5", linecolor="#D8CBBE", tickfont=dict(color="#282321", size=10.5, family="Inter, sans-serif")),
         ),
         legend=dict(orientation="h", yanchor="bottom", y=-0.22, xanchor="center", x=0.5),
     )
