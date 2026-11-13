@@ -105,17 +105,24 @@ def render_editorial_hero(
     featured_bat_name: Optional[str] = None,
     featured_bat_score: Optional[float] = None,
     featured_bat_ci: Optional[str] = None,
+    featured_bat_role: Optional[str] = None,
     featured_bowl_name: Optional[str] = None,
     featured_bowl_score: Optional[float] = None,
     featured_bowl_ci: Optional[str] = None,
+    featured_bowl_role: Optional[str] = None,
 ) -> None:
     """Render the master Kinfolk-inspired editorial hero section (User Requirements Section 4)."""
     if featured_bat_name and featured_bat_score is not None:
+        bat_badge_html = (
+            f'<span class="piq-badge" style="background:#FAF0EB;border:1px solid #BD6548;color:#BD6548;font-weight:700;">{html.escape(featured_bat_role)}</span>'
+            if featured_bat_role
+            else ""
+        )
         bat_card_html = (
             f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #BD6548;border-radius:10px;padding:12px 16px;">'
             f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
             f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BATTER</span>'
-            f'<span class="piq-badge" style="background:#FAF0EB;border:1px solid #BD6548;color:#BD6548;font-weight:700;">Top Order</span>'
+            f'{bat_badge_html}'
             f'</div>'
             f'<div style="font-family:\'Playfair Display\',serif;font-size:1.35rem;font-weight:600;color:#282321;">{html.escape(featured_bat_name)}</div>'
             f'<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">'
@@ -137,11 +144,16 @@ def render_editorial_hero(
         )
 
     if featured_bowl_name and featured_bowl_score is not None:
+        bowl_badge_html = (
+            f'<span class="piq-badge" style="background:#FAF6ED;border:1px solid #C5A46D;color:#75460E;font-weight:700;">{html.escape(featured_bowl_role)}</span>'
+            if featured_bowl_role
+            else ""
+        )
         bowl_card_html = (
             f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #C5A46D;border-radius:10px;padding:12px 16px;">'
             f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
             f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BOWLER</span>'
-            f'<span class="piq-badge" style="background:#FAF6ED;border:1px solid #C5A46D;color:#75460E;font-weight:700;">Slow Orthodox</span>'
+            f'{bowl_badge_html}'
             f'</div>'
             f'<div style="font-family:\'Playfair Display\',serif;font-size:1.35rem;font-weight:600;color:#282321;">{html.escape(featured_bowl_name)}</div>'
             f'<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">'
@@ -165,7 +177,7 @@ def render_editorial_hero(
     hero_html = (
         f'<section class="piq-hero" aria-label="PRESSUREIQ Editorial Overview">'
         f'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;">'
-        f'<div style="flex:1 1 540px;min-width:280px;">'
+        f'<div style="flex:1 1 540px;min-width:0;max-width:100%;">'
         f'<div class="piq-hero-eyebrow">{render_brand_emblem()}<span>{PRODUCT_NAME} · CRICKET INTELLIGENCE PUBLICATION</span></div>'
         f'<h1 class="piq-hero-title">Beyond Performance.</h1>'
         f'<div class="piq-hero-tagline">Measuring composure under pressure.</div>'
@@ -177,7 +189,7 @@ def render_editorial_hero(
         f'<span class="piq-tape-tag" style="background:#BD6548;color:#FFFFFF;">Frozen Model A</span>'
         f'</div>'
         f'</div>'
-        f'<div style="flex:0 1 420px;min-width:270px;display:flex;flex-direction:column;gap:12px;">'
+        f'<div style="flex:1 1 380px;min-width:0;max-width:100%;display:flex;flex-direction:column;gap:12px;">'
         f'{bat_card_html}'
         f'{bowl_card_html}'
         f'</div>'

@@ -56,17 +56,31 @@ def render_overview(bundle: DashboardDataBundle) -> None:
     top_bat_name = str(top_bat["player_name"]) if top_bat is not None else None
     top_bat_score = float(top_bat["reliability_score"]) if top_bat is not None else None
     top_bat_ci = f"[{top_bat['ci_lower_95']:.1f}, {top_bat['ci_upper_95']:.1f}]" if top_bat is not None else None
+    top_bat_role = (
+        str(top_bat["role"]).replace("_", " ").title()
+        if top_bat is not None and "role" in top_bat and pd.notna(top_bat["role"])
+        else None
+    )
+
     top_bowl_name = str(top_bowl["player_name"]) if top_bowl is not None else None
     top_bowl_score = float(top_bowl["reliability_score"]) if top_bowl is not None else None
     top_bowl_ci = f"[{top_bowl['ci_lower_95']:.1f}, {top_bowl['ci_upper_95']:.1f}]" if top_bowl is not None else None
+    top_bowl_role = None
+    if top_bowl is not None:
+        if "bowling_type" in top_bowl and pd.notna(top_bowl["bowling_type"]):
+            top_bowl_role = str(top_bowl["bowling_type"]).strip()
+        elif "pace_or_spin" in top_bowl and pd.notna(top_bowl["pace_or_spin"]):
+            top_bowl_role = str(top_bowl["pace_or_spin"]).strip()
 
     render_editorial_hero(
         featured_bat_name=top_bat_name,
         featured_bat_score=top_bat_score,
         featured_bat_ci=top_bat_ci,
+        featured_bat_role=top_bat_role,
         featured_bowl_name=top_bowl_name,
         featured_bowl_score=top_bowl_score,
         featured_bowl_ci=top_bowl_ci,
+        featured_bowl_role=top_bowl_role,
     )
 
     played_matches = 867
