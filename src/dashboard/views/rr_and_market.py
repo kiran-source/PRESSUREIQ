@@ -157,7 +157,7 @@ def render_market_intelligence(bundle: DashboardDataBundle) -> None:
     tab_teams, tab_ledger, tab_changelog = st.tabs(
         [
             "All 10 IPL Franchises (Squads & 2027 Status)",
-            "Source-Audited Ledger (17 Tracked Players)",
+            f"Source-Audited Ledger ({len(bundle.market_current)} Tracked Players)",
             "Chronological Market Audit Trail",
         ]
     )
