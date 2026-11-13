@@ -57,10 +57,11 @@ def get_player_image_path(player_name: str) -> Path:
     if direct.exists():
         return direct
 
-    # Default fallback to first available or create minimal
-    for p in ASSETS_DIR.glob("*.png"):
-        return p
-    return ASSETS_DIR / fn
+    # Dedicated neutral silhouette fallback
+    neutral = ASSETS_DIR / "neutral_avatar.png"
+    if neutral.exists():
+        return neutral
+    return direct
 
 
 @functools.lru_cache(maxsize=300)

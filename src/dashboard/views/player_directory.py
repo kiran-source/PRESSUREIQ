@@ -105,7 +105,7 @@ def render_player_directory(bundle: DashboardDataBundle) -> None:
     # Search filter
     if search_q.strip():
         q_lower = search_q.strip().lower()
-        filtered = filtered[filtered["player_name"].str.lower().str.contains(q_lower, na=False)]
+        filtered = filtered[filtered["player_name"].str.lower().str.contains(q_lower, regex=False, na=False)]
 
     # Sort options
     sort_opts = {
@@ -183,7 +183,9 @@ def render_player_directory(bundle: DashboardDataBundle) -> None:
             }
         )
         st.dataframe(tbl_show, width="stretch", hide_index=True)
-        sel_t_player = st.selectbox("Quick Jump to Athlete Profile", filtered["player_name"].unique().tolist(), key="dir_tbl_jump")
-        p_sub = filtered[filtered["player_name"] == sel_t_player].iloc[0]
-        if st.button(f"Open {sel_t_player} Dossier →", key="dir_tbl_jump_btn"):
-            jump_to_player(sel_t_player, str(p_sub["discipline"]))
+        options = [f"{r['player_name']} ({r['discipline']})" for _, r in filtered.iterrows()]
+        opt_to_row = {f"{r['player_name']} ({r['discipline']})": r for _, r in filtered.iterrows()}
+        sel_choice = st.selectbox("Quick Jump to Athlete Profile", options, key="dir_tbl_jump")
+        p_sub = opt_to_row[sel_choice]
+        if st.button(f"Open {p_sub['player_name']} Dossier →", key="dir_tbl_jump_btn"):
+            jump_to_player(str(p_sub["player_name"]), str(p_sub["discipline"]))

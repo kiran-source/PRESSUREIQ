@@ -13,7 +13,7 @@ All image assets reside locally in `assets/players/` and are cataloged in `asset
 ### 2.1 Asset Distribution
 - **Total Qualified Athletes in Registry:** 227 unique athletes
 - **Tier 1 — Official ESPNcricinfo Cutouts:** 69 players (High-resolution transparent PNG cutouts mapped via verified Cricsheet register IDs)
-- **Tier 2 — Wikimedia Commons Verified Portraits:** 7 players (High-resolution public-domain sports portraits)
+- **Tier 2 — Wikimedia Commons Verified Portraits:** 7 players (High-resolution open-access portraits adhering to verified source licenses, including GODL-India and Creative Commons CC BY-SA 4.0 with required source attributions)
 - **Tier 3 — Bespoke Editorial Monogram Cards:** 151 players (Uniform luxury square avatars generated on `#FAF6F0` soft cream canvas with terracotta typography and deep ink borders)
 - **Overall Coverage:** **100.0%** (227 / 227 players have an authentic, vetted passport-style avatar)
 

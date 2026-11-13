@@ -1,12 +1,14 @@
 """Capture high-resolution screenshots of PRESSUREIQ v5.0 Visual Intelligence views."""
 
 import asyncio
+import os
 from pathlib import Path
 from playwright.async_api import async_playwright
 
 OUT_DIR = Path(__file__).resolve().parent.parent / "docs" / "dashboard" / "screenshots"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
-BASE_URL = "http://localhost:8501"
+PORT = os.getenv("STREAMLIT_PORT", "8501")
+BASE_URL = f"http://localhost:{PORT}"
 
 
 async def capture():
@@ -21,13 +23,12 @@ async def capture():
         print("Captured v5_batter_hero_desktop.png")
 
         # 2. Desktop Bowler Profile View - Liam Dawson
-        # Click bowling radio or select Liam Dawson
         bowling_radio = page.locator("text=Bowling").first
-        if await bowling_radio.is_visible():
-            await bowling_radio.click()
-            await asyncio.sleep(2.0)
-            await page.screenshot(path=str(OUT_DIR / "v5_bowler_hero_desktop.png"))
-            print("Captured v5_bowler_hero_desktop.png")
+        await bowling_radio.wait_for(state="visible", timeout=10000)
+        await bowling_radio.click()
+        await asyncio.sleep(2.0)
+        await page.screenshot(path=str(OUT_DIR / "v5_bowler_hero_desktop.png"))
+        print("Captured v5_bowler_hero_desktop.png")
 
         # 3. Mobile View - Batter Profile Hero
         page_mobile = await browser.new_page(viewport={"width": 375, "height": 812})

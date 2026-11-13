@@ -25,7 +25,7 @@ This report documents the rigorous quality assurance (QA) audit performed on PRE
 ### 3.1 Color Contrast Ratios (WCAG 2.2 AA Compliance)
 - **Deep Ink (`#282321`) on Warm Ivory (`#F8F4EC`):** Contrast ratio **13.2:1** (Exceeds WCAG AAA 7.0:1 standard).
 - **Deep Ink (`#282321`) on Soft Cream (`#FAF6F0`):** Contrast ratio **12.8:1** (Exceeds WCAG AAA).
-- **Terracotta Brand Accent (`#BD6548`) on White/Cream:** Contrast ratio **4.65:1** (Passes WCAG AA for normal text, exceeds AAA for large text).
+- **Terracotta Brand Accent (`#BD6548`) on White/Cream:** Contrast ratio **4.10:1** (white) and **3.81:1** (`#FAF6F0`), meeting WCAG 2.2 AA standards (3.0:1) for large text (≥18pt or ≥14pt bold), section headers, and graphical component boundaries. All critical normal body text uses Deep Ink `#282321`.
 - **Muted Brown (`#77675D`) on Ivory:** Contrast ratio **4.82:1** (Passes WCAG AA for secondary labels and subtitles).
 - **Sage Green (`#84927A`) on Cream:** Contrast ratio **3.5:1** (Used for non-text graphical badges and category pills with dark text overlays).
 

@@ -34,7 +34,7 @@ ALIASES = {
     "Varun Chakravarthy": 1108375,
     "Lokesh Rahul": 422108,
     "Bhanuka Rajapaksa": 342619,
-    "Kamindu Mendis": 784367,
+    "Kamindu Mendis": 784369,
     "Namboori Tilak Varma": 1170265,
     "Sai Kishore": 1048739,
     "Sai Sudharsan": 1151288,
@@ -307,26 +307,34 @@ def process_player(player_name: str, cid: int, out_dir: Path):
     source = "ESPN_CUTOUT"
 
     # 2. Tier 2: Wikipedia Commons Portrait
-    if not raw:
-        raw, src_url = get_wiki_portrait(player_name)
-        source = "WIKIPEDIA_PORTRAIT"
-
-    if raw:
-        ok = crop_to_passport_avatar(raw, out_file)
-        if ok:
+    if not raw or not crop_to_passport_avatar(raw, out_file):
+        raw_wiki, src_url_wiki = get_wiki_portrait(player_name)
+        if raw_wiki and crop_to_passport_avatar(raw_wiki, out_file):
             return {
                 "player_name": player_name,
                 "cricinfo_id": cid,
                 "status": "SUCCESS",
-                "tier": source,
-                "source_url": src_url,
+                "tier": "WIKIPEDIA_PORTRAIT",
+                "source_url": src_url_wiki,
                 "filename": fn,
                 "file_path": str(out_file.relative_to(ROOT)),
                 "size_bytes": os.path.getsize(out_file)
             }
+    else:
+        return {
+            "player_name": player_name,
+            "cricinfo_id": cid,
+            "status": "SUCCESS",
+            "tier": "ESPN_CUTOUT",
+            "source_url": src_url,
+            "filename": fn,
+            "file_path": str(out_file.relative_to(ROOT)),
+            "size_bytes": os.path.getsize(out_file)
+        }
 
-    # 3. Tier 3: Luxury Editorial Monogram Card
-    generate_editorial_monogram_avatar(player_name, out_file)
+    # 3. Tier 3: Preserve existing valid portrait or generate Luxury Editorial Monogram Card
+    if not (out_file.exists() and os.path.getsize(out_file) > 1000):
+        generate_editorial_monogram_avatar(player_name, out_file)
     return {
         "player_name": player_name,
         "cricinfo_id": cid,

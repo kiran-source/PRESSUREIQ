@@ -1387,7 +1387,8 @@ hr {
     box-shadow: 0 6px 16px rgba(40, 35, 33, 0.08);
     border-color: var(--accent-terracotta);
 }
-.piq-dir-photo {
+.piq-dir-photo,
+.piq-dir-portrait {
     width: 84px;
     height: 84px;
     border-radius: 12px;
