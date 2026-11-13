@@ -102,14 +102,66 @@ def render_top_bar(
 
 
 def render_editorial_hero(
-    featured_bat_name: str = "Ruturaj Gaikwad",
-    featured_bat_score: float = 97.71,
-    featured_bat_ci: str = "[76.3, 99.1]",
-    featured_bowl_name: str = "Liam Dawson",
-    featured_bowl_score: float = 95.39,
-    featured_bowl_ci: str = "[74.2, 98.1]",
+    featured_bat_name: Optional[str] = None,
+    featured_bat_score: Optional[float] = None,
+    featured_bat_ci: Optional[str] = None,
+    featured_bowl_name: Optional[str] = None,
+    featured_bowl_score: Optional[float] = None,
+    featured_bowl_ci: Optional[str] = None,
 ) -> None:
     """Render the master Kinfolk-inspired editorial hero section (User Requirements Section 4)."""
+    if featured_bat_name and featured_bat_score is not None:
+        bat_card_html = (
+            f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #BD6548;border-radius:10px;padding:12px 16px;">'
+            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+            f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BATTER</span>'
+            f'<span class="piq-badge" style="background:#FAF0EB;border:1px solid #BD6548;color:#BD6548;font-weight:700;">Top Order</span>'
+            f'</div>'
+            f'<div style="font-family:\'Playfair Display\',serif;font-size:1.35rem;font-weight:600;color:#282321;">{html.escape(featured_bat_name)}</div>'
+            f'<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">'
+            f'<span style="font-family:\'Playfair Display\',serif;font-size:1.45rem;font-weight:700;color:#BD6548;">{featured_bat_score:.2f}</span>'
+            f'<span style="font-size:0.78rem;color:#77675D;">Reliability Score · 95% CI {html.escape(featured_bat_ci or "N/A")}</span>'
+            f'</div>'
+            f'</div>'
+        )
+    else:
+        bat_card_html = (
+            f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #77675D;border-radius:10px;padding:12px 16px;">'
+            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+            f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BATTER</span>'
+            f'<span class="piq-badge" style="background:#FAF6F0;border:1px solid #D8CBBE;color:#77675D;font-weight:600;">Data Unavailable</span>'
+            f'</div>'
+            f'<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;font-weight:600;color:#77675D;">Ranking Data Unavailable</div>'
+            f'<div style="font-size:0.78rem;color:#77675D;margin-top:2px;">No verified Model A batter rankings loaded</div>'
+            f'</div>'
+        )
+
+    if featured_bowl_name and featured_bowl_score is not None:
+        bowl_card_html = (
+            f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #C5A46D;border-radius:10px;padding:12px 16px;">'
+            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+            f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BOWLER</span>'
+            f'<span class="piq-badge" style="background:#FAF6ED;border:1px solid #C5A46D;color:#75460E;font-weight:700;">Slow Orthodox</span>'
+            f'</div>'
+            f'<div style="font-family:\'Playfair Display\',serif;font-size:1.35rem;font-weight:600;color:#282321;">{html.escape(featured_bowl_name)}</div>'
+            f'<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">'
+            f'<span style="font-family:\'Playfair Display\',serif;font-size:1.45rem;font-weight:700;color:#75460E;">{featured_bowl_score:.2f}</span>'
+            f'<span style="font-size:0.78rem;color:#77675D;">Reliability Score · 95% CI {html.escape(featured_bowl_ci or "N/A")}</span>'
+            f'</div>'
+            f'</div>'
+        )
+    else:
+        bowl_card_html = (
+            f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #77675D;border-radius:10px;padding:12px 16px;">'
+            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+            f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BOWLER</span>'
+            f'<span class="piq-badge" style="background:#FAF6F0;border:1px solid #D8CBBE;color:#77675D;font-weight:600;">Data Unavailable</span>'
+            f'</div>'
+            f'<div style="font-family:\'Playfair Display\',serif;font-size:1.15rem;font-weight:600;color:#77675D;">Ranking Data Unavailable</div>'
+            f'<div style="font-size:0.78rem;color:#77675D;margin-top:2px;">No verified Model A bowler rankings loaded</div>'
+            f'</div>'
+        )
+
     hero_html = (
         f'<section class="piq-hero" aria-label="PRESSUREIQ Editorial Overview">'
         f'<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;">'
@@ -126,28 +178,8 @@ def render_editorial_hero(
         f'</div>'
         f'</div>'
         f'<div style="flex:0 1 420px;min-width:270px;display:flex;flex-direction:column;gap:12px;">'
-        f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #BD6548;border-radius:10px;padding:12px 16px;">'
-        f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
-        f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BATTER</span>'
-        f'<span class="piq-badge" style="background:#FAF0EB;border:1px solid #BD6548;color:#BD6548;font-weight:700;">Top Order</span>'
-        f'</div>'
-        f'<div style="font-family:\'Playfair Display\',serif;font-size:1.35rem;font-weight:600;color:#282321;">{html.escape(featured_bat_name)}</div>'
-        f'<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">'
-        f'<span style="font-family:\'Playfair Display\',serif;font-size:1.45rem;font-weight:700;color:#BD6548;">{featured_bat_score:.2f}</span>'
-        f'<span style="font-size:0.78rem;color:#77675D;">Reliability Score · 95% CI {html.escape(featured_bat_ci)}</span>'
-        f'</div>'
-        f'</div>'
-        f'<div style="background:#FAF6F0;border:1px solid #D8CBBE;border-left:4px solid #C5A46D;border-radius:10px;padding:12px 16px;">'
-        f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
-        f'<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#77675D;">FEATURED #1 BOWLER</span>'
-        f'<span class="piq-badge" style="background:#FAF6ED;border:1px solid #C5A46D;color:#75460E;font-weight:700;">Slow Orthodox</span>'
-        f'</div>'
-        f'<div style="font-family:\'Playfair Display\',serif;font-size:1.35rem;font-weight:600;color:#282321;">{html.escape(featured_bowl_name)}</div>'
-        f'<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">'
-        f'<span style="font-family:\'Playfair Display\',serif;font-size:1.45rem;font-weight:700;color:#75460E;">{featured_bowl_score:.2f}</span>'
-        f'<span style="font-size:0.78rem;color:#77675D;">Reliability Score · 95% CI {html.escape(featured_bowl_ci)}</span>'
-        f'</div>'
-        f'</div>'
+        f'{bat_card_html}'
+        f'{bowl_card_html}'
         f'</div>'
         f'</div>'
         f'</section>'

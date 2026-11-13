@@ -53,12 +53,12 @@ def render_overview(bundle: DashboardDataBundle) -> None:
     """Page 1: Executive Overview landing view (Kinfolk Luxury Editorial)."""
     top_bat = bundle.bat_df.iloc[0] if not bundle.bat_df.empty else None
     top_bowl = bundle.bowl_df.iloc[0] if not bundle.bowl_df.empty else None
-    top_bat_name = str(top_bat["player_name"]) if top_bat is not None else "Ruturaj Gaikwad"
-    top_bat_score = float(top_bat["reliability_score"]) if top_bat is not None else 97.71
-    top_bat_ci = f"[{top_bat['ci_lower_95']:.1f}, {top_bat['ci_upper_95']:.1f}]" if top_bat is not None else "[76.3, 99.1]"
-    top_bowl_name = str(top_bowl["player_name"]) if top_bowl is not None else "Liam Dawson"
-    top_bowl_score = float(top_bowl["reliability_score"]) if top_bowl is not None else 95.39
-    top_bowl_ci = f"[{top_bowl['ci_lower_95']:.1f}, {top_bowl['ci_upper_95']:.1f}]" if top_bowl is not None else "[74.2, 98.1]"
+    top_bat_name = str(top_bat["player_name"]) if top_bat is not None else None
+    top_bat_score = float(top_bat["reliability_score"]) if top_bat is not None else None
+    top_bat_ci = f"[{top_bat['ci_lower_95']:.1f}, {top_bat['ci_upper_95']:.1f}]" if top_bat is not None else None
+    top_bowl_name = str(top_bowl["player_name"]) if top_bowl is not None else None
+    top_bowl_score = float(top_bowl["reliability_score"]) if top_bowl is not None else None
+    top_bowl_ci = f"[{top_bowl['ci_lower_95']:.1f}, {top_bowl['ci_upper_95']:.1f}]" if top_bowl is not None else None
 
     render_editorial_hero(
         featured_bat_name=top_bat_name,

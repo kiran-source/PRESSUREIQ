@@ -331,5 +331,9 @@ def test_coderabbit_findings_remediation():
     assert bundle.integrity_status["market_snapshot_match"] is True
     assert bundle.integrity_status["market_snapshot_sha256"] == FROZEN_MARKET_SNAPSHOT_SHA256
 
+    # 4. Editorial hero empty ranking handling (never substitute player names if data missing)
+    from src.dashboard.components import render_editorial_hero
+    render_editorial_hero(None, None, None, None, None, None)
+
 
 
