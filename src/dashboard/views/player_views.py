@@ -184,7 +184,7 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
     with c2:
         if not player_delivs.empty:
             st.plotly_chart(fig_pressure_response_curve(player_delivs, sel_player, is_batting=is_batting), width="stretch")
-            render_chart_caption("Mean delivery PAVA across leverage tiers. Positive surplus in High [65–85) and Extreme (>=85) bands indicates clutch amplification.")
+            render_chart_caption("Mean delivery PAVA surplus across pressure tiers. Positive values in High [65–85) and Extreme (>=85) bands reflect above-expectation execution in those tiers; upward tier-over-tier slope indicates clutch amplification.")
         else:
             render_empty_state("Delivery-level trace unavailable", "Parquet telemetry not loaded for this environment.")
 
@@ -302,7 +302,7 @@ def render_player_comparison(bundle: DashboardDataBundle) -> None:
         render_chart_caption("Comparative five-pillar radar illustrating relative balance across execution surplus, retention stability, consistency, and adaptability.")
     with c2:
         st.plotly_chart(fig_multi_player_ci_bars(sel_df, color_map=color_map), width="stretch")
-        render_chart_caption("Reliability Scores with 95% bootstrap confidence intervals. Overlapping error intervals indicate indistinguishable statistical difference.")
+        render_chart_caption("Reliability Scores with 95% bootstrap confidence intervals representing estimation uncertainty given historical sample size and variance.")
 
     # Fetch delivery telemetry for overlaid PRC + phase comparisons
     deliv_map = {}

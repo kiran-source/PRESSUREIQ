@@ -18,6 +18,7 @@
 | **Pass 4 (v4 Editorial)** | `dashboard-ui-v3..5117872` | **1** | 0 | 1 | 0 | `6fac083` | **Resolved** |
 | **Pass 5 (v4 Editorial)** | `5117872..6fac083` | **2** | 0 | 0 | 2 | `04ad952` | **Resolved** |
 | **Pass 6 (v4 Final)** | `dashboard-ui-v3..04ad952` | **0** | 0 | 0 | 0 | `04ad952` | **Clean / Complete** |
+| **Pass 7 (Audit Polish)** | `04ad952..57c81f8` | **3** | 0 | 0 | 3 | Pending | **Remediated** |
 
 ---
 
@@ -221,5 +222,28 @@
 - **Reviewed Files:** 12 files (`.streamlit/config.toml`, `src/dashboard/*.py`, `tests/test_dashboard_data.py`)
 - **Findings Reported:** **0 Critical, 0 Major, 0 Minor**
 - **Outcome:** Complete clean pass. Zero outstanding findings.
+
+---
+
+## 8. Pass 7 Visual Excellence Audit Review (`04ad952..57c81f8`)
+
+### Finding 14: Encode the ampersand in both page query values
+- **File:** `docs/dashboard/DASHBOARD_HANDOVER.md:137, 142`
+- **Severity:** Minor
+- **CodeRabbit Diagnostic:** In `?page=Methodology+&+Validation` and `?page=Data+Sources+&+Provenance`, the unencoded ampersand acts as a query parameter separator, causing Streamlit's query parameter parser to truncate the value and fall back to Overview.
+- **Remediation Applied:** Replaced documentation examples with `?page=Methodology+%26+Validation` and `?page=Data+Sources+%26+Provenance`.
+
+### Finding 15: Do not claim clutch amplification from a single-band value
+- **File:** `src/dashboard/views/player_views.py:187`
+- **Severity:** Minor
+- **CodeRabbit Diagnostic:** Caption asserted that positive surplus in High and Extreme bands indicates clutch amplification, whereas single-band positive surplus indicates above-expectation execution only; establishing amplification requires comparison with lower tiers.
+- **Remediation Applied:** Reworded caption: `"Mean delivery PAVA surplus across pressure tiers. Positive values in High [65–85) and Extreme (>=85) bands reflect above-expectation execution in those tiers; upward tier-over-tier slope indicates clutch amplification."`
+
+### Finding 16: Do not read overlapping intervals as equal scores
+- **File:** `src/dashboard/views/player_views.py:305`
+- **Severity:** Minor
+- **CodeRabbit Diagnostic:** Caption asserted that overlapping 95% bootstrap confidence intervals indicate indistinguishable statistical difference, which is statistically inaccurate (two 95% CIs can overlap even when difference is significant).
+- **Remediation Applied:** Reworded caption: `"Reliability Scores with 95% bootstrap confidence intervals representing estimation uncertainty given historical sample size and variance."`
+
 
 

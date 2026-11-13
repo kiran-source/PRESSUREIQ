@@ -134,12 +134,12 @@ SuperRR/
   - `Pending Verification`: Pre-deadline players awaiting official 17 November 2026 filings.
 - **Non-Interference Rule:** Rumours and speculations never alter frozen Model A rankings or team rosters.
 
-### Page 9: Methodology & Validation (`?page=Methodology+&+Validation`)
+### Page 9: Methodology & Validation (`?page=Methodology+%26+Validation`)
 - **Exact Equations:** Full LaTeX display of BPI, BoPI, and PAVA formulations.
 - **Variant Reconciliation:** Authoritative table reconciling the frozen legacy fixed-120-ball calculation with the dynamic `max_innings_balls` research implementation ($0.00$ difference across standard 20-over games).
 - **Validation Reports:** Out-of-sample chronological holdout benchmarks and 5-pillar ablation metrics.
 
-### Page 10: Data Sources & Provenance (`?page=Data+Sources+&+Provenance`)
+### Page 10: Data Sources & Provenance (`?page=Data+Sources+%26+Provenance`)
 - **Cryptographic Checksum Registry:** Live SHA-256 verification of `final_batter_rankings.csv`, `final_bowler_rankings.csv`, `PRESSUREIQ_Final_Submission.zip`, and `ipl_2027_market_snapshot_2026-11-11.csv`.
 - **System Lineage:** Complete table of upstream match sources, ball counts, and pipeline execution logs.
 
