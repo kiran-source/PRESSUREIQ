@@ -258,6 +258,46 @@
 - **Findings Reported:** **0 Critical, 0 Major, 0 Minor**
 - **Outcome:** Complete clean pass. All minor audit observations resolved with 100% precision. Zero outstanding issues.
 
+---
+
+## 10. Pass 9 Premium Sidebar Redesign Review (`8df01e4..fcda3f3`)
+
+- **Command Executed:** `cr review --committed --base 8df01e4 --agent`
+- **Base Commit:** `8df01e4`
+- **HEAD Commit:** `fcda3f3`
+- **Reviewed Files:** `src/dashboard/components.py`, `src/dashboard/design_tokens.py`, `src/dashboard/styles.py`
+
+### Finding 17: Scope sidebar dimensions to aria-expanded
+- **File:** `src/dashboard/styles.py:410-435`
+- **Severity:** Major
+- **CodeRabbit Diagnostic:** Unconditional width (`width: 280px !important`) applied to `section[data-testid="stSidebar"]` overrode Streamlit's collapsed zero-width state, preventing the sidebar from collapsing properly.
+- **Remediation Applied:** Scoped desktop and tablet sidebar width and padding declarations strictly to `section[data-testid="stSidebar"][aria-expanded="true"]`.
+- **Verification:** Verified in Playwright audit `05_overview_mobile_closed_375.png` and `06_overview_mobile_drawer_375.png`.
+
+### Finding 18: Preserve Streamlit session state during sidebar navigation
+- **File:** `src/dashboard/components.py:347-368`
+- **Severity:** Major
+- **CodeRabbit Diagnostic:** Navigation was rendered using raw HTML anchor links (`<a href="?page=..." target="_self">`), triggering full page reloads that reset in-memory Streamlit session state.
+- **Remediation Applied:** Replaced anchor links with native Streamlit buttons (`st.sidebar.button`) with custom primary/secondary pill styling, Material Symbols (`:material/...:`), and an `on_click=_on_nav_item_click` callback that preserves session state and updates query params cleanly.
+- **Remediation Commit:** `6aa231a`.
+
+---
+
+## 11. Pass 10 Launcher Selector Verification Review (`6aa231a..7ef410b`)
+
+- **Command Executed:** `cr review --committed --base 6aa231a --agent`
+- **Base Commit:** `6aa231a`
+- **HEAD Commit:** `7ef410b`
+- **Reviewed Files:** `src/dashboard/styles.py`
+
+### Finding 19: Replace invalid :contains() selector with valid container class
+- **File:** `src/dashboard/styles.py:313-334`
+- **Severity:** Minor
+- **CodeRabbit Diagnostic:** CSS does not support `:contains()`. Including it invalidated the entire comma-separated selector block, causing the "Open Player Profile →" launcher button to lose its distinct terracotta styling.
+- **Remediation Applied:** Replaced invalid selector with W3C-standard `section[data-testid="stSidebar"] div.st-key-global_jump_btn button`, targeting Streamlit's native `.st-key-global_jump_btn` container class.
+- **Verification:** Verified computed CSS with Playwright (`rgb(189, 101, 72)` background, `rgb(255, 255, 255)` text). Re-reviewed with CodeRabbit CLI: **0 findings reported**. Complete clean pass.
+
+
 
 
 

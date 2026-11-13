@@ -1,11 +1,12 @@
-# PRESSUREIQ Luxury Editorial Cricket Intelligence Dashboard (`v4.0`)
+# PRESSUREIQ Luxury Editorial Cricket Intelligence Dashboard (`v4.1`)
 ## Operational Handover, Architecture Guide & Competition User Manual
 
 **Project:** Rajasthan Royals SupeRR Selector Season 2 (2026)  
 **Deliverable:** PRESSUREIQ Production Cricket Telemetry Platform  
 **Branch:** `redesign-editorial-v4`  
 **Master Baseline:** `fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2` (Untouched & Cryptographically Verified)  
-**Version:** `4.0.0`  
+**Rollback Safety Pointer:** `backup-editorial-v4` (Commit `d8fbd2d`)  
+**Version:** `4.1.0 (Editorial)`  
 **Date:** 13 November 2026  
 
 ---
@@ -35,6 +36,21 @@ streamlit run src/dashboard/app.py --server.port 8502
 | **Typography** | Headings: **Playfair Display** (High-contrast serifs) · Body: **Inter** · Telemetry Numerals: **JetBrains Mono** (Tabular numbers) |
 | **Chart Styling** | Bespoke `plotly_white` theme: transparent parchment backgrounds, subtle `#EAE1D5` hairlines, terracotta batter traces, muted gold bowler traces, sage surplus indicators |
 | **Responsive Layout** | Fluid CSS Grid + flexbox with zero horizontal overflow across Desktop (`1440px`), Laptop (`1366px`), Tablet (`768px`), and Mobile (`375px`) |
+
+### 2.1 Luxury Sidebar Navigation Architecture (v4.1)
+
+The sidebar has been completely elevated from generic form widgets into a bespoke editorial navigation suite:
+
+1. **Brand Masthead:** Custom cricket ball seam emblem (terracotta curves with gold core dot), high-contrast Playfair serif `PRESSUREIQ` wordmark, and uppercase `CRICKET INTELLIGENCE` subtitle with a warm hairline divider.
+2. **Quick Player Lookup:** Collapsed compact selector for all 256 qualified players. Selecting a player reveals a high-contrast terracotta launcher button (`Open Player Profile →`) that preserves Streamlit session state and jumps directly to that player's dossier on Page 3.
+3. **Four Grouped Editorial Categories:**
+   - **`DISCOVER`:** Overview, Pressure Leaderboards, Emerging Talent
+   - **`PLAYER ANALYTICS`:** Player Intelligence, Player Comparison, Pressure Analytics
+   - **`FRANCHISE INTELLIGENCE`:** Rajasthan Royals Intelligence, IPL 2027 Market Intelligence
+   - **`RESEARCH`:** Methodology & Validation, Data Sources & Provenance
+4. **Custom Navigation Items:** Replaced radio buttons with custom styled Streamlit buttons featuring Material Symbol icons, a 3px terracotta left accent border on active items, ivory-to-cream gradient backgrounds, and hover transitions on inactive items.
+5. **System Telemetry & Integrity Footer:** Live Model A verification badge (`#5B7B5A` green dot), competition snapshot date (`2026-11-11`), BCCI retention deadline (`2026-11-17`), release tag (`PRESSUREIQ v4.1 Editorial`), and 200,999 balls / 867 matches telemetry.
+6. **Instant Rollback Safety:** If at any point you wish to return to the previous v4.0 sidebar styling, the exact prior state is preserved on branch pointer `backup-editorial-v4` (`git reset --hard backup-editorial-v4`).
 
 ---
 
