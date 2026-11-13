@@ -1,0 +1,2272 @@
+[
+  {
+    "player_name": "Abbas Afridi",
+    "cricinfo_id": 1158538,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Abbas_Afridi.png",
+    "file_path": "assets\\players\\Abbas_Afridi.png",
+    "size_bytes": 6349
+  },
+  {
+    "player_name": "Abdul Samad",
+    "cricinfo_id": 1175485,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Abdul_Samad.png",
+    "file_path": "assets\\players\\Abdul_Samad.png",
+    "size_bytes": 7425
+  },
+  {
+    "player_name": "Abhishek Sharma",
+    "cricinfo_id": 1070183,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Abhishek_Sharma.png",
+    "file_path": "assets\\players\\Abhishek_Sharma.png",
+    "size_bytes": 7980
+  },
+  {
+    "player_name": "Abishek Porel",
+    "cricinfo_id": 1277545,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Abishek_Porel.png",
+    "file_path": "assets\\players\\Abishek_Porel.png",
+    "size_bytes": 7209
+  },
+  {
+    "player_name": "Abrar Ahmed",
+    "cricinfo_id": 734459,
+    "status": "SUCCESS",
+    "tier": "WIKIPEDIA_PORTRAIT",
+    "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Abrar_Ahmed_bowling_2023_%28cropped%29.jpg/330px-Abrar_Ahmed_bowling_2023_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "filename": "Abrar_Ahmed.png",
+    "file_path": "assets\\players\\Abrar_Ahmed.png",
+    "size_bytes": 166113
+  },
+  {
+    "player_name": "Adam Milne",
+    "cricinfo_id": 450860,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/450860.png",
+    "filename": "Adam_Milne.png",
+    "file_path": "assets\\players\\Adam_Milne.png",
+    "size_bytes": 87724
+  },
+  {
+    "player_name": "Adam Zampa",
+    "cricinfo_id": 379504,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/379504.png",
+    "filename": "Adam_Zampa.png",
+    "file_path": "assets\\players\\Adam_Zampa.png",
+    "size_bytes": 106744
+  },
+  {
+    "player_name": "Adil Rashid",
+    "cricinfo_id": 244497,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/244497.png",
+    "filename": "Adil_Rashid.png",
+    "file_path": "assets\\players\\Adil_Rashid.png",
+    "size_bytes": 98092
+  },
+  {
+    "player_name": "Aiden Markram",
+    "cricinfo_id": 600498,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/600498.png",
+    "filename": "Aiden_Markram.png",
+    "file_path": "assets\\players\\Aiden_Markram.png",
+    "size_bytes": 103416
+  },
+  {
+    "player_name": "Akeal Hosein",
+    "cricinfo_id": 530812,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Akeal_Hosein.png",
+    "file_path": "assets\\players\\Akeal_Hosein.png",
+    "size_bytes": 7008
+  },
+  {
+    "player_name": "Allah Ghazanfar",
+    "cricinfo_id": 1326798,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Allah_Ghazanfar.png",
+    "file_path": "assets\\players\\Allah_Ghazanfar.png",
+    "size_bytes": 7450
+  },
+  {
+    "player_name": "Alzarri Joseph",
+    "cricinfo_id": 670031,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Alzarri_Joseph.png",
+    "file_path": "assets\\players\\Alzarri_Joseph.png",
+    "size_bytes": 7269
+  },
+  {
+    "player_name": "Andre Russell",
+    "cricinfo_id": 276298,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/276298.png",
+    "filename": "Andre_Russell.png",
+    "file_path": "assets\\players\\Andre_Russell.png",
+    "size_bytes": 104641
+  },
+  {
+    "player_name": "Angkrish Raghuvanshi",
+    "cricinfo_id": 1292495,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Angkrish_Raghuvanshi.png",
+    "file_path": "assets\\players\\Angkrish_Raghuvanshi.png",
+    "size_bytes": 8008
+  },
+  {
+    "player_name": "Anrich Nortje",
+    "cricinfo_id": 481979,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Anrich_Nortje.png",
+    "file_path": "assets\\players\\Anrich_Nortje.png",
+    "size_bytes": 7545
+  },
+  {
+    "player_name": "Anshul Kamboj",
+    "cricinfo_id": 1175428,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Anshul_Kamboj.png",
+    "file_path": "assets\\players\\Anshul_Kamboj.png",
+    "size_bytes": 7741
+  },
+  {
+    "player_name": "Arshdeep Singh",
+    "cricinfo_id": 1125976,
+    "status": "SUCCESS",
+    "tier": "WIKIPEDIA_PORTRAIT",
+    "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Prime_Minister_Of_Bharat_Shri_Narendra_Damodardas_Modi_with_Arshdeep_Singh_Family_%28Cropped%29.jpg/330px-Prime_Minister_Of_Bharat_Shri_Narendra_Damodardas_Modi_with_Arshdeep_Singh_Family_%28Cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "filename": "Arshdeep_Singh.png",
+    "file_path": "assets\\players\\Arshdeep_Singh.png",
+    "size_bytes": 134626
+  },
+  {
+    "player_name": "Avesh Khan",
+    "cricinfo_id": 694211,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Avesh_Khan.png",
+    "file_path": "assets\\players\\Avesh_Khan.png",
+    "size_bytes": 7238
+  },
+  {
+    "player_name": "Axar Patel",
+    "cricinfo_id": 554691,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/554691.png",
+    "filename": "Axar_Patel.png",
+    "file_path": "assets\\players\\Axar_Patel.png",
+    "size_bytes": 102818
+  },
+  {
+    "player_name": "Ayush Badoni",
+    "cricinfo_id": 1151270,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Ayush_Badoni.png",
+    "file_path": "assets\\players\\Ayush_Badoni.png",
+    "size_bytes": 7734
+  },
+  {
+    "player_name": "Azmatullah Omarzai",
+    "cricinfo_id": 819429,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Azmatullah_Omarzai.png",
+    "file_path": "assets\\players\\Azmatullah_Omarzai.png",
+    "size_bytes": 7785
+  },
+  {
+    "player_name": "Babar Azam",
+    "cricinfo_id": 348144,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/348144.png",
+    "filename": "Babar_Azam.png",
+    "file_path": "assets\\players\\Babar_Azam.png",
+    "size_bytes": 112897
+  },
+  {
+    "player_name": "Barry McCarthy",
+    "cricinfo_id": 348059,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/348059.png",
+    "filename": "Barry_McCarthy.png",
+    "file_path": "assets\\players\\Barry_McCarthy.png",
+    "size_bytes": 94841
+  },
+  {
+    "player_name": "Benjamin Sears",
+    "cricinfo_id": 959769,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Benjamin_Sears.png",
+    "file_path": "assets\\players\\Benjamin_Sears.png",
+    "size_bytes": 7746
+  },
+  {
+    "player_name": "Bhanuka Rajapaksa",
+    "cricinfo_id": 342619,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Bhanuka_Rajapaksa.png",
+    "file_path": "assets\\players\\Bhanuka_Rajapaksa.png",
+    "size_bytes": 7620
+  },
+  {
+    "player_name": "Bhuvneshwar Kumar",
+    "cricinfo_id": 326016,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/326016.png",
+    "filename": "Bhuvneshwar_Kumar.png",
+    "file_path": "assets\\players\\Bhuvneshwar_Kumar.png",
+    "size_bytes": 111361
+  },
+  {
+    "player_name": "Blessing Muzarabani",
+    "cricinfo_id": 827051,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/827051.png",
+    "filename": "Blessing_Muzarabani.png",
+    "file_path": "assets\\players\\Blessing_Muzarabani.png",
+    "size_bytes": 97021
+  },
+  {
+    "player_name": "Brad Evans",
+    "cricinfo_id": 696127,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Brad_Evans.png",
+    "file_path": "assets\\players\\Brad_Evans.png",
+    "size_bytes": 6830
+  },
+  {
+    "player_name": "Brian Bennett",
+    "cricinfo_id": 1071484,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Brian_Bennett.png",
+    "file_path": "assets\\players\\Brian_Bennett.png",
+    "size_bytes": 5977
+  },
+  {
+    "player_name": "Cameron Green",
+    "cricinfo_id": 1076713,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Cameron_Green.png",
+    "file_path": "assets\\players\\Cameron_Green.png",
+    "size_bytes": 7556
+  },
+  {
+    "player_name": "Charith Asalanka",
+    "cricinfo_id": 784367,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Charith_Asalanka.png",
+    "file_path": "assets\\players\\Charith_Asalanka.png",
+    "size_bytes": 7513
+  },
+  {
+    "player_name": "Chris Jordan",
+    "cricinfo_id": 288992,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/288992.png",
+    "filename": "Chris_Jordan.png",
+    "file_path": "assets\\players\\Chris_Jordan.png",
+    "size_bytes": 101131
+  },
+  {
+    "player_name": "Craig Young",
+    "cricinfo_id": 364343,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/364343.png",
+    "filename": "Craig_Young.png",
+    "file_path": "assets\\players\\Craig_Young.png",
+    "size_bytes": 96510
+  },
+  {
+    "player_name": "Curtis Campher",
+    "cricinfo_id": 595921,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Curtis_Campher.png",
+    "file_path": "assets\\players\\Curtis_Campher.png",
+    "size_bytes": 6926
+  },
+  {
+    "player_name": "Darwish Rasooli",
+    "cricinfo_id": 819441,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Darwish_Rasooli.png",
+    "file_path": "assets\\players\\Darwish_Rasooli.png",
+    "size_bytes": 7475
+  },
+  {
+    "player_name": "Daryl Mitchell",
+    "cricinfo_id": 381743,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Daryl_Mitchell.png",
+    "file_path": "assets\\players\\Daryl_Mitchell.png",
+    "size_bytes": 7674
+  },
+  {
+    "player_name": "Dasun Shanaka",
+    "cricinfo_id": 437316,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/437316.png",
+    "filename": "Dasun_Shanaka.png",
+    "file_path": "assets\\players\\Dasun_Shanaka.png",
+    "size_bytes": 112442
+  },
+  {
+    "player_name": "David Miller",
+    "cricinfo_id": 321777,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/321777.png",
+    "filename": "David_Miller.png",
+    "file_path": "assets\\players\\David_Miller.png",
+    "size_bytes": 119275
+  },
+  {
+    "player_name": "David Warner",
+    "cricinfo_id": 219889,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/219889.png",
+    "filename": "David_Warner.png",
+    "file_path": "assets\\players\\David_Warner.png",
+    "size_bytes": 104102
+  },
+  {
+    "player_name": "Deepak Chahar",
+    "cricinfo_id": 447261,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Deepak_Chahar.png",
+    "file_path": "assets\\players\\Deepak_Chahar.png",
+    "size_bytes": 7343
+  },
+  {
+    "player_name": "Deepak Hooda",
+    "cricinfo_id": 497121,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Deepak_Hooda.png",
+    "file_path": "assets\\players\\Deepak_Hooda.png",
+    "size_bytes": 6972
+  },
+  {
+    "player_name": "Devdutt Padikkal",
+    "cricinfo_id": 1119026,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Devdutt_Padikkal.png",
+    "file_path": "assets\\players\\Devdutt_Padikkal.png",
+    "size_bytes": 7147
+  },
+  {
+    "player_name": "Dhruv Jurel",
+    "cricinfo_id": 1175488,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Dhruv_Jurel.png",
+    "file_path": "assets\\players\\Dhruv_Jurel.png",
+    "size_bytes": 6448
+  },
+  {
+    "player_name": "Digvesh Rathi",
+    "cricinfo_id": 1460529,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Digvesh_Rathi.png",
+    "file_path": "assets\\players\\Digvesh_Rathi.png",
+    "size_bytes": 7572
+  },
+  {
+    "player_name": "Dinesh Karthik",
+    "cricinfo_id": 30045,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/30045.png",
+    "filename": "Dinesh_Karthik.png",
+    "file_path": "assets\\players\\Dinesh_Karthik.png",
+    "size_bytes": 106968
+  },
+  {
+    "player_name": "Dushmantha Chameera",
+    "cricinfo_id": 552152,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Dushmantha_Chameera.png",
+    "file_path": "assets\\players\\Dushmantha_Chameera.png",
+    "size_bytes": 7752
+  },
+  {
+    "player_name": "Eshan Malinga",
+    "cricinfo_id": 1306214,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Eshan_Malinga.png",
+    "file_path": "assets\\players\\Eshan_Malinga.png",
+    "size_bytes": 7340
+  },
+  {
+    "player_name": "Faf du Plessis",
+    "cricinfo_id": 44828,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/44828.png",
+    "filename": "Faf_du_Plessis.png",
+    "file_path": "assets\\players\\Faf_du_Plessis.png",
+    "size_bytes": 107474
+  },
+  {
+    "player_name": "Faheem Ashraf",
+    "cricinfo_id": 681117,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/681117.png",
+    "filename": "Faheem_Ashraf.png",
+    "file_path": "assets\\players\\Faheem_Ashraf.png",
+    "size_bytes": 103230
+  },
+  {
+    "player_name": "Fakhar Zaman",
+    "cricinfo_id": 512191,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/512191.png",
+    "filename": "Fakhar_Zaman.png",
+    "file_path": "assets\\players\\Fakhar_Zaman.png",
+    "size_bytes": 105949
+  },
+  {
+    "player_name": "FazalHaq Farooqi",
+    "cricinfo_id": 974175,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "FazalHaq_Farooqi.png",
+    "file_path": "assets\\players\\FazalHaq_Farooqi.png",
+    "size_bytes": 5954
+  },
+  {
+    "player_name": "Gareth Delany",
+    "cricinfo_id": 1099379,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Gareth_Delany.png",
+    "file_path": "assets\\players\\Gareth_Delany.png",
+    "size_bytes": 7547
+  },
+  {
+    "player_name": "George Dockrell",
+    "cricinfo_id": 348034,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/348034.png",
+    "filename": "George_Dockrell.png",
+    "file_path": "assets\\players\\George_Dockrell.png",
+    "size_bytes": 87340
+  },
+  {
+    "player_name": "Gerald Coetzee",
+    "cricinfo_id": 596010,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Gerald_Coetzee.png",
+    "file_path": "assets\\players\\Gerald_Coetzee.png",
+    "size_bytes": 7715
+  },
+  {
+    "player_name": "Glenn Maxwell",
+    "cricinfo_id": 325026,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/325026.png",
+    "filename": "Glenn_Maxwell.png",
+    "file_path": "assets\\players\\Glenn_Maxwell.png",
+    "size_bytes": 102306
+  },
+  {
+    "player_name": "Glenn Phillips",
+    "cricinfo_id": 823509,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Glenn_Phillips.png",
+    "file_path": "assets\\players\\Glenn_Phillips.png",
+    "size_bytes": 7194
+  },
+  {
+    "player_name": "Gudakesh Motie",
+    "cricinfo_id": 670045,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Gudakesh_Motie.png",
+    "file_path": "assets\\players\\Gudakesh_Motie.png",
+    "size_bytes": 8311
+  },
+  {
+    "player_name": "Hardik Pandya",
+    "cricinfo_id": 625371,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/625371.png",
+    "filename": "Hardik_Pandya.png",
+    "file_path": "assets\\players\\Hardik_Pandya.png",
+    "size_bytes": 106687
+  },
+  {
+    "player_name": "Haris Rauf",
+    "cricinfo_id": 1161606,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Haris_Rauf.png",
+    "file_path": "assets\\players\\Haris_Rauf.png",
+    "size_bytes": 6493
+  },
+  {
+    "player_name": "Harpreet Brar",
+    "cricinfo_id": 1168641,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Harpreet_Brar.png",
+    "file_path": "assets\\players\\Harpreet_Brar.png",
+    "size_bytes": 6540
+  },
+  {
+    "player_name": "Harry Brook",
+    "cricinfo_id": 911707,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Harry_Brook.png",
+    "file_path": "assets\\players\\Harry_Brook.png",
+    "size_bytes": 6702
+  },
+  {
+    "player_name": "Harry Tector",
+    "cricinfo_id": 961407,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Harry_Tector.png",
+    "file_path": "assets\\players\\Harry_Tector.png",
+    "size_bytes": 6292
+  },
+  {
+    "player_name": "Harshal Patel",
+    "cricinfo_id": 390481,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Harshal_Patel.png",
+    "file_path": "assets\\players\\Harshal_Patel.png",
+    "size_bytes": 6354
+  },
+  {
+    "player_name": "Harshit Rana",
+    "cricinfo_id": 1312645,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Harshit_Rana.png",
+    "file_path": "assets\\players\\Harshit_Rana.png",
+    "size_bytes": 6638
+  },
+  {
+    "player_name": "Heinrich Klaasen",
+    "cricinfo_id": 436757,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/436757.png",
+    "filename": "Heinrich_Klaasen.png",
+    "file_path": "assets\\players\\Heinrich_Klaasen.png",
+    "size_bytes": 107341
+  },
+  {
+    "player_name": "Ibrahim Zadran",
+    "cricinfo_id": 921509,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Ibrahim_Zadran.png",
+    "file_path": "assets\\players\\Ibrahim_Zadran.png",
+    "size_bytes": 6697
+  },
+  {
+    "player_name": "Iftikhar Ahmed",
+    "cricinfo_id": 480603,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Iftikhar_Ahmed.png",
+    "file_path": "assets\\players\\Iftikhar_Ahmed.png",
+    "size_bytes": 6973
+  },
+  {
+    "player_name": "Ish Sodhi",
+    "cricinfo_id": 559066,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/559066.png",
+    "filename": "Ish_Sodhi.png",
+    "file_path": "assets\\players\\Ish_Sodhi.png",
+    "size_bytes": 100686
+  },
+  {
+    "player_name": "Ishan Kishan",
+    "cricinfo_id": 720471,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Ishan_Kishan.png",
+    "file_path": "assets\\players\\Ishan_Kishan.png",
+    "size_bytes": 6205
+  },
+  {
+    "player_name": "Ishant Sharma",
+    "cricinfo_id": 236779,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/236779.png",
+    "filename": "Ishant_Sharma.png",
+    "file_path": "assets\\players\\Ishant_Sharma.png",
+    "size_bytes": 96149
+  },
+  {
+    "player_name": "Jacob Duffy",
+    "cricinfo_id": 547766,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Jacob_Duffy.png",
+    "file_path": "assets\\players\\Jacob_Duffy.png",
+    "size_bytes": 6908
+  },
+  {
+    "player_name": "Jaker Ali Anik",
+    "cricinfo_id": 824541,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Jaker_Ali_Anik.png",
+    "file_path": "assets\\players\\Jaker_Ali_Anik.png",
+    "size_bytes": 6698
+  },
+  {
+    "player_name": "Jamie Overton",
+    "cricinfo_id": 510530,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Jamie_Overton.png",
+    "file_path": "assets\\players\\Jamie_Overton.png",
+    "size_bytes": 7391
+  },
+  {
+    "player_name": "Jason Behrendorff",
+    "cricinfo_id": 272477,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Jason_Behrendorff.png",
+    "file_path": "assets\\players\\Jason_Behrendorff.png",
+    "size_bytes": 7335
+  },
+  {
+    "player_name": "Jason Holder",
+    "cricinfo_id": 391485,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/391485.png",
+    "filename": "Jason_Holder.png",
+    "file_path": "assets\\players\\Jason_Holder.png",
+    "size_bytes": 98189
+  },
+  {
+    "player_name": "Jasprit Bumrah",
+    "cricinfo_id": 625383,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/625383.png",
+    "filename": "Jasprit_Bumrah.png",
+    "file_path": "assets\\players\\Jasprit_Bumrah.png",
+    "size_bytes": 104033
+  },
+  {
+    "player_name": "Jaydev Unadkat",
+    "cricinfo_id": 390484,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Jaydev_Unadkat.png",
+    "file_path": "assets\\players\\Jaydev_Unadkat.png",
+    "size_bytes": 6969
+  },
+  {
+    "player_name": "Jimmy Neesham",
+    "cricinfo_id": 355269,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/355269.png",
+    "filename": "Jimmy_Neesham.png",
+    "file_path": "assets\\players\\Jimmy_Neesham.png",
+    "size_bytes": 84780
+  },
+  {
+    "player_name": "Jitesh Sharma",
+    "cricinfo_id": 721867,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Jitesh_Sharma.png",
+    "file_path": "assets\\players\\Jitesh_Sharma.png",
+    "size_bytes": 7232
+  },
+  {
+    "player_name": "Jofra Archer",
+    "cricinfo_id": 669855,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Jofra_Archer.png",
+    "file_path": "assets\\players\\Jofra_Archer.png",
+    "size_bytes": 6862
+  },
+  {
+    "player_name": "Jonny Bairstow",
+    "cricinfo_id": 297433,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/297433.png",
+    "filename": "Jonny_Bairstow.png",
+    "file_path": "assets\\players\\Jonny_Bairstow.png",
+    "size_bytes": 111366
+  },
+  {
+    "player_name": "Jos Buttler",
+    "cricinfo_id": 308967,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/308967.png",
+    "filename": "Jos_Buttler.png",
+    "file_path": "assets\\players\\Jos_Buttler.png",
+    "size_bytes": 93188
+  },
+  {
+    "player_name": "Josh Hazlewood",
+    "cricinfo_id": 288284,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/288284.png",
+    "filename": "Josh_Hazlewood.png",
+    "file_path": "assets\\players\\Josh_Hazlewood.png",
+    "size_bytes": 98248
+  },
+  {
+    "player_name": "Joshua Little",
+    "cricinfo_id": 928067,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Joshua_Little.png",
+    "file_path": "assets\\players\\Joshua_Little.png",
+    "size_bytes": 6377
+  },
+  {
+    "player_name": "Kagiso Rabada",
+    "cricinfo_id": 550215,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/550215.png",
+    "filename": "Kagiso_Rabada.png",
+    "file_path": "assets\\players\\Kagiso_Rabada.png",
+    "size_bytes": 103369
+  },
+  {
+    "player_name": "Kamindu Mendis",
+    "cricinfo_id": 784367,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Kamindu_Mendis.png",
+    "file_path": "assets\\players\\Kamindu_Mendis.png",
+    "size_bytes": 7790
+  },
+  {
+    "player_name": "Keshav Maharaj",
+    "cricinfo_id": 267724,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/267724.png",
+    "filename": "Keshav_Maharaj.png",
+    "file_path": "assets\\players\\Keshav_Maharaj.png",
+    "size_bytes": 112529
+  },
+  {
+    "player_name": "Khaleel Ahmed",
+    "cricinfo_id": 942645,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/942645.png",
+    "filename": "Khaleel_Ahmed.png",
+    "file_path": "assets\\players\\Khaleel_Ahmed.png",
+    "size_bytes": 105705
+  },
+  {
+    "player_name": "Krunal Pandya",
+    "cricinfo_id": 471342,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Krunal_Pandya.png",
+    "file_path": "assets\\players\\Krunal_Pandya.png",
+    "size_bytes": 6984
+  },
+  {
+    "player_name": "Kuldeep Yadav",
+    "cricinfo_id": 559235,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/559235.png",
+    "filename": "Kuldeep_Yadav.png",
+    "file_path": "assets\\players\\Kuldeep_Yadav.png",
+    "size_bytes": 114021
+  },
+  {
+    "player_name": "Kyle Jamieson",
+    "cricinfo_id": 625960,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Kyle_Jamieson.png",
+    "file_path": "assets\\players\\Kyle_Jamieson.png",
+    "size_bytes": 7234
+  },
+  {
+    "player_name": "Liam Dawson",
+    "cricinfo_id": 211855,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/211855.png",
+    "filename": "Liam_Dawson.png",
+    "file_path": "assets\\players\\Liam_Dawson.png",
+    "size_bytes": 100619
+  },
+  {
+    "player_name": "Liam Livingstone",
+    "cricinfo_id": 403902,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Liam_Livingstone.png",
+    "file_path": "assets\\players\\Liam_Livingstone.png",
+    "size_bytes": 6357
+  },
+  {
+    "player_name": "Lockie Ferguson",
+    "cricinfo_id": 493773,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Lockie_Ferguson.png",
+    "file_path": "assets\\players\\Lockie_Ferguson.png",
+    "size_bytes": 6826
+  },
+  {
+    "player_name": "Lokesh Rahul",
+    "cricinfo_id": 422108,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/422108.png",
+    "filename": "Lokesh_Rahul.png",
+    "file_path": "assets\\players\\Lokesh_Rahul.png",
+    "size_bytes": 103463
+  },
+  {
+    "player_name": "Lungi Ngidi",
+    "cricinfo_id": 542023,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/542023.png",
+    "filename": "Lungi_Ngidi.png",
+    "file_path": "assets\\players\\Lungi_Ngidi.png",
+    "size_bytes": 101278
+  },
+  {
+    "player_name": "M Shahrukh Khan",
+    "cricinfo_id": 719719,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "M_Shahrukh_Khan.png",
+    "file_path": "assets\\players\\M_Shahrukh_Khan.png",
+    "size_bytes": 7710
+  },
+  {
+    "player_name": "Mahedi Hasan",
+    "cricinfo_id": 833087,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mahedi_Hasan.png",
+    "file_path": "assets\\players\\Mahedi_Hasan.png",
+    "size_bytes": 7237
+  },
+  {
+    "player_name": "Maheesh Theekshana",
+    "cricinfo_id": 1138316,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Maheesh_Theekshana.png",
+    "file_path": "assets\\players\\Maheesh_Theekshana.png",
+    "size_bytes": 7057
+  },
+  {
+    "player_name": "Mahendra Singh Dhoni",
+    "cricinfo_id": 28081,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/28081.png",
+    "filename": "Mahendra_Singh_Dhoni.png",
+    "file_path": "assets\\players\\Mahendra_Singh_Dhoni.png",
+    "size_bytes": 108278
+  },
+  {
+    "player_name": "Marco Jansen",
+    "cricinfo_id": 696401,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Marco_Jansen.png",
+    "file_path": "assets\\players\\Marco_Jansen.png",
+    "size_bytes": 7154
+  },
+  {
+    "player_name": "Marcus Stoinis",
+    "cricinfo_id": 325012,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/325012.png",
+    "filename": "Marcus_Stoinis.png",
+    "file_path": "assets\\players\\Marcus_Stoinis.png",
+    "size_bytes": 100080
+  },
+  {
+    "player_name": "Mark Adair",
+    "cricinfo_id": 526441,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mark_Adair.png",
+    "file_path": "assets\\players\\Mark_Adair.png",
+    "size_bytes": 7208
+  },
+  {
+    "player_name": "Mark Chapman",
+    "cricinfo_id": 438563,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mark_Chapman.png",
+    "file_path": "assets\\players\\Mark_Chapman.png",
+    "size_bytes": 7808
+  },
+  {
+    "player_name": "Matheesha Pathirana",
+    "cricinfo_id": 1194795,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Matheesha_Pathirana.png",
+    "file_path": "assets\\players\\Matheesha_Pathirana.png",
+    "size_bytes": 7419
+  },
+  {
+    "player_name": "Matt Henry",
+    "cricinfo_id": 506612,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/506612.png",
+    "filename": "Matt_Henry.png",
+    "file_path": "assets\\players\\Matt_Henry.png",
+    "size_bytes": 86018
+  },
+  {
+    "player_name": "Matthew Forde",
+    "cricinfo_id": 1209190,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Matthew_Forde.png",
+    "file_path": "assets\\players\\Matthew_Forde.png",
+    "size_bytes": 7486
+  },
+  {
+    "player_name": "Matthew Short",
+    "cricinfo_id": 605575,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Matthew_Short.png",
+    "file_path": "assets\\players\\Matthew_Short.png",
+    "size_bytes": 7994
+  },
+  {
+    "player_name": "Matthew Wade",
+    "cricinfo_id": 230193,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/230193.png",
+    "filename": "Matthew_Wade.png",
+    "file_path": "assets\\players\\Matthew_Wade.png",
+    "size_bytes": 99286
+  },
+  {
+    "player_name": "Mayank Markande",
+    "cricinfo_id": 1081442,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mayank_Markande.png",
+    "file_path": "assets\\players\\Mayank_Markande.png",
+    "size_bytes": 6849
+  },
+  {
+    "player_name": "Mayank Yadav",
+    "cricinfo_id": 1312646,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mayank_Yadav.png",
+    "file_path": "assets\\players\\Mayank_Yadav.png",
+    "size_bytes": 7525
+  },
+  {
+    "player_name": "Michael Bracewell",
+    "cricinfo_id": 326968,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Michael_Bracewell.png",
+    "file_path": "assets\\players\\Michael_Bracewell.png",
+    "size_bytes": 7809
+  },
+  {
+    "player_name": "Mitchell Marsh",
+    "cricinfo_id": 272450,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/272450.png",
+    "filename": "Mitchell_Marsh.png",
+    "file_path": "assets\\players\\Mitchell_Marsh.png",
+    "size_bytes": 97536
+  },
+  {
+    "player_name": "Mitchell Santner",
+    "cricinfo_id": 502714,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/502714.png",
+    "filename": "Mitchell_Santner.png",
+    "file_path": "assets\\players\\Mitchell_Santner.png",
+    "size_bytes": 92748
+  },
+  {
+    "player_name": "Mitchell Starc",
+    "cricinfo_id": 311592,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/311592.png",
+    "filename": "Mitchell_Starc.png",
+    "file_path": "assets\\players\\Mitchell_Starc.png",
+    "size_bytes": 102576
+  },
+  {
+    "player_name": "Moeen Ali",
+    "cricinfo_id": 8917,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/8917.png",
+    "filename": "Moeen_Ali.png",
+    "file_path": "assets\\players\\Moeen_Ali.png",
+    "size_bytes": 86268
+  },
+  {
+    "player_name": "Mohammad Haris",
+    "cricinfo_id": 1161020,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mohammad_Haris.png",
+    "file_path": "assets\\players\\Mohammad_Haris.png",
+    "size_bytes": 7482
+  },
+  {
+    "player_name": "Mohammad Nabi",
+    "cricinfo_id": 25913,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/25913.png",
+    "filename": "Mohammad_Nabi.png",
+    "file_path": "assets\\players\\Mohammad_Nabi.png",
+    "size_bytes": 100884
+  },
+  {
+    "player_name": "Mohammad Nawaz",
+    "cricinfo_id": 348148,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mohammad_Nawaz.png",
+    "file_path": "assets\\players\\Mohammad_Nawaz.png",
+    "size_bytes": 8004
+  },
+  {
+    "player_name": "Mohammad Rishad Hossain",
+    "cricinfo_id": 1159714,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mohammad_Rishad_Hossain.png",
+    "file_path": "assets\\players\\Mohammad_Rishad_Hossain.png",
+    "size_bytes": 6875
+  },
+  {
+    "player_name": "Mohammad Rizwan",
+    "cricinfo_id": 323389,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mohammad_Rizwan.png",
+    "file_path": "assets\\players\\Mohammad_Rizwan.png",
+    "size_bytes": 8062
+  },
+  {
+    "player_name": "Mohammad Saifuddin",
+    "cricinfo_id": 629070,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mohammad_Saifuddin.png",
+    "file_path": "assets\\players\\Mohammad_Saifuddin.png",
+    "size_bytes": 8284
+  },
+  {
+    "player_name": "Mohammed Shami",
+    "cricinfo_id": 481896,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/481896.png",
+    "filename": "Mohammed_Shami.png",
+    "file_path": "assets\\players\\Mohammed_Shami.png",
+    "size_bytes": 118597
+  },
+  {
+    "player_name": "Mohammed Siraj",
+    "cricinfo_id": 940973,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/940973.png",
+    "filename": "Mohammed_Siraj.png",
+    "file_path": "assets\\players\\Mohammed_Siraj.png",
+    "size_bytes": 103067
+  },
+  {
+    "player_name": "Mohit Sharma",
+    "cricinfo_id": 537119,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/537119.png",
+    "filename": "Mohit_Sharma.png",
+    "file_path": "assets\\players\\Mohit_Sharma.png",
+    "size_bytes": 105355
+  },
+  {
+    "player_name": "Mohsin Khan",
+    "cricinfo_id": 41303,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mohsin_Khan.png",
+    "file_path": "assets\\players\\Mohsin_Khan.png",
+    "size_bytes": 7477
+  },
+  {
+    "player_name": "Mujeeb Ur Rahman",
+    "cricinfo_id": 974109,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/974109.png",
+    "filename": "Mujeeb_Ur_Rahman.png",
+    "file_path": "assets\\players\\Mujeeb_Ur_Rahman.png",
+    "size_bytes": 111214
+  },
+  {
+    "player_name": "Mukesh Choudhary",
+    "cricinfo_id": 1125688,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mukesh_Choudhary.png",
+    "file_path": "assets\\players\\Mukesh_Choudhary.png",
+    "size_bytes": 8337
+  },
+  {
+    "player_name": "Mukesh Kumar",
+    "cricinfo_id": 926851,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Mukesh_Kumar.png",
+    "file_path": "assets\\players\\Mukesh_Kumar.png",
+    "size_bytes": 7804
+  },
+  {
+    "player_name": "Mustafizur Rahman",
+    "cricinfo_id": 330902,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/330902.png",
+    "filename": "Mustafizur_Rahman.png",
+    "file_path": "assets\\players\\Mustafizur_Rahman.png",
+    "size_bytes": 103951
+  },
+  {
+    "player_name": "Naman Dhir",
+    "cricinfo_id": 1287032,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Naman_Dhir.png",
+    "file_path": "assets\\players\\Naman_Dhir.png",
+    "size_bytes": 7072
+  },
+  {
+    "player_name": "Namboori Tilak Varma",
+    "cricinfo_id": 1170265,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Namboori_Tilak_Varma.png",
+    "file_path": "assets\\players\\Namboori_Tilak_Varma.png",
+    "size_bytes": 7737
+  },
+  {
+    "player_name": "Nandre Burger",
+    "cricinfo_id": 971349,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Nandre_Burger.png",
+    "file_path": "assets\\players\\Nandre_Burger.png",
+    "size_bytes": 7599
+  },
+  {
+    "player_name": "Naseem Shah",
+    "cricinfo_id": 1158088,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Naseem_Shah.png",
+    "file_path": "assets\\players\\Naseem_Shah.png",
+    "size_bytes": 7589
+  },
+  {
+    "player_name": "Nasum Ahmed",
+    "cricinfo_id": 348049,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Nasum_Ahmed.png",
+    "file_path": "assets\\players\\Nasum_Ahmed.png",
+    "size_bytes": 7520
+  },
+  {
+    "player_name": "Nathan Ellis",
+    "cricinfo_id": 826915,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Nathan_Ellis.png",
+    "file_path": "assets\\players\\Nathan_Ellis.png",
+    "size_bytes": 6890
+  },
+  {
+    "player_name": "Naveen ul Haq",
+    "cricinfo_id": 793447,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Naveen_ul_Haq.png",
+    "file_path": "assets\\players\\Naveen_ul_Haq.png",
+    "size_bytes": 6988
+  },
+  {
+    "player_name": "Nehal Wadhera",
+    "cricinfo_id": 1151273,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Nehal_Wadhera.png",
+    "file_path": "assets\\players\\Nehal_Wadhera.png",
+    "size_bytes": 7747
+  },
+  {
+    "player_name": "Nicholas Pooran",
+    "cricinfo_id": 604302,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Nicholas_Pooran.png",
+    "file_path": "assets\\players\\Nicholas_Pooran.png",
+    "size_bytes": 7303
+  },
+  {
+    "player_name": "Nitish Rana",
+    "cricinfo_id": 604527,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Nitish_Rana.png",
+    "file_path": "assets\\players\\Nitish_Rana.png",
+    "size_bytes": 7116
+  },
+  {
+    "player_name": "Nitish Reddy",
+    "cricinfo_id": 1175496,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Nitish_Reddy.png",
+    "file_path": "assets\\players\\Nitish_Reddy.png",
+    "size_bytes": 7426
+  },
+  {
+    "player_name": "Noor Ahmad",
+    "cricinfo_id": 1182529,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Noor_Ahmad.png",
+    "file_path": "assets\\players\\Noor_Ahmad.png",
+    "size_bytes": 7323
+  },
+  {
+    "player_name": "Nuwan Thushara",
+    "cricinfo_id": 955235,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Nuwan_Thushara.png",
+    "file_path": "assets\\players\\Nuwan_Thushara.png",
+    "size_bytes": 6937
+  },
+  {
+    "player_name": "Obed McCoy",
+    "cricinfo_id": 906783,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Obed_McCoy.png",
+    "file_path": "assets\\players\\Obed_McCoy.png",
+    "size_bytes": 8177
+  },
+  {
+    "player_name": "Pathum Nissanka",
+    "cricinfo_id": 1028655,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Pathum_Nissanka.png",
+    "file_path": "assets\\players\\Pathum_Nissanka.png",
+    "size_bytes": 7348
+  },
+  {
+    "player_name": "Patrick Cummins",
+    "cricinfo_id": 489889,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/489889.png",
+    "filename": "Patrick_Cummins.png",
+    "file_path": "assets\\players\\Patrick_Cummins.png",
+    "size_bytes": 99229
+  },
+  {
+    "player_name": "Phil Salt",
+    "cricinfo_id": 669365,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Phil_Salt.png",
+    "file_path": "assets\\players\\Phil_Salt.png",
+    "size_bytes": 6640
+  },
+  {
+    "player_name": "Piyush Chawla",
+    "cricinfo_id": 32966,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Piyush_Chawla.png",
+    "file_path": "assets\\players\\Piyush_Chawla.png",
+    "size_bytes": 7345
+  },
+  {
+    "player_name": "Prasidh Krishna",
+    "cricinfo_id": 917159,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Prasidh_Krishna.png",
+    "file_path": "assets\\players\\Prasidh_Krishna.png",
+    "size_bytes": 7116
+  },
+  {
+    "player_name": "Prince Yadav",
+    "cricinfo_id": 1460561,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Prince_Yadav.png",
+    "file_path": "assets\\players\\Prince_Yadav.png",
+    "size_bytes": 6956
+  },
+  {
+    "player_name": "Quinton de Kock",
+    "cricinfo_id": 379143,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/379143.png",
+    "filename": "Quinton_de_Kock.png",
+    "file_path": "assets\\players\\Quinton_de_Kock.png",
+    "size_bytes": 103742
+  },
+  {
+    "player_name": "Rachin Ravindra",
+    "cricinfo_id": 959767,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Rachin_Ravindra.png",
+    "file_path": "assets\\players\\Rachin_Ravindra.png",
+    "size_bytes": 6434
+  },
+  {
+    "player_name": "Rahul Chahar",
+    "cricinfo_id": 1064812,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Rahul_Chahar.png",
+    "file_path": "assets\\players\\Rahul_Chahar.png",
+    "size_bytes": 6945
+  },
+  {
+    "player_name": "Rahul Tewatia",
+    "cricinfo_id": 423838,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Rahul_Tewatia.png",
+    "file_path": "assets\\players\\Rahul_Tewatia.png",
+    "size_bytes": 6747
+  },
+  {
+    "player_name": "Rajat Patidar",
+    "cricinfo_id": 823703,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Rajat_Patidar.png",
+    "file_path": "assets\\players\\Rajat_Patidar.png",
+    "size_bytes": 6584
+  },
+  {
+    "player_name": "Rashid Khan",
+    "cricinfo_id": 793463,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/793463.png",
+    "filename": "Rashid_Khan.png",
+    "file_path": "assets\\players\\Rashid_Khan.png",
+    "size_bytes": 107045
+  },
+  {
+    "player_name": "Rasikh Salam",
+    "cricinfo_id": 1161489,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Rasikh_Salam.png",
+    "file_path": "assets\\players\\Rasikh_Salam.png",
+    "size_bytes": 7574
+  },
+  {
+    "player_name": "Ravi Bishnoi",
+    "cricinfo_id": 1175441,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Ravi_Bishnoi.png",
+    "file_path": "assets\\players\\Ravi_Bishnoi.png",
+    "size_bytes": 7262
+  },
+  {
+    "player_name": "Ravichandran Ashwin",
+    "cricinfo_id": 26421,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/26421.png",
+    "filename": "Ravichandran_Ashwin.png",
+    "file_path": "assets\\players\\Ravichandran_Ashwin.png",
+    "size_bytes": 110958
+  },
+  {
+    "player_name": "Ravindra Jadeja",
+    "cricinfo_id": 234675,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/234675.png",
+    "filename": "Ravindra_Jadeja.png",
+    "file_path": "assets\\players\\Ravindra_Jadeja.png",
+    "size_bytes": 111553
+  },
+  {
+    "player_name": "Reece Topley",
+    "cricinfo_id": 461632,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Reece_Topley.png",
+    "file_path": "assets\\players\\Reece_Topley.png",
+    "size_bytes": 6693
+  },
+  {
+    "player_name": "Reeza Hendricks",
+    "cricinfo_id": 269280,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/269280.png",
+    "filename": "Reeza_Hendricks.png",
+    "file_path": "assets\\players\\Reeza_Hendricks.png",
+    "size_bytes": 100098
+  },
+  {
+    "player_name": "Richard Ngarava",
+    "cricinfo_id": 806241,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Richard_Ngarava.png",
+    "file_path": "assets\\players\\Richard_Ngarava.png",
+    "size_bytes": 7696
+  },
+  {
+    "player_name": "Rinku Singh",
+    "cricinfo_id": 723105,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Rinku_Singh.png",
+    "file_path": "assets\\players\\Rinku_Singh.png",
+    "size_bytes": 7433
+  },
+  {
+    "player_name": "Rishabh Pant",
+    "cricinfo_id": 931581,
+    "status": "SUCCESS",
+    "tier": "WIKIPEDIA_PORTRAIT",
+    "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Rishabh_Pant.jpg/330px-Rishabh_Pant.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "filename": "Rishabh_Pant.png",
+    "file_path": "assets\\players\\Rishabh_Pant.png",
+    "size_bytes": 136548
+  },
+  {
+    "player_name": "Riyan Parag",
+    "cricinfo_id": 1079434,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Riyan_Parag.png",
+    "file_path": "assets\\players\\Riyan_Parag.png",
+    "size_bytes": 6805
+  },
+  {
+    "player_name": "Rohit Sharma",
+    "cricinfo_id": 34102,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/34102.png",
+    "filename": "Rohit_Sharma.png",
+    "file_path": "assets\\players\\Rohit_Sharma.png",
+    "size_bytes": 123661
+  },
+  {
+    "player_name": "Romario Shepherd",
+    "cricinfo_id": 677077,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Romario_Shepherd.png",
+    "file_path": "assets\\players\\Romario_Shepherd.png",
+    "size_bytes": 8061
+  },
+  {
+    "player_name": "Roston Chase",
+    "cricinfo_id": 391832,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Roston_Chase.png",
+    "file_path": "assets\\players\\Roston_Chase.png",
+    "size_bytes": 7502
+  },
+  {
+    "player_name": "Rovman Powell",
+    "cricinfo_id": 820351,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Rovman_Powell.png",
+    "file_path": "assets\\players\\Rovman_Powell.png",
+    "size_bytes": 7222
+  },
+  {
+    "player_name": "Ruturaj Gaikwad",
+    "cricinfo_id": 1060380,
+    "status": "SUCCESS",
+    "tier": "WIKIPEDIA_PORTRAIT",
+    "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Ruturaj_Gaikwad.jpeg/330px-Ruturaj_Gaikwad.jpeg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "filename": "Ruturaj_Gaikwad.png",
+    "file_path": "assets\\players\\Ruturaj_Gaikwad.png",
+    "size_bytes": 177182
+  },
+  {
+    "player_name": "Ryan Burl",
+    "cricinfo_id": 495964,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Ryan_Burl.png",
+    "file_path": "assets\\players\\Ryan_Burl.png",
+    "size_bytes": 6920
+  },
+  {
+    "player_name": "Sahibzada Farhan",
+    "cricinfo_id": 647785,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Sahibzada_Farhan.png",
+    "file_path": "assets\\players\\Sahibzada_Farhan.png",
+    "size_bytes": 7297
+  },
+  {
+    "player_name": "Sai Kishore",
+    "cricinfo_id": 1048739,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Sai_Kishore.png",
+    "file_path": "assets\\players\\Sai_Kishore.png",
+    "size_bytes": 7619
+  },
+  {
+    "player_name": "Sai Sudharsan",
+    "cricinfo_id": 1151288,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Sai_Sudharsan.png",
+    "file_path": "assets\\players\\Sai_Sudharsan.png",
+    "size_bytes": 6642
+  },
+  {
+    "player_name": "Saim Ayub",
+    "cricinfo_id": 1161031,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Saim_Ayub.png",
+    "file_path": "assets\\players\\Saim_Ayub.png",
+    "size_bytes": 7438
+  },
+  {
+    "player_name": "Salman Agha",
+    "cricinfo_id": 542289,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Salman_Agha.png",
+    "file_path": "assets\\players\\Salman_Agha.png",
+    "size_bytes": 7507
+  },
+  {
+    "player_name": "Sam Curran",
+    "cricinfo_id": 662973,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/662973.png",
+    "filename": "Sam_Curran.png",
+    "file_path": "assets\\players\\Sam_Curran.png",
+    "size_bytes": 100416
+  },
+  {
+    "player_name": "Sandeep Sharma",
+    "cricinfo_id": 438362,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Sandeep_Sharma.png",
+    "file_path": "assets\\players\\Sandeep_Sharma.png",
+    "size_bytes": 6937
+  },
+  {
+    "player_name": "Sanju Samson",
+    "cricinfo_id": 425943,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Sanju_Samson.png",
+    "file_path": "assets\\players\\Sanju_Samson.png",
+    "size_bytes": 6681
+  },
+  {
+    "player_name": "Sean Abbott",
+    "cricinfo_id": 398666,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Sean_Abbott.png",
+    "file_path": "assets\\players\\Sean_Abbott.png",
+    "size_bytes": 7435
+  },
+  {
+    "player_name": "Shadab Khan",
+    "cricinfo_id": 922943,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/922943.png",
+    "filename": "Shadab_Khan.png",
+    "file_path": "assets\\players\\Shadab_Khan.png",
+    "size_bytes": 103312
+  },
+  {
+    "player_name": "Shahbaz Ahmed",
+    "cricinfo_id": 1159711,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Shahbaz_Ahmed.png",
+    "file_path": "assets\\players\\Shahbaz_Ahmed.png",
+    "size_bytes": 7774
+  },
+  {
+    "player_name": "Shaheen Afridi",
+    "cricinfo_id": 1072470,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Shaheen_Afridi.png",
+    "file_path": "assets\\players\\Shaheen_Afridi.png",
+    "size_bytes": 7649
+  },
+  {
+    "player_name": "Shamar Joseph",
+    "cricinfo_id": 1356971,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Shamar_Joseph.png",
+    "file_path": "assets\\players\\Shamar_Joseph.png",
+    "size_bytes": 7528
+  },
+  {
+    "player_name": "Shamim Hossain",
+    "cricinfo_id": 1159715,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Shamim_Hossain.png",
+    "file_path": "assets\\players\\Shamim_Hossain.png",
+    "size_bytes": 7276
+  },
+  {
+    "player_name": "Shardul Thakur",
+    "cricinfo_id": 475281,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Shardul_Thakur.png",
+    "file_path": "assets\\players\\Shardul_Thakur.png",
+    "size_bytes": 6909
+  },
+  {
+    "player_name": "Shashank Singh",
+    "cricinfo_id": 736417,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Shashank_Singh.png",
+    "file_path": "assets\\players\\Shashank_Singh.png",
+    "size_bytes": 6804
+  },
+  {
+    "player_name": "Sherfane Rutherford",
+    "cricinfo_id": 914541,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Sherfane_Rutherford.png",
+    "file_path": "assets\\players\\Sherfane_Rutherford.png",
+    "size_bytes": 8021
+  },
+  {
+    "player_name": "Shikhar Dhawan",
+    "cricinfo_id": 28235,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/28235.png",
+    "filename": "Shikhar_Dhawan.png",
+    "file_path": "assets\\players\\Shikhar_Dhawan.png",
+    "size_bytes": 100593
+  },
+  {
+    "player_name": "Shimron Hetmyer",
+    "cricinfo_id": 670025,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Shimron_Hetmyer.png",
+    "file_path": "assets\\players\\Shimron_Hetmyer.png",
+    "size_bytes": 7453
+  },
+  {
+    "player_name": "Shivam Dube",
+    "cricinfo_id": 714451,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Shivam_Dube.png",
+    "file_path": "assets\\players\\Shivam_Dube.png",
+    "size_bytes": 7673
+  },
+  {
+    "player_name": "Shoriful Islam",
+    "cricinfo_id": 1159718,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Shoriful_Islam.png",
+    "file_path": "assets\\players\\Shoriful_Islam.png",
+    "size_bytes": 7160
+  },
+  {
+    "player_name": "Shreyas Iyer",
+    "cricinfo_id": 642519,
+    "status": "SUCCESS",
+    "tier": "WIKIPEDIA_PORTRAIT",
+    "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Captain_Shreyas_Iyer_%28Sarpanch_Sahab%29_in_T20.jpg/330px-Captain_Shreyas_Iyer_%28Sarpanch_Sahab%29_in_T20.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "filename": "Shreyas_Iyer.png",
+    "file_path": "assets\\players\\Shreyas_Iyer.png",
+    "size_bytes": 153496
+  },
+  {
+    "player_name": "Shubman Gill",
+    "cricinfo_id": 1070173,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/1070173.png",
+    "filename": "Shubman_Gill.png",
+    "file_path": "assets\\players\\Shubman_Gill.png",
+    "size_bytes": 108904
+  },
+  {
+    "player_name": "Sikandar Raza",
+    "cricinfo_id": 299572,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/299572.png",
+    "filename": "Sikandar_Raza.png",
+    "file_path": "assets\\players\\Sikandar_Raza.png",
+    "size_bytes": 104541
+  },
+  {
+    "player_name": "Spencer Johnson",
+    "cricinfo_id": 1123718,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Spencer_Johnson.png",
+    "file_path": "assets\\players\\Spencer_Johnson.png",
+    "size_bytes": 7392
+  },
+  {
+    "player_name": "Sufiyan Muqeem",
+    "cricinfo_id": 1329697,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Sufiyan_Muqeem.png",
+    "file_path": "assets\\players\\Sufiyan_Muqeem.png",
+    "size_bytes": 8238
+  },
+  {
+    "player_name": "Sunil Narine",
+    "cricinfo_id": 230558,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Sunil_Narine.png",
+    "file_path": "assets\\players\\Sunil_Narine.png",
+    "size_bytes": 7472
+  },
+  {
+    "player_name": "Suryakumar Yadav",
+    "cricinfo_id": 446507,
+    "status": "SUCCESS",
+    "tier": "WIKIPEDIA_PORTRAIT",
+    "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Suryakumar_Yadav_in_PMO_New_Delhi.jpg/330px-Suryakumar_Yadav_in_PMO_New_Delhi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "filename": "Suryakumar_Yadav.png",
+    "file_path": "assets\\players\\Suryakumar_Yadav.png",
+    "size_bytes": 135711
+  },
+  {
+    "player_name": "Suyash Sharma",
+    "cricinfo_id": 1362947,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Suyash_Sharma.png",
+    "file_path": "assets\\players\\Suyash_Sharma.png",
+    "size_bytes": 6797
+  },
+  {
+    "player_name": "T Natarajan",
+    "cricinfo_id": 802575,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "T_Natarajan.png",
+    "file_path": "assets\\players\\T_Natarajan.png",
+    "size_bytes": 6362
+  },
+  {
+    "player_name": "Tadiwanashe Marumani",
+    "cricinfo_id": 1209670,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Tadiwanashe_Marumani.png",
+    "file_path": "assets\\players\\Tadiwanashe_Marumani.png",
+    "size_bytes": 7777
+  },
+  {
+    "player_name": "Tanzim Sakib",
+    "cricinfo_id": 1139520,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Tanzim_Sakib.png",
+    "file_path": "assets\\players\\Tanzim_Sakib.png",
+    "size_bytes": 7036
+  },
+  {
+    "player_name": "Taskin Ahmed",
+    "cricinfo_id": 561611,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Taskin_Ahmed.png",
+    "file_path": "assets\\players\\Taskin_Ahmed.png",
+    "size_bytes": 7108
+  },
+  {
+    "player_name": "Tim David",
+    "cricinfo_id": 892749,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Tim_David.png",
+    "file_path": "assets\\players\\Tim_David.png",
+    "size_bytes": 6377
+  },
+  {
+    "player_name": "Tim Southee",
+    "cricinfo_id": 232364,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/232364.png",
+    "filename": "Tim_Southee.png",
+    "file_path": "assets\\players\\Tim_Southee.png",
+    "size_bytes": 90111
+  },
+  {
+    "player_name": "Towhid Hridoy",
+    "cricinfo_id": 990031,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Towhid_Hridoy.png",
+    "file_path": "assets\\players\\Towhid_Hridoy.png",
+    "size_bytes": 6430
+  },
+  {
+    "player_name": "Trent Boult",
+    "cricinfo_id": 277912,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/277912.png",
+    "filename": "Trent_Boult.png",
+    "file_path": "assets\\players\\Trent_Boult.png",
+    "size_bytes": 81209
+  },
+  {
+    "player_name": "Tristan Stubbs",
+    "cricinfo_id": 595978,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Tristan_Stubbs.png",
+    "file_path": "assets\\players\\Tristan_Stubbs.png",
+    "size_bytes": 7002
+  },
+  {
+    "player_name": "Tushar Deshpande",
+    "cricinfo_id": 822553,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Tushar_Deshpande.png",
+    "file_path": "assets\\players\\Tushar_Deshpande.png",
+    "size_bytes": 7105
+  },
+  {
+    "player_name": "Umesh Yadav",
+    "cricinfo_id": 376116,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/376116.png",
+    "filename": "Umesh_Yadav.png",
+    "file_path": "assets\\players\\Umesh_Yadav.png",
+    "size_bytes": 107690
+  },
+  {
+    "player_name": "Umran Malik",
+    "cricinfo_id": 1246528,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Umran_Malik.png",
+    "file_path": "assets\\players\\Umran_Malik.png",
+    "size_bytes": 7171
+  },
+  {
+    "player_name": "Vaibhav Arora",
+    "cricinfo_id": 1209292,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Vaibhav_Arora.png",
+    "file_path": "assets\\players\\Vaibhav_Arora.png",
+    "size_bytes": 7252
+  },
+  {
+    "player_name": "Varun Chakravarthy",
+    "cricinfo_id": 1108375,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Varun_Chakravarthy.png",
+    "file_path": "assets\\players\\Varun_Chakravarthy.png",
+    "size_bytes": 7807
+  },
+  {
+    "player_name": "Venkatesh Iyer",
+    "cricinfo_id": 851403,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Venkatesh_Iyer.png",
+    "file_path": "assets\\players\\Venkatesh_Iyer.png",
+    "size_bytes": 6889
+  },
+  {
+    "player_name": "Virat Kohli",
+    "cricinfo_id": 253802,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/253802.png",
+    "filename": "Virat_Kohli.png",
+    "file_path": "assets\\players\\Virat_Kohli.png",
+    "size_bytes": 111824
+  },
+  {
+    "player_name": "Vyshak Kumar",
+    "cricinfo_id": 777815,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Vyshak_Kumar.png",
+    "file_path": "assets\\players\\Vyshak_Kumar.png",
+    "size_bytes": 7612
+  },
+  {
+    "player_name": "Wanindu Hasaranga",
+    "cricinfo_id": 784379,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Wanindu_Hasaranga.png",
+    "file_path": "assets\\players\\Wanindu_Hasaranga.png",
+    "size_bytes": 7721
+  },
+  {
+    "player_name": "Washington Sundar",
+    "cricinfo_id": 719715,
+    "status": "SUCCESS",
+    "tier": "WIKIPEDIA_PORTRAIT",
+    "source_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Washington_Sundar.jpg/330px-Washington_Sundar.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "filename": "Washington_Sundar.png",
+    "file_path": "assets\\players\\Washington_Sundar.png",
+    "size_bytes": 171984
+  },
+  {
+    "player_name": "Wellington Masakadza",
+    "cricinfo_id": 571703,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Wellington_Masakadza.png",
+    "file_path": "assets\\players\\Wellington_Masakadza.png",
+    "size_bytes": 9049
+  },
+  {
+    "player_name": "Wesley Madhevere",
+    "cricinfo_id": 938959,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Wesley_Madhevere.png",
+    "file_path": "assets\\players\\Wesley_Madhevere.png",
+    "size_bytes": 8505
+  },
+  {
+    "player_name": "William Jacks",
+    "cricinfo_id": 897549,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "William_Jacks.png",
+    "file_path": "assets\\players\\William_Jacks.png",
+    "size_bytes": 7444
+  },
+  {
+    "player_name": "Xavier Bartlett",
+    "cricinfo_id": 1050545,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Xavier_Bartlett.png",
+    "file_path": "assets\\players\\Xavier_Bartlett.png",
+    "size_bytes": 7487
+  },
+  {
+    "player_name": "Yash Dayal",
+    "cricinfo_id": 1159720,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Yash_Dayal.png",
+    "file_path": "assets\\players\\Yash_Dayal.png",
+    "size_bytes": 6885
+  },
+  {
+    "player_name": "Yash Thakur",
+    "cricinfo_id": 1070196,
+    "status": "SUCCESS",
+    "tier": "EDITORIAL_MONOGRAM",
+    "source_url": "internal://editorial_monogram_generator",
+    "filename": "Yash_Thakur.png",
+    "file_path": "assets\\players\\Yash_Thakur.png",
+    "size_bytes": 6431
+  },
+  {
+    "player_name": "Yuzvendra Chahal",
+    "cricinfo_id": 430246,
+    "status": "SUCCESS",
+    "tier": "ESPN_CUTOUT",
+    "source_url": "https://a.espncdn.com/i/headshots/cricket/players/full/430246.png",
+    "filename": "Yuzvendra_Chahal.png",
+    "file_path": "assets\\players\\Yuzvendra_Chahal.png",
+    "size_bytes": 113521
+  }
+]
