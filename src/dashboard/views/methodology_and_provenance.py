@@ -100,7 +100,56 @@ def render_methodology(bundle: DashboardDataBundle) -> None:
     st.plotly_chart(fig_shrinkage_curve(k_shrink=45.0), width="stretch")
     render_chart_caption("Empirical Bayes shrinkage progression curve (K=45.0 pseudo-deliveries). At n = 45 HP balls, the estimator assigns equal 50% weight to player empirical data and the neutral prior.")
 
-    render_section_header("4. Methodological Exclusions, Small-Sample Sensitivity & Limitations", "Complete research transparency", icon="alert")
+    # Section 4: Model B Recruitment Intelligence Architecture
+    render_section_header("4. Model B — Rajasthan Royals Recruitment Scoring Architecture", "Multi-criteria recruitment formula, gating filters, and sensitivity validation", icon="shield")
+    
+    st.markdown(
+        f"""
+        <div style="background:{PALETTE['bg_surface']}; border:1px solid {PALETTE['border_card']}; border-radius:6px; padding:1.2rem; margin-bottom:1rem;">
+            <h4 style="font-family:'Playfair Display',serif; margin:0 0 0.5rem 0; color:{PALETTE['text_primary']};">Model B 6-Component Weighted Formula</h4>
+            <p style="font-size:0.85rem; color:{PALETTE['text_secondary']}; line-height:1.5;">
+                Model B evaluates actionable franchise recruitment utility for Rajasthan Royals ahead of the IPL 2027 auction.
+                Unlike Model A (which evaluates unconstrained tournament-wide pressure composure), Model B applies strict regulatory eligibility, 
+                contractual availability gating, role benchmarks, and venue fit for Sawai Mansingh Stadium.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.latex(r"\text{Model B Score} = 0.25\,\text{Rel} + 0.20\,\text{T20}_{\text{perf}} + 0.15\,\text{Pred} + 0.15\,\text{Role}_{\text{suit}} + 0.15\,\text{RR}_{\text{fit}} + 0.10\,\text{Consistency}")
+
+    w_col1, w_col2 = st.columns(2)
+    with w_col1:
+        weights_data = [
+            {"Component": "Pressure Reliability (Model A)", "Weight": "25%", "Metric Source": "Preserved 5-pillar reliability score, PAVA surplus & PRC slope"},
+            {"Component": "Overall T20 Performance", "Weight": "20%", "Metric Source": "Career Strike Rate, Batting Average, Economy & Dot Ball %"},
+            {"Component": "Predictive ML Performance", "Weight": "15%", "Metric Source": "Validated LightGBM expected runs / economy under high pressure"},
+            {"Component": "Role Suitability", "Weight": "15%", "Metric Source": "Situational phase execution (PP, Middle, Death) vs role benchmarks"},
+            {"Component": "RR Squad Fit & SMS Jaipur", "Weight": "15%", "Metric Source": "Deficit alignment: Death Seam, Jaipur Squeeze, No. 7 Finisher"},
+            {"Component": "Consistency & Adaptability", "Weight": "10%", "Metric Source": "Match-level CV, downside failure rate mitigation & Kish ESS"},
+        ]
+        st.dataframe(pd.DataFrame(weights_data), width="stretch", hide_index=True)
+
+    with w_col2:
+        ml_val_data = [
+            {"Model Target": "Batter Expected Runs", "Test Split": "2026 (N=2,252)", "Baseline MAE": 17.23, "LightGBM MAE": 5.84, "Improvement": "+66.13%", "R²": 0.845},
+            {"Model Target": "Bowler Runs Conceded", "Test Split": "2026 (N=1,656)", "Baseline MAE": 10.23, "LightGBM MAE": 7.43, "Improvement": "+27.36%", "R²": 0.394},
+        ]
+        st.markdown("**Chronological ML Out-of-Sample Holdout Performance (2026 Test Set)**")
+        st.dataframe(pd.DataFrame(ml_val_data), width="stretch", hide_index=True)
+        st.caption("Strict chronological split: <=2024 train, 2025 validation, 2026 test. Zero future data leakage.")
+
+    # Section 5: Analytical Limitations and Mandatory Disclaimer
+    render_section_header("5. Analytical Limitations & Official Disclaimer", "Methodological scope, uncertainty boundaries, and governance notices", icon="alert-triangle")
+    
+    render_callout(
+        "<b>OFFICIAL ANALYTICAL DISCLAIMER:</b><br/>"
+        "PRESSUREIQ provides an independent analytical recruitment assessment. It does not represent an official Rajasthan Royals "
+        "recruitment decision or guarantee player eligibility, auction availability, selection, or future performance.",
+        accent=PALETTE["accent_terracotta"],
+    )
+
     render_callout(
         "• <b>Dataset Exclusions:</b> 16 abandoned zero-ball matches (out of 883 cataloged) excluded; 38 Super Over deliveries excluded from regular-overs Model A training/rankings; `bowl_speed` nulls/zeros (`38.7%`) filtered to `[50, 165]` km/h and excluded from LightGBM inputs.<br/>"
         "• <b>Small-Sample Bootstrap Variance:</b> Qualifiers with 35–83 HP balls or 22–29 matches exhibit wider 95% CIs and higher mean ranks when match resampling omits leverage appearances below the 30-HP threshold.<br/>"

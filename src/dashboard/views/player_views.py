@@ -193,6 +193,30 @@ def render_player_intelligence(bundle: DashboardDataBundle) -> None:
         ]
     render_kpi_grid(kpi_cards)
 
+    # Section C: Model B Recruitment Intelligence & Strategic Dossier
+    mb_df = bundle.rr_model_b_candidates if bundle.rr_model_b_candidates is not None and not bundle.rr_model_b_candidates.empty else bundle.rr_candidates_df
+    mb_sub = mb_df[mb_df["player_name"] == sel_player] if not mb_df.empty else pd.DataFrame()
+    if not mb_sub.empty:
+        mb_row = mb_sub.iloc[0]
+        render_section_header("Rajasthan Royals Model B Recruitment Intelligence", "Franchise scouting profile, squad gap fit, and risk telemetry", icon="shield")
+        
+        rc1, rc2, rc3, rc4 = st.columns(4)
+        rc1.metric("Model B Target Score", f"{mb_row.get('model_b_target_score', 0.0):.1f} / 100", help="Weighted multi-criteria score")
+        rc2.metric("Tactical Squad Fit", f"{mb_row.get('rr_squad_fit_score', 0.0):.1f} / 100", help="SMS Jaipur deficit alignment")
+        rc3.metric("Consistency Stability", f"{mb_row.get('consistency_score', 0.0):.1f} / 100", help="Match-to-match stability")
+        rc4.metric("Risk Quadrant", str(mb_row.get("risk_quadrant", "Unclassified")), help="Ceiling vs Volatility profile")
+
+        render_callout(
+            f"<b>RR Tactical Gap Addressed:</b> {mb_row.get('addressed_gap', 'Squad Depth')}<br/>"
+            f"• <b>Tactical Advantage:</b> {mb_row.get('tactical_advantage', 'Contingent squad option')}<br/>"
+            f"• <b>Primary Downside Risk / Weakness:</b> {mb_row.get('primary_weakness', 'Sample size')}<br/>"
+            f"• <b>Best Alternative Target:</b> <b>{mb_row.get('best_alternative_name', 'N/A')}</b> — {mb_row.get('best_alternative_tradeoff', '')}<br/>"
+            f"• <b>Regulatory Clearance & Authority:</b> {mb_row.get('eligibility_status', 'Eligible')} "
+            f"(<a href='{mb_row.get('source_url', '#')}' target='_blank'>Official Source Link</a>) | "
+            f"Auction State: <b>{mb_row.get('auction_availability', 'Pending')}</b>",
+            accent=PALETTE["accent_terracotta"],
+        )
+
     # Career metrics strip
     if is_batting:
         perf_txt = (

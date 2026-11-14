@@ -395,6 +395,41 @@ def render_player_podium_cards(
                 callback(pname, disc_label)
 
 
+def render_player_podium_card(
+    rank: int,
+    name: str,
+    discipline: str = "Batter",
+    role: str = "Player",
+    score: float = 0.0,
+    pava: float = 0.0,
+    balls: int = 0,
+    archetype: str = "Ice Cold Anchor",
+    player_id: int = 0,
+) -> None:
+    """Render a single featured recruitment podium card with player portrait, rank, Model B score, and archetype."""
+    b64_img = get_player_image_b64(name)
+    medallion_label = f"#{rank} PRIORITY TARGET"
+    medallion_color = "#C5A46D" if rank == 1 else ("#BD6548" if rank == 2 else "#77675D")
+    rank_cls = f"rank-{min(rank, 3)}"
+
+    card_html = (
+        f'<div class="piq-podium-card {rank_cls}">'
+        f'<span class="piq-podium-badge" style="background:#282321;color:{medallion_color};border:1px solid {medallion_color};">{medallion_label}</span>'
+        f'<img src="{b64_img}" alt="{html.escape(name)}" class="piq-podium-portrait" loading="eager" />'
+        f'<div class="piq-podium-name">{html.escape(name)}</div>'
+        f'<div class="piq-podium-team">{html.escape(role)}</div>'
+        f'<div class="piq-podium-score">{score:.1f}</div>'
+        f'<div class="piq-podium-ci">Pressure Rel: {pava:.1f} &bull; {balls} HP balls</div>'
+        f'<div style="margin-top:0.35rem;font-size:0.75rem;font-family:var(--font-mono);color:#BD6548;font-weight:600;">{html.escape(archetype)}</div>'
+        f'</div>'
+    )
+    st.markdown(card_html, unsafe_allow_html=True)
+    btn_key = f"single_podium_jump_{player_id}_{rank}_{name.replace(' ', '_').lower()}"
+    if st.button(f"Inspect {name} &rarr;", key=btn_key, use_container_width=True):
+        jump_to_player(name, "Batting" if discipline.lower() in ["batter", "batting"] else "Bowling")
+
+
+
 def render_compact_leaderboard_list(
     rows_df: Any,
     is_batting: bool,

@@ -31,9 +31,15 @@ from src.dashboard.views.overview_and_leaderboards import render_leaderboards, r
 from src.dashboard.views.player_directory import render_player_directory
 from src.dashboard.views.player_views import render_player_comparison, render_player_intelligence
 from src.dashboard.views.rr_and_market import render_market_intelligence, render_rr_intelligence
+from src.dashboard.views.rr_command_centre import render_recruitment_command_centre
+from src.dashboard.views.rr_target_batters import render_rr_target_batters
+from src.dashboard.views.rr_target_bowlers import render_rr_target_bowlers
+from src.dashboard.views.rr_squad_gap import render_squad_gap_analysis
+from src.dashboard.views.rr_alternatives import render_alternative_target_finder
+from src.dashboard.views.rr_watchlist import render_eligibility_and_watchlist
 
 st.set_page_config(
-    page_title="PRESSUREIQ — Cricket Pressure Intelligence",
+    page_title="PRESSUREIQ — Rajasthan Royals Recruitment Intelligence",
     page_icon=None,
     layout="wide",
     initial_sidebar_state="auto",
@@ -45,11 +51,26 @@ def _cached_bundle() -> DashboardDataBundle:
     return load_dashboard_bundle_uncached()
 
 
+PAGE_ALIASES = {
+    "Overview": "Recruitment Command Centre",
+    "Pressure Leaderboards": "Global Pressure Intelligence",
+    "Player Intelligence": "Player Intelligence Profiles",
+    "Player Comparison": "Player Comparison Lab",
+    "Rajasthan Royals Intelligence": "Squad Gap Analysis",
+    "IPL 2027 Market Intelligence": "Eligibility & Auction Watchlist",
+    "Methodology & Validation": "Methodology & Model Validation",
+}
+
+
 def _init_session_state() -> None:
     qp = st.query_params.get("page")
-    if qp and qp in NAV_LABELS:
-        st.session_state["active_page"] = qp
-    elif "active_page" not in st.session_state:
+    if qp:
+        resolved = PAGE_ALIASES.get(qp, qp)
+        if resolved in NAV_LABELS:
+            st.session_state["active_page"] = resolved
+        elif qp in NAV_LABELS:
+            st.session_state["active_page"] = qp
+    if "active_page" not in st.session_state:
         st.session_state["active_page"] = NAV_LABELS[0]
 
     if "jump_player_name" not in st.session_state:
@@ -68,7 +89,7 @@ def main() -> None:
         and bundle.integrity_status.get("bowler_frozen_match", False)
     )
 
-    # Redesigned Luxury Editorial Sidebar (User Requirements v4.1)
+    # Redesigned Luxury Editorial Sidebar (User Requirements v4.1 & v6.0)
     with st.sidebar:
         render_sidebar_brand()
         render_sidebar_lookup(bundle)
@@ -87,19 +108,51 @@ def main() -> None:
         )
 
     routes = {
-        "Overview": render_overview,
-        "Pressure Leaderboards": render_leaderboards,
+        # Page 1: Recruitment Command Centre
+        "Recruitment Command Centre": render_recruitment_command_centre,
+        "Overview": render_recruitment_command_centre,
+
+        # Page 2: RR Target Batters
+        "RR Target Batters": render_rr_target_batters,
+
+        # Page 3: RR Target Bowlers
+        "RR Target Bowlers": render_rr_target_bowlers,
+
+        # Page 4: Player Intelligence Profiles
+        "Player Intelligence Profiles": render_player_intelligence,
         "Player Intelligence": render_player_intelligence,
+
+        # Page 5: Squad Gap Analysis
+        "Squad Gap Analysis": render_squad_gap_analysis,
+        "Rajasthan Royals Intelligence": render_squad_gap_analysis,
+
+        # Page 6: Player Comparison Lab
+        "Player Comparison Lab": render_player_comparison,
         "Player Comparison": render_player_comparison,
+
+        # Page 7: Alternative Target Finder
+        "Alternative Target Finder": render_alternative_target_finder,
+
+        # Page 8: Eligibility & Auction Watchlist
+        "Eligibility & Auction Watchlist": render_eligibility_and_watchlist,
+        "IPL 2027 Market Intelligence": render_eligibility_and_watchlist,
+
+        # Page 9: Global Pressure Intelligence (Preserved Model A)
+        "Global Pressure Intelligence": render_leaderboards,
+        "Pressure Leaderboards": render_leaderboards,
+
+        # Page 10: Methodology & Model Validation
+        "Methodology & Model Validation": render_methodology,
+        "Methodology & Validation": render_methodology,
+
+        # Additional Scouting Tools
         "Player Directory": render_player_directory,
         "Pressure Analytics": render_pressure_analytics,
         "Emerging Talent": render_emerging_talent,
-        "Rajasthan Royals Intelligence": render_rr_intelligence,
-        "IPL 2027 Market Intelligence": render_market_intelligence,
-        "Methodology & Validation": render_methodology,
         "Data Sources & Provenance": render_provenance,
     }
-    routes[active_page](bundle)
+    renderer = routes.get(active_page, render_recruitment_command_centre)
+    renderer(bundle)
 
     render_footer(
         batter_sha=str(bundle.integrity_status.get("batter_csv_sha256", "")),

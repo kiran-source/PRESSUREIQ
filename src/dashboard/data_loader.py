@@ -34,6 +34,13 @@ EMERGING_TALENT_PATH = PROCESSED_DATA_DIR / "emerging_talent_watchlist.csv"
 MARKET_SNAPSHOT_NOV11_PATH = SNAPSHOTS_DIR / "ipl_2027_market_snapshot_2026-11-11.csv"
 MARKET_CURRENT_PATH = PROCESSED_DATA_DIR / "ipl_2027_player_market_template.csv"
 MARKET_CHANGELOG_PATH = PROCESSED_DATA_DIR / "ipl_2027_market_change_log.csv"
+RR_MODEL_B_CANDIDATES_PATH = PROCESSED_DATA_DIR / "rr_model_b_candidates.csv"
+RR_MODEL_B_ELIGIBLE_PATH = PROCESSED_DATA_DIR / "rr_model_b_eligible.csv"
+RR_MODEL_B_TARGETABLE_PATH = PROCESSED_DATA_DIR / "rr_model_b_targetable.csv"
+RR_MODEL_B_TARGET_BATTERS_PATH = PROCESSED_DATA_DIR / "rr_model_b_target_batters.csv"
+RR_MODEL_B_TARGET_BOWLERS_PATH = PROCESSED_DATA_DIR / "rr_model_b_target_bowlers.csv"
+RR_MODEL_B_WATCHLIST_PATH = PROCESSED_DATA_DIR / "rr_model_b_watchlist.csv"
+RR_MODEL_B_EXCLUSIONS_PATH = PROCESSED_DATA_DIR / "rr_model_b_exclusions.csv"
 BENCHMARK_PATH = DOCS_DIR / "MODEL_BENCHMARK_REPORT.json"
 VALIDATION_PATH = DOCS_DIR / "VALIDATION_REPORT.json"
 PROVENANCE_PATH = DOCS_DIR / "PROVENANCE.json"
@@ -500,6 +507,13 @@ class DashboardDataBundle:
     integrity_status: Dict[str, Any]
     pressure_summary: Optional[Dict[str, pd.DataFrame]] = None
     missingness_df: Optional[pd.DataFrame] = None
+    rr_model_b_candidates: Optional[pd.DataFrame] = None
+    rr_model_b_eligible: Optional[pd.DataFrame] = None
+    rr_model_b_targetable: Optional[pd.DataFrame] = None
+    rr_model_b_target_batters: Optional[pd.DataFrame] = None
+    rr_model_b_target_bowlers: Optional[pd.DataFrame] = None
+    rr_model_b_watchlist: Optional[pd.DataFrame] = None
+    rr_model_b_exclusions: Optional[pd.DataFrame] = None
 
 
 def load_dashboard_bundle_uncached() -> DashboardDataBundle:
@@ -561,4 +575,11 @@ def load_dashboard_bundle_uncached() -> DashboardDataBundle:
         },
         pressure_summary=query_pressure_analytics_summary(DELIVERIES_PAVA_PATH),
         missingness_df=query_dataset_missingness(DELIVERIES_PAVA_PATH),
+        rr_model_b_candidates=_read_csv_safe(RR_MODEL_B_CANDIDATES_PATH),
+        rr_model_b_eligible=_read_csv_safe(RR_MODEL_B_ELIGIBLE_PATH),
+        rr_model_b_targetable=_read_csv_safe(RR_MODEL_B_TARGETABLE_PATH),
+        rr_model_b_target_batters=_read_csv_safe(RR_MODEL_B_TARGET_BATTERS_PATH),
+        rr_model_b_target_bowlers=_read_csv_safe(RR_MODEL_B_TARGET_BOWLERS_PATH),
+        rr_model_b_watchlist=_read_csv_safe(RR_MODEL_B_WATCHLIST_PATH),
+        rr_model_b_exclusions=_read_csv_safe(RR_MODEL_B_EXCLUSIONS_PATH),
     )

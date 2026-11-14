@@ -78,24 +78,24 @@ PLOTLY_SERIES = [
 ]
 
 NAV_ITEMS = [
-    # DISCOVER Group
-    {"id": "Overview", "label": "Overview", "icon": "layout-dashboard", "mat_icon": ":material/dashboard:", "group": "DISCOVER", "subtitle": "Executive intelligence & Model A summary"},
-    {"id": "Pressure Leaderboards", "label": "Pressure Leaderboards", "icon": "trophy", "mat_icon": ":material/emoji_events:", "group": "DISCOVER", "subtitle": "Frozen Batters (109) & Bowlers (147) cohorts"},
-    {"id": "Emerging Talent", "label": "Emerging Talent", "icon": "trending-up", "mat_icon": ":material/trending_up:", "group": "DISCOVER", "subtitle": "Opportunity-aware uncapped & prospect scouting"},
+    # RR RECRUITMENT INTELLIGENCE (Primary System — Model B)
+    {"id": "Recruitment Command Centre", "label": "Recruitment Command Centre", "icon": "layout-dashboard", "mat_icon": ":material/dashboard:", "group": "RR RECRUITMENT INTELLIGENCE", "subtitle": "Executive scouting telemetry & Model B overview"},
+    {"id": "RR Target Batters", "label": "RR Target Batters", "icon": "target", "mat_icon": ":material/sports_cricket:", "group": "RR RECRUITMENT INTELLIGENCE", "subtitle": "Verified eligible & targetable batting recruits"},
+    {"id": "RR Target Bowlers", "label": "RR Target Bowlers", "icon": "target", "mat_icon": ":material/sports_baseball:", "group": "RR RECRUITMENT INTELLIGENCE", "subtitle": "Verified eligible & targetable bowling recruits"},
+    {"id": "Squad Gap Analysis", "label": "Squad Gap Analysis", "icon": "shield", "mat_icon": ":material/shield:", "group": "RR RECRUITMENT INTELLIGENCE", "subtitle": "SMS Jaipur tactical needs & roster depth"},
+    {"id": "Alternative Target Finder", "label": "Alternative Target Finder", "icon": "git-branch", "mat_icon": ":material/alt_route:", "group": "RR RECRUITMENT INTELLIGENCE", "subtitle": "Role contingency recommender & trade-off matrix"},
+    {"id": "Eligibility & Auction Watchlist", "label": "Eligibility & Auction Watchlist", "icon": "activity", "mat_icon": ":material/fact_check:", "group": "RR RECRUITMENT INTELLIGENCE", "subtitle": "10 confirmed trades, retentions & audit ledger"},
 
-    # PLAYER ANALYTICS Group
-    {"id": "Player Intelligence", "label": "Player Intelligence", "icon": "user-round-search", "mat_icon": ":material/person_search:", "group": "PLAYER ANALYTICS", "subtitle": "Individual pressure profile & match evidence"},
-    {"id": "Player Comparison", "label": "Player Comparison", "icon": "users", "mat_icon": ":material/group:", "group": "PLAYER ANALYTICS", "subtitle": "Head-to-head multi-player telemetry comparator"},
-    {"id": "Player Directory", "label": "Player Directory", "icon": "user", "mat_icon": ":material/badge:", "group": "PLAYER ANALYTICS", "subtitle": "Visual scouting catalog of 227 qualified athletes"},
-    {"id": "Pressure Analytics", "label": "Pressure Analytics", "icon": "chart-no-axes-combined", "mat_icon": ":material/insights:", "group": "PLAYER ANALYTICS", "subtitle": "BPI, BoPI, PAVA & expected-outcome physics"},
+    # PLAYER SCOUTING & ANALYSIS
+    {"id": "Player Intelligence", "label": "Player Intelligence Profiles", "icon": "user-round-search", "mat_icon": ":material/person_search:", "group": "PLAYER SCOUTING & ANALYSIS", "subtitle": "Individual pressure dossier, PRC & recruitment fit"},
+    {"id": "Player Comparison", "label": "Player Comparison Lab", "icon": "users", "mat_icon": ":material/group:", "group": "PLAYER SCOUTING & ANALYSIS", "subtitle": "Head-to-head multi-player telemetry comparator"},
+    {"id": "Player Directory", "label": "Player Directory", "icon": "user", "mat_icon": ":material/badge:", "group": "PLAYER SCOUTING & ANALYSIS", "subtitle": "Visual scouting catalog of 256 candidates"},
 
-    # FRANCHISE INTELLIGENCE Group
-    {"id": "Rajasthan Royals Intelligence", "label": "Rajasthan Royals Intelligence", "icon": "shield", "mat_icon": ":material/shield:", "group": "FRANCHISE INTELLIGENCE", "subtitle": "SMS Jaipur tactical fit vs verified availability"},
-    {"id": "IPL 2027 Market Intelligence", "label": "IPL 2027 Market Intelligence", "icon": "activity", "mat_icon": ":material/storefront:", "group": "FRANCHISE INTELLIGENCE", "subtitle": "All 10 franchises, retentions, trades & sources"},
-
-    # RESEARCH Group
-    {"id": "Methodology & Validation", "label": "Methodology & Validation", "icon": "flask-conical", "mat_icon": ":material/science:", "group": "RESEARCH", "subtitle": "Formulas, LightGBM calibration & bootstrap audit"},
-    {"id": "Data Sources & Provenance", "label": "Data Sources & Provenance", "icon": "database", "mat_icon": ":material/database:", "group": "RESEARCH", "subtitle": "Lineage, checksums, missingness & change log"},
+    # GLOBAL PRESSURE INTELLIGENCE (Frozen Model A & Methodology)
+    {"id": "Global Pressure Intelligence", "label": "Global Pressure Intelligence", "icon": "trophy", "mat_icon": ":material/emoji_events:", "group": "GLOBAL PRESSURE INTELLIGENCE", "subtitle": "Preserved Model A: Batters (109) & Bowlers (147)"},
+    {"id": "Pressure Analytics", "label": "Pressure Analytics", "icon": "chart-no-axes-combined", "mat_icon": ":material/insights:", "group": "GLOBAL PRESSURE INTELLIGENCE", "subtitle": "BPI, BoPI, PAVA & expected-outcome physics"},
+    {"id": "Methodology & Validation", "label": "Methodology & Model Validation", "icon": "flask-conical", "mat_icon": ":material/science:", "group": "GLOBAL PRESSURE INTELLIGENCE", "subtitle": "Model A/B formulations, LightGBM validation & audit"},
+    {"id": "Data Sources & Provenance", "label": "Data Sources & Provenance", "icon": "database", "mat_icon": ":material/database:", "group": "GLOBAL PRESSURE INTELLIGENCE", "subtitle": "Lineage, checksums, missingness & change log"},
 ]
 
 NAV_LABELS = [item["label"] for item in NAV_ITEMS]
@@ -103,20 +103,16 @@ NAV_META = {item["label"]: item for item in NAV_ITEMS}
 
 NAV_GROUPS = [
     {
-        "group": "DISCOVER",
-        "items": [item for item in NAV_ITEMS if item["group"] == "DISCOVER"],
+        "group": "RR RECRUITMENT INTELLIGENCE",
+        "items": [item for item in NAV_ITEMS if item["group"] == "RR RECRUITMENT INTELLIGENCE"],
     },
     {
-        "group": "PLAYER ANALYTICS",
-        "items": [item for item in NAV_ITEMS if item["group"] == "PLAYER ANALYTICS"],
+        "group": "PLAYER SCOUTING & ANALYSIS",
+        "items": [item for item in NAV_ITEMS if item["group"] == "PLAYER SCOUTING & ANALYSIS"],
     },
     {
-        "group": "FRANCHISE INTELLIGENCE",
-        "items": [item for item in NAV_ITEMS if item["group"] == "FRANCHISE INTELLIGENCE"],
-    },
-    {
-        "group": "RESEARCH",
-        "items": [item for item in NAV_ITEMS if item["group"] == "RESEARCH"],
+        "group": "GLOBAL PRESSURE INTELLIGENCE",
+        "items": [item for item in NAV_ITEMS if item["group"] == "GLOBAL PRESSURE INTELLIGENCE"],
     },
 ]
 
