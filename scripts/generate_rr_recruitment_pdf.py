@@ -266,16 +266,18 @@ def build_pdf():
     # 5. Chronological Machine Learning Validation Table
     elements.append(Paragraph("4. Chronological Machine Learning Validation (Holdout 2026)", h1_style))
     elements.append(Paragraph(
-        "Zero future-leakage chronological holdout benchmark: Trained <=2024 (120,412 balls), Val 2025 (49,820 balls), Test 2026 (30,729 balls):",
+        "<b>Model Framing:</b> Innings Execution Efficiency Model (E[Runs | Balls, Pressure Context]). "
+        "Evaluated on blind chronological holdout: Trained &lt;=2024 (120,412 balls), Val 2025 (49,820 balls), Test 2026 (30,729 balls). "
+        "Reporting all three benchmarks to distinguish volume scaling from situational pressure refinement:",
         body_style
     ))
 
     ml_table_data = [
-        [Paragraph("<b>Model Target</b>", table_cell_bold), Paragraph("<b>Holdout Test Split</b>", table_cell_bold), Paragraph("<b>Naive Baseline MAE</b>", table_cell_bold), Paragraph("<b>LightGBM Model MAE</b>", table_cell_bold), Paragraph("<b>Improvement</b>", table_cell_bold), Paragraph("<b>Holdout R²</b>", table_cell_bold)],
-        [Paragraph("Batter Expected Runs", table_cell), Paragraph("2026 Matches (N=2,252)", table_cell), Paragraph("17.23 runs", table_cell), Paragraph("<b>5.84 runs</b>", table_cell_bold), Paragraph("<b>+66.13%</b>", table_cell_bold), Paragraph("0.845", table_cell)],
-        [Paragraph("Bowler Runs Conceded", table_cell), Paragraph("2026 Matches (N=1,656)", table_cell), Paragraph("10.23 runs", table_cell), Paragraph("<b>7.43 runs</b>", table_cell_bold), Paragraph("<b>+27.36%</b>", table_cell_bold), Paragraph("0.394", table_cell)],
+        [Paragraph("<b>Model Target</b>", table_cell_bold), Paragraph("<b>Holdout Test Split</b>", table_cell_bold), Paragraph("<b>Unconditional Mean MAE</b>", table_cell_bold), Paragraph("<b>Volume Baseline MAE</b>", table_cell_bold), Paragraph("<b>LightGBM Contextual MAE</b>", table_cell_bold), Paragraph("<b>Contextual Gain</b>", table_cell_bold)],
+        [Paragraph("Batter Innings Runs", table_cell), Paragraph("2026 (N=2,252)", table_cell), Paragraph("17.23 runs", table_cell), Paragraph("6.26 runs", table_cell), Paragraph("<b>5.84 runs</b> (R²=0.85)", table_cell_bold), Paragraph("<b>+6.81%</b> (+66.1% vs Mean)", table_cell_bold)],
+        [Paragraph("Bowler Spell Runs", table_cell), Paragraph("2026 (N=1,656)", table_cell), Paragraph("10.23 runs", table_cell), Paragraph("8.11 runs", table_cell), Paragraph("<b>7.43 runs</b> (R²=0.39)", table_cell_bold), Paragraph("<b>+8.44%</b> (+27.4% vs Mean)", table_cell_bold)],
     ]
-    t_ml = Table(ml_table_data, colWidths=[110, 100, 75, 75, 70, 74])
+    t_ml = Table(ml_table_data, colWidths=[95, 80, 80, 80, 85, 84])
     t_ml.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#F1E9DD")),
         ("BORDER", (0, 0), (-1, -1), 0.5, c_border),

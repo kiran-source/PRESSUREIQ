@@ -25,14 +25,32 @@ Features for any delivery or match are constructed exclusively from historical d
 
 ## 2. Benchmark Comparison Against Defensible Baselines
 
-In compliance with Part 6 of the specifications, all machine learning models are evaluated directly against defensible naive baselines on the strictly held-out 2026 test set:
+### Important Methodological Framing: Innings Execution Efficiency Model
+To ensure complete scientific transparency during competition review, the predictive models are formally framed as **Innings Execution Efficiency Models**:
+$$\mathbb{E}[\text{Runs Scored} \mid \text{Balls Faced}, \text{Pressure Context}]$$
+$$\mathbb{E}[\text{Runs Conceded} \mid \text{Balls Bowled}, \text{Pressure Context}]$$
 
-### Model Performance on 2026 Test Set (N = 2,252 Batting Innings, 1,656 Bowling Spells)
+They evaluate **in-innings scoring and containment efficiency given opportunity volume and situational pressure**. They are **not pre-match forecasting models**, because completed balls faced and legal balls bowled are observed in-innings volume features.
 
-| Predictive Model | Target Metric | Naive Historical Baseline MAE | LightGBM Model MAE | MAE Improvement | Naive Baseline RMSE | LightGBM Model RMSE | RMSE Improvement | Holdout $R^2$ |
-|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Batting Expected Runs** | Runs scored in innings | 17.227 | **5.835** | **+66.13%** | 23.273 | **9.145** | **+60.70%** | **0.845** |
-| **Bowling Runs Conceded** | Runs conceded in spell | 10.227 | **7.429** | **+27.36%** | 12.708 | **9.670** | **+23.90%** | **0.394** |
+### Three-Benchmark Comparison on 2026 Chronological Test Set (N = 2,252 Batting Innings)
+
+To prevent misattributing volume correlation to pressure variables alone, Model B reports performance against **three distinct reference benchmarks**:
+
+| Benchmark Model | Target & Input Specification | Holdout MAE | Incremental Reduction | Total Reduction vs. Mean | Holdout $R^2$ |
+|---|---|:---:|:---:|:---:|:---:|
+| **1. Unconditional Historical Mean** | Global mean runs across historical innings ($\bar{y} = 22.1$ runs) | 17.227 | Baseline | 0.00% | 0.000 |
+| **2. Opportunity-Adjusted Volume Baseline** | $\text{Balls Faced} \times \text{Global Historical Strike Rate}$ (Volume only) | 6.262 | -63.65% | 63.65% | 0.812 |
+| **3. LightGBM Contextual Execution Model** | Volume + High-Pressure PAVA + BPI Ratio + Phase & Venue | **5.835** | **-6.81%** (vs. Volume) | **66.13%** (vs. Mean) | **0.845** |
+
+### Critical Analytical Explanations:
+1. **Source of the 66.13% MAE Reduction:**  
+   The widely cited $+66.13\%$ error reduction ($17.227 \to 5.835$ MAE) is calculated **relative to the unconditional historical mean**. It measures total variance explained by combining delivery exposure (volume) with situational context.
+2. **True Incremental Value of Pressure Intelligence (+6.81%):**  
+   Completed balls faced accounts for the vast majority of scoring variance. However, holding delivery opportunity volume constant, adding **PAVA pressure surplus (`shrunk_hp_pava`)**, **continuous leverage ratios (`hp_ratio`)**, and **average leverage index (`avg_bpi`)** delivers an additional **+6.81% incremental reduction in MAE** ($6.262 \to 5.835$) and lifts out-of-sample $R^2$ from $0.812$ to $0.845$.
+3. **Bowling Spell Execution Efficiency (N = 1,656 Bowling Spells):**  
+   - Unconditional spell runs mean baseline: **10.227 MAE**
+   - Volume-adjusted legal balls baseline: **8.114 MAE**
+   - LightGBM contextual model: **7.429 MAE** (+27.36% vs. unconditional mean, +8.44% incremental gain over balls bowled alone; $R^2 = 0.394$).
 
 ### Delivery-Level Outcome Classification (2026 Test Deliveries, N = 30,729)
 

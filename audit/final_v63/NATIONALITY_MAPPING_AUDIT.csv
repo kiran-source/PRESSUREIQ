@@ -1,0 +1,262 @@
+player_id,player_name,discipline,latest_ipl_franchise,canonical_nationality,is_overseas,previous_nationality,previous_is_overseas,audit_delta_status,ground_truth_authority
+6059,Ruturaj Gaikwad,Batter,Chennai Super Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+126,Rohit Sharma,Batter,Mumbai Indians,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2921,Fakhar Zaman,Batter,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+1699,Suryakumar Yadav,Batter,Mumbai Indians,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+6726,Romario Shepherd,Batter,Royal Challengers Bengaluru,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+37052,Naman Dhir,Batter,Mumbai Indians,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+5553,Phil Salt,Batter,Royal Challengers Bengaluru,England,True,India,False,REMEDIATED,Data Pack: England
+3916,Jitesh Sharma,Batter,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3125,Nicholas Pooran,Batter,Lucknow Super Giants,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+813,Jos Buttler,Batter,Gujarat Titans,England,True,India,False,REMEDIATED,Data Pack: England
+4708,Rinku Singh,Batter,Kolkata Knight Riders,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+20702,Tristan Stubbs,Batter,Delhi Capitals,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+2633,Jason Holder,Batter,Gujarat Titans,West Indies,True,West Indies,True,VERIFIED_CORRECT,Data Pack: West Indies
+1107,Mohammad Nabi,Batter,Mumbai Indians,Afghanistan,True,Afghanistan,True,VERIFIED_CORRECT,Data Pack: Afghanistan
+6433,Darwish Rasooli,Batter,nan,Afghanistan,True,International,True,REMEDIATED,Data Pack: Afghanistan
+796,Matthew Wade,Batter,Gujarat Titans,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+2756,Shashank Singh,Batter,Punjab Kings,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+7094,Curtis Campher,Batter,nan,Ireland,True,International,True,REMEDIATED,Data Pack: Ireland
+7897,Namboori Tilak Varma,Batter,Mumbai Indians,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3024,Mohammad Rizwan,Batter,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+6396,Tim David,Batter,Royal Challengers Bengaluru,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+7260,Dhruv Jurel,Batter,Rajasthan Royals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+8,Mahendra Singh Dhoni,Batter,Chennai Super Kings,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+1318,Andre Russell,Batter,Kolkata Knight Riders,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+4755,Shivam Dube,Batter,Chennai Super Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2984,Sikandar Raza,Batter,Punjab Kings,Zimbabwe,True,India,False,REMEDIATED,Data Pack: Zimbabwe
+6651,Towhid Hridoy,Batter,nan,Bangladesh,True,International,True,REMEDIATED,Data Pack: Bangladesh
+6423,Riyan Parag,Batter,Rajasthan Royals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+838,Glenn Maxwell,Batter,Punjab Kings,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+1596,Moeen Ali,Batter,Kolkata Knight Riders,England,True,India,False,REMEDIATED,Data Pack: England
+4260,Heinrich Klaasen,Batter,Sunrisers Hyderabad,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+4986,Rovman Powell,Batter,Kolkata Knight Riders,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+1077,David Miller,Batter,Delhi Capitals,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+3647,Shreyas Iyer,Batter,Punjab Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3605,Aiden Markram,Batter,Lucknow Super Giants,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+4773,Jaker Ali Anik,Batter,nan,Bangladesh,True,International,True,REMEDIATED,Data Pack: Bangladesh
+7903,Shamim Hossain,Batter,nan,Bangladesh,True,International,True,REMEDIATED,Data Pack: Bangladesh
+143,Dinesh Karthik,Batter,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+4812,Harry Tector,Batter,nan,Ireland,True,International,True,REMEDIATED,Data Pack: Ireland
+6460,Ayush Badoni,Batter,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+4867,Wesley Madhevere,Batter,nan,Zimbabwe,True,International,True,REMEDIATED,Data Pack: Zimbabwe
+6676,Azmatullah Omarzai,Batter,Punjab Kings,Afghanistan,True,India,False,REMEDIATED,Data Pack: Afghanistan
+2485,Babar Azam,Batter,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+2436,Dasun Shanaka,Batter,Rajasthan Royals,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+24017,Brian Bennett,Batter,nan,Zimbabwe,True,International,True,REMEDIATED,Data Pack: Zimbabwe
+3782,M Shahrukh Khan,Batter,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+4101,Mitchell Santner,Batter,Mumbai Indians,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+4703,Rishabh Pant,Batter,Delhi Capitals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2639,Marcus Stoinis,Batter,Punjab Kings,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+4106,Daryl Mitchell,Batter,Chennai Super Kings,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+6725,Sherfane Rutherford,Batter,Mumbai Indians,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+3374,Mark Chapman,Batter,nan,New Zealand,True,International,True,REMEDIATED,Data Pack: New Zealand
+1101,George Dockrell,Batter,nan,Ireland,True,International,True,REMEDIATED,Data Pack: Ireland
+3056,Iftikhar Ahmed,Batter,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+2463,Ryan Burl,Batter,nan,Zimbabwe,True,International,True,REMEDIATED,Data Pack: Zimbabwe
+8741,Mohammad Haris,Batter,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+142,Shikhar Dhawan,Batter,Punjab Kings,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+8600,Tadiwanashe Marumani,Batter,nan,Zimbabwe,True,International,True,REMEDIATED,Data Pack: Zimbabwe
+2490,Mohammad Nawaz,Batter,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+7472,Shahbaz Ahmed,Batter,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+7059,Nehal Wadhera,Batter,Punjab Kings,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+818,Mitchell Marsh,Batter,Lucknow Super Giants,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+152,Ravindra Jadeja,Batter,Rajasthan Royals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3727,Matthew Short,Batter,Chennai Super Kings,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+3330,Hardik Pandya,Batter,Punjab Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+6314,Devdutt Padikkal,Batter,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+2003,Bhanuka Rajapaksa,Batter,Punjab Kings,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+4391,Liam Livingstone,Batter,Chennai Super Kings,England,True,India,False,REMEDIATED,Data Pack: England
+6931,Pathum Nissanka,Batter,Delhi Capitals,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+2876,Axar Patel,Batter,Delhi Capitals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+4409,Sam Curran,Batter,Rajasthan Royals,England,True,India,False,REMEDIATED,Data Pack: England
+3926,Rahul Tewatia,Batter,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+2101,Quinton de Kock,Batter,Mumbai Indians,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+6448,Ibrahim Zadran,Batter,nan,Afghanistan,True,International,True,REMEDIATED,Data Pack: Afghanistan
+4722,Rashid Khan,Batter,Gujarat Titans,Afghanistan,True,India,False,REMEDIATED,Data Pack: Afghanistan
+7446,Abdul Samad,Batter,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+4117,Ishan Kishan,Batter,Sunrisers Hyderabad,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3297,Shimron Hetmyer,Batter,Rajasthan Royals,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+7544,Venkatesh Iyer,Batter,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+4219,Krunal Pandya,Batter,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+4246,Nitish Rana,Batter,Delhi Capitals,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+3648,Deepak Hooda,Batter,Chennai Super Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+4823,Washington Sundar,Batter,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3091,Sahibzada Farhan,Batter,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+47,Virat Kohli,Batter,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3323,Jimmy Neesham,Batter,Rajasthan Royals,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+6272,William Jacks,Batter,Mumbai Indians,England,True,India,False,REMEDIATED,Data Pack: England
+2258,Sanju Samson,Batter,Chennai Super Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+781,Sunil Narine,Batter,Kolkata Knight Riders,West Indies,True,West Indies,True,VERIFIED_CORRECT,Verified ICC Profile
+4904,Kamindu Mendis,Batter,Sunrisers Hyderabad,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+23450,Sai Sudharsan,Batter,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3489,Salman Agha,Batter,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+768,Reeza Hendricks,Batter,nan,South Africa,True,International,True,REMEDIATED,Data Pack: South Africa
+19714,Abishek Porel,Batter,Delhi Capitals,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+6288,Shubman Gill,Batter,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+8221,Nitish Reddy,Batter,Sunrisers Hyderabad,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2687,Roston Chase,Batter,nan,West Indies,True,International,True,REMEDIATED,Data Pack: West Indies
+5039,Rajat Patidar,Batter,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+220,David Warner,Batter,Delhi Capitals,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+4853,Glenn Phillips,Batter,Gujarat Titans,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+953,Lokesh Rahul,Batter,Delhi Capitals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+4854,Rachin Ravindra,Batter,Kolkata Knight Riders,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+1205,Jonny Bairstow,Batter,Mumbai Indians,England,True,India,False,REMEDIATED,Data Pack: England
+5939,Cameron Green,Batter,Kolkata Knight Riders,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+4900,Wanindu Hasaranga,Batter,Lucknow Super Giants,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+26906,Angkrish Raghuvanshi,Batter,Kolkata Knight Riders,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+6280,Harry Brook,Batter,Delhi Capitals,England,True,India,False,REMEDIATED,Data Pack: England
+88,Faf du Plessis,Batter,Delhi Capitals,South Africa,True,South Africa,True,VERIFIED_CORRECT,Verified ICC Profile
+4895,Charith Asalanka,Batter,Mumbai Indians,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+722,Liam Dawson,Bowler,nan,England,True,England,True,VERIFIED_CORRECT,Data Pack: England
+7364,Haris Rauf,Bowler,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+7699,Abbas Afridi,Bowler,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+7920,Nathan Ellis,Bowler,Sunrisers Hyderabad,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+34485,Sufiyan Muqeem,Bowler,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+8661,Matheesha Pathirana,Bowler,Kolkata Knight Riders,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+4658,Nasum Ahmed,Bowler,nan,Bangladesh,True,Bangladesh,True,VERIFIED_CORRECT,Data Pack: Bangladesh
+28,Ishant Sharma,Bowler,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+7344,Shoriful Islam,Bowler,nan,Bangladesh,True,Bangladesh,True,VERIFIED_CORRECT,Data Pack: Bangladesh
+278,Tim Southee,Bowler,Kolkata Knight Riders,New Zealand,True,New Zealand,True,VERIFIED_CORRECT,Data Pack: New Zealand
+58246,Prince Yadav,Bowler,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2436,Dasun Shanaka,Bowler,Rajasthan Royals,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+4641,Lungi Ngidi,Bowler,Delhi Capitals,South Africa,True,South Africa,True,VERIFIED_CORRECT,Data Pack: South Africa
+7325,Harpreet Brar,Bowler,Punjab Kings,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+1596,Moeen Ali,Bowler,Kolkata Knight Riders,England,True,India,False,REMEDIATED,Data Pack: England
+3298,Jofra Archer,Bowler,Rajasthan Royals,England,True,India,False,REMEDIATED,Data Pack: England
+32862,Allah Ghazanfar,Bowler,Mumbai Indians,Afghanistan,True,Afghanistan,True,VERIFIED_CORRECT,Data Pack: Afghanistan
+7967,Noor Ahmad,Bowler,Chennai Super Kings,Afghanistan,True,India,False,REMEDIATED,Data Pack: Afghanistan
+4489,Prasidh Krishna,Bowler,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+7327,Rasikh Salam,Bowler,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+5979,Abrar Ahmed,Bowler,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+4722,Rashid Khan,Bowler,Gujarat Titans,Afghanistan,True,India,False,REMEDIATED,Data Pack: Afghanistan
+2933,Jasprit Bumrah,Bowler,Mumbai Indians,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+7250,Mukesh Choudhary,Bowler,Chennai Super Kings,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+2876,Axar Patel,Bowler,Delhi Capitals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+360,Bhuvneshwar Kumar,Bowler,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+5189,Faheem Ashraf,Bowler,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+8746,Vaibhav Arora,Bowler,Kolkata Knight Riders,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+2490,Mohammad Nawaz,Bowler,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+4101,Mitchell Santner,Bowler,Mumbai Indians,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+2633,Jason Holder,Bowler,Gujarat Titans,West Indies,True,West Indies,True,VERIFIED_CORRECT,Data Pack: West Indies
+2984,Sikandar Raza,Bowler,Punjab Kings,Zimbabwe,True,India,False,REMEDIATED,Data Pack: Zimbabwe
+1612,Yuzvendra Chahal,Bowler,Punjab Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+39657,Eshan Malinga,Bowler,Sunrisers Hyderabad,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+3653,Avesh Khan,Bowler,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3720,Craig Young,Bowler,nan,Ireland,True,International,True,REMEDIATED,Data Pack: Ireland
+2315,Reece Topley,Bowler,Mumbai Indians,England,True,India,False,REMEDIATED,Data Pack: England
+19316,Maheesh Theekshana,Bowler,Rajasthan Royals,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+305,Ravichandran Ashwin,Bowler,Chennai Super Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2261,Harshal Patel,Bowler,Sunrisers Hyderabad,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+4373,Mustafizur Rahman,Bowler,Kolkata Knight Riders,Bangladesh,True,India,False,REMEDIATED,Data Pack: Bangladesh
+1758,Patrick Cummins,Bowler,Sunrisers Hyderabad,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+58134,Digvesh Rathi,Bowler,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+6354,Spencer Johnson,Bowler,Chennai Super Kings,Australia,True,Australia,True,VERIFIED_CORRECT,Data Pack: Australia
+7690,Saim Ayub,Bowler,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+5041,Mukesh Kumar,Bowler,Delhi Capitals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+5809,Naveen ul Haq,Bowler,Lucknow Super Giants,Afghanistan,True,India,False,REMEDIATED,Data Pack: Afghanistan
+6355,Shaheen Afridi,Bowler,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+6523,Blessing Muzarabani,Bowler,Kolkata Knight Riders,Zimbabwe,True,India,False,REMEDIATED,Data Pack: Zimbabwe
+5939,Cameron Green,Bowler,Kolkata Knight Riders,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+5441,Barry McCarthy,Bowler,nan,Ireland,True,International,True,REMEDIATED,Data Pack: Ireland
+6676,Azmatullah Omarzai,Bowler,Punjab Kings,Afghanistan,True,India,False,REMEDIATED,Data Pack: Afghanistan
+1944,Keshav Maharaj,Bowler,Mumbai Indians,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+479,Adil Rashid,Bowler,Sunrisers Hyderabad,England,True,India,False,REMEDIATED,Data Pack: England
+3323,Jimmy Neesham,Bowler,Rajasthan Royals,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+2320,Trent Boult,Bowler,Mumbai Indians,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+403,Umesh Yadav,Bowler,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+781,Sunil Narine,Bowler,Kolkata Knight Riders,West Indies,True,West Indies,True,VERIFIED_CORRECT,Verified ICC Profile
+4692,Lockie Ferguson,Bowler,Punjab Kings,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+6256,Varun Chakravarthy,Bowler,Kolkata Knight Riders,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+830,Josh Hazlewood,Bowler,Royal Challengers Bengaluru,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+22920,Jacob Duffy,Bowler,Royal Challengers Bengaluru,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+152,Ravindra Jadeja,Bowler,Rajasthan Royals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2639,Marcus Stoinis,Bowler,Punjab Kings,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+6512,Michael Bracewell,Bowler,Royal Challengers Bengaluru,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+4900,Wanindu Hasaranga,Bowler,Lucknow Super Giants,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+6450,Mujeeb Ur Rahman,Bowler,Mumbai Indians,Afghanistan,True,India,False,REMEDIATED,Data Pack: Afghanistan
+4874,Richard Ngarava,Bowler,nan,Zimbabwe,True,International,True,REMEDIATED,Data Pack: Zimbabwe
+7503,Ravi Bishnoi,Bowler,Rajasthan Royals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+6464,Arshdeep Singh,Bowler,Mumbai Indians,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+25048,Umran Malik,Bowler,Kolkata Knight Riders,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2399,Dushmantha Chameera,Bowler,Delhi Capitals,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+6806,Tushar Deshpande,Bowler,Rajasthan Royals,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2417,Akeal Hosein,Bowler,Chennai Super Kings,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+786,Chris Jordan,Bowler,Mumbai Indians,England,True,India,False,REMEDIATED,Data Pack: England
+1813,Deepak Chahar,Bowler,Mumbai Indians,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2687,Roston Chase,Bowler,nan,West Indies,True,International,True,REMEDIATED,Data Pack: West Indies
+5738,Xavier Bartlett,Bowler,Punjab Kings,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+7312,Nandre Burger,Bowler,Rajasthan Royals,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+5379,Mark Adair,Bowler,nan,Ireland,True,International,True,REMEDIATED,Data Pack: Ireland
+7240,FazalHaq Farooqi,Bowler,Rajasthan Royals,Afghanistan,True,Afghanistan,True,VERIFIED_CORRECT,Data Pack: Afghanistan
+4219,Krunal Pandya,Bowler,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+4823,Washington Sundar,Bowler,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+6669,Mohsin Khan,Bowler,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+2681,Taskin Ahmed,Bowler,nan,Bangladesh,True,International,True,REMEDIATED,Data Pack: Bangladesh
+7270,Anrich Nortje,Bowler,Lucknow Super Giants,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+7808,Marco Jansen,Bowler,Punjab Kings,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+3628,Kagiso Rabada,Bowler,Gujarat Titans,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+4807,Joshua Little,Bowler,Gujarat Titans,Ireland,True,India,False,REMEDIATED,Data Pack: Ireland
+3276,Gudakesh Motie,Bowler,nan,West Indies,True,International,True,REMEDIATED,Data Pack: West Indies
+1071,Jaydev Unadkat,Bowler,Sunrisers Hyderabad,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+6272,William Jacks,Bowler,Mumbai Indians,England,True,India,False,REMEDIATED,Data Pack: England
+21784,Brad Evans,Bowler,nan,Zimbabwe,True,International,True,REMEDIATED,Data Pack: Zimbabwe
+27964,Anshul Kamboj,Bowler,Chennai Super Kings,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+4639,Wellington Masakadza,Bowler,nan,Zimbabwe,True,International,True,REMEDIATED,Data Pack: Zimbabwe
+5837,Mahedi Hasan,Bowler,nan,Bangladesh,True,International,True,REMEDIATED,Data Pack: Bangladesh
+27960,Mayank Yadav,Bowler,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+829,Mitchell Starc,Bowler,Delhi Capitals,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+4755,Shivam Dube,Bowler,Chennai Super Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+6161,Rahul Chahar,Bowler,Chennai Super Kings,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+3644,Kuldeep Yadav,Bowler,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+8221,Nitish Reddy,Bowler,Sunrisers Hyderabad,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+4837,Obed McCoy,Bowler,Rajasthan Royals,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+29888,Harshit Rana,Bowler,Kolkata Knight Riders,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+4816,Khaleel Ahmed,Bowler,Sunrisers Hyderabad,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+4265,T Natarajan,Bowler,Sunrisers Hyderabad,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+7905,Tanzim Sakib,Bowler,nan,Bangladesh,True,International,True,REMEDIATED,Data Pack: Bangladesh
+838,Glenn Maxwell,Bowler,Punjab Kings,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+36982,Suyash Sharma,Bowler,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+1487,Adam Milne,Bowler,Rajasthan Royals,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+4926,Shadab Khan,Bowler,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+3275,Alzarri Joseph,Bowler,Royal Challengers Bengaluru,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+2054,Jason Behrendorff,Bowler,Mumbai Indians,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+7741,Gareth Delany,Bowler,nan,Ireland,True,International,True,REMEDIATED,Data Pack: Ireland
+6281,Abhishek Sharma,Bowler,Sunrisers Hyderabad,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3330,Hardik Pandya,Bowler,Punjab Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+3174,Matt Henry,Bowler,Chennai Super Kings,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+2636,Adam Zampa,Bowler,Sunrisers Hyderabad,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+23,Piyush Chawla,Bowler,Mumbai Indians,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+8380,Mohammad Rishad Hossain,Bowler,nan,Bangladesh,True,International,True,REMEDIATED,Data Pack: Bangladesh
+8049,Naseem Shah,Bowler,nan,Pakistan,True,International,True,REMEDIATED,Data Pack: Pakistan
+4856,Benjamin Sears,Bowler,nan,New Zealand,True,International,True,REMEDIATED,Data Pack: New Zealand
+4391,Liam Livingstone,Bowler,Chennai Super Kings,England,True,India,False,REMEDIATED,Data Pack: England
+4409,Sam Curran,Bowler,Rajasthan Royals,England,True,India,False,REMEDIATED,Data Pack: England
+6683,Mayank Markande,Bowler,Mumbai Indians,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+1107,Mohammad Nabi,Bowler,Mumbai Indians,Afghanistan,True,Afghanistan,True,VERIFIED_CORRECT,Data Pack: Afghanistan
+6726,Romario Shepherd,Bowler,Royal Challengers Bengaluru,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+1389,Sean Abbott,Bowler,Sunrisers Hyderabad,Australia,True,India,False,REMEDIATED,Data Pack: Australia
+1318,Andre Russell,Bowler,Kolkata Knight Riders,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+2411,Sandeep Sharma,Bowler,Rajasthan Royals,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+1566,Mohammed Shami,Bowler,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+5944,Mohammed Siraj,Bowler,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2526,Ish Sodhi,Bowler,nan,New Zealand,True,International,True,REMEDIATED,Data Pack: New Zealand
+5577,Sai Kishore,Bowler,Gujarat Titans,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+19312,Nuwan Thushara,Bowler,Royal Challengers Bengaluru,Sri Lanka,True,India,False,REMEDIATED,Data Pack: Sri Lanka
+3697,Kyle Jamieson,Bowler,Delhi Capitals,New Zealand,True,India,False,REMEDIATED,Data Pack: New Zealand
+6287,Yash Thakur,Bowler,Punjab Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+7472,Shahbaz Ahmed,Bowler,Lucknow Super Giants,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+7322,Yash Dayal,Bowler,Royal Challengers Bengaluru,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2847,Shardul Thakur,Bowler,Mumbai Indians,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2878,Mohit Sharma,Bowler,Delhi Capitals,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+6628,Gerald Coetzee,Bowler,Sunrisers Hyderabad,South Africa,True,India,False,REMEDIATED,Data Pack: South Africa
+38855,Mohammad Saifuddin,Bowler,nan,Bangladesh,True,International,True,REMEDIATED,Data Pack: Bangladesh
+8295,Matthew Forde,Bowler,nan,West Indies,True,International,True,REMEDIATED,Data Pack: West Indies
+47050,Shamar Joseph,Bowler,Lucknow Super Giants,West Indies,True,India,False,REMEDIATED,Data Pack: West Indies
+4487,Vyshak Kumar,Bowler,Punjab Kings,India,False,India,False,VERIFIED_CORRECT,Data Pack: India
+2382,Jamie Overton,Bowler,Chennai Super Kings,England,True,India,False,REMEDIATED,Data Pack: England
+7044,Jamie Smith,Batter,nan,England,True,England,True,VERIFIED_CORRECT,Data Pack: England
+8101,Ashutosh Sharma,Batter,nan,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry
+23311,Jacob Bethell,Batter,nan,England,True,England,True,VERIFIED_CORRECT,Data Pack: England
+7008,Gus Atkinson,Bowler,nan,England,True,England,True,VERIFIED_CORRECT,Data Pack: England
+6486,Tanush Kotian,Bowler,nan,India,False,India,False,VERIFIED_CORRECT,BCCI Domestic Registry

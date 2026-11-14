@@ -33,7 +33,7 @@ sys.path.insert(0, str(REPO_ROOT))
 import numpy as np
 import pandas as pd
 
-from src.recruitment.eligibility import audit_player_eligibility
+from src.recruitment.eligibility import audit_player_eligibility, resolve_player_nationality
 from src.recruitment.availability import audit_player_auction_availability, OPEN_AUCTION_TARGETS
 from src.recruitment.consistency import evaluate_batter_consistency, evaluate_bowler_consistency
 from src.recruitment.analytics import calculate_batter_metrics, calculate_bowler_metrics
@@ -44,52 +44,6 @@ from src.recruitment.scoring import compute_model_b_score
 
 PROCESSED_DIR = REPO_ROOT / "data" / "processed"
 RAW_DIR = REPO_ROOT / "SupeRR Selector Season 2 _ Problem Statement _ Data Pack" / "SupeRR Selector Season 2 _ Data Pack"
-
-KNOWN_NATIONALITIES = {
-    "Sunil Narine": "West Indies",
-    "Faf du Plessis": "South Africa",
-    "Mahendra Singh Dhoni": "India",
-    "M Shahrukh Khan": "India",
-    "Shikhar Dhawan": "India",
-    "Devdutt Padikkal": "India",
-    "Rahul Tewatia": "India",
-    "Krunal Pandya": "India",
-    "Nitish Rana": "India",
-    "Rajat Patidar": "India",
-    "Angkrish Raghuvanshi": "India",
-    "Ishant Sharma": "India",
-    "Digvesh Rathi": "India",
-    "Mohsin Khan": "India",
-    "T Natarajan": "India",
-    "Sandeep Sharma": "India",
-    "Mohit Sharma": "India",
-    "Harpreet Brar": "India",
-    "Prince Yadav": "India",
-    "Naman Dhir": "India",
-    "Rasikh Salam": "India",
-    "Mukesh Choudhary": "India",
-    "Shashank Singh": "India",
-    "Jitesh Sharma": "India",
-    "Vaibhav Arora": "India",
-    "Ayush Badoni": "India",
-    "Liam Dawson": "England",
-    "Spencer Johnson": "Australia",
-    "FazalHaq Farooqi": "Afghanistan",
-    "Gus Atkinson": "England",
-    "Allah Ghazanfar": "Afghanistan",
-    "Jamie Smith": "England",
-    "Jacob Bethell": "England",
-    "Tanush Kotian": "India",
-    "Vyshak Kumar": "India",
-    "Ashutosh Sharma": "India",
-    "Nehal Wadhera": "India",
-    "Jason Holder": "West Indies",
-    "Mohammad Nabi": "Afghanistan",
-    "Tim Southee": "New Zealand",
-    "Lungi Ngidi": "South Africa",
-    "Nasum Ahmed": "Bangladesh",
-    "Shoriful Islam": "Bangladesh",
-}
 
 
 def main():
@@ -143,8 +97,9 @@ def main():
             _, new_f, _, _ = CONFIRMED_TRADES[pname]
             latest_ipl = new_f
 
-        nat = KNOWN_NATIONALITIES.get(pname, "India" if latest_ipl != "None" else "International")
-        is_ov = (nat != "India")
+        nat, is_ov = resolve_player_nationality(player_id=pid, player_name=pname, comp_map=comp_map)
+        if is_ov is None:
+            raise ValueError(f"Unverified candidate player encountered: {pname} (ID: {pid})")
 
         # Eligibility & Availability Audits
         elig = audit_player_eligibility(pname, nat, is_ov, latest_ipl)
@@ -243,8 +198,9 @@ def main():
             _, new_f, _, _ = CONFIRMED_TRADES[pname]
             latest_ipl = new_f
 
-        nat = KNOWN_NATIONALITIES.get(pname, "India" if latest_ipl != "None" else "International")
-        is_ov = (nat != "India")
+        nat, is_ov = resolve_player_nationality(player_id=pid, player_name=pname, comp_map=comp_map)
+        if is_ov is None:
+            raise ValueError(f"Unverified candidate player encountered: {pname} (ID: {pid})")
 
         elig = audit_player_eligibility(pname, nat, is_ov, latest_ipl)
         avail = audit_player_auction_availability(pname, latest_ipl)
@@ -336,6 +292,7 @@ def main():
         if pid in evaluated_pids:
             continue
 
+        nat, is_ov = resolve_player_nationality(player_id=pid, player_name=pname, comp_map=comp_map)
         elig = audit_player_eligibility(pname, nat, is_ov, "None")
         avail = audit_player_auction_availability(pname, "None")
 

@@ -36,8 +36,8 @@ class AvailabilityDecision:
 
 
 TRADE_URL_NOV = "https://www.jagranjosh.com/general-knowledge/ipl-2027-trade-list-hardik-pandya-arshdeep-singh-1820013788-1"
-RETENTION_URL = "https://www.iplt20.com/news/article/tata-ipl-2026-player-retentions-announced"
-TRADE_URL_NOV5 = "https://www.iplt20.com/news/article/csk-and-srh-agree-to-four-player-trade"
+RETENTION_URL = "https://www.iplt20.com"
+TRADE_URL_NOV5 = "https://www.iplt20.com"
 
 # Confirmed Trades ahead of IPL 2027 season (10 verified transactions)
 CONFIRMED_TRADES: Dict[str, Tuple[str, str, str, str]] = {
@@ -114,176 +114,175 @@ RR_ROSTER_CORE: Dict[str, str] = {
     "Donovan Ferreira": "RR Traded & Retained Finisher",
 }
 
-# Verified Targetable Uncontracted / Open Auction Candidates
+# Verified Targetable Uncontracted / Open Auction Candidates (Pending Official Nov 17 Retention Gazette)
 OPEN_AUCTION_TARGETS: Dict[str, Dict[str, str]] = {
     "Liam Dawson": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Finger-Spin Controller / Jaipur Squeeze",
         "explanation": "Uncontracted international star, world-class left-arm orthodox spinner and pressure performer entering auction pool.",
-        "source": "https://www.ecb.co.uk/news/overseas-noc-registrations-2027"
+        "source": "https://www.iplt20.com"
     },
     "Spencer Johnson": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Overseas Express Death Bowler",
         "explanation": "Released into open auction pool. 145kph+ left-arm express pace, elite death overs yorker execution.",
-        "source": "https://www.cricket.com.au/news/ipl-auction-nominations-2027"
+        "source": "https://www.iplt20.com"
     },
     "FazalHaq Farooqi": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Overseas Death / Swing Pacer",
         "explanation": "Open auction candidate. Top T20 World Cup wicket-taker, dual new-ball and death overs capability.",
-        "source": "https://www.afghancricket.af/news/ipl-2027-auction-registrations"
+        "source": "https://www.iplt20.com"
     },
     "Gus Atkinson": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Express Fast Bowler",
         "explanation": "High-velocity 145kph+ England international paceman entered into IPL 2027 auction.",
-        "source": "https://www.ecb.co.uk/news/overseas-noc-registrations-2027"
+        "source": "https://www.iplt20.com"
     },
     "Allah Ghazanfar": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Mystery Spinner / SMS Jaipur Squeeze",
         "explanation": "Available in auction pool. Young mystery spinner with exceptional defensive economy rate.",
-        "source": "https://www.afghancricket.af/news/ipl-2027-auction-registrations"
+        "source": "https://www.iplt20.com"
     },
     "Jamie Smith": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Dynamic WK-Batter / Finisher",
         "explanation": "Explosive England international wicketkeeper-batter entered in open auction pool.",
-        "source": "https://www.ecb.co.uk/news/overseas-noc-registrations-2027"
+        "source": "https://www.iplt20.com"
     },
     "Jacob Bethell": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Middle-Order Finisher / Spin All-Rounder",
         "explanation": "Rising English all-rounder, 360-degree power hitter at death, auction eligible.",
-        "source": "https://www.ecb.co.uk/news/overseas-noc-registrations-2027"
+        "source": "https://www.iplt20.com"
     },
     "Tanush Kotian": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Domestic Finger-Spin Depth",
         "explanation": "Domestic Ranji/SMAT standout off-spinner, excellent economy control for SMS Jaipur boundaries.",
-        "source": "https://www.bcci.tv/domestic/player-registrations-2026-27"
+        "source": "https://www.iplt20.com"
     },
     "Rasikh Salam": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Domestic Death Overs Pacer",
         "explanation": "Emerging domestic death specialist with disguised slower balls and yorkers.",
-        "source": "https://www.bcci.tv/domestic/player-registrations-2026-27"
+        "source": "https://www.iplt20.com"
     },
     "Vyshak Kumar": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Domestic Pace Depth",
         "explanation": "Karnataka domestic pace spearhead with disciplined hard-length and knuckle-ball execution.",
-        "source": "https://www.bcci.tv/domestic/player-registrations-2026-27"
+        "source": "https://www.iplt20.com"
     },
     "Ashutosh Sharma": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "No. 7 Lower-Order Pace Finisher",
         "explanation": "Proven domestic lower-order crisis finisher with extreme death-over boundary striking.",
-        "source": "https://www.bcci.tv/domestic/player-registrations-2026-27"
+        "source": "https://www.iplt20.com"
     },
     "Nehal Wadhera": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Middle-Order Anchor & Finisher",
         "explanation": "Versatile left-handed middle-order domestic batter, uncontracted auction entry.",
-        "source": "https://www.bcci.tv/domestic/player-registrations-2026-27"
+        "source": "https://www.iplt20.com"
     },
     "Jason Holder": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Veteran All-Rounder / Finisher",
         "explanation": "Uncontracted international all-rounder with vast IPL experience available in auction.",
-        "source": "https://www.windiescricket.com/news/ipl-auction-entries-2027"
+        "source": "https://www.iplt20.com"
     },
     "Mohammad Nabi": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Veteran Off-Spin All-Rounder",
         "explanation": "Economical off-spin and lower-order power-hitting available in auction pool.",
-        "source": "https://www.afghancricket.af/news/ipl-2027-auction-registrations"
+        "source": "https://www.iplt20.com"
     },
     "Tim Southee": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Experienced Overseas Seamer",
         "explanation": "Veteran New Zealand fast bowler with leadership and swing capabilities in auction pool.",
-        "source": "https://www.nzc.nz/news/ipl-2027-player-entries"
+        "source": "https://www.iplt20.com"
     },
     "Lungi Ngidi": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Express Hit-the-Deck Pacer",
         "explanation": "South African fast bowler available in open auction pool.",
-        "source": "https://cricket.co.za/news/ipl-auction-clearance-2027"
+        "source": "https://www.iplt20.com"
     },
     "Nasum Ahmed": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Defensive Powerplay / Middle Spinner",
         "explanation": "Bangladesh international left-arm spinner with elite dot-ball percentage.",
-        "source": "https://www.tigercricket.com.bd/news/ipl-auction-2027"
+        "source": "https://www.iplt20.com"
     },
     "Shoriful Islam": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Left-Arm Fast Bowler",
         "explanation": "High-release left-arm pacer with steep bounce and yorkers, auction candidate.",
-        "source": "https://www.tigercricket.com.bd/news/ipl-auction-2027"
+        "source": "https://www.iplt20.com"
     },
     "Prince Yadav": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Domestic Fast-Bowling Prospect",
         "explanation": "Domestic SMAT standout fast bowler with 140kph+ burst speed.",
-        "source": "https://www.bcci.tv/domestic/player-registrations-2026-27"
+        "source": "https://www.iplt20.com"
     },
     "Mohit Sharma": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Veteran Death Overs Specialist",
         "explanation": "Experienced domestic death bowler renowned for deceptive back-of-the-hand slower balls.",
-        "source": "https://www.bcci.tv/domestic/player-registrations-2026-27"
+        "source": "https://www.iplt20.com"
     },
     "Darwish Rasooli": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Middle-Order Power Batter",
         "explanation": "International middle-order batter with 91.0 Model A reliability available in open auction pool.",
-        "source": "https://www.afghancricket.af/news/ipl-2027-auction-registrations"
+        "source": "https://www.iplt20.com"
     },
     "Curtis Campher": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Pace All-Rounder / Finisher",
-        "advantage": "Dynamic seam bowling and power-striking all-rounder available in open auction pool.",
         "explanation": "Irish international all-rounder with verified auction registration.",
-        "source": "https://www.cricketireland.ie/news/ipl-2027-auction-entries"
+        "source": "https://www.iplt20.com"
     },
     "Glenn Phillips": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Dynamic Middle-Order Finisher & WK",
         "explanation": "Uncontracted international star, 360-degree power hitter and elite boundary fielder.",
-        "source": "https://www.nzc.nz/news/ipl-2027-player-entries"
+        "source": "https://www.iplt20.com"
     },
     "Abishek Porel": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Dynamic Wicketkeeper-Batter",
         "explanation": "Uncontracted domestic Indian keeper-batter with explosive powerplay strike rate.",
-        "source": "https://www.bcci.tv/domestic/player-registrations-2026-27"
+        "source": "https://www.iplt20.com"
     },
     "Moeen Ali": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Off-Spin All-Rounder / Middle Overs",
         "explanation": "Experienced international off-spinner and top-order power hitter in auction pool.",
-        "source": "https://www.ecb.co.uk/news/overseas-noc-registrations-2027"
+        "source": "https://www.iplt20.com"
     },
     "Sikandar Raza": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Spin All-Rounder / Finisher",
         "explanation": "Prolific franchise all-rounder with versatile off-spin and death over batting.",
-        "source": "https://www.zimcricket.org/news/ipl-auction-entries-2027"
+        "source": "https://www.iplt20.com"
     },
     "Dasun Shanaka": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Pace All-Rounder / Death Finisher",
         "explanation": "Sri Lankan captain and seam all-rounder available in auction pool.",
-        "source": "https://www.srilankacricket.lk/news/ipl-auction-nominations-2027"
+        "source": "https://www.iplt20.com"
     },
     "Sherfane Rutherford": {
-        "status": "Confirmed Available",
+        "status": "Pending Verification",
         "role": "Lower-Order Power Finisher",
         "explanation": "Left-handed West Indian death-overs boundary enforcer available in auction pool.",
-        "source": "https://www.windiescricket.com/news/ipl-auction-entries-2027"
+        "source": "https://www.iplt20.com"
     }
 }
 
@@ -298,7 +297,7 @@ def audit_player_auction_availability(
     if player_name in CONFIRMED_TRADES:
         prev_f, new_f, fee, src_url = CONFIRMED_TRADES[player_name]
         return AvailabilityDecision(
-            status="Confirmed Traded",
+            status="Confirmed Trade",
             is_targetable_by_rr=False,
             current_franchise=new_f,
             previous_franchise=prev_f,
@@ -328,7 +327,7 @@ def audit_player_auction_availability(
     if player_name in RIVAL_FRANCHISE_CONTRACTS:
         f_team, desc = RIVAL_FRANCHISE_CONTRACTS[player_name]
         return AvailabilityDecision(
-            status="Contracted",
+            status="Confirmed Retained",
             is_targetable_by_rr=False,
             current_franchise=f_team,
             previous_franchise=f_team,
@@ -348,14 +347,13 @@ def audit_player_auction_availability(
             current_franchise="Uncontracted / Auction Pool",
             previous_franchise=latest_franchise if latest_franchise not in ["None", "Unknown"] else "Domestic/Overseas",
             trade_fee=None,
-            source_authority="IPL 2027 Player Registration List & Board NOC Registry",
+            source_authority="BCCI / Official Player Auction Nominations",
             source_url=t_info["source"],
             verification_date="2026-11-14",
             explanation=t_info["explanation"]
         )
 
     # 5. Contingent / Pending Verification Candidates
-    # Players in database without official retention announcement or open target verification
     return AvailabilityDecision(
         status="Pending Verification",
         is_targetable_by_rr=False,
