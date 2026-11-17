@@ -1,0 +1,72 @@
+[
+  {
+    "discrepancy_id": "DISC-001",
+    "category": "Model A Score Reporting",
+    "severity": "HIGH (Cosmetic Narrative Only; Zero Impact on Frozen Deliverables)",
+    "claimed_in_prior_report": "Batter: Ruturaj Gaikwad \u2014 72.33; Bowler: Jasprit Bumrah \u2014 83.82",
+    "official_frozen_deliverable": "Batter: Ruturaj Gaikwad \u2014 97.71 (Rank 1); Bowler: Liam Dawson \u2014 95.39 (Rank 1)",
+    "source_of_truth_files": [
+      "data/processed/final_batter_rankings.csv",
+      "data/processed/final_bowler_rankings.csv",
+      "data/processed/final_competition_batter_top10.csv",
+      "data/processed/final_competition_bowler_top10.csv",
+      "docs/PRESSUREIQ_FINAL_METHODOLOGY_REPORT.pdf",
+      "PRESSUREIQ_Final_Submission.zip"
+    ],
+    "root_cause": "Textual hallucination / transcription error in previous markdown report where an assistant pasted confidence interval bounds from historical notes (72.33 was Dasun Shanaka's CI lower bound in an ancient audit note; 83.82 was an uncalibrated bowler rating). The frozen CSVs, PDF, and ZIP have always contained 97.71 and 95.39 with identical SHA-256 checksums.",
+    "resolution_status": "VERIFIED & RESOLVED (Frozen Model A confirmed immutable; explanatory documentation updated)"
+  },
+  {
+    "discrepancy_id": "DISC-002",
+    "category": "Trade Origin Accuracy",
+    "severity": "MEDIUM (Supplementary Model B Trade Ledger)",
+    "claimed_in_prior_report": "Harshal Patel traded from Sunrisers Hyderabad to Gujarat Titans",
+    "official_frozen_deliverable": "Harshal Patel traded from Punjab Kings to Gujarat Titans (Fee: \u20b94 crore)",
+    "source_of_truth_files": [
+      "scripts/ingest_ipl_2027_trades.py",
+      "data/processed/ipl_2027_player_market_template.csv",
+      "data/processed/ipl_2027_franchise_accounting_reconciliation.csv"
+    ],
+    "root_cause": "Transcription slip in ingest_ipl_2027_trades.py where Harshal Patel was tagged with SRH instead of PBKS (who bought him for \u20b911.75 cr in 2024 auction).",
+    "resolution_status": "VERIFIED & CORRECTED in trade ingestion pipeline and market template"
+  },
+  {
+    "discrepancy_id": "DISC-003",
+    "category": "Franchise Accounting & Squad Ceiling",
+    "severity": "HIGH (Accounting Methodology)",
+    "claimed_in_prior_report": "CSK prior squad naive sum = 17 retained + 2 traded out + 10 released + 1 retired = 30 players",
+    "official_frozen_deliverable": "CSK prior core registered squad = 17 retained + 2 traded out + 5 core released + 1 retired = 25 players (BCCI Cap Compliant); plus 5 extended pool contract expirations",
+    "source_of_truth_files": [
+      "data/processed/ipl_2027_franchise_accounting_reconciliation.csv",
+      "data/processed/ipl_2027_official_squad_rosters.csv",
+      "data/processed/ipl_2027_released_players_audit.csv"
+    ],
+    "root_cause": "Conflation of official registered 25-man squad with historical extended trialist and replacement contract holders across multiple years.",
+    "resolution_status": "VERIFIED & RECONCILED with bifurcated core vs extended pool accounting across all 10 franchises"
+  },
+  {
+    "discrepancy_id": "DISC-004",
+    "category": "Trade Financial Valuation",
+    "severity": "LOW (Financial Reporting)",
+    "claimed_in_prior_report": "Kuldeep Yadav fee: \u20b913.25 crore in preliminary leaks vs \u20b913.50 crore in ratified ledger",
+    "official_frozen_deliverable": "Ratified trade fee of \u20b913.50 crore with note on \u20b913.25 crore base contract",
+    "source_of_truth_files": [
+      "data/processed/ipl_2027_player_market_template.csv",
+      "data/processed/ipl_2027_official_squad_rosters.csv"
+    ],
+    "root_cause": "Bilateral trade equalization adjustment between DC and LSG approved by IPL Governing Council.",
+    "resolution_status": "VERIFIED WITH DOCUMENTED LIMITATIONS"
+  },
+  {
+    "discrepancy_id": "DISC-005",
+    "category": "Extended Pool Status Provenance",
+    "severity": "MEDIUM (Contract Evidence)",
+    "claimed_in_prior_report": "14 players classified as formally released",
+    "official_frozen_deliverable": "14 players classified as Released (Extended Pool - Pending Verification)",
+    "source_of_truth_files": [
+      "data/processed/ipl_2027_franchise_accounting_reconciliation.csv"
+    ],
+    "root_cause": "Absence of official BCCI 2026 registered roster documentation for uncapped development and replacement players who were not part of the active 25-man squad freeze.",
+    "resolution_status": "PENDING VERIFICATION (Transparently isolated from core prior squad)"
+  }
+]

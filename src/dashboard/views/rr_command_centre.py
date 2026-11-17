@@ -43,11 +43,12 @@ def render_recruitment_command_centre(bundle: DashboardDataBundle) -> None:
         unsafe_allow_html=True,
     )
 
-    # Mandatory Disclaimer Banner
+    # Mandatory Supplementary Disclaimer Banner
     render_callout(
-        "<b>OFFICIAL ANALYTICAL DISCLAIMER:</b> PRESSUREIQ provides an independent analytical recruitment assessment. "
-        "It does not represent an official Rajasthan Royals recruitment decision or guarantee player eligibility, "
-        "auction availability, selection, or future performance.",
+        "<b>SUPPLEMENTARY RESEARCH NOTICE (MODEL B):</b> This view presents supplementary exploratory franchise recruitment intelligence "
+        "demonstrating downstream IPL scouting workflows (SMS Jaipur squad balance, player valuation, and auction contingency trees). "
+        "It is strictly separate from the official Round 1 competition deliverable (Model A Global Top 10 Batters & Bowlers). "
+        "Unverified players are never treated as confirmed auction targets, and Model A baseline scores remain 100% frozen.",
         accent=PALETTE["accent_terracotta"],
     )
 

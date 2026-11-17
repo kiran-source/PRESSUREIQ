@@ -111,6 +111,13 @@ def test_nathan_ellis_trade_and_contracted_status():
     bowl_top10 = pd.read_csv(PROCESSED_DIR / "rr_2027_bowler_top10.csv")
     assert "Nathan Ellis" not in bowl_top10["player_name"].values
 
+    # Verify all confirmed traded players are non-targetable in candidate pool
+    for traded_name in ["Harshal Patel", "Hardik Pandya", "Arshdeep Singh", "Rishabh Pant", "Kuldeep Yadav", "Mohammed Shami", "Sam Curran"]:
+        matches = cand_df[cand_df["player_name"] == traded_name]
+        if len(matches) > 0:
+            assert not matches.iloc[0]["is_targetable"]
+            assert matches.iloc[0]["auction_availability"] == "Confirmed Trade"
+
 
 def test_mcda_single_availability_weighting():
     """Verify that RR 2027 priority score uses single-pass additive MCDA weighting."""

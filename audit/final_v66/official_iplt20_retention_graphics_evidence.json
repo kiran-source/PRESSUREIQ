@@ -1,0 +1,41 @@
+{
+  "source_url": "https://www.instagram.com/p/Df2lhqjjb-h/",
+  "source_publisher": "@iplt20 (Verified Official Account)",
+  "source_platform": "Instagram (Official Verified Account)",
+  "publication_date": "2026-11-17",
+  "extraction_timestamp": "2026-11-17 20:05:00 IST",
+  "verification_confidence": "HIGH (Official League Primary Source)",
+  "total_rostered_players": 183,
+  "total_pure_retained": 169,
+  "total_traded_in": 14,
+  "total_exits": 78,
+  "exits_breakdown": {
+    "retired": 1,
+    "opted_out": 2,
+    "confirmed_released": 75
+  },
+  "team_wise_roster_counts": {
+    "CSK": 19,
+    "DC": 16,
+    "GT": 22,
+    "KKR": 17,
+    "LSG": 17,
+    "MI": 16,
+    "PBKS": 19,
+    "RCB": 20,
+    "RR": 19,
+    "SRH": 18
+  },
+  "team_wise_exit_counts": {
+    "CSK": 11,
+    "DC": 10,
+    "GT": 5,
+    "KKR": 12,
+    "LSG": 7,
+    "MI": 9,
+    "PBKS": 6,
+    "RCB": 5,
+    "RR": 4,
+    "SRH": 9
+  }
+}

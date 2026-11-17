@@ -43,12 +43,12 @@ def render_rr_target_bowlers(bundle: DashboardDataBundle) -> None:
         unsafe_allow_html=True,
     )
 
-    # Disclaimer
+    # Supplementary Disclaimer
     render_callout(
-        "<b>Model B Acquisition Gating:</b> Unlike global tournament rankings (Model A), this board strictly excludes "
-        "retained rival franchise bowlers (Jasprit Bumrah at MI, Matheesha Pathirana at KKR, Rashid Khan at GT) and "
-        "confirmed traded bowlers (Nathan Ellis to SRH, Arshdeep Singh to MI, Kuldeep Yadav to LSG, T Natarajan to SRH). "
-        "Only verified eligible, open auction targets appear here.",
+        "<b>SUPPLEMENTARY RESEARCH NOTICE (MODEL B):</b> Unlike global competition deliverables (Model A), this board presents supplementary "
+        "franchise-specific recruitment analysis. It strictly excludes retained rival franchise bowlers (Jasprit Bumrah at MI, "
+        "Matheesha Pathirana at KKR, Rashid Khan at GT) and confirmed traded bowlers (Nathan Ellis to SRH, Arshdeep Singh to MI, "
+        "Kuldeep Yadav to LSG, T Natarajan to SRH). Only verified eligible, open auction targets appear here.",
         accent=PALETTE["accent_terracotta"],
     )
 

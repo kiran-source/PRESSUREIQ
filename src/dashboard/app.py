@@ -60,8 +60,10 @@ def _cached_bundle() -> DashboardDataBundle:
 
 
 PAGE_ALIASES = {
-    "Overview": "Recruitment Command Centre",
-    "Pressure Leaderboards": "Global Pressure Intelligence",
+    "Overview": "Official Competition Leaderboards",
+    "Pressure Leaderboards": "Official Competition Leaderboards",
+    "Global Pressure Intelligence": "Official Competition Leaderboards",
+    "Competition Leaderboards": "Official Competition Leaderboards",
     "Player Intelligence": "Player Intelligence Profiles",
     "Player Comparison": "Player Comparison Lab",
     "Rajasthan Royals Intelligence": "Squad Gap Analysis",
@@ -116,50 +118,36 @@ def main() -> None:
         )
 
     routes = {
-        # Page 1: Recruitment Command Centre
-        "Recruitment Command Centre": render_recruitment_command_centre,
-        "Overview": render_recruitment_command_centre,
-
-        # Page 2: RR Target Batters
-        "RR Target Batters": render_rr_target_batters,
-
-        # Page 3: RR Target Bowlers
-        "RR Target Bowlers": render_rr_target_bowlers,
-
-        # Page 4: Player Intelligence Profiles
-        "Player Intelligence Profiles": render_player_intelligence,
-        "Player Intelligence": render_player_intelligence,
-
-        # Page 5: Squad Gap Analysis
-        "Squad Gap Analysis": render_squad_gap_analysis,
-        "Rajasthan Royals Intelligence": render_squad_gap_analysis,
-
-        # Page 6: Player Comparison Lab
-        "Player Comparison Lab": render_player_comparison,
-        "Player Comparison": render_player_comparison,
-
-        # Page 7: Alternative Target Finder
-        "Alternative Target Finder": render_alternative_target_finder,
-
-        # Page 8: Eligibility & Auction Watchlist
-        "Eligibility & Auction Watchlist": render_eligibility_and_watchlist,
-        "IPL 2027 Market Intelligence": render_eligibility_and_watchlist,
-
-        # Page 9: Global Pressure Intelligence (Preserved Model A)
+        # Round 1 Primary Deliverables (Model A)
+        "Official Competition Leaderboards": render_leaderboards,
         "Global Pressure Intelligence": render_leaderboards,
         "Pressure Leaderboards": render_leaderboards,
+        "Overview": render_overview,
 
-        # Page 10: Methodology & Model Validation
+        # Additional Scouting & Analytics
+        "Pressure Analytics & Physics": render_pressure_analytics,
+        "Pressure Analytics": render_pressure_analytics,
+        "Player Intelligence Profiles": render_player_intelligence,
+        "Player Intelligence": render_player_intelligence,
+        "Player Comparison Lab": render_player_comparison,
+        "Player Comparison": render_player_comparison,
+        "Player Directory": render_player_directory,
         "Methodology & Model Validation": render_methodology,
         "Methodology & Validation": render_methodology,
-
-        # Additional Scouting Tools
-        "Player Directory": render_player_directory,
-        "Pressure Analytics": render_pressure_analytics,
-        "Emerging Talent": render_emerging_talent,
         "Data Sources & Provenance": render_provenance,
+        "Emerging Talent": render_emerging_talent,
+
+        # Supplementary RR Recruitment Intelligence (Model B)
+        "Recruitment Command Centre": render_recruitment_command_centre,
+        "RR Target Batters": render_rr_target_batters,
+        "RR Target Bowlers": render_rr_target_bowlers,
+        "Squad Gap Analysis": render_squad_gap_analysis,
+        "Rajasthan Royals Intelligence": render_squad_gap_analysis,
+        "Alternative Target Finder": render_alternative_target_finder,
+        "Eligibility & Auction Watchlist": render_eligibility_and_watchlist,
+        "IPL 2027 Market Intelligence": render_eligibility_and_watchlist,
     }
-    renderer = routes.get(active_page, render_recruitment_command_centre)
+    renderer = routes.get(active_page, render_leaderboards)
     renderer(bundle)
 
     render_footer(

@@ -9,9 +9,9 @@ import pandas as pd
 SOURCE_URL = "https://www.jagranjosh.com/general-knowledge/ipl-2027-trade-list-hardik-pandya-arshdeep-singh-1820013788-1"
 SOURCE_TITLE = "IPL 2027 Trade List: Hardik Pandya, Arshdeep Singh and more"
 PUBLISHER = "Jagran Josh / BCCI IPL Trade Window"
-VERIFICATION_TS = "2026-11-13 20:49:00"
-PUB_DATE = "2026-11-13"
-SNAPSHOT_LABEL = "audit_2026_11_13_trades"
+VERIFICATION_TS = "2026-11-17 19:01:00"
+PUB_DATE = "2026-11-17"
+SNAPSHOT_LABEL = "audit_2026_11_17_trades"
 
 TRADES = [
     {
@@ -84,6 +84,45 @@ TRADES = [
         "current_verified_franchise": "Sunrisers Hyderabad",
         "fee": "₹2 crore",
     },
+    {
+        "player_id": 2261,
+        "player_name": "Harshal Patel",
+        "previous_franchise": "Punjab Kings",
+        "current_verified_franchise": "Gujarat Titans",
+        "fee": "₹4 crore",
+        "source_url": "https://www.mykhel.com/cricket/ipl-2027-trade-window-full-list-of-traded-players-ahead-of-retention-deadline-329841.html",
+        "source_title": "IPL 2027 Trade Window: Full list of traded players ahead of retention deadline",
+        "publisher": "MyKhel / BCCI IPL Trade Window",
+        "evidence_excerpt": "Confirmed IPL 2027 trade: Harshal Patel traded from Punjab Kings to Gujarat Titans in all-cash deal for ₹4 crore.",
+        "conflicting_evidence": "None. Contracted to Gujarat Titans for IPL 2027 (not available in open auction).",
+    },
+    {
+        "player_id": 1566,
+        "player_name": "Mohammed Shami",
+        "previous_franchise": "Lucknow Super Giants",
+        "current_verified_franchise": "Rajasthan Royals",
+        "fee": "₹8 crore",
+        "evidence_excerpt": "Confirmed IPL 2027 trade: Mohammed Shami traded from Lucknow Super Giants to Rajasthan Royals for fee of ₹8 crore.",
+        "conflicting_evidence": "None. Contracted to Rajasthan Royals for IPL 2027 (inflow to RR squad, not in open auction).",
+    },
+    {
+        "player_id": 6237,
+        "player_name": "Manimaran Siddharth",
+        "previous_franchise": "Lucknow Super Giants",
+        "current_verified_franchise": "Rajasthan Royals",
+        "fee": "₹75 lakh",
+        "evidence_excerpt": "Confirmed IPL 2027 trade: Manimaran Siddharth traded from Lucknow Super Giants to Rajasthan Royals for fee of ₹75 lakh.",
+        "conflicting_evidence": "None. Contracted to Rajasthan Royals for IPL 2027 (inflow to RR squad, not in open auction).",
+    },
+    {
+        "player_id": 4409,
+        "player_name": "Sam Curran",
+        "previous_franchise": "Rajasthan Royals",
+        "current_verified_franchise": "Lucknow Super Giants",
+        "fee": "₹2.40 crore",
+        "evidence_excerpt": "Confirmed IPL 2027 trade: Sam Curran traded from Rajasthan Royals to Lucknow Super Giants for fee of ₹2.40 crore.",
+        "conflicting_evidence": "None. Contracted to Lucknow Super Giants for IPL 2027 (outflow from RR squad, not in open auction).",
+    },
 ]
 
 
@@ -95,7 +134,7 @@ def main():
 
     # 1. Preserve backup snapshot before modification
     if template_path.exists():
-        snap_backup = snap_dir / f"ipl_2027_market_snapshot_20261113_pre_trades.csv"
+        snap_backup = snap_dir / f"ipl_2027_market_snapshot_20261117_pre_v65_trades.csv"
         shutil.copy2(template_path, snap_backup)
         print(f"Preserved historical snapshot to: {snap_backup}")
 
@@ -111,6 +150,11 @@ def main():
         prev = t["previous_franchise"]
         curr = t["current_verified_franchise"]
         fee = t["fee"]
+        s_url = t.get("source_url", SOURCE_URL)
+        s_title = t.get("source_title", SOURCE_TITLE)
+        s_pub = t.get("publisher", PUBLISHER)
+        excerpt = t.get("evidence_excerpt", f"Confirmed IPL 2027 trade: {pname} traded from {prev} to {curr} for fee of {fee}.")
+        conf_ev = t.get("conflicting_evidence", f"None. Contracted to {curr} for IPL 2027 (not available in open auction).")
 
         row_data = {
             "player_id": pid,
@@ -122,14 +166,14 @@ def main():
             "confirmed_trade_status": "Confirmed Trade",
             "transaction_mechanism": f"IPL 2027 pre-retention trade ({prev} -> {curr}, Fee: {fee})",
             "rumour_status": f"None — Officially confirmed pre-2027 trade ({fee})",
-            "source_url": SOURCE_URL,
-            "source_title": SOURCE_TITLE,
-            "publisher": PUBLISHER,
+            "source_url": s_url,
+            "source_title": s_title,
+            "publisher": s_pub,
             "source_publication_date": PUB_DATE,
             "verification_timestamp": VERIFICATION_TS,
             "confidence_classification": "Officially Confirmed (Pre-2027 Trade)",
-            "evidence_excerpt": f"Confirmed IPL 2027 trade: {pname} traded from {prev} to {curr} for fee of {fee}.",
-            "conflicting_evidence": f"None. Contracted to {curr} for IPL 2027 (not available in open auction).",
+            "evidence_excerpt": excerpt,
+            "conflicting_evidence": conf_ev,
             "snapshot_label": SNAPSHOT_LABEL,
             "last_updated": PUB_DATE,
         }
@@ -155,8 +199,8 @@ def main():
             "event_type": "TRADE_CONFIRMED",
             "previous_status": f"{prev} Roster",
             "new_status": f"{curr} Roster (Confirmed Trade - {fee})",
-            "verified_by": PUBLISHER,
-            "source_url": SOURCE_URL,
+            "verified_by": s_pub,
+            "source_url": s_url,
             "notes": f"Confirmed IPL 2027 trade: {pname} from {prev} to {curr} for {fee}.",
         }
         changelog_rows.append(cl_entry)

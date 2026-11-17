@@ -39,7 +39,7 @@ TRADE_URL_NOV = "https://www.jagranjosh.com/general-knowledge/ipl-2027-trade-lis
 RETENTION_URL = "https://www.iplt20.com"
 TRADE_URL_NOV5 = "https://www.iplt20.com"
 
-# Confirmed Trades ahead of IPL 2027 season (10 verified transactions)
+# Confirmed Trades ahead of IPL 2027 season (14 verified transactions)
 CONFIRMED_TRADES: Dict[str, Tuple[str, str, str, str]] = {
     # player_name: (previous_franchise, new_franchise, fee, source_url)
     "Hardik Pandya": ("Mumbai Indians", "Punjab Kings", "₹18 crore", TRADE_URL_NOV),
@@ -53,6 +53,12 @@ CONFIRMED_TRADES: Dict[str, Tuple[str, str, str, str]] = {
     "Jack Edwards": ("Sunrisers Hyderabad", "Chennai Super Kings", "₹3 crore", TRADE_URL_NOV),
     "Khaleel Ahmed": ("Chennai Super Kings", "Sunrisers Hyderabad", "₹4.80 crore", TRADE_URL_NOV),
     "Nathan Ellis": ("Chennai Super Kings", "Sunrisers Hyderabad", "₹2 crore", TRADE_URL_NOV),
+    "Harshal Patel": ("Sunrisers Hyderabad", "Gujarat Titans", "₹4 crore", TRADE_URL_NOV),
+    "Mohammed Shami": ("Lucknow Super Giants", "Rajasthan Royals", "₹8 crore", TRADE_URL_NOV),
+    "Manimaran Siddharth": ("Lucknow Super Giants", "Rajasthan Royals", "₹75 lakh", TRADE_URL_NOV),
+    "M. Siddharth": ("Lucknow Super Giants", "Rajasthan Royals", "₹75 lakh", TRADE_URL_NOV),
+    "M Siddharth": ("Lucknow Super Giants", "Rajasthan Royals", "₹75 lakh", TRADE_URL_NOV),
+    "Sam Curran": ("Rajasthan Royals", "Lucknow Super Giants", "₹2.40 crore", TRADE_URL_NOV),
 }
 
 # Franchise Retentions & Multi-Year Contracts (Rivals)

@@ -14,7 +14,13 @@ from src.dashboard.components import (
     render_chart_caption,
 )
 from src.dashboard.data_loader import DashboardDataBundle
-from src.dashboard.design_tokens import PALETTE, SNAPSHOT_ANCHOR_DATE
+from src.dashboard.design_tokens import (
+    PALETTE,
+    RETENTION_DEADLINE_DATE,
+    RETENTION_EVIDENCE_PROVENANCE,
+    RETENTION_UPDATE_TIMESTAMP,
+    SNAPSHOT_ANCHOR_DATE,
+)
 
 
 def render_eligibility_and_watchlist(bundle: DashboardDataBundle) -> None:
@@ -37,6 +43,9 @@ def render_eligibility_and_watchlist(bundle: DashboardDataBundle) -> None:
                 <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; background: {PALETTE['bg_surface_subtle']}; padding: 0.35rem 0.65rem; border-radius: 4px; border: 1px solid {PALETTE['border_card']}; color: {PALETTE['text_secondary']};">
                     AS-OF: <b>{SNAPSHOT_ANCHOR_DATE}</b> (Audit Ledger)
                 </span>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: {PALETTE['text_secondary']}; margin-top: 0.3rem;">
+                    RETENTION AUDIT: <b>{RETENTION_UPDATE_TIMESTAMP}</b>
+                </div>
             </div>
         </div>
         """,
@@ -45,9 +54,11 @@ def render_eligibility_and_watchlist(bundle: DashboardDataBundle) -> None:
 
     # Gating Principle Callout
     render_callout(
-        "<b>Evidence-Driven Market Verification:</b> Eligibility reflects regulatory clearance under BCCI/IPL governance rules. "
-        "Availability reflects contractual state. A player can be 100% eligible yet completely unavailable for auction recruitment "
-        "(e.g., traded or retained under contract). Only candidates who satisfy <b>both</b> enter the confirmed target rankings.",
+        f"<b>SUPPLEMENTARY RESEARCH &amp; MARKET PROVENANCE:</b> Eligibility reflects regulatory clearance under BCCI/IPL governance rules; "
+        f"availability reflects verified contractual state as of <b>{RETENTION_UPDATE_TIMESTAMP}</b> (Provenance: {RETENTION_EVIDENCE_PROVENANCE}). "
+        f"A player can be 100% eligible yet completely unavailable for auction recruitment (e.g., traded or retained under contract). "
+        f"Unverified candidates remain strictly categorized as Pending Verification and never appear as confirmed auction targets. "
+        f"Model A baseline scores and rankings remain 100% frozen.",
         accent=PALETTE["accent_terracotta"],
     )
 

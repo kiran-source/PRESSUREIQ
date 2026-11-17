@@ -104,9 +104,9 @@ def render_alternative_target_finder(bundle: DashboardDataBundle) -> None:
     )
 
     render_callout(
-        "<b>Auction Bidding Reality:</b> In competitive IPL mega-auctions, primary targets frequently escalate beyond budget caps "
+        "<b>SUPPLEMENTARY RESEARCH NOTICE (AUCTION CONTINGENCIES):</b> In competitive IPL auctions, primary targets frequently escalate beyond budget caps "
         "or get snatched by aggressive rival bidding wars. The Alternative Target Finder evaluates like-for-like role substitutes, "
-        "quantifying the statistical compromise and tactical trade-off before bidding starts.",
+        "quantifying the statistical compromise and tactical trade-off before bidding starts. Model A baseline reliability scores remain 100% frozen.",
         accent=PALETTE["accent_terracotta"],
     )
 

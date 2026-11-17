@@ -46,7 +46,7 @@ def render_squad_gap_analysis(bundle: DashboardDataBundle) -> None:
 
     # Overview Callout
     render_callout(
-        "<b>SMS Jaipur Strategic Imperative:</b> Sawai Mansingh Stadium features the longest square boundary dimensions (78m) "
+        "<b>SUPPLEMENTARY RESEARCH (SMS JAIPUR TACTICAL GAPS):</b> Sawai Mansingh Stadium features the longest square boundary dimensions (78m) "
         "in the IPL. Tactical success relies on restrictive finger-spin control ('Jaipur Squeeze') to limit boundary percentages "
         "and disciplined pace execution with cutters into the pitch. At the same time, away fixtures demand extreme power hitting "
         "at No. 7 and high-velocity death bowling.",

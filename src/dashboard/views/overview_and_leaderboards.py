@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 import pandas as pd
 import streamlit as st
 
@@ -32,6 +33,7 @@ from src.dashboard.components import (
     render_kpi_grid,
     render_player_podium_cards,
     render_section_header,
+    status_badge_html,
 )
 from src.dashboard.data_loader import (
     DELIVERIES_PAVA_PATH,
@@ -39,7 +41,15 @@ from src.dashboard.data_loader import (
     DashboardDataBundle,
     query_season_format_stats,
 )
-from src.dashboard.design_tokens import PALETTE, PRODUCT_NAME, PRODUCT_TAGLINE, SNAPSHOT_ANCHOR_DATE
+from src.dashboard.design_tokens import (
+    PALETTE,
+    PRODUCT_NAME,
+    PRODUCT_TAGLINE,
+    RETENTION_DEADLINE_DATE,
+    RETENTION_EVIDENCE_PROVENANCE,
+    RETENTION_UPDATE_TIMESTAMP,
+    SNAPSHOT_ANCHOR_DATE,
+)
 
 
 @st.cache_data(ttl=1800, show_spinner=False)
@@ -416,17 +426,202 @@ def _render_single_discipline_leaderboard(bundle: DashboardDataBundle, is_battin
     render_chart_caption("High-pressure opportunity exposure (P >= 50.0 balls) vs Reliability Score. Markers are sized by matches played; vertical dotted line denotes the Empirical Bayes K=45 threshold where sample data achieves 50% shrinkage weight.")
 
 
-def render_leaderboards(bundle: DashboardDataBundle) -> None:
-    """Page 2: Pressure Leaderboards with Batters & Bowlers tabs."""
-    st.title("Pressure Leaderboards")
+def _render_supplementary_rr_leaderboard(bundle: DashboardDataBundle) -> None:
+    """Supplementary RR Focus Leaderboard joining Model A reliability with official contract statuses."""
     render_callout(
-        "<b>Frozen Model A Baselines:</b> Rankings are loaded read-only from immutable competition CSVs. "
-        "Filtering, slicing by season/format, or changing sort order inspects the cohort without ever rewriting Model A scores or official ranks.",
-        accent=PALETTE["accent_terracotta"],
+        "<b>Supplementary Research Notice:</b> This view crosses objective Model A pressure composure rankings with official "
+        "IPL 2027 market contract statuses. Model A reliability scores and rank orders are <b>100% frozen</b> and uncompromised. "
+        "Unverified or pending players are strictly segregated and <b>never</b> presented as confirmed auction targets.",
+        accent=PALETTE["positive"],
     )
-    tab_bat, tab_bowl = st.tabs(["Batters Leaderboard (109 Qualified)", "Bowlers Leaderboard (147 Qualified)"])
-    with tab_bat:
-        _render_single_discipline_leaderboard(bundle, is_batting=True)
-    with tab_bowl:
-        _render_single_discipline_leaderboard(bundle, is_batting=False)
+
+    st.markdown(
+        f"""
+        <div style="background:{PALETTE['bg_surface_subtle']}; border:1px solid {PALETTE['border_subtle']}; border-radius:6px; padding:0.75rem 1rem; margin-bottom:1.2rem; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; font-weight:600; color:{PALETTE['accent_terracotta']};">OFFICIAL RETENTION STATUS AUDIT:</span>
+                <span style="font-family:'Inter', sans-serif; font-size:0.85rem; color:{PALETTE['text_primary']}; margin-left:0.5rem;">{RETENTION_EVIDENCE_PROVENANCE}</span>
+            </div>
+            <div>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:{PALETTE['text_secondary']};">LAST VERIFIED: <b>{RETENTION_UPDATE_TIMESTAMP}</b></span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    supp_csv_path = Path("data/processed/supplementary_rr_market_leaderboard.csv")
+    if not supp_csv_path.exists():
+        from scripts.build_supplementary_leaderboard import build_supplementary_leaderboards
+        build_supplementary_leaderboards()
+
+    df_supp = pd.read_csv(supp_csv_path).fillna("None")
+
+    # Filters
+    c1, c2, c3 = st.columns([1.1, 1.4, 1.5])
+    disc_filter = c1.selectbox(
+        "Discipline",
+        ["All Qualified Candidates", "Batters Only", "Bowlers Only"],
+        key="supp_disc_filter",
+    )
+    status_filter = c2.selectbox(
+        "Market Status Filter",
+        [
+            "All Contract Categories",
+            "Confirmed Released (Actionable Auction Targets)",
+            "Confirmed Retained & Trades (Unavailable)",
+            "Pending Verification (Awaiting Official Gazette)",
+            "Policy Restricted",
+        ],
+        key="supp_status_filter",
+    )
+    search_query = c3.text_input("Search Player Name", placeholder="Type player name...", key="supp_search_q")
+
+    filtered = df_supp.copy()
+    if disc_filter == "Batters Only":
+        filtered = filtered[filtered["discipline"] == "Batting"]
+    elif disc_filter == "Bowlers Only":
+        filtered = filtered[filtered["discipline"] == "Bowling"]
+
+    if status_filter == "Confirmed Released (Actionable Auction Targets)":
+        filtered = filtered[filtered["official_market_status"] == "Confirmed Released"]
+    elif status_filter == "Confirmed Retained & Trades (Unavailable)":
+        filtered = filtered[filtered["official_market_status"].isin(["Confirmed Retained", "Confirmed Trade"])]
+    elif status_filter == "Pending Verification (Awaiting Official Gazette)":
+        filtered = filtered[filtered["official_market_status"] == "Pending Verification"]
+    elif status_filter == "Policy Restricted":
+        filtered = filtered[filtered["official_market_status"] == "Policy/Eligibility Review"]
+
+    if search_query.strip():
+        filtered = filtered[filtered["player_name"].str.contains(search_query.strip(), case=False, na=False)]
+
+    # KPI Counters
+    n_total = len(filtered)
+    n_released = int((filtered["official_market_status"] == "Confirmed Released").sum())
+    n_trade = int((filtered["official_market_status"] == "Confirmed Trade").sum())
+    n_retained = int((filtered["official_market_status"] == "Confirmed Retained").sum())
+    n_pending = int((filtered["official_market_status"] == "Pending Verification").sum())
+
+    render_kpi_grid([
+        {
+            "label": "Filtered Candidates",
+            "value": str(n_total),
+            "sub": "Joined with objective Model A ranks",
+            "accent": PALETTE["text_primary"],
+            "icon": "users",
+        },
+        {
+            "label": "Confirmed Released",
+            "value": f"{n_released} Players",
+            "sub": "Officially verified auction targets",
+            "accent": PALETTE["positive"],
+            "icon": "check-circle",
+        },
+        {
+            "label": "Contracted / Traded",
+            "value": f"{n_retained + n_trade} Players",
+            "sub": f"{n_trade} pre-auction trades, {n_retained} retentions",
+            "accent": PALETTE["accent_terracotta"],
+            "icon": "lock",
+        },
+        {
+            "label": "Pending Gazette",
+            "value": f"{n_pending} Players",
+            "sub": "Pre-retention status pending Nov 17 filings",
+            "accent": PALETTE["warning"],
+            "icon": "clock",
+        },
+    ])
+
+    st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
+
+    # Display table
+    cols_to_show = [
+        "model_a_rank",
+        "player_name",
+        "discipline",
+        "role",
+        "reliability_score",
+        "score_ci_95",
+        "current_verified_franchise",
+        "official_market_status",
+        "recruitment_category",
+        "availability_summary",
+        "transaction_mechanism",
+    ]
+    display_df = filtered[cols_to_show].rename(
+        columns={
+            "model_a_rank": "Model A Rank",
+            "player_name": "Player Name",
+            "discipline": "Discipline",
+            "role": "Role / Style",
+            "reliability_score": "Reliability Score",
+            "score_ci_95": "95% Bootstrap CI",
+            "current_verified_franchise": "Verified Franchise",
+            "official_market_status": "Market Status",
+            "recruitment_category": "Recruitment Category",
+            "availability_summary": "Contract / Availability Detail",
+            "transaction_mechanism": "Official Evidence & Notes",
+        }
+    )
+
+    st.dataframe(display_df, width="stretch", hide_index=True)
+
+    # Export CSV
+    csv_bytes = filtered.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        label="Export Supplementary RR Focus Leaderboard (CSV)",
+        data=csv_bytes,
+        file_name="pressureiq_supplementary_rr_market_leaderboard.csv",
+        mime="text/csv",
+        key="dl_supp_leaderboard",
+    )
+
+
+def render_leaderboards(bundle: DashboardDataBundle) -> None:
+    """Official Competition Deliverable & Supplementary RR Focus."""
+    st.markdown(
+        f"""
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 1.2rem; border-bottom: 1px solid {PALETTE['border_subtle']}; padding-bottom: 0.8rem;">
+            <div>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: {PALETTE['accent_terracotta']}; font-weight: 600;">
+                    OFFICIAL ROUND 1 DELIVERABLE &bull; MODEL A GLOBAL INTELLIGENCE
+                </span>
+                <h1 style="font-family: 'Playfair Display', Georgia, serif; font-size: 2.2rem; font-weight: 600; color: {PALETTE['text_primary']}; margin: 0.2rem 0 0 0;">
+                    Pressure Reliability Leaderboards
+                </h1>
+                <p style="font-family: 'Inter', sans-serif; font-size: 0.92rem; color: {PALETTE['text_secondary']}; margin: 0.2rem 0 0 0;">
+                    Objective norm-referenced composure under high pressure across 200,999 deliveries and 867 competitive matches.
+                </p>
+            </div>
+            <div style="text-align: right;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; background: {PALETTE['bg_surface_subtle']}; padding: 0.35rem 0.65rem; border-radius: 4px; border: 1px solid {PALETTE['border_card']}; color: {PALETTE['text_secondary']};">
+                    BASELINES: <b>100% FROZEN (SHA-256 VERIFIED)</b>
+                </span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    tab_main, tab_supp = st.tabs([
+        "🏆 Official Competition Deliverables (Model A — Global Top 10)",
+        "🎯 Supplementary RR Focus & Market Availability (Exploratory Overlay)",
+    ])
+
+    with tab_main:
+        render_callout(
+            "<b>Official Round 1 Problem Statement Deliverable:</b> Below are the top 10 batters and top 10 bowlers who perform best under pressure, "
+            "evaluated through standardized ball-by-ball leverage physics (BPI & BoPI), PAVA monotonic value added, Empirical Bayes shrinkage, and N=2,000 match-clustered bootstrap uncertainty intervals. "
+            "Rankings and scores are loaded read-only from frozen baseline CSVs.",
+            accent=PALETTE["accent_terracotta"],
+        )
+        tab_bat, tab_bowl = st.tabs(["Batters Leaderboard (109 Qualified — Top 10 Highlighted)", "Bowlers Leaderboard (147 Qualified — Top 10 Highlighted)"])
+        with tab_bat:
+            _render_single_discipline_leaderboard(bundle, is_batting=True)
+        with tab_bowl:
+            _render_single_discipline_leaderboard(bundle, is_batting=False)
+
+    with tab_supp:
+        _render_supplementary_rr_leaderboard(bundle)
 

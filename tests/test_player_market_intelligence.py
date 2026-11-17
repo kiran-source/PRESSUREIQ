@@ -114,6 +114,22 @@ def test_verified_player_franchises_and_mechanisms():
     assert df.loc["Nathan Ellis", "official_retention_status"] == "Confirmed Trade"
     assert df.loc["Nathan Ellis", "confirmed_trade_status"] == "Confirmed Trade"
 
+    assert df.loc["Harshal Patel", "current_verified_franchise"] == "Gujarat Titans"
+    assert df.loc["Harshal Patel", "official_retention_status"] == "Confirmed Trade"
+    assert df.loc["Harshal Patel", "confirmed_trade_status"] == "Confirmed Trade"
+
+    assert df.loc["Mohammed Shami", "current_verified_franchise"] == "Rajasthan Royals"
+    assert df.loc["Mohammed Shami", "official_retention_status"] == "Confirmed Trade"
+    assert df.loc["Mohammed Shami", "confirmed_trade_status"] == "Confirmed Trade"
+
+    assert df.loc["Manimaran Siddharth", "current_verified_franchise"] == "Rajasthan Royals"
+    assert df.loc["Manimaran Siddharth", "official_retention_status"] == "Confirmed Trade"
+    assert df.loc["Manimaran Siddharth", "confirmed_trade_status"] == "Confirmed Trade"
+
+    assert df.loc["Sam Curran", "current_verified_franchise"] == "Lucknow Super Giants"
+    assert df.loc["Sam Curran", "official_retention_status"] == "Confirmed Trade"
+    assert df.loc["Sam Curran", "confirmed_trade_status"] == "Confirmed Trade"
+
     assert df.loc["Haris Rauf", "official_retention_status"] == "Policy/Eligibility Review"
 
 

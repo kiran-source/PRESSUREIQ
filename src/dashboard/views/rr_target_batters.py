@@ -43,11 +43,12 @@ def render_rr_target_batters(bundle: DashboardDataBundle) -> None:
         unsafe_allow_html=True,
     )
 
-    # Disclaimer
+    # Supplementary Disclaimer
     render_callout(
-        "<b>Model B Acquisition Gating:</b> Unlike global tournament rankings (Model A), this board strictly excludes "
-        "retained rival franchise players (e.g. Ruturaj Gaikwad at CSK, Rohit Sharma & Suryakumar Yadav at MI) and "
-        "confirmed traded players (Hardik Pandya to PBKS, Rishabh Pant to DC). Only verified eligible, uncontracted auction targets appear here.",
+        "<b>SUPPLEMENTARY RESEARCH NOTICE (MODEL B):</b> Unlike global competition deliverables (Model A), this board presents supplementary "
+        "franchise-specific recruitment analysis. It strictly excludes retained rival franchise players (e.g. Ruturaj Gaikwad at CSK, "
+        "Rohit Sharma & Suryakumar Yadav at MI) and confirmed traded players (Hardik Pandya to PBKS, Rishabh Pant to DC). "
+        "Only verified eligible, uncontracted auction targets appear here.",
         accent=PALETTE["accent_terracotta"],
     )
 

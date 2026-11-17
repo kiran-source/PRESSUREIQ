@@ -1,0 +1,133 @@
+{
+  "manifest_version": "V6.6.1",
+  "document_title": "IPL 2027 Official Social-Media Graphics Source Evidence Manifest",
+  "primary_source_url": "https://www.instagram.com/p/Df2lhqjjb-h/",
+  "publisher": "@iplt20 (Verified Official BCCI / IPL Account)",
+  "publication_date": "2026-11-17",
+  "verification_timestamp": "2026-11-17 20:05:00 IST",
+  "verification_confidence": "HIGH (Official League Primary Source)",
+  "total_slides": 10,
+  "slides": {
+    "Slide 1": {
+      "team": "CSK",
+      "rostered_count": 19,
+      "overseas_count": 4,
+      "traded_in_count": 2,
+      "domestic_count": 13
+    },
+    "Slide 2": {
+      "team": "DC",
+      "rostered_count": 16,
+      "overseas_count": 4,
+      "traded_in_count": 2,
+      "domestic_count": 10
+    },
+    "Slide 3": {
+      "team": "GT",
+      "rostered_count": 22,
+      "overseas_count": 6,
+      "traded_in_count": 1,
+      "domestic_count": 15
+    },
+    "Slide 4": {
+      "team": "KKR",
+      "rostered_count": 17,
+      "overseas_count": 5,
+      "traded_in_count": 0,
+      "domestic_count": 12
+    },
+    "Slide 5": {
+      "team": "LSG",
+      "rostered_count": 17,
+      "overseas_count": 4,
+      "traded_in_count": 2,
+      "domestic_count": 11
+    },
+    "Slide 6": {
+      "team": "MI",
+      "rostered_count": 16,
+      "overseas_count": 6,
+      "traded_in_count": 1,
+      "domestic_count": 9
+    },
+    "Slide 7": {
+      "team": "PBKS",
+      "rostered_count": 19,
+      "overseas_count": 6,
+      "traded_in_count": 1,
+      "domestic_count": 12
+    },
+    "Slide 8": {
+      "team": "RR",
+      "rostered_count": 19,
+      "overseas_count": 5,
+      "traded_in_count": 2,
+      "domestic_count": 12
+    },
+    "Slide 9": {
+      "team": "RCB",
+      "rostered_count": 20,
+      "overseas_count": 7,
+      "traded_in_count": 0,
+      "domestic_count": 13
+    },
+    "Slide 10": {
+      "team": "SRH",
+      "rostered_count": 18,
+      "overseas_count": 4,
+      "traded_in_count": 3,
+      "domestic_count": 11
+    }
+  },
+  "visual_markers_legend": {
+    "T": {
+      "meaning": "Traded Inflow (Confirmed Trade)",
+      "verification": "Corroborates 14 verified trade window transfers",
+      "total_observed": 14
+    },
+    "cross": {
+      "meaning": "Overseas Player Slot (Aeroplane \u2708 / cross icon in league graphics)",
+      "verification": "Designates overseas nationality quota limit",
+      "total_observed": 51
+    },
+    "none": {
+      "meaning": "Domestic Retained Player Core",
+      "verification": "Retained Indian player",
+      "total_observed": 118
+    }
+  },
+  "derived_evidence_file_checksums": {
+    "data/processed/ipl_2027_official_squad_rosters.csv": {
+      "size_bytes": 41470,
+      "sha256": "7565e7b45d1c81633186863572f16592fa067ea8ea7ad808f87fc4f390b4159e"
+    },
+    "data/processed/ipl_2027_released_players_audit.csv": {
+      "size_bytes": 19684,
+      "sha256": "f8461474e9e30a883950c8a37f3c318b921674d7284b7432cd2abb739bc183eb"
+    },
+    "data/processed/ipl_2027_franchise_accounting_reconciliation.csv": {
+      "size_bytes": 48485,
+      "sha256": "733d59659efcfa415e395ee254cbdb76a69b9880d5be7c0fab6843a432ed6fd0"
+    },
+    "data/processed/ipl_2027_player_market_template.csv": {
+      "size_bytes": 21999,
+      "sha256": "83b3b0305a9d1c7a7ad5db212b8ff7e7753d812331ab1b90617442acecabd255"
+    },
+    "data/processed/ipl_2027_market_change_log.csv": {
+      "size_bytes": 12481,
+      "sha256": "5d8d1a258cda2277bf13fa533594164456775fbf935a6c930567c9ae5dee881c"
+    },
+    "submission_handover/03_Evidence_CSVs_And_Provenance/ipl_2027_official_squad_rosters.csv": {
+      "size_bytes": 41470,
+      "sha256": "7565e7b45d1c81633186863572f16592fa067ea8ea7ad808f87fc4f390b4159e"
+    },
+    "submission_handover/03_Evidence_CSVs_And_Provenance/ipl_2027_released_players_audit.csv": {
+      "size_bytes": 19684,
+      "sha256": "f8461474e9e30a883950c8a37f3c318b921674d7284b7432cd2abb739bc183eb"
+    },
+    "submission_handover/03_Evidence_CSVs_And_Provenance/ipl_2027_franchise_accounting_reconciliation.csv": {
+      "size_bytes": 48485,
+      "sha256": "733d59659efcfa415e395ee254cbdb76a69b9880d5be7c0fab6843a432ed6fd0"
+    }
+  }
+}
