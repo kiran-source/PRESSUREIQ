@@ -13,6 +13,10 @@
 *.toml text eol=lf
 *.csv text eol=lf
 *.html text eol=lf
+
+# Canonical frozen competition deliverables (preserve exact CRLF byte sequence across all platforms)
+data/processed/final_batter_rankings.csv text eol=crlf
+data/processed/final_bowler_rankings.csv text eol=crlf
 .gitignore text eol=lf
 .gitattributes text eol=lf
 

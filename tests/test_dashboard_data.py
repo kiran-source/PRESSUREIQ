@@ -387,6 +387,37 @@ def test_model_a_leaderboard_direct_csv_fallback():
         pytest.fail(f"_render_single_discipline_leaderboard raised an unexpected exception: {exc}")
 
 
+def test_cross_platform_hash_integrity_and_tamper_detection(tmp_path):
+    """Verify that compute_file_sha256 reliably verifies LF/CRLF representations while strictly rejecting tampered files."""
+    from src.dashboard.data_loader import (
+        BATTER_RANKINGS_PATH,
+        BOWLER_RANKINGS_PATH,
+        FROZEN_BATTER_SHA256,
+        FROZEN_BOWLER_SHA256,
+        compute_file_sha256,
+    )
+
+    # 1. On-disk canonical CSVs match frozen hashes
+    assert compute_file_sha256(BATTER_RANKINGS_PATH) == FROZEN_BATTER_SHA256
+    assert compute_file_sha256(BOWLER_RANKINGS_PATH) == FROZEN_BOWLER_SHA256
+
+    # 2. Simulated Linux LF checkout matches frozen hashes
+    lf_bat_path = tmp_path / "linux_batters.csv"
+    lf_bowl_path = tmp_path / "linux_bowlers.csv"
+    lf_bat_path.write_bytes(BATTER_RANKINGS_PATH.read_bytes().replace(b"\r\n", b"\n"))
+    lf_bowl_path.write_bytes(BOWLER_RANKINGS_PATH.read_bytes().replace(b"\r\n", b"\n"))
+
+    assert compute_file_sha256(lf_bat_path) == FROZEN_BATTER_SHA256
+    assert compute_file_sha256(lf_bowl_path) == FROZEN_BOWLER_SHA256
+
+    # 3. Tampered data is strictly detected and does NOT match
+    tampered_path = tmp_path / "tampered.csv"
+    tampered_bytes = BATTER_RANKINGS_PATH.read_bytes().replace(b"Ruturaj Gaikwad", b"Tampered Player")
+    tampered_path.write_bytes(tampered_bytes)
+    assert compute_file_sha256(tampered_path) != FROZEN_BATTER_SHA256
+
+
+
 
 
 
