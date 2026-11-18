@@ -450,12 +450,42 @@ def _render_supplementary_rr_leaderboard(bundle: DashboardDataBundle) -> None:
         unsafe_allow_html=True,
     )
 
-    supp_csv_path = Path("data/processed/supplementary_rr_market_leaderboard.csv")
+    repo_root = Path(__file__).resolve().parents[3]
+    supp_csv_path = repo_root / "data" / "processed" / "supplementary_rr_market_leaderboard.csv"
     if not supp_csv_path.exists():
-        from scripts.build_supplementary_leaderboard import build_supplementary_leaderboards
-        build_supplementary_leaderboards()
+        try:
+            from scripts.build_supplementary_leaderboard import build_supplementary_leaderboards
+            build_supplementary_leaderboards()
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).warning("Supplementary leaderboard auto-generation skipped: %s", exc)
 
-    df_supp = pd.read_csv(supp_csv_path).fillna("None")
+    if not supp_csv_path.exists():
+        missing_sources = []
+        for p in [repo_root / "data" / "processed" / "final_batter_rankings.csv",
+                  repo_root / "data" / "processed" / "final_bowler_rankings.csv",
+                  repo_root / "data" / "processed" / "ipl_2027_player_market_template.csv"]:
+            if not p.exists():
+                missing_sources.append(p.name)
+
+        diag = f"Missing source file(s): <code>{', '.join(missing_sources)}</code>" if missing_sources else f"File not found: <code>{supp_csv_path.name}</code>"
+        render_callout(
+            f"<b>Supplementary Leaderboard Unavailable:</b> {diag}.<br/>"
+            "The supplementary RR recruitment focus leaderboard requires both Model A rankings and the IPL 2027 market contract registry to compute market crosses. "
+            "<b>Official Model A rankings in Tab 1 are unaffected and remain fully accessible.</b>",
+            accent=PALETTE["warning"],
+        )
+        return
+
+    try:
+        df_supp = pd.read_csv(supp_csv_path).fillna("None")
+    except Exception as exc:
+        render_callout(
+            f"<b>Supplementary Leaderboard Error:</b> Failed to read <code>{supp_csv_path.name}</code>: <code>{exc}</code>.<br/>"
+            "Official Model A rankings in Tab 1 remain unaffected.",
+            accent=PALETTE["warning"],
+        )
+        return
 
     # Filters
     c1, c2, c3 = st.columns([1.1, 1.4, 1.5])
@@ -623,5 +653,14 @@ def render_leaderboards(bundle: DashboardDataBundle) -> None:
             _render_single_discipline_leaderboard(bundle, is_batting=False)
 
     with tab_supp:
-        _render_supplementary_rr_leaderboard(bundle)
+        try:
+            _render_supplementary_rr_leaderboard(bundle)
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).error("Unexpected error in supplementary leaderboard: %s", exc, exc_info=True)
+            render_callout(
+                f"<b>Supplementary View Notice:</b> The supplementary RR market leaderboard encountered an unexpected error: <code>{exc}</code>. "
+                "The official Model A leaderboards in Tab 1 remain fully functional and unaffected.",
+                accent=PALETTE["warning"],
+            )
 

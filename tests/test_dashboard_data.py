@@ -343,5 +343,37 @@ def test_coderabbit_findings_remediation():
         assert len(tbl) == len(bm_df)
 
 
+def test_supplementary_leaderboard_builder_missing_file_handling(tmp_path):
+    """Verify that build_supplementary_leaderboards raises FileNotFoundError when source files are missing."""
+    from scripts.build_supplementary_leaderboard import build_supplementary_leaderboards
+
+    empty_dir = tmp_path / "empty_processed"
+    empty_dir.mkdir(parents=True, exist_ok=True)
+
+    with pytest.raises(FileNotFoundError) as exc_info:
+        build_supplementary_leaderboards(processed_dir=empty_dir)
+    assert "missing required source file" in str(exc_info.value).lower()
+
+
+def test_supplementary_leaderboard_renders_gracefully_when_missing(monkeypatch, tmp_path):
+    """Verify that _render_supplementary_rr_leaderboard does not crash when the supplementary CSV is missing."""
+    from src.dashboard.views.overview_and_leaderboards import _render_supplementary_rr_leaderboard
+    bundle = load_dashboard_bundle_uncached()
+
+    # Point supp_csv_path to a non-existent file in tmp_path
+    fake_path = tmp_path / "non_existent_supplementary_leaderboard.csv"
+    monkeypatch.setattr(
+        "src.dashboard.views.overview_and_leaderboards.Path",
+        lambda *args: fake_path if "supplementary_rr_market_leaderboard" in str(args) else Path(*args),
+    )
+
+    # Calling the renderer must NOT raise an exception
+    try:
+        _render_supplementary_rr_leaderboard(bundle)
+    except Exception as exc:
+        pytest.fail(f"_render_supplementary_rr_leaderboard raised an exception when CSV is missing: {exc}")
+
+
+
 
 

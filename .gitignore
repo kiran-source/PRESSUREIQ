@@ -39,15 +39,21 @@ ENV/
 .coverage
 htmlcov/
 
-# Raw Data (preserve original files without pushing 40MB+ raw data to git commits if needed, or track scripts)
-# Keep data pack untracked if large or track git lfs, but let's ignore huge parquet/csv exports if generated
-*.parquet
-data/processed/
+# Raw Data & Intermediate Backups
+SupeRR Selector Season 2 _ Problem Statement _ Data Pack/
 data/interim/
+data/processed/baseline_v1_backup/
+data/processed/official_baseline_v2/
+data/processed/challenge_results/
+data/processed/hybrid_validation_results/
+data/processed/research_pressure/
+data/processed/models/
+data/processed/*.zip
+data/processed/*.pdf
+
+*.zip
 .DS_Store
 *.log
-*.zip
 catboost_info/
 .playwright-mcp/
-SupeRR Selector Season 2 _ Problem Statement _ Data Pack/
 

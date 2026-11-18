@@ -1,0 +1,78 @@
+{
+  "audit_timestamp": "2026-11-11T22:18:00+05:30",
+  "audit_date": "2026-11-11",
+  "git": {
+    "branch": "remediation-phase1-audit",
+    "head_commit": "b5c48e0b0c37f4d7b595e7b3ea00d12965a0f00e",
+    "frozen_master_commit": "fc0e622c10d49b4b484c6ddd0e6fdde4f76091c2",
+    "working_tree_clean_before_phase2": true,
+    "diff_count_vs_master": 76
+  },
+  "archives": {
+    "frozen_submission_zip": {
+      "path": "PRESSUREIQ_Final_Submission.zip",
+      "sha256": "76059a8f5f8b8de5126a5ed8b2a9378fb6664016989f3125df7ca4bbbe9696db",
+      "unchanged": true
+    },
+    "remediation_zip": {
+      "path": "PRESSUREIQ_Phase1_Remediation.zip",
+      "sha256": "f0bf96720d07ebd08eead91ca740490af213cd66317a96864fb42d8c1f1fd645",
+      "size_bytes": 53548998,
+      "file_count": 223,
+      "crc_status": "PASS",
+      "secret_scan_hits": 0,
+      "uncommitted_files_in_zip": 0
+    }
+  },
+  "frozen_rankings": {
+    "final_batter_rankings_csv": {
+      "frozen_sha256": "887f0c104047eb7b5c7d662b83600bacaf6263fa7162fc343b27800760b99b87",
+      "regenerated_clean_room_sha256": "887f0c104047eb7b5c7d662b83600bacaf6263fa7162fc343b27800760b99b87",
+      "byte_identical": true,
+      "top10_exact_match": true
+    },
+    "final_bowler_rankings_csv": {
+      "frozen_sha256": "344d63c55cecc7bce9de3cd06d82b6ac8217fcd448bb3f2e93d55da314f1e7bb",
+      "regenerated_clean_room_sha256": "344d63c55cecc7bce9de3cd06d82b6ac8217fcd448bb3f2e93d55da314f1e7bb",
+      "byte_identical": true,
+      "top10_exact_match": true
+    }
+  },
+  "environment": {
+    "python_version": "Python 3.13.5",
+    "isolated_venv_path": "C:\\Users\\kiran\\AppData\\Local\\Temp\\prq_venv",
+    "ensurepip_workaround_needed": true,
+    "ensurepip_error": "Host Python 3.13 ensurepip/_bundled missing wheel FileNotFoundError; installed via host pip --python",
+    "packages": {
+      "pandas": "2.3.3",
+      "numpy": "2.2.2",
+      "scipy": "1.16.3",
+      "scikit-learn": "1.8.0",
+      "lightgbm": "4.7.0",
+      "xgboost": "3.2.0",
+      "catboost": "1.2.10",
+      "duckdb": "2.0.0",
+      "plotly": "6.6.0",
+      "streamlit": "1.56.0",
+      "pyarrow": "23.0.1",
+      "pytest": "9.1.1"
+    }
+  },
+  "checks": {
+    "passed": [
+      "A1: Archive SHA-256, CRC testzip(), 223-file manifest, and secret scan (0 hits)",
+      "A2: Git commit verification, clean tree, master preservation, diff audit",
+      "A3a: Deterministic regeneration of Model A batter & bowler CSVs byte-identical to frozen baseline",
+      "A3b: build_market_intelligence.py (rc=0) & import_market_retentions.py (rc=0) & 8/8 market guardrail tests (rc=0)"
+    ],
+    "failed": [
+      "A3c: Clean-room pytest tests/ exited 2 at collection because pymupdf is imported in tests/test_final_competition_deliverables.py but missing from requirements.txt",
+      "A3d: Archive-only pytest (--ignore=test_final_competition_deliverables.py) exited 1 (70 passed, 1 skipped, 1 failed on missing PRESSUREIQ_Final_Submission.zip in archive-only root)"
+    ],
+    "blocked": [
+      "A3e: scripts/build_rr_2027_recommendations.py exited 1 in archive-only clean room due to excluded raw competition_team_player_mapping.csv",
+      "Tooling: coderabbit CLI/plugin is not installed in this environment"
+    ]
+  }
+}
+

@@ -1,0 +1,5 @@
+timestamp,player_id,player_name,event_type,previous_status,new_status,verified_by,source_url,notes
+2026-11-05 14:00:00,7920,Nathan Ellis,TRADE_CONFIRMED,Chennai Super Kings Roster,Sunrisers Hyderabad Roster,IPL Governing Council Trade Notification,https://www.chennaisuperkings.com/news/trade-deal-ellis-khaleel,Four-player blockbuster trade: Ellis and Khaleel traded to SRH for Livingstone and Edwards.
+2026-11-06 10:30:00,48557,Vignesh Puthur,TRADE_CONFIRMED,Mumbai Indians Roster,Rajasthan Royals Roster,IPL Governing Council Trade Notification,https://www.iplt20.com/news/trade-window-updates,Acquired by RR for spin depth.
+2026-11-07 16:00:00,3916,Jitesh Sharma,RELEASE_CONFIRMED,Punjab Kings Squad,Auction Pool Available,Franchise Release Notification,https://www.punjabkingsipl.in/news/squad-releases,Unretained; enters mini-auction pool.
+2026-11-08 11:30:00,6726,Romario Shepherd,RELEASE_CONFIRMED,Mumbai Indians Squad,Auction Pool Available,Franchise Release Notification,https://www.mumbaiindians.com/news/squad-updates,Unretained; prime target for RR #7 finisher.

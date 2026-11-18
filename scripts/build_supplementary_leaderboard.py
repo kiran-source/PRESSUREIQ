@@ -14,19 +14,30 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 
-def build_supplementary_leaderboards():
+from typing import Optional
+
+def build_supplementary_leaderboards(
+    processed_dir: Optional[Path] = None,
+    handover_dir: Optional[Path] = None,
+):
     print("--- BUILDING SUPPLEMENTARY RR FOCUS LEADERBOARDS ---")
-    processed_dir = Path("data/processed")
-    handover_dir = Path("submission_handover/03_Evidence_CSVs_And_Provenance")
+    root = Path(__file__).resolve().parent.parent
+    if processed_dir is None:
+        processed_dir = root / "data" / "processed"
+    if handover_dir is None:
+        handover_dir = root / "submission_handover" / "03_Evidence_CSVs_And_Provenance"
     
     # 1. Load canonical Model A datasets
     fb_path = processed_dir / "final_batter_rankings.csv"
     fw_path = processed_dir / "final_bowler_rankings.csv"
     mkt_path = processed_dir / "ipl_2027_player_market_template.csv"
     
-    assert fb_path.exists(), f"Missing {fb_path}"
-    assert fw_path.exists(), f"Missing {fw_path}"
-    assert mkt_path.exists(), f"Missing {mkt_path}"
+    missing = [str(p.name) for p in [fb_path, fw_path, mkt_path] if not p.exists()]
+    if missing:
+        import logging
+        msg = f"Cannot build supplementary leaderboard: missing required source file(s): {', '.join(missing)}"
+        logging.getLogger(__name__).warning(msg)
+        raise FileNotFoundError(msg)
     
     fb = pd.read_csv(fb_path)
     fw = pd.read_csv(fw_path)
