@@ -88,7 +88,6 @@ gatherUsageStats = false
 headless = true
 enableCORS = false
 enableXsrfProtection = false
-port = 8502
 ```
 
 ---
@@ -102,7 +101,7 @@ Before deploying, run a local production simulation:
 pip install -r requirements.txt
 
 # Run with production settings
-streamlit run streamlit_app.py --server.headless true --server.port 8502
+streamlit run streamlit_app.py --server.headless true --server.port 8501
 
 # In another terminal: verify 107/107 tests pass
 python -m pytest tests/ -q
