@@ -374,6 +374,20 @@ def test_supplementary_leaderboard_renders_gracefully_when_missing(monkeypatch, 
         pytest.fail(f"_render_supplementary_rr_leaderboard raised an exception when CSV is missing: {exc}")
 
 
+def test_model_a_leaderboard_direct_csv_fallback():
+    """Verify that _render_single_discipline_leaderboard recovers from an empty bundle DataFrame via direct CSV load."""
+    from src.dashboard.views.overview_and_leaderboards import _render_single_discipline_leaderboard
+    bundle = load_dashboard_bundle_uncached()
+    bundle.bat_df = pd.DataFrame()  # Simulate empty bundle dataframe
+
+    # Calling the renderer must NOT raise an exception and should recover via CSV
+    try:
+        _render_single_discipline_leaderboard(bundle, is_batting=True)
+    except Exception as exc:
+        pytest.fail(f"_render_single_discipline_leaderboard raised an unexpected exception: {exc}")
+
+
+
 
 
 

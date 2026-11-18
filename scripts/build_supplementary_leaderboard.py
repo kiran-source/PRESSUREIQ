@@ -158,10 +158,14 @@ def build_supplementary_leaderboards(
     # Verify non-interference with Model A
     fb_check = pd.read_csv(fb_path)
     fw_check = pd.read_csv(fw_path)
-    assert fb_check.iloc[0]["player_name"] == "Ruturaj Gaikwad", "Model A Batters mutated!"
-    assert fw_check.iloc[0]["player_name"] == "Liam Dawson", "Model A Bowlers mutated!"
-    assert np.isclose(bat_supp.iloc[0]["reliability_score"], 97.71), "Score drift detected!"
-    assert np.isclose(bowl_supp.iloc[0]["reliability_score"], 95.39), "Score drift detected!"
+    if fb_check.iloc[0]["player_name"] != "Ruturaj Gaikwad":
+        raise ValueError("Model A Batters mutated!")
+    if fw_check.iloc[0]["player_name"] != "Liam Dawson":
+        raise ValueError("Model A Bowlers mutated!")
+    if not np.isclose(bat_supp.iloc[0]["reliability_score"], 97.71):
+        raise ValueError("Score drift detected!")
+    if not np.isclose(bowl_supp.iloc[0]["reliability_score"], 95.39):
+        raise ValueError("Score drift detected!")
     print("Non-interference validation: PASS (Zero Model A drift, 100% score integrity)")
 
 if __name__ == "__main__":

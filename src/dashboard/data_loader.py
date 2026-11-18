@@ -183,6 +183,10 @@ def query_match_cluster_ess(pava_path: Path = DELIVERIES_PAVA_PATH, is_batting: 
     con = duckdb.connect()
     try:
         return con.execute(sql, [p_str]).df()
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning("query_match_cluster_ess failed: %s", exc)
+        return pd.DataFrame(columns=["player_id", "kish_match_ess", "hp_matches_played"])
     finally:
         con.close()
 
@@ -240,6 +244,10 @@ def query_season_format_stats(
     con = duckdb.connect()
     try:
         return con.execute(sql, params).df()
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning("query_season_format_stats failed: %s", exc)
+        return pd.DataFrame()
     finally:
         con.close()
 
@@ -265,6 +273,10 @@ def query_player_deliveries(
     con = duckdb.connect()
     try:
         return con.execute(sql, [p_str, int(player_id)]).df()
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning("query_player_deliveries failed: %s", exc)
+        return pd.DataFrame()
     finally:
         con.close()
 
@@ -296,6 +308,10 @@ def query_player_match_contributions(
             return con.execute(sql, [t_str, m_str, int(player_id)]).df()
         sql = f"SELECT * FROM read_parquet(?) WHERE {id_col} = ?"
         return con.execute(sql, [t_str, int(player_id)]).df()
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning("query_player_match_contributions failed: %s", exc)
+        return pd.DataFrame()
     finally:
         con.close()
 
@@ -335,6 +351,10 @@ def query_unestablished_profiles(
     con = duckdb.connect()
     try:
         return con.execute(sql, [p_str]).df()
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning("query_unestablished_profiles failed: %s", exc)
+        return pd.DataFrame()
     finally:
         con.close()
 
@@ -358,6 +378,10 @@ def query_cohort_phase_summary(pava_path: Path = DELIVERIES_PAVA_PATH) -> pd.Dat
     con = duckdb.connect()
     try:
         return con.execute(sql, [p_str]).df()
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning("query_cohort_phase_summary failed: %s", exc)
+        return pd.DataFrame()
     finally:
         con.close()
 
@@ -444,6 +468,10 @@ def query_pressure_analytics_summary(pava_path: Path = DELIVERIES_PAVA_PATH) -> 
         """
         phase_df = con.execute(phase_sql, [p_str]).df()
         return {"hist": hist_df, "tiers": tiers_df, "phase_outcomes": phase_df}
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning("query_pressure_analytics_summary failed: %s", exc)
+        return {"hist": pd.DataFrame(), "tiers": pd.DataFrame(), "phase_outcomes": pd.DataFrame()}
     finally:
         con.close()
 
@@ -483,6 +511,10 @@ def query_dataset_missingness(pava_path: Path = DELIVERIES_PAVA_PATH) -> pd.Data
                 for name, cnt, note in items
             ]
         )
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning("query_dataset_missingness failed: %s", exc)
+        return pd.DataFrame()
     finally:
         con.close()
 

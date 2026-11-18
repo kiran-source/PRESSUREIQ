@@ -238,6 +238,18 @@ def _render_single_discipline_leaderboard(bundle: DashboardDataBundle, is_battin
     accent = RR_BLUE if is_batting else RR_PINK
     role_col = "role" if is_batting else "bowling_type"
 
+    # Direct canonical CSV load guarantee for official Model A leaderboards
+    if raw_df.empty or "rank" not in raw_df.columns:
+        repo_root = Path(__file__).resolve().parents[3]
+        csv_file = "final_batter_rankings.csv" if is_batting else "final_bowler_rankings.csv"
+        csv_path = repo_root / "data" / "processed" / csv_file
+        if csv_path.exists():
+            try:
+                raw_df = pd.read_csv(csv_path)
+            except Exception as exc:
+                import logging
+                logging.getLogger(__name__).warning("Direct load of %s failed: %s", csv_file, exc)
+
     if raw_df.empty or "rank" not in raw_df.columns:
         render_empty_state(f"Official {disc_name} rankings unavailable", f"Verify `data/processed/final_{'batter' if is_batting else 'bowler'}_rankings.csv` is present.")
         return
@@ -452,13 +464,6 @@ def _render_supplementary_rr_leaderboard(bundle: DashboardDataBundle) -> None:
 
     repo_root = Path(__file__).resolve().parents[3]
     supp_csv_path = repo_root / "data" / "processed" / "supplementary_rr_market_leaderboard.csv"
-    if not supp_csv_path.exists():
-        try:
-            from scripts.build_supplementary_leaderboard import build_supplementary_leaderboards
-            build_supplementary_leaderboards()
-        except Exception as exc:
-            import logging
-            logging.getLogger(__name__).warning("Supplementary leaderboard auto-generation skipped: %s", exc)
 
     if not supp_csv_path.exists():
         missing_sources = []

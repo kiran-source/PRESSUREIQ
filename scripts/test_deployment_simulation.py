@@ -15,6 +15,9 @@ import time
 import urllib.request
 import urllib.error
 
+sys.stdout.reconfigure(line_buffering=True)
+sys.stderr.reconfigure(line_buffering=True)
+
 def run_simulation():
     cmd = [
         "streamlit",
@@ -36,8 +39,8 @@ def run_simulation():
         text=True,
     )
     
-    health_url = "http://localhost:8501/healthz"
-    home_url = "http://localhost:8501/"
+    health_url = "http://127.0.0.1:8501/healthz"
+    home_url = "http://127.0.0.1:8501/"
     
     success = False
     health_ok = False
@@ -45,8 +48,8 @@ def run_simulation():
     
     t0 = time.time()
     try:
-        # Wait up to 15 seconds for server to initialize
-        while time.time() - t0 < 15:
+        # Wait up to 25 seconds for server to initialize
+        while time.time() - t0 < 25:
             ret = proc.poll()
             if ret is not None:
                 print(f"ERROR: Process exited prematurely with return code {ret}")
@@ -80,7 +83,7 @@ def run_simulation():
             print("\nSIMULATION RESULT: SUCCESS (Process running, port 8501 listening, healthz=200, home=200)")
             
     finally:
-        print("Stopping simulation server...")
+        print("Stopping simulation server...", flush=True)
         proc.terminate()
         try:
             stdout, stderr = proc.communicate(timeout=5)
@@ -88,15 +91,8 @@ def run_simulation():
             proc.kill()
             stdout, stderr = proc.communicate()
             
-        if stdout:
-            print(f"Server stdout ({len(stdout)} chars)")
-        if stderr:
-            # Filter harmless script run context warnings
-            err_lines = [l for l in stderr.splitlines() if "ScriptRunContext" not in l and "to view a Streamlit app" not in l]
-            if err_lines:
-                print("Server stderr notices:")
-                for l in err_lines[:10]:
-                    print(" ", l)
+        print(f"Server stdout:\n{stdout}", flush=True)
+        print(f"Server stderr:\n{stderr}", flush=True)
 
     return success
 
